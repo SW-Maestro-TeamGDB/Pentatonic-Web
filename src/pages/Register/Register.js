@@ -51,17 +51,19 @@ const Register = () => {
   // if (data) console.log(data);
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
-      <input {...register('id', { required: true })} />
-      <input {...register('pw', { required: true })} />
-      {/* {errors.exampleRequired && <span>This field is required</span>} */}
-      <input {...register('username', { required: true })} />
-      <input {...register('phoneNumber', { required: true })} />
-      <input {...register('position', { required: true })} />
-      <input {...register('level', { required: true })} />
-      <input {...register('type', { required: true })} />
-      <input type="submit" />
-    </form>
+    <center>
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <input {...register('id', { required: true })} />
+        <input {...register('pw', { required: true })} />
+        {/* {errors.exampleRequired && <span>This field is required</span>} */}
+        <input {...register('username', { required: true })} />
+        <input {...register('phoneNumber', { required: true })} />
+        <input {...register('position', { required: true })} />
+        <input {...register('level', { required: true })} />
+        <input {...register('type', { required: true })} />
+        <input type="submit" />
+      </form>
+    </center>
   );
 };
 
