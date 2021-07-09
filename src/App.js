@@ -2,6 +2,7 @@ import React from 'react';
 import { ApolloClient, InMemoryCache, ApolloProvider } from '@apollo/client';
 import { Route, Switch, BrowserRouter as Router } from 'react-router-dom';
 import { createHttpLink } from 'apollo-link-http';
+import Header from './components/Header';
 import Menu from './components/Menu';
 import Register from './pages/Register';
 import Artist from './pages/Artist';
@@ -29,6 +30,7 @@ function App() {
   return (
     <ApolloProvider client={client}>
       <Router>
+        <Header />
         <Menu />
         <Switch>
           <Route path={['/', '/lounge']} component={Lounge} exact />
