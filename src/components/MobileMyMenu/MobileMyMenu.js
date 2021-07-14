@@ -1,19 +1,11 @@
 import react, { useState } from 'react';
+import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 
 const MobilemyMenu = (props) => {
   const { setMenuToggle } = props;
   return (
-    <div
-      onClick={() => setMenuToggle(false)}
-      style={{
-        position: 'absolute',
-        zindex: '2',
-        width: '100%',
-        height: '100%',
-        backgroundColor: 'rgba(0,0,0,0.6)',
-      }}
-    >
+    <MenuContainer onClick={() => setMenuToggle(false)}>
       <div
         style={{
           display: 'flex',
@@ -29,13 +21,40 @@ const MobilemyMenu = (props) => {
           alignItems: 'center',
         }}
       >
-        <Link to="/profile">마이페이지</Link>
-        <Link to="/liked">좋아요 누른 커버</Link>
-        <Link to="/library">라이브러리</Link>
-        <Link to="/">로그아웃</Link>
+        <Divider />
+        <MenuLink to="/lounge">라운지</MenuLink>
+        <MenuLink to="/studio">스튜디오</MenuLink>
+        <MenuLink to="/artist">아티스트</MenuLink>
+        <Divider />
+        <MenuLink to="/profile">마이페이지</MenuLink>
+        <MenuLink to="/liked">좋아요 누른 커버</MenuLink>
+        <MenuLink to="/library">라이브러리</MenuLink>
+        <MenuLink to="/">로그아웃</MenuLink>
       </div>
-    </div>
+    </MenuContainer>
   );
 };
+
+const MenuContainer = styled.div`
+  position: absolute;
+  z-index: 2;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.6);
+`;
+
+const Divider = styled.div`
+  width: 80%;
+  border-bottom: 0.1px solid rgba(0, 0, 0, 0.3);
+  margin: 2vh 0;
+`;
+
+const MenuLink = styled(Link)`
+  color: black;
+  margin: 1vh 0;
+  text-align: center;
+  font-weight: 400;
+  font-size: 0.8rem;
+`;
 
 export default MobilemyMenu;

@@ -1,5 +1,7 @@
 import react, { useState } from 'react';
 import { Default, Mobile } from '../../lib/Media';
+import { Link } from 'react-router-dom';
+import styled from 'styled-components';
 import MyMenu from '../MyMenu';
 import MobileMyMenu from '../MobileMyMenu/MobileMyMenu';
 
@@ -9,22 +11,18 @@ const Header = () => {
   return (
     <>
       <Default>
-        <div
-          style={{
-            backgroundColor: 'black',
-            color: 'white',
-            textAlign: 'right',
-          }}
-        >
-          <div
+        <HeaderContainer>
+          <LogoContainer>
+            <LogoLink to="/">Pentatonic</LogoLink>
+          </LogoContainer>
+          <LoginContainer
             onClick={() => {
               setMenuToggle(!menuToggle);
             }}
-            style={{ fontSize: '3rem', maxidth: 'auto', fontWeight: 'bold' }}
           >
             USER123
-          </div>
-        </div>
+          </LoginContainer>
+        </HeaderContainer>
         {menuToggle ? <MyMenu /> : null}
       </Default>
       <Mobile>
@@ -48,7 +46,7 @@ const Header = () => {
                 console.log(menuToggle);
               }}
             >
-              =
+              ☰
             </button>
           </div>
           <div
@@ -61,5 +59,38 @@ const Header = () => {
     </>
   );
 };
+
+const HeaderContainer = styled.div`
+  background-color: black;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 8vh;
+
+  // 드래그 방지
+  -ms-user-select: none;
+  -moz-user-select: -moz-none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  user-select: none;
+`;
+
+const LogoContainer = styled.div`
+  margin-left: 1.5vw;
+`;
+
+const LogoLink = styled(Link)`
+  font-size: 2.5rem;
+  font-weight: bolder;
+  color: white;
+`;
+
+const LoginContainer = styled.div`
+  font-size: 2rem;
+  font-weight: bold;
+  margin-right: 1.5vw;
+  cursor: pointer;
+`;
 
 export default Header;

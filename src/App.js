@@ -4,6 +4,7 @@ import { Route, Switch, BrowserRouter as Router } from 'react-router-dom';
 import { createHttpLink } from 'apollo-link-http';
 import Header from './components/Header';
 import Menu from './components/Menu';
+import LoungeHome from './pages/LoungeHome';
 import Register from './pages/Register';
 import Artist from './pages/Artist';
 import Lounge from './pages/Lounge';
@@ -33,13 +34,14 @@ function App() {
         <Header />
         <Menu />
         <Switch>
-          <Route path={['/', '/lounge']} component={Lounge} exact />
-          <Route path="/studio" component={Studio} exact />
-          <Route path="/artist" component={Artist} exact />
-          <Route path="/profile" component={Profile} exact />
-          <Route path="/register" component={Register} exact />
-          <Route path="/library" component={Library} exact />
-          <Route path="/liked" component={Liked} exact />
+          <Route path="/" component={LoungeHome} exact />
+          <Route path="/lounge" component={Lounge} />
+          <Route path="/studio" component={Studio} />
+          <Route path="/artist" component={Artist} />
+          <Route path="/profile" component={Profile} />
+          <Route path="/register" component={Register} />
+          <Route path="/library" component={Library} />
+          <Route path="/liked" component={Liked} />
         </Switch>
       </Router>
     </ApolloProvider>

@@ -1,9 +1,21 @@
 import react from 'react';
+import { Route, Link } from 'react-router-dom';
+import SubMenu from '../../components/SubMenu';
+import ArtistHome from '../ArtistHome';
+import RisingBand from '../RisingBand';
+import RisingArtist from '../RisingArtist';
+import BandRank from '../BandRank';
+import ArtistRank from '../ArtistRank';
 
-const Artist = () => {
+const Artist = ({ match }) => {
   return (
     <center>
-      <h1>아티스트</h1>
+      <SubMenu page={'Artist'} />
+      <Route exact path={match.path} component={ArtistHome} />
+      <Route path={`${match.path}/rising/band`} component={RisingBand} />
+      <Route path={`${match.path}/rising/solo`} component={RisingArtist} />
+      <Route path={`${match.path}/rank/band`} component={BandRank} />
+      <Route path={`${match.path}/rank/solo`} component={ArtistRank} />
     </center>
   );
 };
