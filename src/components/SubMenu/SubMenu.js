@@ -41,7 +41,7 @@ const SubMenu = (props) => {
 };
 
 const SubMenuContainer = styled.div`
-  min-height: 3vh;
+  min-height: 1.5rem;
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -52,7 +52,7 @@ const SubMenuLink = styled(Link)`
   color: black;
   font-size: 1.2rem;
   font-weight: 600;
-  margin: 0 2vw;
+  margin: 0 1rem;
 `;
 
 export default SubMenu;

@@ -1,1 +1,1 @@
-export { Desktop, Tablet, Mobile, Default } from './Media';
+export { Desktop, Tablet, Mobile, Default, media } from './Media';

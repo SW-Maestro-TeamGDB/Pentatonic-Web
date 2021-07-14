@@ -23,7 +23,8 @@ const MenuContainer = styled.div`
   right: 1vw;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
   padding: 1.5vh 1vw;
-  transform: translateY(-1.3vh);
+  width: 10rem;
+  transform: translateY(3.5rem);
 `;
 
 const MenuLink = styled(Link)`
