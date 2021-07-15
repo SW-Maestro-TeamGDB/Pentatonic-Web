@@ -12,6 +12,7 @@ import Profile from './pages/Profile';
 import Studio from './pages/Studio';
 import Library from './pages/Library';
 import Liked from './pages/Liked';
+import Login from './pages/Login/Login';
 
 const client = new ApolloClient({
   link: createHttpLink({
@@ -35,6 +36,7 @@ function App() {
         <Menu />
         <Switch>
           <Route path="/" component={LoungeHome} exact />
+          <Route path="/login" component={Login} />
           <Route path="/lounge" component={Lounge} />
           <Route path="/studio" component={Studio} />
           <Route path="/artist" component={Artist} />

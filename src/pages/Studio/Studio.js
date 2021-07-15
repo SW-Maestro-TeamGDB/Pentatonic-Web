@@ -4,14 +4,27 @@ import SubMenu from '../../components/SubMenu';
 import StudioHome from '../StudioHome';
 import StudioBandCover from '../StudioBandCover';
 import StudioSoloCover from '../StudioSoloCover';
+import MusicInformation from '../MusicInformation';
+import CoverMaking from '../CoverMaking';
 
 const Studio = ({ match }) => {
   return (
     <center>
       <SubMenu page={'Studio'} />
       <Route exact path={match.path} component={StudioHome} />
-      <Route path={`${match.path}/band`} component={StudioBandCover} />
-      <Route path={`${match.path}/solo`} component={StudioSoloCover} />
+      <Route path={`${match.path}/band`} component={StudioBandCover} exact />
+      <Route path={`${match.path}/solo`} component={StudioSoloCover} exact />
+      <Route
+        path={`${match.path}/band/:id`}
+        component={MusicInformation}
+        exact
+      />
+      <Route
+        path={`${match.path}/solo/:id`}
+        component={MusicInformation}
+        exact
+      />
+      <Route path={`${match.path}/cover`} component={CoverMaking} />
     </center>
   );
 };
