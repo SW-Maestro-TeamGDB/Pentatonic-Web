@@ -1,14 +1,24 @@
-import react, { useState } from 'react';
+import react, { useState, useRef, useEffect } from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 
-const MyMenu = () => {
+const MyMenu = (props) => {
+  const { menuToggle, setMenuToggle, menuRef, onClickMenu } = props;
+
   return (
-    <MenuContainer>
-      <MenuLink to="/profile">마이페이지</MenuLink>
-      <MenuLink to="/liked">좋아요 누른 커버</MenuLink>
-      <MenuLink to="/library">라이브러리</MenuLink>
-      <MenuLink to="/">로그아웃</MenuLink>
+    <MenuContainer ref={menuRef}>
+      <MenuLink to="/profile" onClick={onClickMenu}>
+        마이페이지
+      </MenuLink>
+      <MenuLink to="/liked" onClick={onClickMenu}>
+        좋아요 누른 커버
+      </MenuLink>
+      <MenuLink to="/library" onClick={onClickMenu}>
+        라이브러리
+      </MenuLink>
+      <MenuLink to="/" onClick={onClickMenu}>
+        로그아웃
+      </MenuLink>
     </MenuContainer>
   );
 };
@@ -22,16 +32,20 @@ const MenuContainer = styled.div`
   background-color: white;
   right: 1vw;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-  padding: 1.5vh 1vw;
+  padding: 1.5vh 0;
   width: 10rem;
   transform: translateY(3.5rem);
 `;
 
 const MenuLink = styled(Link)`
   color: black;
-  margin: 1vh 0;
+  padding: 1vh 0;
   text-align: center;
   font-weight: 400;
+
+  &:hover {
+    background-color: rgb(230, 230, 230);
+  }
 `;
 
 export default MyMenu;

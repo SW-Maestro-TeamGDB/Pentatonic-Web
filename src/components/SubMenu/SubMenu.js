@@ -53,6 +53,10 @@ const SubMenuLink = styled(Link)`
   font-size: 1.2rem;
   font-weight: 600;
   margin: 0 1rem;
+
+  &:hover {
+    color: rgb(60, 60, 60);
+  }
 `;
 
 export default SubMenu;

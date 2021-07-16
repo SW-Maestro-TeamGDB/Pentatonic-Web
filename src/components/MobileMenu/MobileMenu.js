@@ -1,32 +1,67 @@
-import react, { useState } from 'react';
+import react, { useState, useRef, useEffect } from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 
 const MobileMenu = (props) => {
-  const { setMenuToggle } = props;
+  const { menuToggle, setMenuToggle, menuRef, onClickMenu } = props;
+
   return (
-    <MenuContainer onClick={() => setMenuToggle(false)}>
-      <MenuBackGround>
-        <Divider />
-        <MenuLink to="/lounge">라운지</MenuLink>
-        <SubMenuLink to="/lounge/weekly">위클리 챌린지</SubMenuLink>
-        <SubMenuLink to="/lounge/band">떠오르는 밴드커버</SubMenuLink>
-        <SubMenuLink to="/lounge/solo">떠오르는 솔로커버</SubMenuLink>
-        <Divider />
-        <MenuLink to="/studio">스튜디오</MenuLink>
-        <SubMenuLink to="/studio/band">밴드 커버</SubMenuLink>
-        <SubMenuLink to="/studio/solo">솔로 커버</SubMenuLink>
-        <Divider />
-        <MenuLink to="/artist">아티스트</MenuLink>
-        <SubMenuLink to="/artist/rising/band">라이징 밴드</SubMenuLink>
-        <SubMenuLink to="/artist/rising/solo">라이징 아티스트</SubMenuLink>
-        <SubMenuLink to="/artist/rank/band">밴드 랭킹</SubMenuLink>
-        <SubMenuLink to="/artist/rank/solo">아티스트 랭킹</SubMenuLink>
-        <Divider />
-        <SubMenuLink to="/profile">마이페이지</SubMenuLink>
-        <SubMenuLink to="/liked">좋아요 누른 커버</SubMenuLink>
-        <SubMenuLink to="/library">라이브러리</SubMenuLink>
-        <SubMenuLink to="/">로그아웃</SubMenuLink>
+    <MenuContainer>
+      <MenuBackGround ref={menuRef}>
+        <MenuContents>
+          <Divider />
+          <MenuLink to="/lounge" onClick={onClickMenu}>
+            라운지
+          </MenuLink>
+          <SubMenuLink to="/lounge/weekly" onClick={onClickMenu}>
+            위클리 챌린지
+          </SubMenuLink>
+          <SubMenuLink to="/lounge/band" onClick={onClickMenu}>
+            떠오르는 밴드커버
+          </SubMenuLink>
+          <SubMenuLink to="/lounge/solo" onClick={onClickMenu}>
+            떠오르는 솔로커버
+          </SubMenuLink>
+          <Divider />
+          <MenuLink to="/studio" onClick={onClickMenu}>
+            스튜디오
+          </MenuLink>
+          <SubMenuLink to="/studio/band" onClick={onClickMenu}>
+            밴드 커버
+          </SubMenuLink>
+          <SubMenuLink to="/studio/solo" onClick={onClickMenu}>
+            솔로 커버
+          </SubMenuLink>
+          <Divider />
+          <MenuLink to="/artist" onClick={onClickMenu}>
+            아티스트
+          </MenuLink>
+          <SubMenuLink to="/artist/rising/band" onClick={onClickMenu}>
+            라이징 밴드
+          </SubMenuLink>
+          <SubMenuLink to="/artist/rising/solo" onClick={onClickMenu}>
+            라이징 아티스트
+          </SubMenuLink>
+          <SubMenuLink to="/artist/rank/band" onClick={onClickMenu}>
+            밴드 랭킹
+          </SubMenuLink>
+          <SubMenuLink to="/artist/rank/solo" onClick={onClickMenu}>
+            아티스트 랭킹
+          </SubMenuLink>
+          <Divider />
+          <SubMenuLink to="/profile" onClick={onClickMenu}>
+            마이페이지
+          </SubMenuLink>
+          <SubMenuLink to="/liked" onClick={onClickMenu}>
+            좋아요 누른 커버
+          </SubMenuLink>
+          <SubMenuLink to="/library" onClick={onClickMenu}>
+            라이브러리
+          </SubMenuLink>
+          <SubMenuLink to="/" onClick={onClickMenu}>
+            로그아웃
+          </SubMenuLink>
+        </MenuContents>
       </MenuBackGround>
     </MenuContainer>
   );
@@ -41,17 +76,22 @@ const MenuContainer = styled.div`
 `;
 
 const MenuBackGround = styled.div`
+  position: fixed;
+  width: 50%;
+  height: 100%;
+  border: 1px solid lightgray;
+`;
+
+const MenuContents = styled.div`
   display: flex;
   flex-direction: column;
   z-index: 3;
-  position: absolute;
+  align-items: center;
   color: black;
   background-color: white;
   left: 0;
-  width: 40%;
   height: 100%;
-  border: 1px solid lightgray;
-  align-items: center;
+  transition: '.25s all';
 `;
 
 const Divider = styled.div`

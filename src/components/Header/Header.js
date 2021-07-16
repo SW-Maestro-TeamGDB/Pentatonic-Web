@@ -1,7 +1,8 @@
-import react, { useState } from 'react';
+import react, { useState, useRef, useEffect } from 'react';
 import { useMediaQuery } from 'react-responsive';
 import { Default, Mobile, media } from '../../lib/Media';
 import { Link } from 'react-router-dom';
+import { Drawer } from 'antd-mobile';
 import styled from 'styled-components';
 import MyMenu from '../MyMenu';
 import MobileMenu from '../MobileMenu/MobileMenu';
@@ -12,13 +13,44 @@ const Header = () => {
   const isMobile = useMediaQuery({
     query: '(max-width:767px)',
   });
+
+  const buttonRef = useRef(null);
+  const menuRef = useRef(null);
+  const onClickMenu = () => {
+    setMenuToggle(false);
+  };
+
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (menuRef.current && !menuRef.current.contains(e.target)) {
+        setMenuToggle(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [menuRef]);
+
   const showMenu = () => {
     console.log(isMobile);
     if (!isMobile) {
-      return <MyMenu />;
+      return (
+        <MyMenu
+          menuToggle={menuToggle}
+          setMenuToggle={setMenuToggle}
+          menuRef={menuRef}
+          onClickMenu={onClickMenu}
+        />
+      );
     } else {
       return (
-        <MobileMenu menuToggle={menuToggle} setMenuToggle={setMenuToggle} />
+        <MobileMenu
+          menuToggle={menuToggle}
+          setMenuToggle={setMenuToggle}
+          menuRef={menuRef}
+          onClickMenu={onClickMenu}
+        />
       );
     }
   };
@@ -44,6 +76,7 @@ const Header = () => {
             onClick={() => {
               setMenuToggle(!menuToggle);
             }}
+            ref={buttonRef}
           >
             USER123
           </LoginContainer>
