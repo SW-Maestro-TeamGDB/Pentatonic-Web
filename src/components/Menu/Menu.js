@@ -20,7 +20,7 @@ const Menu = () => {
 const MenuContainer = styled.div`
   display: flex;
   justify-content: center;
-  height: 12vh;
+  margin: 3vh 0;
 `;
 
 const MenuWrapper = styled.div`
@@ -31,7 +31,7 @@ const MenuWrapper = styled.div`
 `;
 
 const MenuLink = styled(Link)`
-  font-size: 2rem;
+  font-size: 1.4rem;
   letter-spacing: 4px;
   color: black;
   font-family: 'NanumSquare';

@@ -1,10 +1,11 @@
 import react from 'react';
+import PageContainer from '../../components/PageContainer';
 
 const Profile = () => {
   return (
-    <center>
-      <h1>프로필</h1>
-    </center>
+    <PageContainer>
+      <h3>프로필</h3>
+    </PageContainer>
   );
 };
 

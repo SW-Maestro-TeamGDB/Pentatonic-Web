@@ -1,13 +1,12 @@
 import react, { useState } from 'react';
 import styled from 'styled-components';
+import PageContainer from '../../components/PageContainer';
 
 const ArtistHome = () => {
   return (
-    <center>
-      <MenuContainer>
-        <h3>아티스트 홈</h3>
-      </MenuContainer>
-    </center>
+    <PageContainer>
+      <h3>아티스트 홈</h3>
+    </PageContainer>
   );
 };
 

@@ -9,14 +9,14 @@ import ArtistRank from '../ArtistRank';
 
 const Artist = ({ match }) => {
   return (
-    <center>
+    <>
       <SubMenu page={'Artist'} />
       <Route exact path={match.path} component={ArtistHome} />
       <Route path={`${match.path}/rising/band`} component={RisingBand} />
       <Route path={`${match.path}/rising/solo`} component={RisingArtist} />
       <Route path={`${match.path}/rank/band`} component={BandRank} />
       <Route path={`${match.path}/rank/solo`} component={ArtistRank} />
-    </center>
+    </>
   );
 };
 

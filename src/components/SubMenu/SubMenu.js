@@ -41,16 +41,17 @@ const SubMenu = (props) => {
 };
 
 const SubMenuContainer = styled.div`
-  min-height: 1.5rem;
+  min-height: 1.2rem;
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: center;
+  margin-bottom: 1rem;
 `;
 
 const SubMenuLink = styled(Link)`
   color: black;
-  font-size: 1.2rem;
+  font-size: 1.1rem;
   font-weight: 600;
   margin: 0 1rem;
 

@@ -2,6 +2,7 @@ import React from 'react';
 import { ApolloClient, InMemoryCache, ApolloProvider } from '@apollo/client';
 import { Route, Switch, BrowserRouter as Router } from 'react-router-dom';
 import { createHttpLink } from 'apollo-link-http';
+import styled from 'styled-components';
 import Header from './components/Header';
 import Menu from './components/Menu';
 import LoungeHome from './pages/LoungeHome';
@@ -34,20 +35,28 @@ function App() {
       <Router>
         <Header />
         <Menu />
-        <Switch>
-          <Route path="/" component={LoungeHome} exact />
-          <Route path="/login" component={Login} />
-          <Route path="/lounge" component={Lounge} />
-          <Route path="/studio" component={Studio} />
-          <Route path="/artist" component={Artist} />
-          <Route path="/profile" component={Profile} />
-          <Route path="/register" component={Register} />
-          <Route path="/library" component={Library} />
-          <Route path="/liked" component={Liked} />
-        </Switch>
+        <Centered>
+          <Switch>
+            <Route path="/" component={LoungeHome} exact />
+            <Route path="/login" component={Login} />
+            <Route path="/lounge" component={Lounge} />
+            <Route path="/studio" component={Studio} />
+            <Route path="/artist" component={Artist} />
+            <Route path="/profile" component={Profile} />
+            <Route path="/register" component={Register} />
+            <Route path="/library" component={Library} />
+            <Route path="/liked" component={Liked} />
+          </Switch>
+        </Centered>
       </Router>
     </ApolloProvider>
   );
 }
+
+const Centered = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`;
 
 export default App;

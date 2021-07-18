@@ -1,26 +1,13 @@
 import react, { useState } from 'react';
 import styled from 'styled-components';
-import { Link } from 'react-router-dom';
+import PageContainer from '../../components/PageContainer';
 
 const StudioSoloCover = () => {
   return (
-    <MenuContainer>
+    <PageContainer>
       <h3>솔로 커버</h3>
-    </MenuContainer>
+    </PageContainer>
   );
 };
-
-const MenuContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  z-index: 2;
-  color: black;
-  background-color: white;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-  padding: 1.5vh 1vw;
-  height: 70vh;
-  width: 70%;
-  margin-top: 3vh;
-`;
 
 export default StudioSoloCover;

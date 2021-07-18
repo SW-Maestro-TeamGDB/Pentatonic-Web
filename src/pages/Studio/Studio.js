@@ -9,7 +9,7 @@ import CoverMaking from '../CoverMaking';
 
 const Studio = ({ match }) => {
   return (
-    <center>
+    <>
       <SubMenu page={'Studio'} />
       <Route exact path={match.path} component={StudioHome} />
       <Route path={`${match.path}/band`} component={StudioBandCover} exact />
@@ -25,7 +25,7 @@ const Studio = ({ match }) => {
         exact
       />
       <Route path={`${match.path}/cover`} component={CoverMaking} />
-    </center>
+    </>
   );
 };
 

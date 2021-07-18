@@ -1,10 +1,11 @@
 import react from 'react';
+import PageContainer from '../../components/PageContainer';
 
 const Library = () => {
   return (
-    <center>
-      <h1>라이브러리</h1>
-    </center>
+    <PageContainer>
+      <h3>라이브러리</h3>
+    </PageContainer>
   );
 };
 

@@ -124,7 +124,7 @@ const LogoContainer = styled.div`
 `;
 
 const LogoLink = styled(Link)`
-  font-size: 2.5rem;
+  font-size: 1.8rem;
   font-weight: bolder;
   color: white;
 
@@ -136,7 +136,7 @@ const LogoLink = styled(Link)`
 `;
 
 const LoginContainer = styled.div`
-  font-size: 2rem;
+  font-size: 1.8rem;
   font-weight: bold;
   margin-right: 1.5vw;
   cursor: pointer;
