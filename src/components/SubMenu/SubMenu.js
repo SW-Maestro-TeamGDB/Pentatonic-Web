@@ -47,6 +47,13 @@ const SubMenuContainer = styled.div`
   align-items: center;
   justify-content: center;
   margin-bottom: 1rem;
+  position: fixed;
+  top: 120px;
+  padding-bottom: 20px;
+  z-index: 4;
+  background-color: white;
+  width: 100%;
+  border-bottom: 1.5px solid rgb(200, 200, 200, 0.5);
 `;
 
 const SubMenuLink = styled(Link)`

@@ -20,7 +20,13 @@ const Menu = () => {
 const MenuContainer = styled.div`
   display: flex;
   justify-content: center;
-  margin: 3vh 0;
+  position: fixed;
+  padding: 40px 0 40px;
+  top: 50px;
+  width: 100%;
+  z-index: 4;
+  height: 50px;
+  background-color: white;
 `;
 
 const MenuWrapper = styled.div`

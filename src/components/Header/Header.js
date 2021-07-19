@@ -1,5 +1,6 @@
-import react, { useState, useRef, useEffect } from 'react';
+import react, { useState, useEffect } from 'react';
 import { useMediaQuery } from 'react-responsive';
+import { Dropdown, Drawer } from 'antd';
 import { Default, Mobile, media } from '../../lib/Media';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
@@ -8,57 +9,38 @@ import MobileMenu from '../MobileMenu/MobileMenu';
 
 const Header = () => {
   const [menuToggle, setMenuToggle] = useState(false);
+  const myMenu = (
+    <MenuContainer>
+      <MenuLink to="/profile">마이페이지</MenuLink>
+      <MenuLink to="/liked">좋아요 누른 커버</MenuLink>
+      <MenuLink to="/library">라이브러리</MenuLink>
+      <MenuLink to="/">로그아웃</MenuLink>
+    </MenuContainer>
+  );
+
+  const showDrawer = () => {
+    setMenuToggle(true);
+  };
+  const onClose = () => {
+    setMenuToggle(false);
+  };
 
   const isMobile = useMediaQuery({
     query: '(max-width:767px)',
   });
 
-  const buttonRef = useRef(null);
-  const menuRef = useRef(null);
-  const onClickMenu = () => {
-    setMenuToggle(false);
-  };
-
-  useEffect(() => {
-    const handleClickOutside = (e) => {
-      if (menuRef.current && !menuRef.current.contains(e.target)) {
-        setMenuToggle(false);
-      }
-    };
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, [menuRef]);
-
-  const showMenu = () => {
-    console.log(isMobile);
-    if (!isMobile) {
-      return (
-        <MyMenu
-          menuToggle={menuToggle}
-          setMenuToggle={setMenuToggle}
-          menuRef={menuRef}
-          onClickMenu={onClickMenu}
-        />
-      );
-    } else {
-      return (
-        <MobileMenu
-          menuToggle={menuToggle}
-          setMenuToggle={setMenuToggle}
-          menuRef={menuRef}
-          onClickMenu={onClickMenu}
-        />
-      );
-    }
-  };
-
   return (
-    <>
-      {menuToggle ? showMenu() : null}
+    <Fixed>
       <HeaderContainer>
         <Mobile>
+          <CustomDrawer
+            placement="left"
+            closable={false}
+            onClose={onClose}
+            visible={menuToggle}
+          >
+            <MobileMenu onClose={onClose} />
+          </CustomDrawer>
           <MobileMenuButton
             onClick={() => {
               setMenuToggle(!menuToggle);
@@ -71,19 +53,42 @@ const Header = () => {
           <LogoLink to="/">Pentatonic</LogoLink>
         </LogoContainer>
         <Default>
-          <LoginContainer
-            onClick={() => {
-              setMenuToggle(!menuToggle);
-            }}
-            ref={buttonRef}
+          <CustomDropdown
+            overlay={MyMenu}
+            trigger={['click']}
+            placement="bottomCenter"
           >
-            USER123
-          </LoginContainer>
+            <UserName>USER123</UserName>
+          </CustomDropdown>
         </Default>
       </HeaderContainer>
-    </>
+    </Fixed>
   );
 };
+
+const Fixed = styled.div`
+  position: fixed;
+  width: 100%;
+  top: 0;
+  z-index: 4;
+`;
+
+const CustomDropdown = styled(Dropdown)`
+  position: absolute;
+  right: 2vw;
+  height: 100%;
+  display: flex;
+  align-items: center;
+`;
+
+const CustomDrawer = styled(Drawer)``;
+
+const UserImg = styled.img``;
+
+const UserName = styled.div`
+  font-size: 1.5rem;
+  font-weight: 600;
+`;
 
 const HeaderContainer = styled.div`
   background-color: black;
@@ -91,7 +96,7 @@ const HeaderContainer = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  height: 4rem;
+  height: 50px;
 
   // 드래그 방지
   -ms-user-select: none;
@@ -139,6 +144,30 @@ const LoginContainer = styled.div`
   font-weight: bold;
   margin-right: 1.5vw;
   cursor: pointer;
+`;
+
+const MenuContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  color: black;
+  background-color: white;
+  right: 1vw;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  padding: 1.5vh 0;
+  width: 10rem;
+  transform: translateY(3.5rem);
+`;
+
+const MenuLink = styled(Link)`
+  color: black;
+  padding: 1vh 0;
+  text-align: center;
+  font-weight: 400;
+
+  &:hover {
+    background-color: rgb(230, 230, 230);
+  }
 `;
 
 export default Header;
