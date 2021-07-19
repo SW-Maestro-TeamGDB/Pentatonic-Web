@@ -73,7 +73,7 @@ const BoardHeader = styled.div`
 `;
 
 const BoardTitle = styled.nav`
-  font-size: 1.2em;
+  font-size: 1.2vw;
   font-weight: 600;
   text-align: center;
   width: 100%;
@@ -81,7 +81,7 @@ const BoardTitle = styled.nav`
 `;
 
 const BoardLink = styled(Link)`
-  font-size: 0.8em;
+  font-size: 0.8vw;
   font-weight: 500;
   color: black;
   width: 3rem;

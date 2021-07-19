@@ -24,7 +24,7 @@ const Studio = ({ match }) => {
         component={MusicInformation}
         exact
       />
-      <Route path={`${match.path}/cover`} component={CoverMaking} />
+      <Route path={`${match.path}/cover/:id`} component={CoverMaking} />
     </>
   );
 };

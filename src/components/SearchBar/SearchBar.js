@@ -2,13 +2,13 @@ import react from 'react';
 import styled from 'styled-components';
 import { Default } from '../../lib/Media';
 import { Link } from 'react-router-dom';
-import searchIcon from '../../images/searchIcon.svg';
+import SearchIcon from '../../images/SearchIcon.svg';
 
 const SearchBar = ({ props }) => {
   return (
     <SearchBarContainer>
       <CustomInput />
-      <CustomIcon src={searchIcon} />
+      <CustomIcon src={SearchIcon} />
     </SearchBarContainer>
   );
 };

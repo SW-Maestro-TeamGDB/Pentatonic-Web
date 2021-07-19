@@ -2,7 +2,6 @@ import react, { useState, useRef, useEffect } from 'react';
 import { useMediaQuery } from 'react-responsive';
 import { Default, Mobile, media } from '../../lib/Media';
 import { Link } from 'react-router-dom';
-import { Drawer } from 'antd-mobile';
 import styled from 'styled-components';
 import MyMenu from '../MyMenu';
 import MobileMenu from '../MobileMenu/MobileMenu';

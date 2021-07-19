@@ -6,15 +6,15 @@ import { Link } from 'react-router-dom';
 const WeeklyBanner = () => {
   return (
     <BannerContainer>
-      <BannerBackground>
-        <Link to="/lounge/weekly">
+      <Link to="/lounge/weekly">
+        <BannerBackground>
           <BannerTitle>Weekly Challenge</BannerTitle>
           <SongContainer>
             <SongInform>Tame Impala</SongInform>
             <SongInform>'Cause I'm a man</SongInform>
           </SongContainer>
-        </Link>
-      </BannerBackground>
+        </BannerBackground>
+      </Link>
     </BannerContainer>
   );
 };
@@ -22,9 +22,9 @@ const WeeklyBanner = () => {
 const BannerContainer = styled.div`
   display: flex;
   flex-direction: column;
-  height: 25rem;
+  height: 30em;
   width: 80%;
-  border-radius: 1rem;
+  border-radius: 1em;
   position: relative;
   cursor: pointer;
 
@@ -40,8 +40,9 @@ const BannerContainer = styled.div`
 `;
 
 const BannerBackground = styled.div`
+  position: relative;
   background-color: rgba(0, 0, 0, 0.3);
-  border-radius: 1rem;
+  border-radius: 1em;
   height: 100%;
   width: 100%;
   position: absolute;
@@ -49,28 +50,26 @@ const BannerBackground = styled.div`
 
 const BannerTitle = styled.div`
   color: white;
-  font-size: 1.5rem;
+  position: absolute;
+  font-size: 1.5vw;
   font-weight: 800;
-  padding: 1rem 2rem;
-  border-top-left-radius: 1rem;
-  border-top-right-radius: 1rem;
-`;
-
-const SongImage = styled.img`
-  width: 10rem;
-  height: 10rem;
+  padding: 2vh 2vw;
+  border-top-left-radius: 1em;
+  border-top-right-radius: 1em;
 `;
 
 const SongContainer = styled.div`
   display: flex;
+  position: absolute;
+  width: 100%;
+  height: 100%;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  margin-top: 3rem;
 `;
 
 const SongInform = styled.div`
-  font-size: 5em;
+  font-size: 3.5vw;
   font-weight: 900;
   color: white;
   letter-spacing: -0.2rem;

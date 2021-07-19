@@ -34,8 +34,11 @@ const MenuLink = styled(Link)`
   font-size: 1.4rem;
   letter-spacing: 4px;
   color: black;
-  font-family: 'NanumSquare';
   font-weight: 800;
+
+  &:hover {
+    color: rgb(60, 60, 60);
+  }
 `;
 
 export default Menu;
