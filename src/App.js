@@ -2,6 +2,7 @@ import React from 'react';
 import { ApolloClient, InMemoryCache, ApolloProvider } from '@apollo/client';
 import { Route, Switch, BrowserRouter as Router } from 'react-router-dom';
 import { createHttpLink } from 'apollo-link-http';
+import ScrollToTop from './lib/ScrollToTop';
 import styled from 'styled-components';
 import Header from './components/Header';
 import Menu from './components/Menu';
@@ -33,6 +34,7 @@ function App() {
   return (
     <ApolloProvider client={client}>
       <Router>
+        <ScrollToTop />
         <Header />
         <Menu />
         <Centered>
