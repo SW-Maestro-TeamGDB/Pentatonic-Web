@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import PageContainer from '../../components/PageContainer';
 import WeeklyBanner from '../../components/WeeklyBanner/WeeklyBanner';
 import SearchBar from '../../components/SearchBar';
-import CoverList from '../../components/CoverList/CoverList';
+import CoverGrid from '../../components/CoverGrid/CoverGrid';
 import MakingIcon from '../../images/MakingIcon.svg';
 import PageImage from '../../components/PageImage';
 import GenreButton from '../../components/GenreButton/GenreButton';
@@ -16,7 +16,7 @@ const LoungeSoloCovers = () => {
   const tempCover = () =>
     Array.from({ length: 30 }, () => 0).map((v, i) => {
       return (
-        <CoverList
+        <CoverGrid
           id={parseInt(Math.random() * 100)}
           key={i}
           idx={parseInt(Math.random() * 5)}
@@ -45,39 +45,6 @@ const LoungeSoloCovers = () => {
     </PageContainer>
   );
 };
-
-const WeeklyImg = styled.div`
-  background: linear-gradient(
-      to bottom,
-      rgba(255, 255, 255, 0) 10%,
-      rgba(255, 255, 255, 0.25) 35%,
-      rgba(255, 255, 255, 0.5) 60%,
-      rgba(255, 255, 255, 0.75) 85%,
-      rgba(255, 255, 255, 1) 100%
-    ),
-    url('https://images.unsplash.com/photo-1510915361894-db8b60106cb1?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1050&q=80');
-  background-repeat: no-repeat;
-  background-position: top center;
-  background-size: 100%;
-
-  border-top-left-radius: 3rem;
-  border-top-right-radius: 3rem;
-
-  height: 15rem;
-  width: 70%;
-
-  display: flex;
-  justify-content: center;
-  align-items: center;
-`;
-
-const PageTitle = styled.div`
-  font-size: 3.5rem;
-  font-weight: 900;
-  color: white;
-  letter-spacing: -0.2rem;
-  margin-top: 2rem;
-`;
 
 const PageDesc = styled.div`
   font-size: 1rem;
@@ -113,13 +80,20 @@ const CoverContainer = styled.div`
   width: 70%;
   height: auto;
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: repeat(${parseInt(window.innerWidth / 400)}, 1fr);
   margin-top: 3.5rem;
+  grid-column-gap: 1rem;
+  grid-row-gap: 1rem;
 `;
 
 const CustomButton = styled.span`
   cursor: pointer;
   font-size: 1rem;
+`;
+
+const CustomMenu = styled(Menu)`
+  min-width: 7rem;
+  text-align: center;
 `;
 
 export default LoungeSoloCovers;

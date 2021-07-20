@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import PageContainer from '../../components/PageContainer';
 import WeeklyBanner from '../../components/WeeklyBanner/WeeklyBanner';
 import SearchBar from '../../components/SearchBar';
-import CoverList from '../../components/CoverList/CoverList';
+import CoverGrid from '../../components/CoverGrid/CoverGrid';
 import MakingIcon from '../../images/MakingIcon.svg';
 import PageImage from '../../components/PageImage';
 
@@ -12,7 +12,7 @@ const WeeklyChallenge = () => {
   const tempCover = () =>
     Array.from({ length: 30 }, () => 0).map((v, i) => {
       return (
-        <CoverList
+        <CoverGrid
           id={parseInt(Math.random() * 100)}
           key={i}
           idx={parseInt(Math.random() * 5)}
@@ -54,9 +54,12 @@ const PageDesc = styled.div`
 `;
 
 const SubContainer = styled.div`
-  margin-top: 1rem;
+  margin-top: 2rem;
   position: relative;
   width: 70%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
 `;
 
 const MakingIconImg = styled.img`
@@ -77,8 +80,10 @@ const CoverContainer = styled.div`
   width: 70%;
   height: auto;
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: repeat(${parseInt(window.innerWidth / 400)}, 1fr);
   margin-top: 3.5rem;
+  grid-column-gap: 1rem;
+  grid-row-gap: 1rem;
 `;
 
 const CustomButton = styled.span`

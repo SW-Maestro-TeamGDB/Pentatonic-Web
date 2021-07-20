@@ -59,6 +59,9 @@ const Centered = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  position: absolute;
+  top: 160px;
+  width: 100%;
 `;
 
 export default App;
