@@ -9,6 +9,7 @@ import CoverGrid from '../../components/CoverGrid/CoverGrid';
 import MakingIcon from '../../images/MakingIcon.svg';
 import PageImage from '../../components/PageImage';
 import GenreButton from '../../components/GenreButton/GenreButton';
+import GridContainer from '../../components/GridContainer/GridContainer';
 
 const LoungeSoloCovers = () => {
   const [genre, setGenre] = useState('전체');
@@ -41,7 +42,7 @@ const LoungeSoloCovers = () => {
           <CustomButton>새로운 커버 만들기</CustomButton>
         </MakingCoverLink>
       </SubContainer>
-      <CoverContainer>{tempCover()}</CoverContainer>
+      <GridContainer width="70%">{tempCover()}</GridContainer>
     </PageContainer>
   );
 };
@@ -74,16 +75,6 @@ const MakingCoverLink = styled(Link)`
   display: flex;
   flex-direction: row;
   align-items: center;
-`;
-
-const CoverContainer = styled.div`
-  width: 70%;
-  height: auto;
-  display: grid;
-  grid-template-columns: repeat(${parseInt(window.innerWidth / 400)}, 1fr);
-  margin-top: 3.5rem;
-  grid-column-gap: 1rem;
-  grid-row-gap: 1rem;
 `;
 
 const CustomButton = styled.span`

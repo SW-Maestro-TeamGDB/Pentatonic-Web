@@ -5,6 +5,7 @@ import WeeklyBanner from '../../components/WeeklyBanner/WeeklyBanner';
 import PageContainer from '../../components/PageContainer';
 import SearchBar from '../../components/SearchBar';
 import CoverGrid from '../../components/CoverGrid/CoverGrid';
+import GridContainer from '../../components/GridContainer/GridContainer';
 
 const LoungeHome = () => {
   const tempCover = () =>
@@ -29,7 +30,7 @@ const LoungeHome = () => {
             <BoardLink to="/lounge/band">더보기</BoardLink>
           </BoardHeader>
           <Divider />
-          <CoverContainer>{tempCover()}</CoverContainer>
+          <GridContainer width="90%">{tempCover()}</GridContainer>
         </BoardWrapper>
         <BoardWrapper>
           <BoardHeader>
@@ -37,7 +38,7 @@ const LoungeHome = () => {
             <BoardLink to="/lounge/solo">더보기</BoardLink>
           </BoardHeader>
           <Divider />
-          <CoverContainer>{tempCover()}</CoverContainer>
+          <GridContainer width="90%">{tempCover()}</GridContainer>
         </BoardWrapper>
       </BoardContainer>
     </PageContainer>
@@ -52,18 +53,6 @@ const Divider = styled.div`
   border-bottom: 1px solid lightgray;
   width: 90%;
   margin: 1vh 0;
-`;
-
-const CoverContainer = styled.div`
-  display: grid;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  grid-template-columns: repeat(${parseInt(window.innerWidth / 800)}, 1fr);
-  grid-column-gap: 1rem;
-  grid-row-gap: 1rem;
-
-  width: 90%;
 `;
 
 const BoardContainer = styled.div`
