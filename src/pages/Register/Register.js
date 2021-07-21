@@ -1,6 +1,8 @@
 import react, { useState } from 'react';
+import styled from 'styled-components';
 import { gql, useQuery } from '@apollo/client';
 import { useForm } from 'react-hook-form';
+import PageContainer from '../../components/PageContainer';
 
 const endPoint = 'https://pentatonic.cdn.ntruss.com/api';
 
@@ -51,20 +53,41 @@ const Register = () => {
   // if (data) console.log(data);
 
   return (
-    <center>
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <input {...register('id', { required: true })} />
-        <input {...register('pw', { required: true })} />
+    <PageContainer>
+      <h2>회원가입 페이지</h2>
+      <form
+        onSubmit={handleSubmit(onSubmit)}
+        style={{ display: 'flex', flexDirection: 'column' }}
+      >
+        <CustomInput {...register('id', { required: true })} />
+        <CustomInput {...register('pw', { required: true })} />
         {/* {errors.exampleRequired && <span>This field is required</span>} */}
-        <input {...register('username', { required: true })} />
-        <input {...register('phoneNumber', { required: true })} />
-        <input {...register('position', { required: true })} />
-        <input {...register('level', { required: true })} />
-        <input {...register('type', { required: true })} />
-        <input type="submit" />
+        <CustomInput {...register('username', { required: true })} />
+        <CustomInput {...register('phoneNumber', { required: true })} />
+        <CustomInput {...register('position', { required: true })} />
+        <CustomInput {...register('level', { required: true })} />
+        <CustomInput {...register('type', { required: true })} />
+        <CustomInput type="submit" />
       </form>
-    </center>
+    </PageContainer>
   );
 };
+
+const CustomInput = styled.input`
+  width: 100%;
+  color: black;
+  border: 2px solid lightgray;
+  transition: all ease 0.3s;
+  outline: none;
+  height: 4rem;
+  border-radius: 0.8rem;
+  margin: 0.5rem 0;
+  padding: 0 1rem;
+  font-size: 1.2rem;
+
+  &:focus {
+    border: 2px solid black;
+  }
+`;
 
 export default Register;

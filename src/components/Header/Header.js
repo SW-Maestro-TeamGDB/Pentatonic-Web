@@ -1,14 +1,17 @@
 import react, { useState, useEffect } from 'react';
 import { useMediaQuery } from 'react-responsive';
-import { Dropdown, Drawer } from 'antd';
+import { Dropdown, Drawer, Modal } from 'antd';
 import { Default, Mobile, media } from '../../lib/Media';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import MyMenu from '../MyMenu';
 import MobileMenu from '../MobileMenu/MobileMenu';
+import LoginModal from '../LoginModal';
 
 const Header = () => {
   const [menuToggle, setMenuToggle] = useState(false);
+  const [modalToggle, setModalToggle] = useState(false);
+
   const myMenu = (
     <MenuContainer>
       <MenuLink to="/profile">마이페이지</MenuLink>
@@ -17,6 +20,10 @@ const Header = () => {
       <MenuLink to="/">로그아웃</MenuLink>
     </MenuContainer>
   );
+
+  const onClickLoginButton = () => {
+    setModalToggle(true);
+  };
 
   const showDrawer = () => {
     setMenuToggle(true);
@@ -53,13 +60,18 @@ const Header = () => {
           <LogoLink to="/">Pentatonic</LogoLink>
         </LogoContainer>
         <Default>
-          <CustomDropdown
+          <LoginButton onClick={() => onClickLoginButton()}>로그인</LoginButton>
+          {/* <CustomDropdown
             overlay={MyMenu}
             trigger={['click']}
             placement="bottomCenter"
           >
             <UserName>USER123</UserName>
-          </CustomDropdown>
+          </CustomDropdown> */}
+          <LoginModal
+            modalToggle={modalToggle}
+            setModalToggle={setModalToggle}
+          />
         </Default>
       </HeaderContainer>
     </Fixed>
@@ -113,6 +125,24 @@ const HeaderContainer = styled.div`
     justify-content: center;
     align-items: center;
     color: black;
+  }
+`;
+
+const LoginButton = styled.button`
+  right: 1vw;
+  position: absolute;
+  border: none;
+  background-color: transparent;
+  color: white;
+  width: 100px;
+  border-radius: 6px;
+  height: 60%;
+  font-size: 20px;
+  font-weight: bold;
+  cursor: pointer;
+
+  &:hover {
+    color: lightgray;
   }
 `;
 

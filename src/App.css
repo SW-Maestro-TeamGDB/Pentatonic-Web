@@ -9,8 +9,22 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+::-webkit-scrollbar {
+  width: 0.8rem;
+}
+
+::-webkit-scrollbar-track {
+  background: #f0f0f0;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #8c8c8c;
+  border-radius: 1rem;
+}
+
 html {
   scroll-behavior: smooth;
+  overflow-y: scroll;
 }
 
 * {
