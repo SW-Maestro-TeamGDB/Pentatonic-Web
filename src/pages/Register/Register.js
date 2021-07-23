@@ -1,4 +1,4 @@
-import react, { useState } from 'react';
+import react, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { Steps } from 'antd';
 import { gql, useQuery } from '@apollo/client';
@@ -12,6 +12,8 @@ const { Step } = Steps;
 
 const Register = () => {
   const [pageStep, setPageStep] = useState(0);
+  const [phoneNumber, setPhoneNumber] = useState(null);
+  const [authCode, setAuthCode] = useState(null);
   const nextPage = () => {
     setPageStep(pageStep + 1);
   };
@@ -32,9 +34,9 @@ const Register = () => {
       ),
     },
     {
-      description: '휴대전화 인증',
+      description: '개인정보 입력',
       content: (
-        <RegisterPhoneAuth
+        <RegisterForm
           pageStep={pageStep}
           setPageStep={setPageStep}
           nextPage={nextPage}
@@ -43,13 +45,17 @@ const Register = () => {
       ),
     },
     {
-      description: '개인정보 입력',
+      description: '휴대전화 인증',
       content: (
-        <RegisterForm
+        <RegisterPhoneAuth
           pageStep={pageStep}
           setPageStep={setPageStep}
           nextPage={nextPage}
           prevPage={prevPage}
+          phoneNumber={phoneNumber}
+          setPhoneNumber={setPhoneNumber}
+          authCode={authCode}
+          setAuthCode={setAuthCode}
         />
       ),
     },

@@ -8,7 +8,6 @@ import {
 import { gql, useMutation, useQuery } from '@apollo/client';
 import { Modal } from 'antd';
 import { Link } from 'react-router-dom';
-import { set } from 'react-hook-form';
 
 const LOGIN = gql`
   mutation login($id: String!, $password: String!) {
