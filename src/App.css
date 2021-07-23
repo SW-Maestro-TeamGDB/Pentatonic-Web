@@ -37,6 +37,10 @@ code {
     'Courier New', monospace;
 }
 
+button {
+  outline: none;
+}
+
 @font-face {
   font-family: 'NanumSquare';
   font-weight: 400;

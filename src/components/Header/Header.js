@@ -1,4 +1,6 @@
 import react, { useState, useEffect } from 'react';
+import { useQuery, gql } from '@apollo/client';
+import { GET_CURRENT_USER, currentUserVar } from '../../apollo/cache';
 import { useMediaQuery } from 'react-responsive';
 import { Dropdown, Drawer, Modal } from 'antd';
 import { Default, Mobile, media } from '../../lib/Media';
@@ -11,15 +13,8 @@ import LoginModal from '../LoginModal';
 const Header = () => {
   const [menuToggle, setMenuToggle] = useState(false);
   const [modalToggle, setModalToggle] = useState(false);
-
-  const myMenu = (
-    <MenuContainer>
-      <MenuLink to="/profile">마이페이지</MenuLink>
-      <MenuLink to="/liked">좋아요 누른 커버</MenuLink>
-      <MenuLink to="/library">라이브러리</MenuLink>
-      <MenuLink to="/">로그아웃</MenuLink>
-    </MenuContainer>
-  );
+  const { data } = useQuery(GET_CURRENT_USER);
+  const user = data.user;
 
   const onClickLoginButton = () => {
     setModalToggle(true);
@@ -60,14 +55,24 @@ const Header = () => {
           <LogoLink to="/">Pentatonic</LogoLink>
         </LogoContainer>
         <Default>
-          <LoginButton onClick={() => onClickLoginButton()}>로그인</LoginButton>
-          {/* <CustomDropdown
-            overlay={MyMenu}
-            trigger={['click']}
-            placement="bottomCenter"
-          >
-            <UserName>USER123</UserName>
-          </CustomDropdown> */}
+          {data.user ? (
+            <>
+              <CustomDropdown
+                overlay={MyMenu}
+                trigger={['click']}
+                placement="bottomCenter"
+              >
+                <ProfileContainer>
+                  <UserImg src={user.profileURI} />
+                  <UserName>{user?.username}</UserName>
+                </ProfileContainer>
+              </CustomDropdown>
+            </>
+          ) : (
+            <LoginButton onClick={() => onClickLoginButton()}>
+              로그인
+            </LoginButton>
+          )}
           <LoginModal
             modalToggle={modalToggle}
             setModalToggle={setModalToggle}
@@ -93,9 +98,20 @@ const CustomDropdown = styled(Dropdown)`
   align-items: center;
 `;
 
+const ProfileContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+`;
+
 const CustomDrawer = styled(Drawer)``;
 
-const UserImg = styled.img``;
+const UserImg = styled.img`
+  height: 60%;
+  border-radius: 100%;
+  margin-right: 1rem;
+`;
 
 const UserName = styled.div`
   font-size: 1.5rem;

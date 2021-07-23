@@ -10,7 +10,7 @@ const GridContainer = ({ children, width }) => {
     height: auto;
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    margin-top: 3.5rem;
+    margin-top: 2.5rem;
     grid-column-gap: 1rem;
     grid-row-gap: 1rem;
   `;

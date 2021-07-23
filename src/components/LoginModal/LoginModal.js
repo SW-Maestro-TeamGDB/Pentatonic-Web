@@ -1,5 +1,10 @@
 import react, { useEffect, useState, useCallback } from 'react';
 import styled from 'styled-components';
+import {
+  GET_USER_INFORM,
+  isLoggedInVar,
+  currentUserVar,
+} from '../../apollo/cache';
 import { gql, useMutation, useQuery } from '@apollo/client';
 import { Modal } from 'antd';
 import { Link } from 'react-router-dom';
@@ -15,38 +20,45 @@ const LoginModal = (props) => {
   const { modalToggle, setModalToggle } = props;
   const [id, setID] = useState('');
   const [password, setPassword] = useState('');
-  const [error, setError] = useState(null);
-
+  const [FormError, setFormError] = useState(null);
   const [login, loginResult] = useMutation(LOGIN, {
     errorPolicy: 'all',
+  });
+
+  const currentUser = useQuery(GET_USER_INFORM, {
     onCompleted: (data) => {
-      if (data) alert(data);
+      currentUserVar(data.getPersonalInformation);
     },
   });
 
   useEffect(() => {
     setID('');
     setPassword('');
-    setError('');
+    setFormError('');
   }, [modalToggle]);
 
   useEffect(() => {
-    if (loginResult.data) {
+    if (loginResult.data?.login) {
+      localStorage.setItem('token', loginResult.data.login);
       alert('로그인에 성공했습니다.');
+      setModalToggle(false);
+
+      // 현재 강제 새로고침으로 리렌더
+      window.location.reload();
     } else if (loginResult.error) {
-      setError(loginResult.error.message);
+      setFormError(loginResult.error.message);
     }
   }, [loginResult.data]);
 
   useEffect(() => {
-    if (error) setError(null);
+    if (FormError) setFormError(null);
   }, [id, password]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
     if (!id || !password) {
-      return setError('아이디와 비밀번호를 입력해주세요');
+      return setFormError('아이디와 비밀번호를 입력해주세요');
     }
 
     login({ variables: { id, password } });
@@ -80,7 +92,7 @@ const LoginModal = (props) => {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
-          {error ? <ErrorMessage>{error}</ErrorMessage> : null}
+          {FormError ? <ErrorMessage>{FormError}</ErrorMessage> : null}
           <SubmitButton type="submit">로그인</SubmitButton>
         </CustomForm>
         <SubContainer>

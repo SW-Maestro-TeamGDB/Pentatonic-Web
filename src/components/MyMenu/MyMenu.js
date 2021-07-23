@@ -1,14 +1,19 @@
 import react, { useState, useRef, useEffect } from 'react';
-import styled from 'styled-components';
+import { currentUserVar } from '../../apollo/cache';
 import { Link } from 'react-router-dom';
+import styled from 'styled-components';
 
 const MyMenu = (props) => {
+  const onClickLogout = () => {
+    localStorage.clear();
+    currentUserVar(null);
+  };
   return (
     <MenuContainer>
       <MenuLink to="/profile">마이페이지</MenuLink>
       <MenuLink to="/liked">좋아요 누른 커버</MenuLink>
       <MenuLink to="/library">라이브러리</MenuLink>
-      <MenuLink to="/">로그아웃</MenuLink>
+      <MenuLink onClick={onClickLogout}>로그아웃</MenuLink>
     </MenuContainer>
   );
 };
@@ -18,7 +23,7 @@ const MenuContainer = styled.div`
   flex-direction: column;
   color: black;
   background-color: white;
-  width: 8vw;
+  width: 100%;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 `;
 
