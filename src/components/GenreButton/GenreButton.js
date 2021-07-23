@@ -51,7 +51,7 @@ const CustomButton = styled.span`
   transition: all ease 0.3s;
 
   &:hover {
-    background-color: rgba(0, 0, 0, 0.7);
+    background-color: #3d3d3d;
   }
 `;
 

@@ -40,7 +40,6 @@ const LoginModal = (props) => {
   useEffect(() => {
     if (loginResult.data?.login) {
       localStorage.setItem('token', loginResult.data.login);
-      alert('로그인에 성공했습니다.');
       setModalToggle(false);
 
       // 현재 강제 새로고침으로 리렌더
