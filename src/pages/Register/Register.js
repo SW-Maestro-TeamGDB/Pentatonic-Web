@@ -11,15 +11,28 @@ import RegisterTermsOfService from '../RegisterTermsOfService';
 const { Step } = Steps;
 
 const Register = () => {
+  const userInit = {
+    id: null,
+    password: null,
+    type: null,
+    username: null,
+  };
   const [pageStep, setPageStep] = useState(0);
   const [phoneNumber, setPhoneNumber] = useState(null);
   const [authCode, setAuthCode] = useState(null);
+  const [userInform, setUserInform] = useState(userInit);
+
   const nextPage = () => {
     setPageStep(pageStep + 1);
   };
   const prevPage = () => {
     setPageStep(pageStep - 1);
+    setUserInform(userInit);
   };
+
+  useEffect(() => {
+    console.log(userInform);
+  }, userInform);
 
   const pages = [
     {
@@ -41,6 +54,8 @@ const Register = () => {
           setPageStep={setPageStep}
           nextPage={nextPage}
           prevPage={prevPage}
+          userInform={userInform}
+          setUserInform={setUserInform}
         />
       ),
     },

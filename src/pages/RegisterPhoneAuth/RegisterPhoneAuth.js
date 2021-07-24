@@ -21,6 +21,7 @@ const RegisterPhoneAuth = (props) => {
     setPhoneNumber,
     authCode,
     setAuthCode,
+    userInit,
   } = props;
 
   const [check, setCheck] = useState(false);
@@ -155,7 +156,7 @@ const Container = styled.div`
 `;
 
 const PhoneNumberContainer = styled.div`
-  width: 60%;
+  width: 70%;
 `;
 
 const CustomTitle = styled.div`

@@ -100,6 +100,8 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  position: relative;
+  height: 55vh;
 `;
 
 const TermsContainer = styled.div`
@@ -108,7 +110,7 @@ const TermsContainer = styled.div`
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
   padding: 1rem 1rem;
   overflow-y: scroll;
-  height: 40vh;
+  height: 35vh;
 `;
 
 const TermsQuestion = styled.span`
@@ -144,9 +146,10 @@ const ErrorMessage = styled.span`
 `;
 
 const ButtonConatiner = styled.div`
+  position: absolute;
   width: 50vw;
   min-width: 70%;
-  margin-top: 2rem;
+  bottom: 0;
   display: flex;
   flex-direction: row;
   justify-content: space-around;
