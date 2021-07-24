@@ -6,9 +6,14 @@ import { Link } from 'react-router-dom';
 import { Radio } from 'antd';
 import { check } from 'prettier';
 
-const CHECK_INFORM = gql`
-  query checkInform($id: String!, $username: String!) {
+const CHECK_ID = gql`
+  query checkId($id: String!) {
     checkId(input: { user: { id: $id } })
+  }
+`;
+
+const CHECK_USERNAME = gql`
+  query checkUsername($username: String!) {
     checkUsername(input: { user: { username: $username } })
   }
 `;
@@ -23,25 +28,32 @@ const RegisterForm = (props) => {
     setUserInform,
     userInit,
   } = props;
+
   const [idError, setIdError] = useState(null);
   const [passwordError, setPasswordError] = useState(null);
   const [usernameError, setUsernameError] = useState(null);
   const [typeError, setTypeError] = useState(null);
   const [passwordValidation, setPasswordValidation] = useState(null);
-  const [checkInform, { loading, data }] = useLazyQuery(CHECK_INFORM, {
-    errorPolicy: 'all',
+  const [checkId] = useLazyQuery(CHECK_ID, {
+    fetchPolicy: 'network-only',
+    onError: (error) => {
+      window.scrollTo(0, 0);
+      setIdError(error.message);
+    },
+    onCompleted: () => {
+      checkUsername({ variables: { username: userInform.username } });
+    },
+  });
 
+  const [checkUsername] = useLazyQuery(CHECK_USERNAME, {
+    fetchPolicy: 'network-only',
+    onError: (error) => {
+      window.scrollTo(0, 0);
+      setUsernameError(error.message);
+    },
     onCompleted: (data) => {
-      if (data.checkId && data.checkUsername) {
-        return nextPage();
-      }
-
-      if (!data.checkId) {
-        setIdError('중복된 ID입니다');
-      }
-
-      if (!data.checkUsername) {
-        setUsernameError('중복된 닉네임입니다');
+      if (allErrorCheck()) {
+        nextPage();
       }
     },
   });
@@ -108,10 +120,8 @@ const RegisterForm = (props) => {
 
   const onClickNextButton = () => {
     if (idCheck() && passwordCheck() && usernameCheck() && typeCheck()) {
-      checkInform({
-        variables: { id: userInform.id, username: userInform.username },
-      });
-
+      checkId({ variables: { id: userInform.id } });
+    } else {
       window.scrollTo(0, 0);
     }
   };
