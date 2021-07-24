@@ -1,4 +1,4 @@
-import react, { useEffect, useState } from 'react';
+import react, { useEffect, useState, useMutation } from 'react';
 import styled from 'styled-components';
 import { Steps } from 'antd';
 import { gql, useQuery } from '@apollo/client';
@@ -71,6 +71,7 @@ const Register = () => {
           setPhoneNumber={setPhoneNumber}
           authCode={authCode}
           setAuthCode={setAuthCode}
+          userInform={userInform}
         />
       ),
     },

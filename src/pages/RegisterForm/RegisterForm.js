@@ -26,7 +26,6 @@ const RegisterForm = (props) => {
     prevPage,
     userInform,
     setUserInform,
-    userInit,
   } = props;
 
   const [idError, setIdError] = useState(null);

@@ -11,6 +11,25 @@ const SEND_AUTH_CODE = gql`
   }
 `;
 
+const REGISTER = gql`
+  mutation register(
+    $username: String!
+    $id: String!
+    $password: String!
+    $type: Int!
+    $phoneNumber: PhoneNumber!
+    $authCode: Int!
+  ) {
+    register(
+      input: {
+        user: { username: $username, id: $id, password: $password, type: $type }
+        phoneNumber: $phoneNumber
+        authCode: $authCode
+      }
+    )
+  }
+`;
+
 const RegisterPhoneAuth = (props) => {
   const {
     pageStep,
@@ -21,15 +40,28 @@ const RegisterPhoneAuth = (props) => {
     setPhoneNumber,
     authCode,
     setAuthCode,
-    userInit,
+    userInform,
   } = props;
 
   const [check, setCheck] = useState(false);
   const [authError, setAuthError] = useState(null);
   const [numberStatus, setNumberStatus] = useState(0);
+  const [numberError, setNumberError] = useState(null);
   const [tempNumber, setTempNumber] = useState(null);
   const [auth, authResult] = useMutation(SEND_AUTH_CODE, {
-    errorPolicy: 'all',
+    onError: (error) => {
+      setNumberStatus(-1);
+      setNumberError(error.message);
+    },
+  });
+  const [register, registerResult] = useMutation(REGISTER, {
+    onError: (error) => {
+      setAuthError(error.message);
+    },
+    onCompleted: (data) => {
+      localStorage.setItem('token', data.register);
+      window.location.href = '/';
+    },
   });
 
   const onClickNextButton = () => {
@@ -54,21 +86,10 @@ const RegisterPhoneAuth = (props) => {
       frontCheck() ||
       isNaN(Number(tempNumber))
     ) {
+      setNumberError('올바르지 않은 번호형식 입니다');
       return setNumberStatus(-1);
     } else {
       return requestAuth();
-    }
-  };
-
-  const authCodeCheck = () => {
-    if (
-      Number(authCode).toString().length === 6 &&
-      !isNaN(Number(tempNumber))
-    ) {
-      setAuthError(null);
-      submitRegister();
-    } else {
-      setAuthError('인증번호 형식이 올바르지 않습니다');
     }
   };
 
@@ -77,12 +98,37 @@ const RegisterPhoneAuth = (props) => {
     return '+82' + num.substr(1);
   };
 
+  const authCodeCheck = () => {
+    if (numberStatus !== 1) {
+      setNumberStatus(-1);
+      setNumberError('올바르지 않은 번호형식 입니다');
+      return;
+    } else if (
+      Number(authCode).toString().length === 6 &&
+      !isNaN(Number(tempNumber))
+    ) {
+      setAuthError(null);
+      submitRegister();
+    } else {
+      setAuthError('인증번호가 일치하지 않습니다');
+    }
+  };
+
   const requestAuth = () => {
-    // auth({ variables: { phoneNumber: changeNumber(tempNumber) } });
+    auth({ variables: { phoneNumber: changeNumber(tempNumber) } });
   };
 
   const submitRegister = () => {
-    alert('가입완료');
+    register({
+      variables: {
+        username: userInform.username,
+        id: userInform.id,
+        password: userInform.password,
+        type: userInform.type,
+        phoneNumber: phoneNumber,
+        authCode: Number(authCode),
+      },
+    });
   };
 
   useEffect(() => {
@@ -94,8 +140,13 @@ const RegisterPhoneAuth = (props) => {
 
   useEffect(() => {
     setNumberStatus(0);
+    setNumberError(null);
     setPhoneNumber(null);
   }, [tempNumber]);
+
+  useEffect(() => {
+    setAuthError(null);
+  }, [authCode]);
 
   return (
     <Container>
@@ -111,10 +162,10 @@ const RegisterPhoneAuth = (props) => {
         <AuthButton onClick={() => numberCheck()}>인증번호 받기</AuthButton>
         <ErrorContainer>
           {numberStatus === -1 ? (
-            <ErrorMessage>올바르지 않은 번호형식 입니다.</ErrorMessage>
+            <ErrorMessage>{numberError}</ErrorMessage>
           ) : null}
         </ErrorContainer>
-        {numberStatus !== 1 ? (
+        {numberStatus === 1 ? (
           <AuthNumberInput
             value={authCode}
             placeholder="인증번호를 입력해주세요"
