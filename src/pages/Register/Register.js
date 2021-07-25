@@ -96,7 +96,10 @@ const Register = () => {
 
 const StepContents = styled.div`
   width: 70%;
-  margin-top: 5%;
+  margin-top: 3%;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+  border-radius: 1rem;
+  padding: 3rem 0;
 `;
 
 const CustomSteps = styled(Steps)`

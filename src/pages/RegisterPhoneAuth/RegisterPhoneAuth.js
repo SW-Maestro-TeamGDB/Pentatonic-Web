@@ -101,7 +101,7 @@ const RegisterPhoneAuth = (props) => {
   const authCodeCheck = () => {
     if (numberStatus !== 1) {
       setNumberStatus(-1);
-      setNumberError('올바르지 않은 번호형식 입니다');
+      setNumberError('휴대전화 인증을 진행해주세요');
       return;
     } else if (
       Number(authCode).toString().length === 6 &&

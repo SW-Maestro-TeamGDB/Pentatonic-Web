@@ -105,8 +105,7 @@ const Container = styled.div`
 `;
 
 const TermsContainer = styled.div`
-  width: 50vw;
-  min-width: 70%;
+  width: 75%;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
   padding: 1rem 1rem;
   overflow-y: scroll;

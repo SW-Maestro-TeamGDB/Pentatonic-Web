@@ -70,7 +70,7 @@ const Header = () => {
             </>
           ) : (
             <LoginButton onClick={() => onClickLoginButton()}>
-              로그인
+              로그인 / 회원가입
             </LoginButton>
           )}
           <LoginModal
@@ -150,7 +150,7 @@ const LoginButton = styled.button`
   border: none;
   background-color: transparent;
   color: white;
-  width: 100px;
+  width: auto;
   border-radius: 6px;
   height: 60%;
   font-size: 20px;

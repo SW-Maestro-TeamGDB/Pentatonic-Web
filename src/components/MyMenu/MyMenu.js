@@ -19,12 +19,14 @@ const MyMenu = (props) => {
 };
 
 const MenuContainer = styled.div`
+  min-width: 9rem;
   display: flex;
   flex-direction: column;
   color: black;
   background-color: white;
-  width: 100%;
+  max-width: 100%;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  overflow: hidden;
 `;
 
 const MenuLink = styled(Link)`
