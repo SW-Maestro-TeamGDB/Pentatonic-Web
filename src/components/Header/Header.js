@@ -1,6 +1,10 @@
 import react, { useState, useEffect } from 'react';
-import { useQuery, gql } from '@apollo/client';
-import { GET_CURRENT_USER, currentUserVar } from '../../apollo/cache';
+import { useQuery, gql, useLazyQuery } from '@apollo/client';
+import {
+  GET_CURRENT_USER,
+  GET_USER_INFORM,
+  currentUserVar,
+} from '../../apollo/cache';
 import { useMediaQuery } from 'react-responsive';
 import { Dropdown, Drawer, Modal } from 'antd';
 import { Default, Mobile, media } from '../../lib/Media';
@@ -13,8 +17,20 @@ import AuthModal from '../AuthModal';
 const Header = () => {
   const [menuToggle, setMenuToggle] = useState(false);
   const [modalToggle, setModalToggle] = useState(false);
-  const { data } = useQuery(GET_CURRENT_USER);
-  const user = data.user;
+  const { data } = useQuery(GET_CURRENT_USER, {
+    fetchPolicy: 'network-only',
+    onError: (error) => {},
+    onCompleted: (data) => {
+      console.log(data);
+    },
+  });
+
+  const [getUserInform, getUserInformResult] = useLazyQuery(GET_USER_INFORM, {
+    fetchPolicy: 'network-only',
+    onCompleted: (data) => {
+      currentUserVar(data.getPersonalInformation);
+    },
+  });
 
   const onClickLoginButton = () => {
     setModalToggle(true);
@@ -30,6 +46,16 @@ const Header = () => {
   const isMobile = useMediaQuery({
     query: '(max-width:767px)',
   });
+
+  useEffect(() => {
+    if (localStorage.getItem('token')) {
+      getUserInform();
+    }
+  }, [localStorage.getItem('token')]);
+
+  useEffect(() => {
+    console.log(data);
+  }, [data]);
 
   return (
     <Fixed>
@@ -55,7 +81,7 @@ const Header = () => {
           <LogoLink to="/">Pentatonic</LogoLink>
         </LogoContainer>
         <Default>
-          {data.user ? (
+          {data?.user ? (
             <>
               <CustomDropdown
                 overlay={MyMenu}
@@ -63,8 +89,8 @@ const Header = () => {
                 placement="bottomCenter"
               >
                 <ProfileContainer>
-                  <UserImg src={user.profileURI} />
-                  <UserName>{user?.username}</UserName>
+                  <UserImg src={data?.user?.profileURI} />
+                  <UserName>{data?.user?.username}</UserName>
                 </ProfileContainer>
               </CustomDropdown>
             </>

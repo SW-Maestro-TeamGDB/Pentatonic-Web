@@ -1,11 +1,7 @@
 import react, { useEffect, useState, useCallback } from 'react';
 import styled from 'styled-components';
-import {
-  GET_USER_INFORM,
-  isLoggedInVar,
-  currentUserVar,
-} from '../../apollo/cache';
-import { gql, useMutation, useQuery } from '@apollo/client';
+import { currentUserVar } from '../../apollo/cache';
+import { gql, useMutation, useQuery, useLazyQuery } from '@apollo/client';
 import { Modal } from 'antd';
 import { Link } from 'react-router-dom';
 
@@ -24,12 +20,6 @@ const LoginModal = (props) => {
     errorPolicy: 'all',
   });
 
-  const currentUser = useQuery(GET_USER_INFORM, {
-    onCompleted: (data) => {
-      currentUserVar(data.getPersonalInformation);
-    },
-  });
-
   useEffect(() => {
     setID('');
     setPassword('');
@@ -40,9 +30,6 @@ const LoginModal = (props) => {
     if (loginResult.data?.login) {
       localStorage.setItem('token', loginResult.data.login);
       setModalToggle(false);
-
-      // 현재 강제 새로고침으로 리렌더
-      window.location.reload();
     } else if (loginResult.error) {
       setFormError(loginResult.error.message);
     }

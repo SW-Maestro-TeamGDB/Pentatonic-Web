@@ -79,6 +79,7 @@ const Register = ({ history }) => {
           authCode={authCode}
           setAuthCode={setAuthCode}
           userInform={userInform}
+          history={history}
         />
       ),
     },

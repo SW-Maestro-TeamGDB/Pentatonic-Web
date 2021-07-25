@@ -41,6 +41,7 @@ const RegisterPhoneAuth = (props) => {
     authCode,
     setAuthCode,
     userInform,
+    history,
   } = props;
 
   const [check, setCheck] = useState(false);
