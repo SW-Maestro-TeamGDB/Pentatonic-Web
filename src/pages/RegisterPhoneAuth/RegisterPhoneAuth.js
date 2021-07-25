@@ -158,6 +158,7 @@ const RegisterPhoneAuth = (props) => {
           maxLength="11"
           value={tempNumber}
           onChange={(e) => setTempNumber(e.target.value)}
+          disabled={numberStatus === 1}
         />
         <AuthButton onClick={() => numberCheck()}>인증번호 받기</AuthButton>
         <ErrorContainer>
@@ -262,13 +263,13 @@ const ErrorContainer = styled.div`
   margin-left: 0.5rem;
 `;
 
-const CustomCheckbox = styled(Checkbox)`
-  margin: 0 1rem;
-`;
-
 const ErrorMessage = styled.span`
   text-align: center;
   color: #cb0000;
+`;
+
+const CustomCheckbox = styled(Checkbox)`
+  margin: 0 1rem;
 `;
 
 const ButtonConatiner = styled.div`

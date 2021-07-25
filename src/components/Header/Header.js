@@ -8,7 +8,7 @@ import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import MyMenu from '../MyMenu';
 import MobileMenu from '../MobileMenu/MobileMenu';
-import LoginModal from '../LoginModal';
+import AuthModal from '../AuthModal';
 
 const Header = () => {
   const [menuToggle, setMenuToggle] = useState(false);
@@ -73,7 +73,7 @@ const Header = () => {
               로그인 / 회원가입
             </LoginButton>
           )}
-          <LoginModal
+          <AuthModal
             modalToggle={modalToggle}
             setModalToggle={setModalToggle}
           />

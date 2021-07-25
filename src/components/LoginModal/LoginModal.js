@@ -16,7 +16,7 @@ const LOGIN = gql`
 `;
 
 const LoginModal = (props) => {
-  const { modalToggle, setModalToggle } = props;
+  const { modalToggle, setModalToggle, closeModal, setPageStep } = props;
   const [id, setID] = useState('');
   const [password, setPassword] = useState('');
   const [FormError, setFormError] = useState(null);
@@ -64,45 +64,32 @@ const LoginModal = (props) => {
     setPassword('');
   };
 
-  const closeModal = () => {
-    setModalToggle(false);
-  };
-
   return (
-    <CustomModal
-      visible={modalToggle}
-      onCancel={closeModal}
-      footer={null}
-      centered
-    >
-      <LoginContainer>
-        <LoginTitle>로그인</LoginTitle>
-        <CustomForm onSubmit={handleSubmit}>
-          <CustomInput
-            placeholder="아이디"
-            value={id}
-            onChange={(e) => setID(e.target.value)}
-            type="text"
-          />
-          <PasswordInput
-            placeholder="비밀번호"
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
-          {FormError ? <ErrorMessage>{FormError}</ErrorMessage> : null}
-          <SubmitButton type="submit">로그인</SubmitButton>
-        </CustomForm>
-        <SubContainer>
-          <CustomLink to="/account" onClick={closeModal}>
-            ID/PW찾기
-          </CustomLink>
-          <CustomLink to="/register" onClick={closeModal}>
-            회원가입
-          </CustomLink>
-        </SubContainer>
-      </LoginContainer>
-    </CustomModal>
+    <LoginContainer>
+      <LoginTitle>로그인</LoginTitle>
+      <CustomForm onSubmit={handleSubmit}>
+        <CustomInput
+          placeholder="아이디"
+          value={id}
+          onChange={(e) => setID(e.target.value)}
+          type="text"
+        />
+        <PasswordInput
+          placeholder="비밀번호"
+          type="password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+        />
+        {FormError ? <ErrorMessage>{FormError}</ErrorMessage> : null}
+        <SubmitButton type="submit">로그인</SubmitButton>
+      </CustomForm>
+      <SubContainer>
+        <CustomLink onClick={() => setPageStep(1)}>ID/PW찾기</CustomLink>
+        <CustomLink to="/register" onClick={closeModal}>
+          회원가입
+        </CustomLink>
+      </SubContainer>
+    </LoginContainer>
   );
 };
 

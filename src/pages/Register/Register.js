@@ -10,7 +10,7 @@ import RegisterTermsOfService from '../RegisterTermsOfService';
 
 const { Step } = Steps;
 
-const Register = () => {
+const Register = ({ history }) => {
   const userInit = {
     id: null,
     password: null,
@@ -21,6 +21,13 @@ const Register = () => {
   const [phoneNumber, setPhoneNumber] = useState(null);
   const [authCode, setAuthCode] = useState(null);
   const [userInform, setUserInform] = useState(userInit);
+
+  // 회원가입 중 로그인 할 시 메인화면으로 이동
+  useEffect(() => {
+    if (localStorage.getItem('token')) {
+      history.push('/');
+    }
+  }, [localStorage]);
 
   const nextPage = () => {
     setPageStep(pageStep + 1);
