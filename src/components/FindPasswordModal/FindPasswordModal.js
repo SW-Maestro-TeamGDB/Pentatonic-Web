@@ -9,11 +9,9 @@ const SEND_AUTH_CODE = gql`
   }
 `;
 
-const FIND_ID = gql`
-  query findId($phoneNumber: PhoneNumber!, $authCode: Int!) {
-    findId(input: { phoneNumber: $phoneNumber, authCode: $authCode }) {
-      id
-    }
+const CHECK_AUTH_CODE = gql`
+  query checkAuthCode($phoneNumber: PhoneNumber!, $authCode: Int!) {
+    checkAuthCode(phoneNumber: $phoneNumber, authCode: $authCode)
   }
 `;
 
@@ -61,7 +59,7 @@ const FindPasswordModal = (props) => {
     },
   });
 
-  const [findId] = useLazyQuery(FIND_ID, {
+  const [checkAuthId] = useLazyQuery(CHECK_AUTH_CODE, {
     fetchPolicy: 'network-only',
     onError: (error) => {
       setAuthError(error.message);
@@ -227,7 +225,7 @@ const FindPasswordModal = (props) => {
       !isNaN(Number(tempNumber))
     ) {
       setAuthError(null);
-      findId({
+      checkAuthId({
         variables: {
           phoneNumber: changeNumber(tempNumber),
           authCode: Number(authCode),

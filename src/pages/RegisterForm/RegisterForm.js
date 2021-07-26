@@ -6,15 +6,27 @@ import { Link } from 'react-router-dom';
 import { Radio } from 'antd';
 import { check } from 'prettier';
 
-const CHECK_ID = gql`
-  query checkId($id: String!) {
-    checkId(input: { user: { id: $id } })
+// const CHECK_ID = gql`
+//   query checkId($id: String!) {
+//     checkId(input: { user: { id: $id } })
+//   }
+// `;
+
+const IS_VALID_ID = gql`
+  query isValidId($id: ID!) {
+    isValidId(id: $id)
   }
 `;
 
-const CHECK_USERNAME = gql`
-  query checkUsername($username: String!) {
-    checkUsername(input: { user: { username: $username } })
+// const CHECK_USERNAME = gql`
+//   query checkUsername($username: String!) {
+//     checkUsername(input: { user: { username: $username } })
+//   }
+// `;
+
+const IS_VALID_USERNAME = gql`
+  query isValidUsername($username: String!) {
+    isValidUsername(username: $username)
   }
 `;
 
@@ -33,7 +45,7 @@ const RegisterForm = (props) => {
   const [usernameError, setUsernameError] = useState(null);
   const [typeError, setTypeError] = useState(null);
   const [passwordValidation, setPasswordValidation] = useState(null);
-  const [checkId] = useLazyQuery(CHECK_ID, {
+  const [checkId] = useLazyQuery(IS_VALID_ID, {
     fetchPolicy: 'network-only',
     onError: (error) => {
       window.scrollTo(0, 0);
@@ -44,7 +56,7 @@ const RegisterForm = (props) => {
     },
   });
 
-  const [checkUsername] = useLazyQuery(CHECK_USERNAME, {
+  const [checkUsername] = useLazyQuery(IS_VALID_USERNAME, {
     fetchPolicy: 'network-only',
     onError: (error) => {
       window.scrollTo(0, 0);
