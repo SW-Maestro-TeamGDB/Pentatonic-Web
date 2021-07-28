@@ -1,10 +1,11 @@
-import react, { useState, useEffect, useCallback } from 'react';
+import react, { useState, useEffect, useCallback, useRef } from 'react';
 import { Progress } from 'antd';
 import styled from 'styled-components';
 import PlayIcon from '../../images/PlayIcon.svg';
 import StopIcon from '../../images/StopIcon.svg';
 import RetryIcon from '../../images/RetryIcon.svg';
 import SaveIcon from '../../images/SaveIcon.svg';
+import tempLyric from './lyrics.json';
 
 const RecordPage = (props) => {
   const { setPage, setAudioFile, audioDuration, inst } = props;
@@ -16,15 +17,31 @@ const RecordPage = (props) => {
   const [audioUrl, setAudioUrl] = useState();
   const [count, setCount] = useState(0);
 
-  const stopInst = () => {
+  // 임시 가사
+  const lyrics = tempLyric.lyrics;
+  const lyricsLength = lyrics.length;
+  const [lyricsIndex, setLyricsIndex] = useState(0);
+  const [endTime, setEndTime] = useState(lyrics[0].end);
+
+  // 매 count 갱신마다 렌더하므로 방법 고민해볼것
+  useEffect(() => {
+    if (count > endTime && lyricsIndex < lyricsLength - 1) {
+      setEndTime(lyrics[lyricsIndex + 1].end);
+      setLyricsIndex(lyricsIndex + 1);
+    }
+  }, [count]);
+
+  const init = () => {
     // 배경음악 중지 및 초기화
     inst.pause();
     inst.currentTime = 0;
+    setEndTime(lyrics[0].end);
+    setLyricsIndex(0);
   };
 
   const onClickStop = () => {
     offRecAudio();
-    stopInst();
+    init();
     setPage(0);
   };
 
@@ -45,23 +62,23 @@ const RecordPage = (props) => {
     // 마이크 사용 권한 획득
     navigator.mediaDevices.getUserMedia({ audio: true }).then((stream) => {
       const mediaRecorder = new MediaRecorder(stream);
+      init();
       inst.play();
-      console.log(inst);
       mediaRecorder.start();
       setStream(stream);
       setMedia(mediaRecorder);
       makeSound(stream);
 
       analyser.onaudioprocess = function (e) {
-        console.log(e.playbackTime);
         setCount(e.playbackTime);
+
         // 30초 지나면 자동으로 음성 저장 및 녹음 중지
         if (e.playbackTime > audioDuration) {
           stream.getAudioTracks().forEach(function (track) {
             track.stop();
           });
 
-          stopInst();
+          init();
           // 녹음 중지
           mediaRecorder.stop();
 
@@ -105,7 +122,7 @@ const RecordPage = (props) => {
   const onSubmitAudioFile = () => {
     if (audioUrl) {
       setAudioFile(window.URL.createObjectURL(audioUrl)); // 오디오 파일 url로 저장
-      stopInst();
+      init();
       setPage(2);
     }
     // File 생성자를 사용해 파일로 변환
@@ -130,7 +147,14 @@ const RecordPage = (props) => {
           <CustomPlayIcon src={SaveIcon} onClick={onSubmitAudioFile} />
         ) : null}
       </IconContainer>
+      <LyricsContainer>
+        <CurrentLyrics>{lyrics[lyricsIndex].text}</CurrentLyrics>
+        <NextLyrics>
+          {lyricsIndex < lyricsLength - 1 ? lyrics[lyricsIndex + 1].text : 'ㅤ'}
+        </NextLyrics>
+      </LyricsContainer>
       <ProgressContainer>
+        {/* audioDuration의 길이를 알기 떄문에 animation 형식으로 바꾸는것 고려 */}
         <CustomProgress
           percent={(count / audioDuration) * 100}
           showInfo={false}
@@ -158,9 +182,27 @@ const IconContainer = styled.div`
   width: 40%;
 `;
 
+const CurrentLyrics = styled.div`
+  font-size: 1.2rem;
+  font-weight: 800;
+`;
+
+const NextLyrics = styled.div`
+  font-size: 1rem;
+  color: rgba(160, 160, 160);
+`;
+
+const LyricsContainer = styled.div`
+  position: absolute;
+  left: 50%;
+  bottom: 25%;
+  transform: translate(-50%, -50%);
+  width: 30rem;
+`;
+
 const ProgressContainer = styled.div`
   position: absolute;
-  bottom: 25%;
+  bottom: 20%;
   left: 50%;
   transform: translate(-50%, -50%);
 `;
@@ -186,9 +228,6 @@ const CustomStopIcon = styled.img`
   cursor: pointer;
   width: 3.5rem;
   height: 3.5rem;
-
-  &:hover {
-  }
 `;
 
 export default RecordPage;

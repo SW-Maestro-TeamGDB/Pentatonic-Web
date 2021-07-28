@@ -11,16 +11,17 @@ const CoverMaking = () => {
   const [audioFile, setAudioFile] = useState();
   const [audioDuration, setAudioDuration] = useState();
   const [inst, setInst] = useState();
+
+  // 샘플 오디오
   const audio = new Audio();
   audio.src = instrument;
 
   useEffect(() => {
     setInst(audio);
-    console.log(inst);
   }, []);
 
   useEffect(() => {
-    setAudioDuration(Math.random() * 10 + 3);
+    setAudioDuration(Math.random() * 10 + 42);
   }, []);
 
   const showPage = () => {
