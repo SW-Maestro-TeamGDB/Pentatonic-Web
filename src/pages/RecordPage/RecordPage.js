@@ -1,14 +1,25 @@
 import react, { useState, useEffect, useCallback } from 'react';
+import { Progress } from 'antd';
 import styled from 'styled-components';
-import PageContainer from '../../components/PageContainer';
+import PlayIcon from '../../images/PlayIcon.svg';
+import StopIcon from '../../images/StopIcon.svg';
+import RetryIcon from '../../images/RetryIcon.svg';
+import SaveIcon from '../../images/SaveIcon.svg';
 
-const RecordPage = () => {
+const RecordPage = (props) => {
+  const { setPage, setAudioFile, audioDuration } = props;
   const [stream, setStream] = useState();
   const [media, setMedia] = useState();
   const [onRec, setOnRec] = useState(true);
   const [source, setSource] = useState();
   const [analyser, setAnalyser] = useState();
   const [audioUrl, setAudioUrl] = useState();
+  const [count, setCount] = useState(0);
+
+  const onClickStop = () => {
+    offRecAudio();
+    setPage(0);
+  };
 
   const onRecAudio = () => {
     // 음원정보를 담은 노드를 생성하거나 음원을 실행또는 디코딩 시키는 일을 한다
@@ -33,8 +44,9 @@ const RecordPage = () => {
       makeSound(stream);
 
       analyser.onaudioprocess = function (e) {
+        setCount(e.playbackTime);
         // 30초 지나면 자동으로 음성 저장 및 녹음 중지
-        if (e.playbackTime > 30) {
+        if (e.playbackTime > audioDuration) {
           stream.getAudioTracks().forEach(function (track) {
             track.stop();
           });
@@ -45,7 +57,9 @@ const RecordPage = () => {
 
           mediaRecorder.ondataavailable = function (e) {
             setAudioUrl(e.data);
+            setAudioFile(window.URL.createObjectURL(e.data));
             setOnRec(true);
+            // setPage(2);
           };
         } else {
           setOnRec(false);
@@ -59,7 +73,7 @@ const RecordPage = () => {
     // dataavailable 이벤트로 Blob 데이터에 대한 응답을 받을 수 있음
     media.ondataavailable = function (e) {
       setAudioUrl(e.data);
-      setOnRec(true);
+      setOnRec(false); // false 로 수정
     };
 
     // 모든 트랙에서 stop()을 호출해 오디오 스트림을 정지
@@ -74,25 +88,92 @@ const RecordPage = () => {
     source.disconnect();
   };
 
-  const onSubmitAudioFile = useCallback(() => {
+  const onSubmitAudioFile = () => {
     if (audioUrl) {
-      console.log(URL.createObjectURL(audioUrl)); // 출력된 링크에서 녹음된 오디오 확인 가능
+      setAudioFile(window.URL.createObjectURL(audioUrl)); // 오디오 파일 url로 저장
+      setPage(2);
     }
     // File 생성자를 사용해 파일로 변환
     const sound = new File([audioUrl], 'soundBlob', {
       lastModified: new Date().getTime(),
       type: 'audio',
     });
-    console.log(sound); // File 정보 출력
-  }, [audioUrl]);
+  };
 
   return (
-    <PageContainer>
-      <h3>음성녹음</h3>
-      <button onClick={onRec ? onRecAudio : offRecAudio}>녹음</button>
-      <button onClick={onSubmitAudioFile}>결과 확인</button>
-    </PageContainer>
+    <Container>
+      <IconContainer>
+        {onRec ? (
+          <CustomPlayIcon
+            src={audioUrl ? RetryIcon : PlayIcon}
+            onClick={onRecAudio}
+          />
+        ) : (
+          <CustomStopIcon src={StopIcon} onClick={onClickStop} />
+        )}
+        {onRec && audioUrl ? (
+          <CustomPlayIcon src={SaveIcon} onClick={onSubmitAudioFile} />
+        ) : null}
+      </IconContainer>
+      <ProgressContainer>
+        <CustomProgress
+          percent={(count / audioDuration) * 100}
+          showInfo={false}
+          strokeColor="black"
+        />
+      </ProgressContainer>
+    </Container>
   );
 };
+
+const Container = styled.div`
+  width: 80%;
+  height: 70vh;
+  position: relative;
+`;
+
+const IconContainer = styled.div`
+  position: absolute;
+  top: 40%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  width: 40%;
+`;
+
+const ProgressContainer = styled.div`
+  position: absolute;
+  bottom: 25%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+`;
+
+const CustomProgress = styled(Progress)`
+  width: 30rem;
+`;
+
+const CustomPlayIcon = styled.img`
+  transition: all ease-in-out 0.3s;
+  cursor: pointer;
+  width: 4rem;
+  height: 4rem;
+
+  &:hover {
+    color: rgb(100, 100, 100);
+    transform: scale(1.1);
+  }
+`;
+
+const CustomStopIcon = styled.img`
+  transition: all ease-in-out 0.3s;
+  cursor: pointer;
+  width: 3.5rem;
+  height: 3.5rem;
+
+  &:hover {
+  }
+`;
 
 export default RecordPage;

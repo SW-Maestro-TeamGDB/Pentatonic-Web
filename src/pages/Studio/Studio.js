@@ -16,9 +16,7 @@ const Studio = ({ match }) => {
       <Route path={`${match.path}/band`} component={StudioBandCover} exact />
       <Route path={`${match.path}/solo`} component={StudioSoloCover} exact />
       <Route path={`${match.path}/:id`} component={MusicInformation} exact />
-
       <Route path={`${match.path}/:id/cover`} component={CoverMaking} exact />
-      <Route path={`${match.path}/:id/record`} component={RecordPage} exact />
     </>
   );
 };
