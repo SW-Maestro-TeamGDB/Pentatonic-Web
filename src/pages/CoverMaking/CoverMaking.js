@@ -4,11 +4,20 @@ import PageContainer from '../../components/PageContainer';
 import CoverForm from '../CoverForm';
 import RecordPage from '../RecordPage';
 import RecordEdit from '../RecordEdit';
+import instrument from './inst.mp3';
 
 const CoverMaking = () => {
   const [page, setPage] = useState(0);
   const [audioFile, setAudioFile] = useState();
   const [audioDuration, setAudioDuration] = useState();
+  const [inst, setInst] = useState();
+  const audio = new Audio();
+  audio.src = instrument;
+
+  useEffect(() => {
+    setInst(audio);
+    console.log(inst);
+  }, []);
 
   useEffect(() => {
     setAudioDuration(Math.random() * 10 + 3);
@@ -23,6 +32,7 @@ const CoverMaking = () => {
           setPage={setPage}
           setAudioFile={setAudioFile}
           audioDuration={audioDuration}
+          inst={inst}
         />
       );
     } else if (page === 2) {

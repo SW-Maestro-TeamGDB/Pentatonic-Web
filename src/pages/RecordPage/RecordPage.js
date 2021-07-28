@@ -7,7 +7,7 @@ import RetryIcon from '../../images/RetryIcon.svg';
 import SaveIcon from '../../images/SaveIcon.svg';
 
 const RecordPage = (props) => {
-  const { setPage, setAudioFile, audioDuration } = props;
+  const { setPage, setAudioFile, audioDuration, inst } = props;
   const [stream, setStream] = useState();
   const [media, setMedia] = useState();
   const [onRec, setOnRec] = useState(true);
@@ -16,8 +16,15 @@ const RecordPage = (props) => {
   const [audioUrl, setAudioUrl] = useState();
   const [count, setCount] = useState(0);
 
+  const stopInst = () => {
+    // 배경음악 중지 및 초기화
+    inst.pause();
+    inst.currentTime = 0;
+  };
+
   const onClickStop = () => {
     offRecAudio();
+    stopInst();
     setPage(0);
   };
 
@@ -38,19 +45,26 @@ const RecordPage = (props) => {
     // 마이크 사용 권한 획득
     navigator.mediaDevices.getUserMedia({ audio: true }).then((stream) => {
       const mediaRecorder = new MediaRecorder(stream);
+      inst.play();
+      console.log(inst);
       mediaRecorder.start();
       setStream(stream);
       setMedia(mediaRecorder);
       makeSound(stream);
 
       analyser.onaudioprocess = function (e) {
+        console.log(e.playbackTime);
         setCount(e.playbackTime);
         // 30초 지나면 자동으로 음성 저장 및 녹음 중지
         if (e.playbackTime > audioDuration) {
           stream.getAudioTracks().forEach(function (track) {
             track.stop();
           });
+
+          stopInst();
+          // 녹음 중지
           mediaRecorder.stop();
+
           // 메서드가 호출 된 노드 연결 해제
           analyser.disconnect();
           audioCtx.createMediaStreamSource(stream).disconnect();
@@ -91,6 +105,7 @@ const RecordPage = (props) => {
   const onSubmitAudioFile = () => {
     if (audioUrl) {
       setAudioFile(window.URL.createObjectURL(audioUrl)); // 오디오 파일 url로 저장
+      stopInst();
       setPage(2);
     }
     // File 생성자를 사용해 파일로 변환
