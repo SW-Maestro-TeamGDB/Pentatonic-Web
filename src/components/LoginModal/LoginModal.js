@@ -6,7 +6,7 @@ import { Modal } from 'antd';
 import { Link } from 'react-router-dom';
 
 const LOGIN = gql`
-  mutation login($id: String!, $password: String!) {
+  mutation login($id: Id!, $password: Password!) {
     login(input: { user: { id: $id, password: $password } })
   }
 `;
@@ -18,6 +18,9 @@ const LoginModal = (props) => {
   const [FormError, setFormError] = useState(null);
   const [login, loginResult] = useMutation(LOGIN, {
     errorPolicy: 'all',
+    onError: (errors) => {
+      setFormError('로그인에 실패했습니다');
+    },
   });
 
   useEffect(() => {
@@ -27,6 +30,7 @@ const LoginModal = (props) => {
   }, [modalToggle]);
 
   useEffect(() => {
+    console.log(loginResult);
     if (loginResult.data?.login) {
       localStorage.setItem('token', loginResult.data.login);
       setModalToggle(false);
@@ -60,6 +64,7 @@ const LoginModal = (props) => {
           value={id}
           onChange={(e) => setID(e.target.value)}
           type="text"
+          maxLength="14"
         />
         <PasswordInput
           placeholder="비밀번호"
