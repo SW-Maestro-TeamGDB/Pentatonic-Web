@@ -71,7 +71,6 @@ const RecordPage = (props) => {
 
       analyser.onaudioprocess = function (e) {
         setCount(e.playbackTime);
-
         // 30초 지나면 자동으로 음성 저장 및 녹음 중지
         if (e.playbackTime > audioDuration) {
           stream.getAudioTracks().forEach(function (track) {
@@ -79,8 +78,9 @@ const RecordPage = (props) => {
           });
 
           init();
+
           // 녹음 중지
-          mediaRecorder.stop();
+          if (mediaRecorder.state === 'recording') mediaRecorder.stop();
 
           // 메서드가 호출 된 노드 연결 해제
           analyser.disconnect();

@@ -21,7 +21,7 @@ const CoverMaking = () => {
   }, []);
 
   useEffect(() => {
-    setAudioDuration(Math.random() * 10 + 42);
+    setAudioDuration(Math.random() * 3 + 10);
   }, []);
 
   const showPage = () => {
@@ -37,7 +37,13 @@ const CoverMaking = () => {
         />
       );
     } else if (page === 2) {
-      return <RecordEdit audioFile={audioFile} setAudioFile={setAudioFile} />;
+      return (
+        <RecordEdit
+          audioFile={audioFile}
+          setAudioFile={setAudioFile}
+          inst={inst}
+        />
+      );
     }
   };
 
