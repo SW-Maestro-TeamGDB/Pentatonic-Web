@@ -30,6 +30,9 @@ const Header = () => {
     onCompleted: (data) => {
       currentUserVar(data.getPersonalInformation);
     },
+    onError: (error) => {
+      console.log(error);
+    },
   });
 
   const onClickLoginButton = () => {

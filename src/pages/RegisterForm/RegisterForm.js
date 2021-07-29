@@ -13,7 +13,7 @@ import { check } from 'prettier';
 // `;
 
 const IS_VALID_ID = gql`
-  query isValidId($id: ID!) {
+  query isValidId($id: Id!) {
     isValidId(id: $id)
   }
 `;
@@ -25,7 +25,7 @@ const IS_VALID_ID = gql`
 // `;
 
 const IS_VALID_USERNAME = gql`
-  query isValidUsername($username: String!) {
+  query isValidUsername($username: Username!) {
     isValidUsername(username: $username)
   }
 `;
@@ -176,6 +176,7 @@ const RegisterForm = (props) => {
               id: e.target.value,
             })
           }
+          maxLength="14"
           placeholder="아이디"
         />
         <ErrorContainer>
@@ -221,6 +222,7 @@ const RegisterForm = (props) => {
               username: e.target.value,
             })
           }
+          maxLength="14"
           placeholder="닉네임"
         />
         <ErrorContainer>

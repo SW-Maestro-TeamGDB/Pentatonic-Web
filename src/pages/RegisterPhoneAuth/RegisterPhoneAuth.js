@@ -13,9 +13,9 @@ const SEND_AUTH_CODE = gql`
 
 const REGISTER = gql`
   mutation register(
-    $username: String!
-    $id: String!
-    $password: String!
+    $username: Username!
+    $id: Id!
+    $password: Password!
     $type: Int!
     $phoneNumber: PhoneNumber!
     $authCode: Int!

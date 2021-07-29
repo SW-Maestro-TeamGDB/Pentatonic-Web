@@ -19,7 +19,7 @@ const RESET_PASSWORD = gql`
   mutation resetPassword(
     $phoneNumber: PhoneNumber!
     $authCode: Int!
-    $password: String!
+    $password: Password!
   ) {
     resetPassword(
       input: {

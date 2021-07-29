@@ -11,7 +11,7 @@ const SEND_AUTH_CODE = gql`
 
 const FIND_ID = gql`
   query findId($phoneNumber: PhoneNumber!, $authCode: Int!) {
-    findId(input: { phoneNumber: $phoneNumber, authCode: $authCode }) {
+    findId(phoneNumber: $phoneNumber, authCode: $authCode) {
       id
     }
   }
