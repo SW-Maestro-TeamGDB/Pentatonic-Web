@@ -21,7 +21,7 @@ const CoverMaking = () => {
   }, []);
 
   useEffect(() => {
-    setAudioDuration(Math.random() * 3 + 10);
+    setAudioDuration(Math.random() * 3 + 2);
   }, []);
 
   const showPage = () => {
