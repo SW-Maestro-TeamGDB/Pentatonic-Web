@@ -50,7 +50,7 @@ const SubMenuContainer = styled.div`
   position: fixed;
   top: 120px;
   padding-bottom: 20px;
-  z-index: 4;
+  z-index: 3;
   background-color: white;
   width: 100%;
   border-bottom: 1.5px solid rgb(200, 200, 200, 0.5);
