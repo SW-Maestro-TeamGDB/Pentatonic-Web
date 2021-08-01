@@ -24,7 +24,7 @@ const MenuContainer = styled.div`
   padding: 40px 0 40px;
   top: 50px;
   width: 100%;
-  z-index: 4;
+  z-index: 3;
   height: 50px;
   background-color: white;
 `;

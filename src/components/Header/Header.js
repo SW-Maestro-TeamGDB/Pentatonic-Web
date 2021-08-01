@@ -6,7 +6,7 @@ import {
   currentUserVar,
 } from '../../apollo/cache';
 import { useMediaQuery } from 'react-responsive';
-import { Dropdown, Drawer, Modal } from 'antd';
+import { Dropdown, Drawer, Modal, Select } from 'antd';
 import { Default, Mobile, media } from '../../lib/Media';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
@@ -90,6 +90,7 @@ const Header = () => {
                 overlay={MyMenu}
                 trigger={['click']}
                 placement="bottomCenter"
+                getPopupContainer={(trigger) => trigger.parentNode}
               >
                 <ProfileContainer>
                   <UserImg src={data?.user?.profileURI} />
@@ -120,9 +121,8 @@ const Fixed = styled.div`
 `;
 
 const CustomDropdown = styled(Dropdown)`
-  position: absolute;
+  position: relative;
   right: 2vw;
-  height: 100%;
   display: flex;
   align-items: center;
 `;
@@ -137,9 +137,10 @@ const ProfileContainer = styled.div`
 const CustomDrawer = styled(Drawer)``;
 
 const UserImg = styled.img`
-  height: 60%;
+  max-height: 30px;
   border-radius: 100%;
   margin-right: 1rem;
+  background-color: white;
 `;
 
 const UserName = styled.div`
@@ -224,7 +225,6 @@ const LoginContainer = styled.div`
 const MenuContainer = styled.div`
   display: flex;
   flex-direction: column;
-  position: absolute;
   color: black;
   background-color: white;
   right: 1vw;
