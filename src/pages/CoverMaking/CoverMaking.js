@@ -114,6 +114,7 @@ const StepContents = styled.div`
   border-radius: 1rem;
   display: flex;
   justify-content: center;
+  margin-bottom: 2rem;
 `;
 
 export default CoverMaking;

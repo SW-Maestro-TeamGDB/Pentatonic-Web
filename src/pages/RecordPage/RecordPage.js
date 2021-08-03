@@ -1,11 +1,13 @@
 import react, { useState, useEffect, useCallback, useRef } from 'react';
-import { Progress } from 'antd';
+import { Progress, Modal } from 'antd';
+import RecordModal from '../../components/RecordModal/RecordModal';
 import styled from 'styled-components';
 import PlayIcon from '../../images/PlayIcon.svg';
 import StopIcon from '../../images/StopIcon.svg';
 import RetryIcon from '../../images/RetryIcon.svg';
 import SaveIcon from '../../images/SaveIcon.svg';
 import tempLyric from './lyrics.json';
+import { LeftOutlined } from '@ant-design/icons';
 
 const RecordPage = (props) => {
   const { setPage, setAudioFile, audioDuration, inst } = props;
@@ -16,6 +18,13 @@ const RecordPage = (props) => {
   const [analyser, setAnalyser] = useState();
   const [audioUrl, setAudioUrl] = useState();
   const [count, setCount] = useState(0);
+
+  // 모달
+  const [modalToggle, setModalToggle] = useState(false);
+
+  useEffect(() => {
+    setModalToggle(true);
+  }, []);
 
   // 임시 가사
   const lyrics = tempLyric.lyrics;
@@ -134,6 +143,11 @@ const RecordPage = (props) => {
 
   return (
     <Container>
+      <RecordModal modalToggle={modalToggle} setModalToggle={setModalToggle} />
+      <BackwardButton onClick={() => setPage(0)}>
+        <LeftOutlined />
+        <BackwardText>커버 정보 입력</BackwardText>
+      </BackwardButton>
       <IconContainer>
         {onRec ? (
           <CustomPlayIcon
@@ -180,6 +194,29 @@ const IconContainer = styled.div`
   flex-direction: row;
   justify-content: space-evenly;
   width: 40%;
+`;
+
+const BackwardButton = styled.div`
+  position: absolute;
+  cursor: pointer;
+  z-index: 2;
+  font-size: 1.2rem;
+  top: 5%;
+  left: 0%;
+  color: black;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  &:hover {
+    color: gray;
+  }
+`;
+
+const BackwardText = styled.span`
+  margin-left: 1rem;
+  font-size: 80%;
 `;
 
 const CurrentLyrics = styled.div`
