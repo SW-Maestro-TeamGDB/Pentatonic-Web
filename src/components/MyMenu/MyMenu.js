@@ -19,14 +19,14 @@ const MyMenu = (props) => {
 };
 
 const MenuContainer = styled.div`
-  min-width: 9rem;
+  width: 12em;
   display: flex;
   flex-direction: column;
   color: black;
   background-color: white;
-  max-width: 100%;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-  overflow: hidden;
+  position: fixed;
+  z-index: 5;
 `;
 
 const MenuLink = styled(Link)`
@@ -35,7 +35,7 @@ const MenuLink = styled(Link)`
   text-align: center;
   font-weight: 400;
   font-size: 16px;
-
+  z-index: 5;
   &:hover {
     background-color: rgb(230, 230, 230);
     color: black;

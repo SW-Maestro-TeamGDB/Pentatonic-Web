@@ -48,7 +48,7 @@ const Centered = styled.div`
   flex-direction: column;
   align-items: center;
   position: absolute;
-  top: 160px;
+  top: 110px;
   width: 100%;
 `;
 

@@ -1,6 +1,5 @@
 import react from 'react';
 import { Route, Link } from 'react-router-dom';
-import SubMenu from '../../components/SubMenu';
 import ArtistHome from '../ArtistHome';
 import RisingBand from '../RisingBand';
 import RisingArtist from '../RisingArtist';
@@ -10,7 +9,6 @@ import ArtistRank from '../ArtistRank';
 const Artist = ({ match }) => {
   return (
     <>
-      <SubMenu page={'Artist'} />
       <Route exact path={match.path} component={ArtistHome} />
       <Route path={`${match.path}/rising/band`} component={RisingBand} />
       <Route path={`${match.path}/rising/solo`} component={RisingArtist} />
