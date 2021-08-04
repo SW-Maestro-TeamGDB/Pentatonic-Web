@@ -16,11 +16,12 @@ const SessionAddPanel = (props) => {
   });
 
   const onClickSessionAdd = () => {
+    console.log(inputSession.member);
     if (sessionSet.has(inputSession.session)) {
       return setSessionError('이미 등록된 세션입니다');
     } else if (inputSession.session === '세션 선택') {
       return setSessionError('세션을 선택해주세요');
-    } else if (inputSession.memeber === '인원 선택') {
+    } else if (inputSession.member === '인원 선택') {
       return setSessionError('인원을 선택해주세요');
     }
 
@@ -52,22 +53,22 @@ const SessionAddPanel = (props) => {
                 setInputSession({ ...inputSession, session: value });
               }}
             >
-              <Option value="vocal">
+              <Option value="보컬">
                 <Centered>보컬</Centered>
               </Option>
-              <Option value="guitar">
+              <Option value="기타">
                 <Centered>기타</Centered>
               </Option>
-              <Option value="bass">
+              <Option value="베이스">
                 <Centered>베이스</Centered>
               </Option>
-              <Option value="drum">
+              <Option value="드럼">
                 <Centered>드럼</Centered>
               </Option>
-              <Option value="keyboard">
+              <Option value="키보드">
                 <Centered>키보드</Centered>
               </Option>
-              <Option value="gayaguem">
+              <Option value="가야금">
                 <Centered>가야금</Centered>
               </Option>
             </SessionSelect>
@@ -93,9 +94,6 @@ const SessionAddPanel = (props) => {
               </Option>
               <Option value="5">
                 <Centered>5</Centered>
-              </Option>
-              <Option value="6">
-                <Centered>6</Centered>
               </Option>
             </MemberSelect>
             <SessionSubmitButton onClick={() => onClickSessionAdd()}>
