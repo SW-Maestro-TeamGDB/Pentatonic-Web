@@ -1,9 +1,10 @@
-import react, { useState } from 'react';
+import react, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import PageContainer from '../../components/PageContainer';
 import RecordPage from '../RecordPage';
 import RecordEdit from '../RecordEdit';
+import SessionAddPanel from '../../components/SessionAddPanel';
 import { Upload } from 'antd';
 import { LeftOutlined, PictureOutlined } from '@ant-design/icons';
 
@@ -12,10 +13,16 @@ const { Dragger } = Upload;
 const CoverMaking = (props) => {
   const { setPage, audioDuration, pageUrl } = props;
   const [titleError, setTitleError] = useState(null);
-
+  const [session, setSession] = useState([]);
+  const [sessionSet, setSessionSet] = useState(new Set([]));
+  const [sessionAddToggle, setSessionAddToggle] = useState(1);
   const backToMusicInfo = () => {
     return pageUrl.substr(0, pageUrl.length - 6);
   };
+
+  useEffect(() => {
+    console.log(session);
+  }, [session]);
 
   return (
     <Container>
@@ -67,6 +74,15 @@ const CoverMaking = (props) => {
         <InputContainer>
           <CustomTitle>세션 프리셋</CustomTitle>
           <CustomDescription>커버에 필요한 세션을 추가합니다</CustomDescription>
+          <SessionContainer></SessionContainer>
+          <SessionAddButtonContainer>
+            <SessionAddPanel
+              session={session}
+              setSession={setSession}
+              sessionSet={sessionSet}
+              setSessionSet={setSessionSet}
+            />
+          </SessionAddButtonContainer>
         </InputContainer>
         <InputContainer>
           <CustomTitle>제공 반주</CustomTitle>
@@ -90,6 +106,14 @@ const Container = styled.div`
 const InputContainer = styled.div`
   width: 100%;
   margin-top: 2rem;
+`;
+
+const SessionContainer = styled.div``;
+
+const SessionAddButtonContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;
 
 const SongMetaContainer = styled.div`
