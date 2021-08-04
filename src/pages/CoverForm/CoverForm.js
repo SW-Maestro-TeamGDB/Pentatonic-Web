@@ -19,11 +19,14 @@ const CoverMaking = (props) => {
   const [session, setSession] = useState([]);
   const [sessionSet, setSessionSet] = useState(new Set([]));
   const [sessionAddToggle, setSessionAddToggle] = useState(1);
+  const [selectedSession, setSelectedSession] = useState(null);
   const backToMusicInfo = () => {
     return pageUrl.substr(0, pageUrl.length - 6);
   };
 
-  useEffect(() => {}, [session]);
+  useEffect(() => {
+    console.log(selectedSession);
+  }, [selectedSession]);
 
   return (
     <Container>
@@ -84,6 +87,8 @@ const CoverMaking = (props) => {
                 setSession={setSession}
                 sessionSet={sessionSet}
                 setSessionSet={setSessionSet}
+                selectedSession={selectedSession}
+                setSelectedSession={setSelectedSession}
               />
             ) : (
               <NoSession>등록된 세션이 없습니다</NoSession>
