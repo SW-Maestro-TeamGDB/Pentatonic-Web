@@ -15,8 +15,11 @@ const SessionAddPanel = (props) => {
     member: '인원 선택',
   });
 
+  useEffect(() => {
+    setSessionError(null);
+  }, [session]);
+
   const onClickSessionAdd = () => {
-    console.log(inputSession.member);
     if (sessionSet.has(inputSession.session)) {
       return setSessionError('이미 등록된 세션입니다');
     } else if (inputSession.session === '세션 선택') {

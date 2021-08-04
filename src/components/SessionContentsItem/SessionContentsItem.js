@@ -11,7 +11,9 @@ const SessionContentsItem = (props) => {
     <SessionContentsContainer>
       <SessionTitle>{title}</SessionTitle>
       <SessionMember>0/{number}</SessionMember>
-      <DeleteContainer onClick={() => onClickDelete(index)}>X</DeleteContainer>
+      <DeleteContainer onClick={() => onClickDelete(title, index)}>
+        X
+      </DeleteContainer>
     </SessionContentsContainer>
   );
 };
@@ -20,13 +22,15 @@ const SessionContentsContainer = styled.div`
   display: flex;
   width: 100%;
   align-items: center;
+  box-sizing: border-box;
 `;
 
 const SessionTitle = styled.div`
   font-size: 1.2rem;
   font-weight: 700;
   width: 70%;
-  text-align: center;
+  text-align: left;
+  padding-left: 10%;
 `;
 
 const SessionMember = styled.div`

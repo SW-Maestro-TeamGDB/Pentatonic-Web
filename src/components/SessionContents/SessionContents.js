@@ -1,20 +1,21 @@
 import { Collapse } from 'antd';
-import react, { useEffect, useState } from 'react';
+import react, { useEffect, useState, useCallback } from 'react';
 import styled from 'styled-components';
 import { Default } from '../../lib/Media';
 import GridContainer from '../GridContainer/GridContainer';
 import SessionContentsItem from '../SessionContentsItem/SessionContentsItem';
 
 const SessionContents = (props) => {
-  const { session, setSession } = props;
+  const { session, setSession, sessionSet, setSessionSet } = props;
 
-  const onClickDelete = (index) => {
-    let temp = session;
-    temp.splice(index);
-    setSession(temp);
+  const onClickDelete = (title, index) => {
+    let temp = sessionSet;
+    temp.delete(title);
+    setSessionSet(temp);
+    setSession([...session.filter((v, i) => i !== index)]);
   };
 
-  const showSessionContents = () => {
+  const showSessionContents = useCallback(() => {
     return session.map((v, index) => {
       return (
         <SessionContentsItem
@@ -26,7 +27,7 @@ const SessionContents = (props) => {
         />
       );
     });
-  };
+  }, [session]);
 
   return (
     <GridContainer templateColumn="1fr 1fr">

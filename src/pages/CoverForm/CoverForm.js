@@ -23,9 +23,7 @@ const CoverMaking = (props) => {
     return pageUrl.substr(0, pageUrl.length - 6);
   };
 
-  useEffect(() => {
-    console.log(session);
-  }, [session]);
+  useEffect(() => {}, [session]);
 
   return (
     <Container>
@@ -81,7 +79,12 @@ const CoverMaking = (props) => {
           </CustomDescription>
           <SessionContainer>
             {session.length > 0 ? (
-              <SessionContents session={session} setSession={setSession} />
+              <SessionContents
+                session={session}
+                setSession={setSession}
+                sessionSet={sessionSet}
+                setSessionSet={setSessionSet}
+              />
             ) : (
               <NoSession>등록된 세션이 없습니다</NoSession>
             )}
@@ -123,7 +126,7 @@ const InputContainer = styled.div`
 `;
 
 const SessionContainer = styled.div`
-  margin: 3rem 0 2rem;
+  margin: 2.5rem 0 2rem;
 `;
 
 const SessionAddButtonContainer = styled.div`
