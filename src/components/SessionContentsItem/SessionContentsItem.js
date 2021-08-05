@@ -14,13 +14,18 @@ const SessionContentsItem = (props) => {
     setSelectedSession,
   } = props;
   const selected = selectedSession === title;
+
+  const onClickSession = () => {
+    if (selected) {
+      setSelectedSession(null);
+    } else {
+      setSelectedSession(title);
+    }
+  };
+
   return (
     <SessionContentsContainer selected={selected}>
-      <SessionMeta
-        onClick={() => {
-          setSelectedSession(title);
-        }}
-      >
+      <SessionMeta onClick={() => onClickSession()}>
         <SessionTitle>
           {title}{' '}
           {selected ? <SelectedContainer>SELECTED</SelectedContainer> : null}
