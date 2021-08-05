@@ -164,9 +164,9 @@ const FindIdModal = (props) => {
   return (
     <FindAccountContainer>
       <ModalHeader>
-        <BakcwardButton onClick={() => setPageStep(1)}>
+        <BackwardButton onClick={() => setPageStep(1)}>
           <LeftOutlined />
-        </BakcwardButton>
+        </BackwardButton>
         <HeaderTitle>아이디 찾기</HeaderTitle>
       </ModalHeader>
       <ModalContents>{showContent()}</ModalContents>
@@ -290,7 +290,7 @@ const Divider = styled.div`
   border-radius: 5px;
 `;
 
-const BakcwardButton = styled.span`
+const BackwardButton = styled.span`
   position: absolute;
   cursor: pointer;
   z-index: 2;

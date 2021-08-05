@@ -2,7 +2,6 @@ import react, { useEffect, useState, useCallback } from 'react';
 import styled from 'styled-components';
 import { currentUserVar } from '../../apollo/cache';
 import { gql, useMutation, useQuery, useLazyQuery } from '@apollo/client';
-import { Modal } from 'antd';
 import { Link } from 'react-router-dom';
 
 const LOGIN = gql`
@@ -84,11 +83,6 @@ const LoginModal = (props) => {
     </LoginContainer>
   );
 };
-
-const CustomModal = styled(Modal)`
-  border-radius: 1rem;
-  overflow: hidden;
-`;
 
 const LoginContainer = styled.div`
   height: 30rem;

@@ -1,0 +1,16 @@
+{
+  "lyrics": [
+    { "text": "Fix You - Coldplay", "end": 13 },
+    { "text": "When you try your best, but you don't succeed", "end": 21 },
+    {
+      "text": "When you get what you want ",
+      "end": 23
+    },
+    {
+      "text": "but not what you need",
+      "end": 28
+    },
+    { "text": "When you feel so tired, but you can't sleep", "end": 35 },
+    { "text": "Stuck in reverse", "end": 42 }
+  ]
+}

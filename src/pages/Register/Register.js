@@ -112,6 +112,7 @@ const StepContents = styled.div`
 
 const CustomSteps = styled(Steps)`
   width: 70%;
+  margin-top: 1.5rem;
 `;
 
 export default Register;
