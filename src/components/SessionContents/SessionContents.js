@@ -1,5 +1,5 @@
-import { Collapse } from 'antd';
 import react, { useEffect, useState, useCallback } from 'react';
+import { Collapse } from 'antd';
 import styled from 'styled-components';
 import { Default } from '../../lib/Media';
 import GridContainer from '../GridContainer/GridContainer';
@@ -31,7 +31,7 @@ const SessionContents = (props) => {
     }
   };
 
-  const showSessionContents = () => {
+  const showSessionContents = useCallback(() => {
     return session.map((v, index) => {
       return (
         <SessionContentsItem
@@ -45,7 +45,7 @@ const SessionContents = (props) => {
         />
       );
     });
-  };
+  }, [session, selectedSession]);
 
   return (
     <GridContainer templateColumn="1fr 1fr">

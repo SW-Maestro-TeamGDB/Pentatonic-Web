@@ -13,30 +13,9 @@ const SessionContentsItem = (props) => {
     selectedSession,
     setSelectedSession,
   } = props;
-
-  const SessionContentsContainer = styled.div`
-    display: flex;
-    width: 100%;
-    padding: 0.5rem 0;
-    border-radius: 0.5rem;
-    align-items: center;
-    box-sizing: border-box;
-    cursor: pointer;
-    color: ${selectedSession === title ? 'white' : 'gray'};
-    background-color: ${selectedSession === title ? 'gray' : 'white'};
-    transition: all 0.3s ease-in-out;
-
-    &:hover {
-      background-color: ${selectedSession === title ? 'gray' : '#f0f0f0'};
-    }
-  `;
-
-  const selected = () => {
-    return selectedSession === title ? true : false;
-  };
-
+  const selected = selectedSession === title;
   return (
-    <SessionContentsContainer>
+    <SessionContentsContainer selected={selected}>
       <SessionMeta
         onClick={() => {
           setSelectedSession(title);
@@ -44,10 +23,10 @@ const SessionContentsItem = (props) => {
       >
         <SessionTitle>
           {title}{' '}
-          {selected() ? <SelectedContainer>SELECTED</SelectedContainer> : null}
+          {selected ? <SelectedContainer>SELECTED</SelectedContainer> : null}
         </SessionTitle>
         <SessionMember>
-          {selected() ? '1' : '0'}/{number}
+          {selected ? '1' : '0'}/{number}
         </SessionMember>
       </SessionMeta>
       <DeleteContainer onClick={() => onClickDelete(title, index)}>
@@ -98,6 +77,23 @@ const SessionMeta = styled.div`
   width: 90%;
   display: flex;
   flex-direction: row;
+`;
+
+const SessionContentsContainer = styled.div`
+  display: flex;
+  width: 100%;
+  padding: 0.5rem 0;
+  border-radius: 0.5rem;
+  align-items: center;
+  box-sizing: border-box;
+  cursor: pointer;
+  color: ${(props) => (props.selected ? 'white' : 'gray')};
+  background-color: ${(props) => (props.selected ? 'gray' : 'white')};
+  transition: all 0.3s ease-in-out;
+
+  &:hover {
+    background-color: ${(props) => (props.selected ? 'gray' : '#f0f0f0')};
+  }
 `;
 
 export default SessionContentsItem;

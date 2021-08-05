@@ -1,4 +1,4 @@
-import react from 'react';
+import react, { useCallback } from 'react';
 import styled from 'styled-components';
 import { media } from '../../lib/Media';
 import InstButton from '../InstButton/InstButton';
@@ -6,7 +6,7 @@ import InstButton from '../InstButton/InstButton';
 const InstSelect = (props) => {
   const { inst, setSelectInst, selectInst } = props;
 
-  const showInst = () => {
+  const showInst = useCallback(() => {
     return inst.map((v, i) => {
       return (
         <InstButton
@@ -17,7 +17,8 @@ const InstSelect = (props) => {
         />
       );
     });
-  };
+  }, [selectInst, inst]);
+
   return <InstConatiner>{showInst()}</InstConatiner>;
 };
 
