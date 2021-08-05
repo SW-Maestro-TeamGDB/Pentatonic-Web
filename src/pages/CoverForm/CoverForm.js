@@ -7,6 +7,7 @@ import RecordEdit from '../RecordEdit';
 import SessionAddPanel from '../../components/SessionAddPanel';
 import GridContainer from '../../components/GridContainer/GridContainer';
 import SessionContents from '../../components/SessionContents';
+import InstSelect from '../../components/InstSelect';
 import { Upload } from 'antd';
 import { LeftOutlined, PictureOutlined } from '@ant-design/icons';
 
@@ -16,13 +17,16 @@ const CoverMaking = (props) => {
   const { setPage, audioDuration, pageUrl } = props;
   const [titleError, setTitleError] = useState(null);
   const [sessionError, setSessionError] = useState(null);
-  const [session, setSession] = useState([]);
-  const [sessionSet, setSessionSet] = useState(new Set([]));
-  const [sessionAddToggle, setSessionAddToggle] = useState(1);
-  const [selectedSession, setSelectedSession] = useState(null);
+  const [session, setSession] = useState([]); // 세션
+  const [sessionSet, setSessionSet] = useState(new Set([])); // 세션 종류 저장
+  const [sessionAddToggle, setSessionAddToggle] = useState(1); // 세션 추가 토글
+  const [selectedSession, setSelectedSession] = useState(null); // 녹음 참여 세션
+  const [selectInst, setSelectInst] = useState([]); // 녹음 선택 인스트
   const backToMusicInfo = () => {
     return pageUrl.substr(0, pageUrl.length - 6);
   };
+
+  const tempInst = ['기타', '보컬', '베이스', '드럼', '키보드'];
 
   useEffect(() => {
     console.log(selectedSession);
@@ -108,7 +112,14 @@ const CoverMaking = (props) => {
         </InputContainer>
         <InputContainer>
           <CustomTitle>제공 반주</CustomTitle>
-          <CustomDescription>녹음에 사용될 반주를 추가합니다</CustomDescription>
+          <CustomDescription>녹음에 사용될 반주를 선택합니다</CustomDescription>
+          <InstContainer>
+            <InstSelect
+              inst={tempInst}
+              setSelectInst={setSelectInst}
+              selectInst={selectInst}
+            />
+          </InstContainer>
         </InputContainer>
         <SubmitButton onClick={() => setPage(1)}>다음으로</SubmitButton>
       </FormContainer>
@@ -144,6 +155,10 @@ const SongMetaContainer = styled.div`
   height: 15rem;
   width: 100%;
   position: relative;
+`;
+
+const InstContainer = styled.div`
+  margin: 2.5rem 0;
 `;
 
 const CustomPictureIcon = styled(PictureOutlined)`
