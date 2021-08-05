@@ -15,7 +15,13 @@ const { Dragger } = Upload;
 
 const CoverMaking = (props) => {
   const { setPage, audioDuration, pageUrl } = props;
-  const [titleError, setTitleError] = useState(null);
+  const [bandData, setBandData] = useState({
+    name: null,
+    introduce: null,
+    backgroundURI: null,
+    songId: null,
+  });
+  const [informError, setInformError] = useState(null);
   const [sessionError, setSessionError] = useState(null);
   const [session, setSession] = useState([]); // 세션
   const [sessionSet, setSessionSet] = useState(new Set([])); // 세션 종류 저장
@@ -28,9 +34,40 @@ const CoverMaking = (props) => {
 
   const tempInst = ['기타', '보컬', '베이스', '드럼', '키보드'];
 
+  const formCheck = () => {
+    let check = true;
+
+    if (!bandData.name) {
+      setInformError('커버 제목을 입력해주세요');
+      check = false;
+    } else if (!bandData.introduce) {
+      setInformError('커버 소개를 입력해주세요');
+      check = false;
+    }
+
+    if (session.length === 0) {
+      setSessionError('커버를 구성할 세션을 하나 이상 추가해주세요');
+      check = false;
+    } else if (!selectedSession) {
+      setSessionError('녹음에 참여할 세션을 골라주세요');
+      check = false;
+    }
+
+    return check;
+  };
+
   useEffect(() => {
-    console.log(selectedSession);
-  }, [selectedSession]);
+    setInformError(null);
+  }, [bandData.name, bandData.introduce]);
+
+  useEffect(() => {
+    setSessionError(null);
+  }, [session, selectedSession]);
+
+  const onClickSubmitButton = () => {
+    if (formCheck()) setPage(1);
+    else window.scrollTo(0, 0);
+  };
 
   return (
     <Container>
@@ -48,17 +85,19 @@ const CoverMaking = (props) => {
             커버의 제목과 소개를 입력해주세요
           </CustomDescription>
           <CustomInput
-            onChange={(e) => console.log(e.target.value)}
+            onChange={(e) => setBandData({ ...bandData, name: e.target.value })}
             maxLength="14"
             placeholder="커버 제목을 입력해주세요"
           />
-          <ErrorContainer>
-            {titleError ? <ErrorMessage>{titleError}</ErrorMessage> : null}
-          </ErrorContainer>
           <CustomTextArea
-            onChange={(e) => console.log(e.target.value)}
+            onChange={(e) =>
+              setBandData({ ...bandData, introduce: e.target.value })
+            }
             placeholder="커버 소개를 입력해주세요"
           />
+          <ErrorContainer>
+            {informError ? <ErrorMessage>{informError}</ErrorMessage> : null}
+          </ErrorContainer>
         </InputContainer>
         <InputContainer>
           <CustomTitle>커버 이미지</CustomTitle>
@@ -112,7 +151,7 @@ const CoverMaking = (props) => {
         </InputContainer>
         <InputContainer>
           <CustomTitle>제공 반주</CustomTitle>
-          <CustomDescription>녹음에 사용될 반주를 선택합니다</CustomDescription>
+          <CustomDescription>녹음에 사용될 반주를 조합합니다</CustomDescription>
           <InstContainer>
             <InstSelect
               inst={tempInst}
@@ -121,7 +160,9 @@ const CoverMaking = (props) => {
             />
           </InstContainer>
         </InputContainer>
-        <SubmitButton onClick={() => setPage(1)}>다음으로</SubmitButton>
+        <SubmitButton onClick={() => onClickSubmitButton()}>
+          다음으로
+        </SubmitButton>
       </FormContainer>
     </Container>
   );
@@ -296,6 +337,7 @@ const CustomTextArea = styled.textarea`
   padding: 1rem 1rem;
   font-size: 1.2rem;
   resize: none;
+  margin-top: 0.5rem;
 
   &:focus {
     border: 2px solid black;
