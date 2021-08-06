@@ -1,23 +1,40 @@
 import react, { useState, useEffect, useCallback, useRef } from 'react';
 import { Progress, Modal } from 'antd';
 import RecordModal from '../../components/RecordModal/RecordModal';
+import MicAuthModal from '../../components/MicAuthModal';
 import styled from 'styled-components';
 import PlayIcon from '../../images/PlayIcon.svg';
 import StopIcon from '../../images/StopIcon.svg';
 import RetryIcon from '../../images/RetryIcon.svg';
 import SaveIcon from '../../images/SaveIcon.svg';
 import tempLyric from './lyrics.json';
-import { LeftOutlined } from '@ant-design/icons';
+import { LeftOutlined, PauseOutlined } from '@ant-design/icons';
 
 const RecordPage = (props) => {
   const { setPage, setAudioFile, audioDuration, inst } = props;
   const [stream, setStream] = useState();
   const [media, setMedia] = useState();
-  const [onRec, setOnRec] = useState(true);
+  const [onRec, setOnRec] = useState(0); // 0: 정지 , 1: 녹음, 2: 일시정지
   const [source, setSource] = useState();
   const [analyser, setAnalyser] = useState();
   const [audioUrl, setAudioUrl] = useState();
   const [count, setCount] = useState(0);
+  const [micAuthModalToggle, setMicAuthModalToggle] = useState(false);
+
+  const showRecordingState = () => {
+    if (onRec === 0) {
+      return (
+        <CustomPlayIcon
+          src={audioUrl ? RetryIcon : PlayIcon}
+          onClick={() => onRecAudio()}
+        />
+      );
+    } else if (onRec === 1) {
+      return <CustomPauseIcon onClick={() => onClickPause()} />;
+    } else if (onRec === 2) {
+      return <CustomPlayIcon src={PlayIcon} onClick={() => onClickResume()} />;
+    }
+  };
 
   // 모달
   const [modalToggle, setModalToggle] = useState(false);
@@ -49,9 +66,21 @@ const RecordPage = (props) => {
   };
 
   const onClickStop = () => {
-    offRecAudio();
+    // if (audioUrl) offRecAudio();
     init();
     setPage(0);
+  };
+
+  const onClickPause = () => {
+    inst.pause();
+    media.pause();
+    setOnRec(2);
+  };
+
+  const onClickResume = () => {
+    inst.play();
+    // media.resume();
+    setOnRec(1);
   };
 
   const onRecAudio = () => {
@@ -68,44 +97,55 @@ const RecordPage = (props) => {
       source.connect(analyser);
       analyser.connect(audioCtx.destination);
     }
+
     // 마이크 사용 권한 획득
-    navigator.mediaDevices.getUserMedia({ audio: true }).then((stream) => {
-      const mediaRecorder = new MediaRecorder(stream);
-      init();
-      inst.play();
-      mediaRecorder.start();
-      setStream(stream);
-      setMedia(mediaRecorder);
-      makeSound(stream);
+    navigator.mediaDevices
+      .getUserMedia({ audio: true })
+      .then((stream) => {
+        const mediaRecorder = new MediaRecorder(stream);
+        init();
+        inst.play();
+        mediaRecorder.start();
+        setStream(stream);
+        setMedia(mediaRecorder);
+        makeSound(stream);
 
-      analyser.onaudioprocess = function (e) {
-        setCount(e.playbackTime);
-        // 30초 지나면 자동으로 음성 저장 및 녹음 중지
-        if (e.playbackTime > audioDuration) {
-          stream.getAudioTracks().forEach(function (track) {
-            track.stop();
-          });
+        analyser.onaudioprocess = function (e) {
+          if (mediaRecorder.state === 'recording') setCount(e.playbackTime);
+          if (mediaRecorder.state === 'paused') {
+            setOnRec(2);
+            mediaRecorder.pause();
+          }
+          // 30초 지나면 자동으로 음성 저장 및 녹음 중지
+          if (e.playbackTime > audioDuration) {
+            stream.getAudioTracks().forEach(function (track) {
+              track.stop();
+            });
 
-          init();
+            init();
 
-          // 녹음 중지
-          if (mediaRecorder.state === 'recording') mediaRecorder.stop();
+            // 녹음 중지
+            if (mediaRecorder.state === 'recording') {
+              mediaRecorder.stop();
+              setOnRec(0);
+            }
+            // 메서드가 호출 된 노드 연결 해제
+            analyser.disconnect();
+            audioCtx.createMediaStreamSource(stream).disconnect();
 
-          // 메서드가 호출 된 노드 연결 해제
-          analyser.disconnect();
-          audioCtx.createMediaStreamSource(stream).disconnect();
-
-          mediaRecorder.ondataavailable = function (e) {
-            setAudioUrl(e.data);
-            setAudioFile(window.URL.createObjectURL(e.data));
-            setOnRec(true);
-            // setPage(2);
-          };
-        } else {
-          setOnRec(false);
-        }
-      };
-    });
+            mediaRecorder.ondataavailable = function (e) {
+              setAudioUrl(e.data);
+              setAudioFile(window.URL.createObjectURL(e.data));
+              // setOnRec(0);
+            };
+          } else {
+            setOnRec(1);
+          }
+        };
+      })
+      .catch(() => {
+        setMicAuthModalToggle(true);
+      });
   };
 
   // 사용자가 음성 녹음을 중지했을 때
@@ -113,7 +153,7 @@ const RecordPage = (props) => {
     // dataavailable 이벤트로 Blob 데이터에 대한 응답을 받을 수 있음
     media.ondataavailable = function (e) {
       setAudioUrl(e.data);
-      setOnRec(false); // false 로 수정
+      setOnRec(0); // false 로 수정
     };
 
     // 모든 트랙에서 stop()을 호출해 오디오 스트림을 정지
@@ -144,21 +184,18 @@ const RecordPage = (props) => {
   return (
     <Container>
       <RecordModal modalToggle={modalToggle} setModalToggle={setModalToggle} />
-      <BackwardButton onClick={() => setPage(0)}>
+      <MicAuthModal
+        modalToggle={micAuthModalToggle}
+        setModalToggle={setMicAuthModalToggle}
+      />
+      <BackwardButton onClick={() => onClickStop()}>
         <LeftOutlined />
         <BackwardText>커버 정보 입력</BackwardText>
       </BackwardButton>
       <IconContainer>
-        {onRec ? (
-          <CustomPlayIcon
-            src={audioUrl ? RetryIcon : PlayIcon}
-            onClick={onRecAudio}
-          />
-        ) : (
-          <CustomStopIcon src={StopIcon} onClick={onClickStop} />
-        )}
-        {onRec && audioUrl ? (
-          <CustomPlayIcon src={SaveIcon} onClick={onSubmitAudioFile} />
+        {showRecordingState()}
+        {onRec === 0 && audioUrl ? (
+          <CustomPlayIcon src={SaveIcon} onClick={() => onSubmitAudioFile()} />
         ) : null}
       </IconContainer>
       <LyricsContainer>
@@ -260,11 +297,15 @@ const CustomPlayIcon = styled.img`
   }
 `;
 
-const CustomStopIcon = styled.img`
+const CustomPauseIcon = styled(PauseOutlined)`
   transition: all ease-in-out 0.3s;
   cursor: pointer;
-  width: 3.5rem;
-  height: 3.5rem;
+  font-size: 3.5rem;
+  color: lightgray;
+
+  &:hover {
+    color: black;
+  }
 `;
 
 export default RecordPage;
