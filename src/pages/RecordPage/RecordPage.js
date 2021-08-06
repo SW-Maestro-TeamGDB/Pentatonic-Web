@@ -12,6 +12,7 @@ import { LeftOutlined, PauseOutlined } from '@ant-design/icons';
 
 const RecordPage = (props) => {
   const { setPage, setAudioFile, audioDuration, inst } = props;
+  const [countdown, setCountDown] = useState(4);
   const [stream, setStream] = useState();
   const [media, setMedia] = useState();
   const [onRec, setOnRec] = useState(0); // 0: 정지 , 1: 녹음, 2: 일시정지
@@ -21,23 +22,68 @@ const RecordPage = (props) => {
   const [count, setCount] = useState(0);
   const [micAuthModalToggle, setMicAuthModalToggle] = useState(false);
 
+  const startCountDown = () => {
+    setCountDown(3);
+    setTimeout(() => {
+      setCountDown(2);
+      setTimeout(() => {
+        setCountDown(1);
+        setTimeout(() => {
+          setCountDown(4);
+          setOnRec(1);
+          onRecAudio();
+        }, 1000);
+      }, 1000);
+    }, 1000);
+  };
+
+  // const startCountDown = () => {
+  //   setCountDown(3);
+  // };
+
+  // useEffect(() => {
+  //   const interval = setInterval(() => {
+  //     if (countdown > 0 && countdown < 4) {
+  //       setCountDown((countdown) => countdown - 1);
+  //     } else {
+  //       clearInterval(interval);
+  //     }
+  //   }, 1000);
+
+  //   if (countdown <= 0) {
+  //     setCountDown(4);
+  //     setOnRec(1);
+  //     onRecAudio();
+  //   }
+
+  //   return () => clearInterval(interval);
+  // }, [countdown]);
+
   const showRecordingState = () => {
+    if (countdown !== 4) {
+      return <CountDownText>{countdown}</CountDownText>;
+    }
+
     if (onRec === 0) {
       return (
         <CustomPlayIcon
           src={audioUrl ? RetryIcon : PlayIcon}
-          onClick={() => onRecAudio()}
+          onClick={onClickStart}
         />
       );
     } else if (onRec === 1) {
-      return <CustomPauseIcon onClick={() => onClickPause()} />;
+      return <CustomPauseIcon onClick={onClickPause} />;
     } else if (onRec === 2) {
-      return <CustomPlayIcon src={PlayIcon} onClick={() => onClickResume()} />;
+      return <CustomPlayIcon src={PlayIcon} onClick={onClickResume} />;
     }
   };
 
   // 모달
   const [modalToggle, setModalToggle] = useState(false);
+
+  useEffect(() => {
+    // console.log(onRec);
+  }, [onRec]);
 
   useEffect(() => {
     setModalToggle(true);
@@ -65,6 +111,10 @@ const RecordPage = (props) => {
     setLyricsIndex(0);
   };
 
+  const onClickStart = () => {
+    startCountDown();
+  };
+
   const onClickStop = () => {
     // if (audioUrl) offRecAudio();
     init();
@@ -73,13 +123,17 @@ const RecordPage = (props) => {
 
   const onClickPause = () => {
     inst.pause();
-    media.pause();
+    if (media.state === 'recording') {
+      media.pause();
+    }
     setOnRec(2);
   };
 
   const onClickResume = () => {
     inst.play();
-    // media.resume();
+    if (media.state === 'paused') {
+      media.resume();
+    }
     setOnRec(1);
   };
 
@@ -109,9 +163,12 @@ const RecordPage = (props) => {
         setStream(stream);
         setMedia(mediaRecorder);
         makeSound(stream);
+        setOnRec(1);
 
         analyser.onaudioprocess = function (e) {
-          if (mediaRecorder.state === 'recording') setCount(e.playbackTime);
+          if (mediaRecorder.state === 'recording') {
+            setCount(e.playbackTime);
+          }
           if (mediaRecorder.state === 'paused') {
             setOnRec(2);
             mediaRecorder.pause();
@@ -121,14 +178,14 @@ const RecordPage = (props) => {
             stream.getAudioTracks().forEach(function (track) {
               track.stop();
             });
-
             init();
 
             // 녹음 중지
             if (mediaRecorder.state === 'recording') {
               mediaRecorder.stop();
-              setOnRec(0);
             }
+            setOnRec(0);
+
             // 메서드가 호출 된 노드 연결 해제
             analyser.disconnect();
             audioCtx.createMediaStreamSource(stream).disconnect();
@@ -139,7 +196,7 @@ const RecordPage = (props) => {
               // setOnRec(0);
             };
           } else {
-            setOnRec(1);
+            // setOnRec(1);
           }
         };
       })
@@ -194,7 +251,7 @@ const RecordPage = (props) => {
       </BackwardButton>
       <IconContainer>
         {showRecordingState()}
-        {onRec === 0 && audioUrl ? (
+        {onRec === 0 && audioUrl && countdown === 4 ? (
           <CustomPlayIcon src={SaveIcon} onClick={() => onSubmitAudioFile()} />
         ) : null}
       </IconContainer>
@@ -251,6 +308,11 @@ const BackwardButton = styled.div`
   }
 `;
 
+const CountDownText = styled.div`
+  font-size: 6rem;
+  font-weight: 900;
+`;
+
 const BackwardText = styled.span`
   margin-left: 1rem;
   font-size: 80%;
@@ -300,8 +362,10 @@ const CustomPlayIcon = styled.img`
 const CustomPauseIcon = styled(PauseOutlined)`
   transition: all ease-in-out 0.3s;
   cursor: pointer;
-  font-size: 3.5rem;
+  font-size: 5rem;
   color: lightgray;
+  width: 5rem;
+  text-align: center;
 
   &:hover {
     color: black;
