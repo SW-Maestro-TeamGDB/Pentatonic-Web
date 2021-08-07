@@ -1,5 +1,5 @@
 import react, { useState, useEffect, useCallback, useRef } from 'react';
-import { Progress, Modal } from 'antd';
+import { Progress, Modal, notification } from 'antd';
 import RecordModal from '../../components/RecordModal/RecordModal';
 import MicAuthModal from '../../components/MicAuthModal';
 // import AudioVisualizer from '../../components/AudioVisualizer';
@@ -10,6 +10,7 @@ import RetryIcon from '../../images/RetryIcon.svg';
 import SaveIcon from '../../images/SaveIcon.svg';
 import tempLyric from './lyrics.json';
 import { LeftOutlined, PauseOutlined } from '@ant-design/icons';
+import hihat from './hihat.mp3';
 
 const RecordPage = (props) => {
   const { setPage, setAudioFile, audioDuration, inst } = props;
@@ -24,13 +25,19 @@ const RecordPage = (props) => {
   const [count, setCount] = useState(0);
   const [micAuthModalToggle, setMicAuthModalToggle] = useState(false);
 
+  const hihatSound = new Audio();
+  hihatSound.src = hihat;
+
   // 카운트 다운
 
   const startCountDown = () => {
+    hihatSound.play();
     setCountDown(3);
     setTimeout(() => {
+      hihatSound.play();
       setCountDown(2);
       setTimeout(() => {
+        hihatSound.play();
         setCountDown(1);
         setTimeout(() => {
           setCountDown(4);
@@ -233,17 +240,36 @@ const RecordPage = (props) => {
     source.disconnect();
   };
 
+  const goToNextPage = () => {};
+
   const onSubmitAudioFile = () => {
-    if (audioUrl) {
-      setAudioFile(window.URL.createObjectURL(audioUrl)); // 오디오 파일 url로 저장
-      init();
-      setPage(2);
+    if (parseInt(count) < 60) {
+      return notification['warning']({
+        key: 'audioNotification',
+        message: '',
+        description: '1분 이상의 녹음만 저장이 가능합니다',
+        placement: 'bottomRight',
+        duration: 3,
+      });
     }
-    // File 생성자를 사용해 파일로 변환
-    const sound = new File([audioUrl], 'soundBlob', {
-      lastModified: new Date().getTime(),
-      type: 'audio',
-    });
+
+    media.ondataavailable = (e) => {
+      setAudioFile(window.URL.createObjectURL(e.data));
+    };
+
+    if (onRec === 1) {
+      stream.getAudioTracks().forEach(function (track) {
+        track.stop();
+      });
+
+      media.stop();
+      // 메서드가 호출 된 노드 연결 해제
+      analyser.disconnect();
+      source.disconnect();
+    }
+
+    init();
+    setPage(2);
   };
 
   return (
@@ -257,12 +283,7 @@ const RecordPage = (props) => {
         <LeftOutlined />
         <BackwardText>커버 정보 입력</BackwardText>
       </BackwardButton>
-      <IconContainer>
-        {showRecordingState()}
-        {onRec === 0 && audioUrl && countdown === 4 ? (
-          <CustomPlayIcon src={SaveIcon} onClick={() => onSubmitAudioFile()} />
-        ) : null}
-      </IconContainer>
+      <IconContainer>{showRecordingState()}</IconContainer>
       <LyricsContainer>
         <CurrentLyrics>{lyrics[lyricsIndex].text}</CurrentLyrics>
         <NextLyrics>
@@ -282,6 +303,17 @@ const RecordPage = (props) => {
           <AudioVisualizer audioCtx={audioCtx}></AudioVisualizer>
         ) : null}
       </VisualizerContainer> */}
+      {((onRec === 0 && audioUrl) || onRec === 2) && countdown === 4 ? (
+        <SubmitContainer>
+          <SubmitButton
+            onClick={() => onSubmitAudioFile()}
+            disabled={count < 60}
+          >
+            저장하기
+            <SaveIconImg src={SaveIcon} />
+          </SubmitButton>
+        </SubmitContainer>
+      ) : null}
     </Container>
   );
 };
@@ -314,6 +346,29 @@ const VisualizerContainer = styled.div`
   z-index: 1;
 `;
 
+const SubmitContainer = styled.div`
+  height: 2rem;
+  position: absolute;
+  bottom: 5%;
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+`;
+
+const SubmitButton = styled.div`
+  cursor: pointer;
+  background-color: black;
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 1rem;
+  transition: all ease-in-out 0.3s;
+
+  &:hover {
+    background-color: rgb(50, 50, 50);
+  }
+`;
+
 const BackwardButton = styled.div`
   position: absolute;
   cursor: pointer;
@@ -343,12 +398,12 @@ const BackwardText = styled.span`
 `;
 
 const CurrentLyrics = styled.div`
-  font-size: 1.2rem;
+  font-size: 1.4rem;
   font-weight: 800;
 `;
 
 const NextLyrics = styled.div`
-  font-size: 1rem;
+  font-size: 1.2rem;
   color: rgba(160, 160, 160);
 `;
 
@@ -357,7 +412,7 @@ const LyricsContainer = styled.div`
   left: 50%;
   bottom: 25%;
   transform: translate(-50%, -50%);
-  width: 30rem;
+  width: 40vw;
   z-index: 2;
 `;
 
@@ -369,8 +424,13 @@ const ProgressContainer = styled.div`
   z-index: 2;
 `;
 
+const SaveIconImg = styled.img`
+  filter: invert(100%);
+  margin-left: 0.5rem;
+`;
+
 const CustomProgress = styled(Progress)`
-  width: 30rem;
+  width: 40vw;
 `;
 
 const CustomPlayIcon = styled.img`
@@ -381,7 +441,7 @@ const CustomPlayIcon = styled.img`
 
   &:hover {
     color: rgb(100, 100, 100);
-    transform: scale(1.1);
+    transform: scale(1.05);
   }
 `;
 
@@ -395,6 +455,7 @@ const CustomPauseIcon = styled(PauseOutlined)`
 
   &:hover {
     color: black;
+    transform: scale(1.05);
   }
 `;
 
