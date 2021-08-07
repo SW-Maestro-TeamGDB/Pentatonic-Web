@@ -25,7 +25,7 @@ const CoverMaking = ({ match }) => {
   }, []);
 
   useEffect(() => {
-    setAudioDuration(Math.random() * 3 + 2);
+    setAudioDuration(60);
   }, []);
 
   const pages = [
@@ -114,6 +114,7 @@ const StepContents = styled.div`
   border-radius: 1rem;
   display: flex;
   justify-content: center;
+  padding-bottom: 0.5rem;
   margin-bottom: 2rem;
 `;
 
