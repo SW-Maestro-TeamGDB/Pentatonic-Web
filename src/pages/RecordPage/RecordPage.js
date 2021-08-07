@@ -2,6 +2,7 @@ import react, { useState, useEffect, useCallback, useRef } from 'react';
 import { Progress, Modal } from 'antd';
 import RecordModal from '../../components/RecordModal/RecordModal';
 import MicAuthModal from '../../components/MicAuthModal';
+// import AudioVisualizer from '../../components/AudioVisualizer';
 import styled from 'styled-components';
 import PlayIcon from '../../images/PlayIcon.svg';
 import StopIcon from '../../images/StopIcon.svg';
@@ -13,6 +14,7 @@ import { LeftOutlined, PauseOutlined } from '@ant-design/icons';
 const RecordPage = (props) => {
   const { setPage, setAudioFile, audioDuration, inst } = props;
   const [countdown, setCountDown] = useState(4);
+  const [audioCtx, setAudioCtx] = useState();
   const [stream, setStream] = useState();
   const [media, setMedia] = useState();
   const [onRec, setOnRec] = useState(0); // 0: 정지 , 1: 녹음, 2: 일시정지
@@ -21,6 +23,8 @@ const RecordPage = (props) => {
   const [audioUrl, setAudioUrl] = useState();
   const [count, setCount] = useState(0);
   const [micAuthModalToggle, setMicAuthModalToggle] = useState(false);
+
+  // 카운트 다운
 
   const startCountDown = () => {
     setCountDown(3);
@@ -116,13 +120,14 @@ const RecordPage = (props) => {
   };
 
   const onClickStop = () => {
-    // if (audioUrl) offRecAudio();
+    if (onRec === 1) offRecAudio();
     init();
     setPage(0);
   };
 
   const onClickPause = () => {
     inst.pause();
+    audioCtx.suspend();
     if (media.state === 'recording') {
       media.pause();
     }
@@ -131,6 +136,7 @@ const RecordPage = (props) => {
 
   const onClickResume = () => {
     inst.play();
+    audioCtx.resume();
     if (media.state === 'paused') {
       media.resume();
     }
@@ -140,6 +146,7 @@ const RecordPage = (props) => {
   const onRecAudio = () => {
     // 음원정보를 담은 노드를 생성하거나 음원을 실행또는 디코딩 시키는 일을 한다
     const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    setAudioCtx(audioCtx);
     // 자바스크립트를 통해 음원의 진행상태에 직접접근에 사용된다.
     const analyser = audioCtx.createScriptProcessor(0, 1, 1);
     setAnalyser(analyser);
@@ -160,6 +167,7 @@ const RecordPage = (props) => {
         init();
         inst.play();
         mediaRecorder.start();
+
         setStream(stream);
         setMedia(mediaRecorder);
         makeSound(stream);
@@ -269,6 +277,11 @@ const RecordPage = (props) => {
           strokeColor="black"
         />
       </ProgressContainer>
+      {/* <VisualizerContainer>
+        {audioCtx && onRec === 1 ? (
+          <AudioVisualizer audioCtx={audioCtx}></AudioVisualizer>
+        ) : null}
+      </VisualizerContainer> */}
     </Container>
   );
 };
@@ -288,6 +301,17 @@ const IconContainer = styled.div`
   flex-direction: row;
   justify-content: space-evenly;
   width: 40%;
+  z-index: 2;
+`;
+
+const VisualizerContainer = styled.div`
+  height: 60%;
+  width: 100%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1;
 `;
 
 const BackwardButton = styled.div`
@@ -334,6 +358,7 @@ const LyricsContainer = styled.div`
   bottom: 25%;
   transform: translate(-50%, -50%);
   width: 30rem;
+  z-index: 2;
 `;
 
 const ProgressContainer = styled.div`
@@ -341,6 +366,7 @@ const ProgressContainer = styled.div`
   bottom: 20%;
   left: 50%;
   transform: translate(-50%, -50%);
+  z-index: 2;
 `;
 
 const CustomProgress = styled(Progress)`
