@@ -123,7 +123,10 @@ const RecordPage = (props) => {
   };
 
   const onClickStart = () => {
-    startCountDown();
+    navigator.mediaDevices
+      .getUserMedia({ audio: true })
+      .then(() => startCountDown())
+      .catch(() => setMicAuthModalToggle(true));
   };
 
   const onClickStop = () => {
@@ -142,12 +145,17 @@ const RecordPage = (props) => {
   };
 
   const onClickResume = () => {
-    inst.play();
-    audioCtx.resume();
-    if (media.state === 'paused') {
-      media.resume();
-    }
-    setOnRec(1);
+    navigator.mediaDevices
+      .getUserMedia({ audio: true })
+      .then(() => {
+        inst.play();
+        audioCtx.resume();
+        if (media.state === 'paused') {
+          media.resume();
+        }
+        setOnRec(1);
+      })
+      .catch(() => setMicAuthModalToggle(true));
   };
 
   const onRecAudio = () => {
@@ -216,7 +224,7 @@ const RecordPage = (props) => {
         };
       })
       .catch(() => {
-        setMicAuthModalToggle(true);
+        // setMicAuthModalToggle(true);
       });
   };
 
@@ -247,7 +255,7 @@ const RecordPage = (props) => {
       return notification['warning']({
         key: 'audioNotification',
         message: '',
-        description: '1분 이상의 녹음만 저장이 가능합니다',
+        description: '1분 이상의 녹음만 저장 가능합니다',
         placement: 'bottomRight',
         duration: 3,
       });
