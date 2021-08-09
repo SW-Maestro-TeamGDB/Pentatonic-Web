@@ -6,6 +6,7 @@ import SearchIcon from '../../images/SearchIcon.svg';
 
 const GridContainer = (props) => {
   const { children, width, templateColumn } = props;
+
   return (
     <Container width={width} templateColumn={templateColumn}>
       {children}
@@ -18,7 +19,9 @@ const Container = styled.div`
   height: auto;
   display: grid;
   grid-template-columns: ${(props) =>
-    props.templateColumn ? '1fr 1fr' : 'repeat(auto-fit, minmax(200px, 1fr))'};
+    props.templateColumn
+      ? `repeat(auto-fit, minmax(${props.templateColumn}, 1fr))`
+      : '1fr 1fr'};
   grid-column-gap: 1rem;
   grid-row-gap: 1rem;
 `;
