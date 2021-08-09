@@ -2,7 +2,6 @@ import react, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { gql, useMutation, useLazyQuery, useQuery } from '@apollo/client';
 import { Default } from '../../lib/Media';
-import { Link } from 'react-router-dom';
 import { Radio } from 'antd';
 import { check } from 'prettier';
 

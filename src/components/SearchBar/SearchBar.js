@@ -1,7 +1,6 @@
 import react from 'react';
 import styled from 'styled-components';
 import { Default } from '../../lib/Media';
-import { Link } from 'react-router-dom';
 import SearchIcon from '../../images/SearchIcon.svg';
 
 const SearchBar = ({ props }) => {

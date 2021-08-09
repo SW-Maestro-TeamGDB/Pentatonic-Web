@@ -1,5 +1,5 @@
 import react from 'react';
-import { Route, Link } from 'react-router-dom';
+import { Route } from 'react-router-dom';
 import StudioHome from '../StudioHome';
 import StudioBandCover from '../StudioBandCover';
 import StudioSoloCover from '../StudioSoloCover';

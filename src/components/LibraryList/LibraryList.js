@@ -1,7 +1,6 @@
 import react from 'react';
 import styled from 'styled-components';
 import { Default } from '../../lib/Media';
-import { Link } from 'react-router-dom';
 import { DeleteFilled } from '@ant-design/icons';
 import ThumbIcon from '../../images/ThumbIcon.svg';
 import ViewIcon from '../../images/ViewIcon.svg';

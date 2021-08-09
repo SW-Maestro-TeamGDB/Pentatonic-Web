@@ -1,5 +1,5 @@
 import react from 'react';
-import { Route, Link } from 'react-router-dom';
+import { Route } from 'react-router-dom';
 import styled from 'styled-components';
 import LoungeHome from '../LoungeHome';
 import WeeklyChallenge from '../WeeklyChallenge';

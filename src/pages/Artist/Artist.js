@@ -1,5 +1,5 @@
 import react from 'react';
-import { Route, Link } from 'react-router-dom';
+import { Route } from 'react-router-dom';
 import ArtistHome from '../ArtistHome';
 import RisingBand from '../RisingBand';
 import RisingArtist from '../RisingArtist';

@@ -49,7 +49,6 @@ const MenuButton = styled.div`
   font-weight: 400;
   font-size: 16px;
   z-index: 5;
-  cursor: pointer;
   &:hover {
     background-color: rgb(230, 230, 230);
     color: black;

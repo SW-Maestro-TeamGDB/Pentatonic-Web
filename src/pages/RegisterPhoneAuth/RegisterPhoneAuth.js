@@ -2,7 +2,6 @@ import react, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { gql, useMutation } from '@apollo/client';
 import { Default } from '../../lib/Media';
-import { Link } from 'react-router-dom';
 import { Checkbox } from 'antd';
 
 const SEND_AUTH_CODE = gql`

@@ -75,7 +75,7 @@ const LoginModal = (props) => {
         <SubmitButton type="submit">로그인</SubmitButton>
       </CustomForm>
       <SubContainer>
-        <CustomLink onClick={() => setPageStep(1)}>ID/PW찾기</CustomLink>
+        <CustomButton onClick={() => setPageStep(1)}>ID/PW찾기</CustomButton>
         <CustomLink to="/register" onClick={closeModal}>
           회원가입
         </CustomLink>
@@ -111,6 +111,13 @@ const CustomLink = styled(Link)`
   color: black;
   font-size: 1rem;
   margin: 0 1rem;
+`;
+
+const CustomButton = styled.div`
+  color: black;
+  font-size: 1rem;
+  margin: 0 1rem;
+  cursor: pointer;
 `;
 
 const CustomForm = styled.form`
