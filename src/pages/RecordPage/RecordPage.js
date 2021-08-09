@@ -25,6 +25,11 @@ const RecordPage = (props) => {
   const [count, setCount] = useState(0);
   const [micAuthModalToggle, setMicAuthModalToggle] = useState(false);
 
+  const [second, setSecond] = useState();
+  const [minute, setMinute] = useState();
+  const [audioSecond, setAudioSecond] = useState(parseInt(audioDuration) % 60);
+  const [audioMinute, setAudioMinute] = useState(parseInt(audioDuration) / 60);
+
   const hihatSound = new Audio();
   hihatSound.src = hihat;
 
@@ -112,6 +117,17 @@ const RecordPage = (props) => {
       setEndTime(lyrics[lyricsIndex + 1].end);
       setLyricsIndex(lyricsIndex + 1);
     }
+
+    const time = parseInt(count);
+    const remain = parseInt(audioDuration - count);
+
+    console.log(remain);
+
+    setSecond(time % 60);
+    setMinute(parseInt(time / 60));
+
+    setAudioSecond(remain % 60);
+    setAudioMinute(parseInt(remain / 60));
   }, [count]);
 
   const init = () => {
@@ -248,8 +264,6 @@ const RecordPage = (props) => {
     source.disconnect();
   };
 
-  const goToNextPage = () => {};
-
   const onSubmitAudioFile = () => {
     if (parseInt(count) < 60) {
       return notification['warning']({
@@ -291,13 +305,19 @@ const RecordPage = (props) => {
         <LeftOutlined />
         <BackwardText>커버 정보 입력</BackwardText>
       </BackwardButton>
-      <IconContainer>{showRecordingState()}</IconContainer>
-      <LyricsContainer>
-        <CurrentLyrics>{lyrics[lyricsIndex].text}</CurrentLyrics>
-        <NextLyrics>
-          {lyricsIndex < lyricsLength - 1 ? lyrics[lyricsIndex + 1].text : 'ㅤ'}
-        </NextLyrics>
-      </LyricsContainer>
+      <Background>
+        <BackgroundBlur>
+          <IconContainer>{showRecordingState()}</IconContainer>
+          <LyricsContainer>
+            <CurrentLyrics>{lyrics[lyricsIndex].text}</CurrentLyrics>
+            <NextLyrics>
+              {lyricsIndex < lyricsLength - 1
+                ? lyrics[lyricsIndex + 1].text
+                : 'ㅤ'}
+            </NextLyrics>
+          </LyricsContainer>
+        </BackgroundBlur>
+      </Background>
       <ProgressContainer>
         {/* audioDuration의 길이를 알기 떄문에 animation 형식으로 바꾸는것 고려 */}
         <CustomProgress
@@ -305,7 +325,21 @@ const RecordPage = (props) => {
           showInfo={false}
           strokeColor="black"
         />
+        <TimeContainer>
+          <CurrentTimeContainer>
+            {minute}
+            {':'}
+            {second < 10 ? '0' + second : second}
+          </CurrentTimeContainer>
+          <RemainTimeContainer>
+            {'- '}
+            {audioMinute}
+            {':'}
+            {audioSecond < 10 ? '0' + audioSecond : audioSecond}
+          </RemainTimeContainer>
+        </TimeContainer>
       </ProgressContainer>
+
       {/* <VisualizerContainer>
         {audioCtx && onRec === 1 ? (
           <AudioVisualizer audioCtx={audioCtx}></AudioVisualizer>
@@ -332,9 +366,18 @@ const Container = styled.div`
   position: relative;
 `;
 
+const CurrentTimeContainer = styled.div`
+  font-weight: 800;
+`;
+
+const RemainTimeContainer = styled.div`
+  font-weight: 800;
+  color: #6236ff;
+`;
+
 const IconContainer = styled.div`
   position: absolute;
-  top: 40%;
+  top: 45%;
   left: 50%;
   transform: translate(-50%, -50%);
   display: flex;
@@ -352,6 +395,20 @@ const VisualizerContainer = styled.div`
   left: 50%;
   transform: translate(-50%, -50%);
   z-index: 1;
+`;
+
+const Background = styled.div`
+  background: url('https://w.namu.la/s/8f16d9ad8ac378b6d2339ce927bbc9d6431dbf5277b241bf363ffa61cf5496caf1611f471aca282ff14bd8e544135b8f5edbbfebb6f942603cc9563f130a548cf40005956d405598ed3f6067522ad7b6aaf067e05dbc1e79085d5b90fb90ab5f9947a0cd3108efda6f8008666a1627cc');
+  margin-top: 6rem;
+  height: 26rem;
+`;
+
+const BackgroundBlur = styled.div`
+  position: relative;
+  width: 100%;
+  height: 100%;
+  -webkit-backdrop-filter: blur(2px) brightness(40%);
+  backdrop-filter: blur(2px) brightness(40%);
 `;
 
 const SubmitContainer = styled.div`
@@ -398,6 +455,7 @@ const BackwardButton = styled.div`
 const CountDownText = styled.div`
   font-size: 6rem;
   font-weight: 900;
+  color: white;
 `;
 
 const BackwardText = styled.span`
@@ -406,30 +464,50 @@ const BackwardText = styled.span`
 `;
 
 const CurrentLyrics = styled.div`
-  font-size: 1.4rem;
-  font-weight: 800;
+  font-size: 1.5rem;
+  font-weight: 900;
 `;
 
 const NextLyrics = styled.div`
   font-size: 1.2rem;
-  color: rgba(160, 160, 160);
+  font-weight: 400;
+  color: rgba(50, 50, 50);
 `;
 
 const LyricsContainer = styled.div`
   position: absolute;
   left: 50%;
-  bottom: 25%;
-  transform: translate(-50%, -50%);
+  bottom: 5%;
+  transform: translate(-50%, 0);
   width: 40vw;
   z-index: 2;
+  background: rgba(255, 255, 255, 0.5);
+  padding: 1rem 1rem;
+  border-radius: 1rem;
 `;
 
 const ProgressContainer = styled.div`
   position: absolute;
-  bottom: 20%;
+  bottom: 12%;
   left: 50%;
   transform: translate(-50%, -50%);
+  padding: 0 2rem;
   z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 108%;
+  box-sizing: border-box;
+`;
+
+const TimeContainer = styled.div`
+  font-size: 1rem;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  position: relative;
 `;
 
 const SaveIconImg = styled.img`
@@ -438,10 +516,11 @@ const SaveIconImg = styled.img`
 `;
 
 const CustomProgress = styled(Progress)`
-  width: 40vw;
+  width: 100%;
 `;
 
 const CustomPlayIcon = styled.img`
+  filter: invert(100%);
   transition: all ease-in-out 0.3s;
   cursor: pointer;
   width: 4rem;
@@ -454,10 +533,11 @@ const CustomPlayIcon = styled.img`
 `;
 
 const CustomPauseIcon = styled(PauseOutlined)`
+  filter: invert(100%);
   transition: all ease-in-out 0.3s;
   cursor: pointer;
   font-size: 5rem;
-  color: lightgray;
+  color: black;
   width: 5rem;
   text-align: center;
 
