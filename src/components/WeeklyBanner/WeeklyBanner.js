@@ -7,27 +7,23 @@ const WeeklyBanner = () => {
   return (
     <BannerContainer>
       <Link to="/lounge/weekly">
-        <BannerBackground>
-          <BannerTitle>Weekly Challenge</BannerTitle>
-          <SongContainer>
-            <SongInform>Tame Impala</SongInform>
-            <SongInform>'Cause I'm a man</SongInform>
-          </SongContainer>
-        </BannerBackground>
+        <Background />
+        <BannerContents>
+          <WeeklyChallengeTitleContainer>
+            <WeeklyChallengeTitle>Weekly Challenge</WeeklyChallengeTitle>
+          </WeeklyChallengeTitleContainer>
+          <SongTitle>'Cause I'm a man</SongTitle>
+          <Singer>Tame Impala</Singer>
+        </BannerContents>
       </Link>
     </BannerContainer>
   );
 };
 
-const BannerContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  height: 30em;
-  width: 80%;
-  border-radius: 1em;
-  position: relative;
-  cursor: pointer;
-
+const Background = styled.div`
+  width: 100%;
+  height: 100%;
+  position: absolute;
   background-image: url('https://media.pitchfork.com/photos/6064da2beef32a677ce9dbfc/2:1/w_2560%2Cc_limit/Tame-Impala.jpg');
   background-repeat: no-repeat;
   background-position: center center;
@@ -39,40 +35,66 @@ const BannerContainer = styled.div`
   }
 `;
 
-const BannerBackground = styled.div`
-  position: relative;
-  background-color: rgba(0, 0, 0, 0.3);
-  border-radius: 1em;
-  height: 100%;
-  width: 100%;
-  position: absolute;
-`;
-
-const BannerTitle = styled.div`
-  color: white;
-  position: absolute;
-  font-size: 1.5vw;
-  font-weight: 800;
-  padding: 2vh 2vw;
-  border-top-left-radius: 1em;
-  border-top-right-radius: 1em;
-`;
-
-const SongContainer = styled.div`
+const BannerContainer = styled.div`
   display: flex;
-  position: absolute;
-  width: 100%;
-  height: 100%;
   flex-direction: column;
+  height: 25vw;
+  width: 100%;
+  border-radius: 10px;
+  position: relative;
+  cursor: pointer;
+
+  ${Background} {
+    filter: brightness(70%);
+  }
+`;
+
+const BannerContents = styled.div`
+  position: absolute;
+  bottom: 5%;
+  display: flex;
+  flex-direction: column;
+  right: 3%;
+`;
+
+const WeeklyChallengeTitleContainer = styled.div`
+  display: flex;
+  justify-content: flex-end;
+`;
+
+const WeeklyChallengeTitle = styled.div`
+  color: white;
+  font-size: 18px;
+  font-weight: 800;
+  padding: 10px 15px;
+  width: 200px;
+  height: 40px;
+  border-radius: 30px;
+  background-image: linear-gradient(to right, #6236ff, #9b66ff);
+
+  display: flex;
   justify-content: center;
   align-items: center;
 `;
 
-const SongInform = styled.div`
-  font-size: 3.5vw;
+const SongTitle = styled.span`
   font-weight: 900;
+  font-size: 48px;
   color: white;
-  letter-spacing: -0.2rem;
+
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+`;
+
+const Singer = styled.span`
+  font-weight: 900;
+  font-size: 24px;
+  color: white;
+
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
 `;
 
 export default WeeklyBanner;
