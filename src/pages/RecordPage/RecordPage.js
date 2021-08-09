@@ -25,6 +25,8 @@ const RecordPage = (props) => {
   const [count, setCount] = useState(0);
   const [micAuthModalToggle, setMicAuthModalToggle] = useState(false);
 
+  const [countdownState, setCountDownState] = useState(false);
+
   const [second, setSecond] = useState();
   const [minute, setMinute] = useState();
   const [audioSecond, setAudioSecond] = useState(parseInt(audioDuration) % 60);
@@ -35,45 +37,54 @@ const RecordPage = (props) => {
 
   // 카운트 다운
 
-  const startCountDown = () => {
-    hihatSound.play();
-    setCountDown(3);
-    setTimeout(() => {
+  const runCountDown = () => {
+    if (countdown > 1 && countdown <= 4) {
+      hihatSound.currentTime = 0;
       hihatSound.play();
-      setCountDown(2);
-      setTimeout(() => {
-        hihatSound.play();
-        setCountDown(1);
-        setTimeout(() => {
-          setCountDown(4);
-          setOnRec(1);
-          onRecAudio();
-        }, 1000);
-      }, 1000);
-    }, 1000);
+    }
+    setCountDown((countdown) => countdown - 1);
   };
 
   // const startCountDown = () => {
-  //   setCountDown(3);
+  //   setCountDownState(true);
+  //   runCountDown();
+  //   setTimeout(() => {
+  //     runCountDown();
+  //     setTimeout(() => {
+  //       runCountDown();
+  //       setTimeout(() => {
+  //         setCountDown(4);
+  //         setOnRec(1);
+  //         onRecAudio();
+  //         setCountDownState(false);
+  //       }, 1000);
+  //     }, 1000);
+  //   }, 1000);
   // };
 
-  // useEffect(() => {
-  //   const interval = setInterval(() => {
-  //     if (countdown > 0 && countdown < 4) {
-  //       setCountDown((countdown) => countdown - 1);
-  //     } else {
-  //       clearInterval(interval);
-  //     }
-  //   }, 1000);
+  const startCountDown = () => {
+    setCountDownState(true);
+    runCountDown();
+  };
 
-  //   if (countdown <= 0) {
-  //     setCountDown(4);
-  //     setOnRec(1);
-  //     onRecAudio();
-  //   }
+  useEffect(() => {
+    const interval = setInterval(() => {
+      if (countdown > 1 && countdown < 4 && countdownState === true) {
+        runCountDown();
+      } else {
+        if (countdown === 1) {
+          setCountDownState(false);
+          setCountDown(4);
+          setOnRec(1);
+          onRecAudio();
+        }
 
-  //   return () => clearInterval(interval);
-  // }, [countdown]);
+        clearInterval(interval);
+      }
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, [countdown]);
 
   const showRecordingState = () => {
     if (countdown !== 4) {
@@ -98,10 +109,6 @@ const RecordPage = (props) => {
   const [modalToggle, setModalToggle] = useState(false);
 
   useEffect(() => {
-    // console.log(onRec);
-  }, [onRec]);
-
-  useEffect(() => {
     setModalToggle(true);
   }, []);
 
@@ -121,8 +128,6 @@ const RecordPage = (props) => {
     const time = parseInt(count);
     const remain = parseInt(audioDuration - count);
 
-    console.log(remain);
-
     setSecond(time % 60);
     setMinute(parseInt(time / 60));
 
@@ -131,6 +136,9 @@ const RecordPage = (props) => {
   }, [count]);
 
   const init = () => {
+    if (onRec === 1) {
+      offRecAudio();
+    }
     // 배경음악 중지 및 초기화
     inst.pause();
     inst.currentTime = 0;
@@ -146,7 +154,6 @@ const RecordPage = (props) => {
   };
 
   const onClickStop = () => {
-    if (onRec === 1) offRecAudio();
     init();
     setPage(0);
   };
@@ -294,6 +301,14 @@ const RecordPage = (props) => {
     setPage(2);
   };
 
+  // 페이지 벗어날시 반주 재생과 녹음 중지
+  useEffect(() => {
+    return () => {
+      init();
+      setCountDownState(false);
+    };
+  }, []);
+
   return (
     <Container>
       <RecordModal modalToggle={modalToggle} setModalToggle={setModalToggle} />
@@ -339,7 +354,6 @@ const RecordPage = (props) => {
           </RemainTimeContainer>
         </TimeContainer>
       </ProgressContainer>
-
       {/* <VisualizerContainer>
         {audioCtx && onRec === 1 ? (
           <AudioVisualizer audioCtx={audioCtx}></AudioVisualizer>
