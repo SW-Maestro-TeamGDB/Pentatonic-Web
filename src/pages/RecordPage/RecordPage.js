@@ -2,7 +2,7 @@ import react, { useState, useEffect, useCallback, useRef } from 'react';
 import { Progress, Modal, notification } from 'antd';
 import RecordModal from '../../components/RecordModal/RecordModal';
 import MicAuthModal from '../../components/MicAuthModal';
-// import AudioVisualizer from '../../components/AudioVisualizer';
+import AudioVisualizer from '../../components/AudioVisualizer';
 import styled from 'styled-components';
 import PlayIcon from '../../images/PlayIcon.svg';
 import StopIcon from '../../images/StopIcon.svg';
@@ -25,50 +25,90 @@ const RecordPage = (props) => {
   const [count, setCount] = useState(0);
   const [micAuthModalToggle, setMicAuthModalToggle] = useState(false);
 
+  // 카운트다운
+  const [countdownState, setCountDownState] = useState(false);
+  const [second, setSecond] = useState();
+  const [minute, setMinute] = useState();
+  const [audioSecond, setAudioSecond] = useState(parseInt(audioDuration) % 60);
+  const [audioMinute, setAudioMinute] = useState(parseInt(audioDuration) / 60);
+
+  // 언마운트를 위한 useRef
+  const mediaRef = useRef();
+  const analyserRef = useRef();
+  const sourceRef = useRef();
+  const streamRef = useRef();
+
+  useEffect(() => {
+    streamRef.current = stream;
+  }, [stream]);
+
+  useEffect(() => {
+    mediaRef.current = media;
+  }, [media]);
+
+  useEffect(() => {
+    analyserRef.current = analyser;
+  }, [analyser]);
+
+  useEffect(() => {
+    sourceRef.current = source;
+  }, [source]);
+
+  //
+
   const hihatSound = new Audio();
   hihatSound.src = hihat;
 
   // 카운트 다운
 
-  const startCountDown = () => {
-    hihatSound.play();
-    setCountDown(3);
-    setTimeout(() => {
+  const runCountDown = () => {
+    if (countdown > 1 && countdown <= 4) {
+      hihatSound.currentTime = 0;
       hihatSound.play();
-      setCountDown(2);
-      setTimeout(() => {
-        hihatSound.play();
-        setCountDown(1);
-        setTimeout(() => {
-          setCountDown(4);
-          setOnRec(1);
-          onRecAudio();
-        }, 1000);
-      }, 1000);
-    }, 1000);
+    }
+    setCountDown((countdown) => countdown - 1);
   };
 
   // const startCountDown = () => {
-  //   setCountDown(3);
+  //   setCountDownState(true);
+  //   runCountDown();
+  //   setTimeout(() => {
+  //     runCountDown();
+  //     setTimeout(() => {
+  //       runCountDown();
+  //       setTimeout(() => {
+  //         setCountDown(4);
+  //         setOnRec(1);
+  //         onRecAudio();
+  //         setCountDownState(false);
+  //       }, 1000);
+  //     }, 1000);
+  //   }, 1000);
   // };
 
-  // useEffect(() => {
-  //   const interval = setInterval(() => {
-  //     if (countdown > 0 && countdown < 4) {
-  //       setCountDown((countdown) => countdown - 1);
-  //     } else {
-  //       clearInterval(interval);
-  //     }
-  //   }, 1000);
+  const startCountDown = () => {
+    setCountDownState(true);
+    runCountDown();
+  };
 
-  //   if (countdown <= 0) {
-  //     setCountDown(4);
-  //     setOnRec(1);
-  //     onRecAudio();
-  //   }
+  useEffect(() => {
+    const interval = setInterval(() => {
+      if (countdown > 1 && countdown < 4 && countdownState === true) {
+        runCountDown();
+      } else {
+        if (countdown === 1) {
+          setCountDownState(false);
+          setCountDown(4);
+          setOnRec(1);
+          onRecAudio();
+        }
 
-  //   return () => clearInterval(interval);
-  // }, [countdown]);
+        clearInterval(interval);
+      }
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, [countdown]);
 
   const showRecordingState = () => {
     if (countdown !== 4) {
@@ -93,10 +133,6 @@ const RecordPage = (props) => {
   const [modalToggle, setModalToggle] = useState(false);
 
   useEffect(() => {
-    // console.log(onRec);
-  }, [onRec]);
-
-  useEffect(() => {
     setModalToggle(true);
   }, []);
 
@@ -112,9 +148,21 @@ const RecordPage = (props) => {
       setEndTime(lyrics[lyricsIndex + 1].end);
       setLyricsIndex(lyricsIndex + 1);
     }
+
+    const time = parseInt(count);
+    const remain = parseInt(audioDuration - count);
+
+    setSecond(time % 60);
+    setMinute(parseInt(time / 60));
+
+    setAudioSecond(remain % 60);
+    setAudioMinute(parseInt(remain / 60));
   }, [count]);
 
   const init = () => {
+    if (onRec === 1) {
+      offRecAudio();
+    }
     // 배경음악 중지 및 초기화
     inst.pause();
     inst.currentTime = 0;
@@ -123,11 +171,13 @@ const RecordPage = (props) => {
   };
 
   const onClickStart = () => {
-    startCountDown();
+    navigator.mediaDevices
+      .getUserMedia({ audio: true })
+      .then(() => startCountDown())
+      .catch(() => setMicAuthModalToggle(true));
   };
 
   const onClickStop = () => {
-    if (onRec === 1) offRecAudio();
     init();
     setPage(0);
   };
@@ -142,12 +192,17 @@ const RecordPage = (props) => {
   };
 
   const onClickResume = () => {
-    inst.play();
-    audioCtx.resume();
-    if (media.state === 'paused') {
-      media.resume();
-    }
-    setOnRec(1);
+    navigator.mediaDevices
+      .getUserMedia({ audio: true })
+      .then((stream) => {
+        inst.play();
+        audioCtx.resume();
+        if (media.state === 'paused') {
+          media.resume();
+        }
+        setOnRec(1);
+      })
+      .catch(() => setMicAuthModalToggle(true));
   };
 
   const onRecAudio = () => {
@@ -216,7 +271,7 @@ const RecordPage = (props) => {
         };
       })
       .catch(() => {
-        setMicAuthModalToggle(true);
+        // setMicAuthModalToggle(true);
       });
   };
 
@@ -233,21 +288,19 @@ const RecordPage = (props) => {
       track.stop();
     });
 
-    // 미디어 캡처 중지
-    media.stop();
+    // 미디어 캡처 중지\
+    if (media.state === 'recording') media.stop();
     // 메서드가 호출 된 노드 연결 해제
     analyser.disconnect();
     source.disconnect();
   };
-
-  const goToNextPage = () => {};
 
   const onSubmitAudioFile = () => {
     if (parseInt(count) < 60) {
       return notification['warning']({
         key: 'audioNotification',
         message: '',
-        description: '1분 이상의 녹음만 저장이 가능합니다',
+        description: '1분 이상의 녹음만 저장 가능합니다',
         placement: 'bottomRight',
         duration: 3,
       });
@@ -257,12 +310,12 @@ const RecordPage = (props) => {
       setAudioFile(window.URL.createObjectURL(e.data));
     };
 
-    if (onRec === 1) {
+    if (onRec === 2) {
       stream.getAudioTracks().forEach(function (track) {
         track.stop();
       });
 
-      media.stop();
+      if (media.state === 'recording') media.stop();
       // 메서드가 호출 된 노드 연결 해제
       analyser.disconnect();
       source.disconnect();
@@ -271,6 +324,22 @@ const RecordPage = (props) => {
     init();
     setPage(2);
   };
+
+  // 페이지 벗어날시 반주 재생과 녹음 중지
+  useEffect(() => {
+    return () => {
+      // 언마운트시 state 값 useRef로 접근
+      streamRef.current.getAudioTracks().forEach(function (track) {
+        track.stop();
+      });
+      if (mediaRef.current.state === 'recording') mediaRef.current.stop();
+      analyserRef.current.disconnect();
+      sourceRef.current.disconnect();
+
+      init();
+      setCountDownState(false);
+    };
+  }, []);
 
   return (
     <Container>
@@ -283,13 +352,19 @@ const RecordPage = (props) => {
         <LeftOutlined />
         <BackwardText>커버 정보 입력</BackwardText>
       </BackwardButton>
-      <IconContainer>{showRecordingState()}</IconContainer>
-      <LyricsContainer>
-        <CurrentLyrics>{lyrics[lyricsIndex].text}</CurrentLyrics>
-        <NextLyrics>
-          {lyricsIndex < lyricsLength - 1 ? lyrics[lyricsIndex + 1].text : 'ㅤ'}
-        </NextLyrics>
-      </LyricsContainer>
+      <Background>
+        <BackgroundBlur>
+          <IconContainer>{showRecordingState()}</IconContainer>
+          <LyricsContainer>
+            <CurrentLyrics>{lyrics[lyricsIndex].text}</CurrentLyrics>
+            <NextLyrics>
+              {lyricsIndex < lyricsLength - 1
+                ? lyrics[lyricsIndex + 1].text
+                : 'ㅤ'}
+            </NextLyrics>
+          </LyricsContainer>
+        </BackgroundBlur>
+      </Background>
       <ProgressContainer>
         {/* audioDuration의 길이를 알기 떄문에 animation 형식으로 바꾸는것 고려 */}
         <CustomProgress
@@ -297,12 +372,20 @@ const RecordPage = (props) => {
           showInfo={false}
           strokeColor="black"
         />
+        <TimeContainer>
+          <CurrentTimeContainer>
+            {minute}
+            {':'}
+            {second < 10 ? '0' + second : second}
+          </CurrentTimeContainer>
+          <RemainTimeContainer>
+            {'- '}
+            {audioMinute}
+            {':'}
+            {audioSecond < 10 ? '0' + audioSecond : audioSecond}
+          </RemainTimeContainer>
+        </TimeContainer>
       </ProgressContainer>
-      {/* <VisualizerContainer>
-        {audioCtx && onRec === 1 ? (
-          <AudioVisualizer audioCtx={audioCtx}></AudioVisualizer>
-        ) : null}
-      </VisualizerContainer> */}
       {((onRec === 0 && audioUrl) || onRec === 2) && countdown === 4 ? (
         <SubmitContainer>
           <SubmitButton
@@ -314,6 +397,14 @@ const RecordPage = (props) => {
           </SubmitButton>
         </SubmitContainer>
       ) : null}
+      <VisualizerContainer onRec={onRec}>
+        <AudioVisualizer
+          audioCtx={audioCtx}
+          source={sourceRef.current}
+          width={'250px'}
+          height={'100px'}
+        ></AudioVisualizer>
+      </VisualizerContainer>
     </Container>
   );
 };
@@ -324,9 +415,18 @@ const Container = styled.div`
   position: relative;
 `;
 
+const CurrentTimeContainer = styled.div`
+  font-weight: 800;
+`;
+
+const RemainTimeContainer = styled.div`
+  font-weight: 800;
+  color: #6236ff;
+`;
+
 const IconContainer = styled.div`
   position: absolute;
-  top: 40%;
+  top: 45%;
   left: 50%;
   transform: translate(-50%, -50%);
   display: flex;
@@ -337,13 +437,28 @@ const IconContainer = styled.div`
 `;
 
 const VisualizerContainer = styled.div`
-  height: 60%;
-  width: 100%;
+  height: 10rem;
+  width: 15rem;
   position: absolute;
   top: 50%;
-  left: 50%;
+  left: -40%;
   transform: translate(-50%, -50%);
   z-index: 1;
+  visibility: ${(props) => (props.onRec === 1 ? 'visible' : 'hidden')};
+`;
+
+const Background = styled.div`
+  background: url('https://w.namu.la/s/8f16d9ad8ac378b6d2339ce927bbc9d6431dbf5277b241bf363ffa61cf5496caf1611f471aca282ff14bd8e544135b8f5edbbfebb6f942603cc9563f130a548cf40005956d405598ed3f6067522ad7b6aaf067e05dbc1e79085d5b90fb90ab5f9947a0cd3108efda6f8008666a1627cc');
+  margin-top: 6rem;
+  height: 26rem;
+`;
+
+const BackgroundBlur = styled.div`
+  position: relative;
+  width: 100%;
+  height: 100%;
+  -webkit-backdrop-filter: blur(2px) brightness(40%);
+  backdrop-filter: blur(2px) brightness(40%);
 `;
 
 const SubmitContainer = styled.div`
@@ -390,6 +505,7 @@ const BackwardButton = styled.div`
 const CountDownText = styled.div`
   font-size: 6rem;
   font-weight: 900;
+  color: white;
 `;
 
 const BackwardText = styled.span`
@@ -398,30 +514,50 @@ const BackwardText = styled.span`
 `;
 
 const CurrentLyrics = styled.div`
-  font-size: 1.4rem;
-  font-weight: 800;
+  font-size: 1.5rem;
+  font-weight: 900;
 `;
 
 const NextLyrics = styled.div`
   font-size: 1.2rem;
-  color: rgba(160, 160, 160);
+  font-weight: 400;
+  color: rgba(50, 50, 50);
 `;
 
 const LyricsContainer = styled.div`
   position: absolute;
   left: 50%;
-  bottom: 25%;
-  transform: translate(-50%, -50%);
+  bottom: 5%;
+  transform: translate(-50%, 0);
   width: 40vw;
   z-index: 2;
+  background: rgba(255, 255, 255, 0.5);
+  padding: 1rem 1rem;
+  border-radius: 1rem;
 `;
 
 const ProgressContainer = styled.div`
   position: absolute;
-  bottom: 20%;
+  bottom: 12%;
   left: 50%;
   transform: translate(-50%, -50%);
+  padding: 0 2rem;
   z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 108%;
+  box-sizing: border-box;
+`;
+
+const TimeContainer = styled.div`
+  font-size: 1rem;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  position: relative;
 `;
 
 const SaveIconImg = styled.img`
@@ -430,10 +566,11 @@ const SaveIconImg = styled.img`
 `;
 
 const CustomProgress = styled(Progress)`
-  width: 40vw;
+  width: 100%;
 `;
 
 const CustomPlayIcon = styled.img`
+  filter: invert(100%);
   transition: all ease-in-out 0.3s;
   cursor: pointer;
   width: 4rem;
@@ -446,10 +583,11 @@ const CustomPlayIcon = styled.img`
 `;
 
 const CustomPauseIcon = styled(PauseOutlined)`
+  filter: invert(100%);
   transition: all ease-in-out 0.3s;
   cursor: pointer;
   font-size: 5rem;
-  color: lightgray;
+  color: black;
   width: 5rem;
   text-align: center;
 

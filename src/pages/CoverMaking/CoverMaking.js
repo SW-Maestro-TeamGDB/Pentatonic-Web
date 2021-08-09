@@ -104,7 +104,7 @@ const CoverMaking = ({ match }) => {
 
 const CustomSteps = styled(Steps)`
   width: 70%;
-  margin-top: 1.5rem;
+  margin-top: 1rem;
 `;
 
 const StepContents = styled.div`

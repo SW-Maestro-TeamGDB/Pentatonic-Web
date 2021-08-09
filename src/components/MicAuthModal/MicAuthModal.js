@@ -29,6 +29,7 @@ const MicAuthModal = (props) => {
           <CautionTitle>
             마이크 권한을 허용하고 다시 녹음버튼을 눌러주세요
           </CautionTitle>
+          <Spacing />
           <SubmitButton onClick={() => closeModal()}>확인했습니다</SubmitButton>
         </CautionContent>
       </CautionContainer>
@@ -81,11 +82,12 @@ const SubmitButton = styled.button`
   border-radius: 0.8rem;
   background-color: black;
   margin: 1rem 0;
-  width: 95%;
-  height: 4rem;
+  width: 90%;
+  height: 3rem;
   border: none;
   color: white;
-  font-size: 1.2rem;
+  font-size: 1rem;
+  font-weight: 800;
   cursor: pointer;
   transition: all ease-in-out 0.3s;
   &:hover {
