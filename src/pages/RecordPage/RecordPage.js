@@ -2,7 +2,7 @@ import react, { useState, useEffect, useCallback, useRef } from 'react';
 import { Progress, Modal, notification } from 'antd';
 import RecordModal from '../../components/RecordModal/RecordModal';
 import MicAuthModal from '../../components/MicAuthModal';
-// import AudioVisualizer from '../../components/AudioVisualizer';
+import AudioVisualizer from '../../components/AudioVisualizer';
 import styled from 'styled-components';
 import PlayIcon from '../../images/PlayIcon.svg';
 import StopIcon from '../../images/StopIcon.svg';
@@ -25,8 +25,8 @@ const RecordPage = (props) => {
   const [count, setCount] = useState(0);
   const [micAuthModalToggle, setMicAuthModalToggle] = useState(false);
 
+  // 카운트다운
   const [countdownState, setCountDownState] = useState(false);
-
   const [second, setSecond] = useState();
   const [minute, setMinute] = useState();
   const [audioSecond, setAudioSecond] = useState(parseInt(audioDuration) % 60);
@@ -288,8 +288,8 @@ const RecordPage = (props) => {
       track.stop();
     });
 
-    // 미디어 캡처 중지
-    media.stop();
+    // 미디어 캡처 중지\
+    if (media.state === 'recording') media.stop();
     // 메서드가 호출 된 노드 연결 해제
     analyser.disconnect();
     source.disconnect();
@@ -315,7 +315,7 @@ const RecordPage = (props) => {
         track.stop();
       });
 
-      media.stop();
+      if (media.state === 'recording') media.stop();
       // 메서드가 호출 된 노드 연결 해제
       analyser.disconnect();
       source.disconnect();
@@ -386,11 +386,6 @@ const RecordPage = (props) => {
           </RemainTimeContainer>
         </TimeContainer>
       </ProgressContainer>
-      {/* <VisualizerContainer>
-        {audioCtx && onRec === 1 ? (
-          <AudioVisualizer audioCtx={audioCtx}></AudioVisualizer>
-        ) : null}
-      </VisualizerContainer> */}
       {((onRec === 0 && audioUrl) || onRec === 2) && countdown === 4 ? (
         <SubmitContainer>
           <SubmitButton
@@ -402,6 +397,14 @@ const RecordPage = (props) => {
           </SubmitButton>
         </SubmitContainer>
       ) : null}
+      <VisualizerContainer onRec={onRec}>
+        <AudioVisualizer
+          audioCtx={audioCtx}
+          source={sourceRef.current}
+          width={'250px'}
+          height={'100px'}
+        ></AudioVisualizer>
+      </VisualizerContainer>
     </Container>
   );
 };
@@ -434,13 +437,14 @@ const IconContainer = styled.div`
 `;
 
 const VisualizerContainer = styled.div`
-  height: 60%;
-  width: 100%;
+  height: 10rem;
+  width: 15rem;
   position: absolute;
   top: 50%;
-  left: 50%;
+  left: -40%;
   transform: translate(-50%, -50%);
   z-index: 1;
+  visibility: ${(props) => (props.onRec === 1 ? 'visible' : 'hidden')};
 `;
 
 const Background = styled.div`
