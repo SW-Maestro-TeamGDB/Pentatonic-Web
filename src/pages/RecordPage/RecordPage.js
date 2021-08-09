@@ -37,6 +37,11 @@ const RecordPage = (props) => {
   const analyserRef = useRef();
   const sourceRef = useRef();
   const streamRef = useRef();
+  const audioCtxRef = useRef();
+
+  useEffect(() => {
+    audioCtxRef.current = audioCtx;
+  }, [audioCtx]);
 
   useEffect(() => {
     streamRef.current = stream;
@@ -329,12 +334,17 @@ const RecordPage = (props) => {
   useEffect(() => {
     return () => {
       // 언마운트시 state 값 useRef로 접근
-      streamRef.current.getAudioTracks().forEach(function (track) {
-        track.stop();
-      });
-      if (mediaRef.current.state === 'recording') mediaRef.current.stop();
-      analyserRef.current.disconnect();
-      sourceRef.current.disconnect();
+
+      // audicContext가 만들어졌을 경우만 (카운트다운 제외)
+      if (audioCtxRef.current) {
+        streamRef.current.getAudioTracks().forEach(function (track) {
+          track.stop();
+        });
+
+        if (mediaRef.current.state === 'recording') mediaRef.current.stop();
+        analyserRef.current.disconnect();
+        sourceRef.current.disconnect();
+      }
 
       init();
       setCountDownState(false);
