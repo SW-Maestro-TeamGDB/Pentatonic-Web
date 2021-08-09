@@ -13,7 +13,7 @@ const MyMenu = (props) => {
       <MenuLink to="/profile">마이페이지</MenuLink>
       <MenuLink to="/liked">좋아요 누른 커버</MenuLink>
       <MenuLink to="/library">라이브러리</MenuLink>
-      <MenuLink onClick={onClickLogout}>로그아웃</MenuLink>
+      <MenuButton onClick={onClickLogout}>로그아웃</MenuButton>
     </MenuContainer>
   );
 };
@@ -36,6 +36,20 @@ const MenuLink = styled(Link)`
   font-weight: 400;
   font-size: 16px;
   z-index: 5;
+  &:hover {
+    background-color: rgb(230, 230, 230);
+    color: black;
+  }
+`;
+
+const MenuButton = styled.div`
+  color: black;
+  padding: 1vh 0;
+  text-align: center;
+  font-weight: 400;
+  font-size: 16px;
+  z-index: 5;
+  cursor: pointer;
   &:hover {
     background-color: rgb(230, 230, 230);
     color: black;
