@@ -32,6 +32,30 @@ const RecordPage = (props) => {
   const [audioSecond, setAudioSecond] = useState(parseInt(audioDuration) % 60);
   const [audioMinute, setAudioMinute] = useState(parseInt(audioDuration) / 60);
 
+  // 언마운트를 위한 useRef
+  const mediaRef = useRef();
+  const analyserRef = useRef();
+  const sourceRef = useRef();
+  const streamRef = useRef();
+
+  useEffect(() => {
+    streamRef.current = stream;
+  }, [stream]);
+
+  useEffect(() => {
+    mediaRef.current = media;
+  }, [media]);
+
+  useEffect(() => {
+    analyserRef.current = analyser;
+  }, [analyser]);
+
+  useEffect(() => {
+    sourceRef.current = source;
+  }, [source]);
+
+  //
+
   const hihatSound = new Audio();
   hihatSound.src = hihat;
 
@@ -170,7 +194,7 @@ const RecordPage = (props) => {
   const onClickResume = () => {
     navigator.mediaDevices
       .getUserMedia({ audio: true })
-      .then(() => {
+      .then((stream) => {
         inst.play();
         audioCtx.resume();
         if (media.state === 'paused') {
@@ -286,7 +310,7 @@ const RecordPage = (props) => {
       setAudioFile(window.URL.createObjectURL(e.data));
     };
 
-    if (onRec === 1) {
+    if (onRec === 2) {
       stream.getAudioTracks().forEach(function (track) {
         track.stop();
       });
@@ -304,6 +328,14 @@ const RecordPage = (props) => {
   // 페이지 벗어날시 반주 재생과 녹음 중지
   useEffect(() => {
     return () => {
+      // 언마운트시 state 값 useRef로 접근
+      streamRef.current.getAudioTracks().forEach(function (track) {
+        track.stop();
+      });
+      if (mediaRef.current.state === 'recording') mediaRef.current.stop();
+      analyserRef.current.disconnect();
+      sourceRef.current.disconnect();
+
       init();
       setCountDownState(false);
     };
