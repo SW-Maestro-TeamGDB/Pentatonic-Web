@@ -39,25 +39,23 @@ const Menu = () => {
     <Default>
       <MenuContainer>
         <MenuWrapper>
-          <div style={{ position: 'relative' }}>
-            <Dropdown
-              overlay={LoungeMenu}
-              placement="bottomLeft"
-              getPopupContainer={(trigger) => trigger.parentNode}
-            >
-              <MenuLink to="/lounge">라운지</MenuLink>
-            </Dropdown>
-          </div>
+          <Dropdown
+            overlay={LoungeMenu}
+            placement="bottomCenter"
+            getPopupContainer={(trigger) => trigger.parentNode}
+          >
+            <MenuLink to="/lounge">라운지</MenuLink>
+          </Dropdown>
           <Dropdown
             overlay={StudioMenu}
-            placement="bottomLeft"
+            placement="bottomCenter"
             getPopupContainer={(trigger) => trigger.parentNode}
           >
             <MenuLink to="/studio">스튜디오</MenuLink>
           </Dropdown>
           <Dropdown
             overlay={ArtistMenu}
-            placement="bottomLeft"
+            placement="bottomCenter"
             getPopupContainer={(trigger) => trigger.parentNode}
           >
             <MenuLink to="/artist">아티스트</MenuLink>
@@ -71,21 +69,19 @@ const Menu = () => {
 const MenuContainer = styled.div`
   display: flex;
   justify-content: center;
+  align-items: center;
   position: fixed;
-  padding: 35px 0 35px;
-  top: 50px;
-  width: 100%;
   z-index: 3;
-  height: 50px;
-  background-color: white;
-  border-bottom: 1px solid rgb(220, 220, 220);
+  width: 100%;
+  height: 100%;
+  position: absolute;
 `;
 
 const MenuWrapper = styled.div`
   display: flex;
-  justify-content: space-evenly;
+  justify-content: space-around;
   align-items: center;
-  width: 65%;
+  width: 70%;
 `;
 
 const SubMenuSpacing = styled.div`
@@ -93,10 +89,12 @@ const SubMenuSpacing = styled.div`
 `;
 
 const MenuLink = styled(Link)`
-  font-size: 1.4rem;
+  font-size: 18px;
   letter-spacing: 4px;
   color: black;
   font-weight: 800;
+  line-height: 1.13;
+  letter-spacing: -0.4px;
 
   &:hover {
     color: rgb(60, 60, 60);
@@ -105,7 +103,7 @@ const MenuLink = styled(Link)`
 
 const SubMenuContainer = styled.div`
   border-radius: 1rem;
-  width: 13rem;
+  width: 200px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -113,14 +111,16 @@ const SubMenuContainer = styled.div`
   background-color: white;
   position: fixed;
   box-shadow: 0 2px 0px rgba(0, 0, 0, 0.3);
-  transform: translateX(-30%);
+  transform: translateX(-34%);
 `;
 
 const SubMenuLink = styled(Link)`
   color: black;
-  font-size: 1rem;
+  font-size: 16px;
   font-weight: 500;
-  padding: 0.5rem 0.5rem;
+  padding: 10px 10px;
+  line-height: 1.13;
+  letter-spacing: -0.4px;
   width: 100%;
   text-align: center;
   transition: background-color 0.1s ease-in-out;

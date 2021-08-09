@@ -13,6 +13,7 @@ import styled from 'styled-components';
 import MyMenu from '../MyMenu';
 import MobileMenu from '../MobileMenu/MobileMenu';
 import AuthModal from '../AuthModal';
+import Menu from '../Menu';
 
 const Header = () => {
   const [menuToggle, setMenuToggle] = useState(false);
@@ -23,6 +24,10 @@ const Header = () => {
     onCompleted: (data) => {
       console.log(data);
     },
+  });
+
+  useEffect(() => {
+    console.log(data);
   });
 
   const [getUserInform, getUserInformResult] = useLazyQuery(GET_USER_INFORM, {
@@ -79,34 +84,42 @@ const Header = () => {
           >
             ☰
           </MobileMenuButton>
+          <LogoContainer>
+            <LogoLink to="/">Pentatonic</LogoLink>
+          </LogoContainer>
         </Mobile>
-        <LogoContainer>
-          <LogoLink to="/">Pentatonic</LogoLink>
-        </LogoContainer>
         <Default>
-          {data?.user ? (
-            <>
-              <CustomDropdown
-                overlay={MyMenu}
-                trigger={['click']}
-                placement="bottomCenter"
-                getPopupContainer={(trigger) => trigger.parentNode}
-              >
-                <ProfileContainer>
-                  <UserImg src={data?.user?.profileURI} />
-                  <UserName>{data?.user?.username}</UserName>
-                </ProfileContainer>
-              </CustomDropdown>
-            </>
-          ) : (
-            <LoginButton onClick={() => onClickLoginButton()}>
-              로그인 / 회원가입
-            </LoginButton>
-          )}
-          <AuthModal
-            modalToggle={modalToggle}
-            setModalToggle={setModalToggle}
-          />
+          <HeaderContents>
+            <LogoContainer>
+              <LogoLink to="/">Pentatonic</LogoLink>
+            </LogoContainer>
+            <MenuContainer>
+              <Menu />
+            </MenuContainer>
+            <UserContainer>
+              {data?.user ? (
+                <CustomDropdown
+                  overlay={MyMenu}
+                  trigger={['click']}
+                  placement="bottomCenter"
+                  getPopupContainer={(trigger) => trigger.parentNode}
+                >
+                  <ProfileContainer>
+                    <UserImg src={data?.user?.profileURI} />
+                    <UserName>{data?.user?.username}</UserName>
+                  </ProfileContainer>
+                </CustomDropdown>
+              ) : (
+                <LoginButton onClick={() => onClickLoginButton()}>
+                  로그인 / 회원가입
+                </LoginButton>
+              )}
+            </UserContainer>
+            <AuthModal
+              modalToggle={modalToggle}
+              setModalToggle={setModalToggle}
+            />
+          </HeaderContents>
         </Default>
       </HeaderContainer>
     </Fixed>
@@ -120,9 +133,22 @@ const Fixed = styled.div`
   z-index: 4;
 `;
 
+const HeaderContents = styled.div`
+  width: 80%;
+  display: flex;
+  justify-content: space-between;
+`;
+
+const UserContainer = styled.div`
+  width: 10%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 15px;
+`;
+
 const CustomDropdown = styled(Dropdown)`
   position: relative;
-  right: 2vw;
   display: flex;
   align-items: center;
 `;
@@ -132,29 +158,32 @@ const ProfileContainer = styled.div`
   flex-direction: row;
   align-items: center;
   justify-content: center;
+  cursor: pointer;
 `;
 
 const CustomDrawer = styled(Drawer)``;
 
 const UserImg = styled.img`
-  max-height: 30px;
-  border-radius: 100%;
-  margin-right: 1rem;
-  background-color: white;
+  height: 32px;
+  border-radius: 30px;
+  margin-right: 10px;
 `;
 
 const UserName = styled.div`
-  font-size: 1.5rem;
+  font-size: 18px;
   font-weight: 600;
+  line-height: 1.13;
+  letter-spacing: -0.4px;
 `;
 
 const HeaderContainer = styled.div`
-  background-color: black;
-  color: white;
+  background-color: #ffffff;
+  color: black;
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  height: 50px;
+  justify-content: center;
+  height: 64px;
+  box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.2);
 
   // 드래그 방지
   -ms-user-select: none;
@@ -174,21 +203,25 @@ const HeaderContainer = styled.div`
   }
 `;
 
-const LoginButton = styled.button`
-  right: 1vw;
-  position: absolute;
+const LoginButton = styled.div`
   border: none;
   background-color: transparent;
-  color: white;
+  color: black;
   width: auto;
   border-radius: 6px;
-  height: 60%;
-  font-size: 20px;
+  font-size: 16px;
   font-weight: bold;
   cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: all 0.3s ease-in-out;
+
+  line-height: 1.13;
+  letter-spacing: -0.4px;
 
   &:hover {
-    color: lightgray;
+    color: rgb(60, 60, 60);
   }
 `;
 
@@ -201,17 +234,24 @@ const MobileMenuButton = styled.div`
 
 const LogoContainer = styled.div`
   margin-left: 1.5vw;
+  display: flex;
+  align-items: center; ;
 `;
 
 const LogoLink = styled(Link)`
-  font-size: 1.8rem;
-  font-weight: bolder;
-  color: white;
+  font-size: 28px;
+  font-weight: 900;
+  color: #6236ff;
+  letter-spacing: -1.5px;
 
   ${media.small} {
     color: black;
     font-size: 2rem;
     font-weight: 900;
+  }
+
+  &:hover {
+    color: #6236ff;
   }
 `;
 
@@ -223,15 +263,8 @@ const LoginContainer = styled.div`
 `;
 
 const MenuContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  color: black;
-  background-color: white;
-  right: 1vw;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-  padding: 1.5vh 0;
-  width: 10rem;
-  transform: translateY(3.5rem);
+  width: 70%;
+  position: relative;
 `;
 
 const MenuLink = styled(Link)`

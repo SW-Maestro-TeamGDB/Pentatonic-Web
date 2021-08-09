@@ -23,7 +23,6 @@ function App() {
       <Router>
         <ScrollToTop />
         <Header />
-        <Menu />
         <Centered>
           <Switch>
             <Route path="/" component={LoungeHome} exact />
@@ -48,7 +47,7 @@ const Centered = styled.div`
   flex-direction: column;
   align-items: center;
   position: absolute;
-  top: 110px;
+  top: 50px;
   width: 100%;
 `;
 

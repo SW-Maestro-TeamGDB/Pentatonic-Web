@@ -28,6 +28,7 @@ const Background = styled.div`
   background-repeat: no-repeat;
   background-position: center center;
   background-size: 100%;
+  border-radius: 15px;
 
   &:hover {
     background-size: 115%;

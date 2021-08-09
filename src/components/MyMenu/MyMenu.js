@@ -53,6 +53,7 @@ const MenuButton = styled.div`
     background-color: rgb(230, 230, 230);
     color: black;
   }
+  cursor: pointer;
 `;
 
 export default MyMenu;
