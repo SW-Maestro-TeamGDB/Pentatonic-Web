@@ -26,19 +26,17 @@ const LoungeHome = () => {
       <BoardContainer>
         <BoardWrapper>
           <BoardHeader>
-            <BoardTitle>떠오르는 밴드커버</BoardTitle>
-            <BoardLink to="/lounge/band">더보기</BoardLink>
-          </BoardHeader>
-          <Divider />
-          <GridContainer width="90%">{tempCover()}</GridContainer>
-        </BoardWrapper>
-        <BoardWrapper>
-          <BoardHeader>
             <BoardTitle>떠오르는 솔로커버</BoardTitle>
             <BoardLink to="/lounge/solo">더보기</BoardLink>
           </BoardHeader>
-          <Divider />
-          <GridContainer width="90%">{tempCover()}</GridContainer>
+          <GridContainer templateColumn="265px">{tempCover()}</GridContainer>
+        </BoardWrapper>
+        <BoardWrapper>
+          <BoardHeader>
+            <BoardTitle>떠오르는 밴드커버</BoardTitle>
+            <BoardLink to="/lounge/band">더보기</BoardLink>
+          </BoardHeader>
+          <GridContainer templateColumn="265px">{tempCover()}</GridContainer>
         </BoardWrapper>
       </BoardContainer>
     </PageContainer>
@@ -46,7 +44,7 @@ const LoungeHome = () => {
 };
 
 const Spacing = styled.div`
-  margin: 2rem 0;
+  margin: 1rem 0;
 `;
 
 const Divider = styled.div`
@@ -58,11 +56,12 @@ const Divider = styled.div`
 const BoardContainer = styled.div`
   display: flex;
   flex-direction: row;
-  width: 80%;
+  justify-content: space-between;
+  width: 100%;
 `;
 
 const BoardWrapper = styled.div`
-  width: 100%;
+  width: 47%;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -75,24 +74,27 @@ const BoardHeader = styled.div`
   flex-direction: row;
   align-items: center;
   justify-content: center;
-  margin-bottom: 1rem;
-  width: 90%;
+  margin-bottom: 10px;
+  width: 95%;
 `;
 
 const BoardTitle = styled.nav`
   font-size: 24px;
   font-weight: 600;
-  text-align: center;
   width: 100%;
   color: black;
 `;
 
 const BoardLink = styled(Link)`
-  font-size: 12px;
+  font-size: 20px;
   font-weight: 500;
-  color: black;
+  color: #bbbbbb;
   position: absolute;
   right: 0;
+
+  &:hover {
+    color: rgb(150, 150, 150);
+  }
 `;
 
 export default LoungeHome;

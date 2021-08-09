@@ -19,7 +19,6 @@ const Container = styled.div`
   display: grid;
   grid-template-columns: ${(props) =>
     props.templateColumn ? '1fr 1fr' : 'repeat(auto-fit, minmax(200px, 1fr))'};
-  margin-top: 2.5rem;
   grid-column-gap: 1rem;
   grid-row-gap: 1rem;
 `;
