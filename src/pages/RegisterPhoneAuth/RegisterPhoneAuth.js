@@ -204,7 +204,7 @@ const Container = styled.div`
   flex-direction: column;
   align-items: center;
   position: relative;
-  height: 55vh;
+  height: 65vh;
 `;
 
 const PhoneNumberContainer = styled.div`

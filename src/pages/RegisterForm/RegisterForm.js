@@ -285,7 +285,7 @@ const Container = styled.div`
 
 const InputContainer = styled.div`
   width: 70%;
-  margin-top: 2rem;
+  margin-top: 0.8rem;
 `;
 
 const CustomTitle = styled.div`

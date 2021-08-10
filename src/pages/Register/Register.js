@@ -103,15 +103,17 @@ const Register = ({ history }) => {
 };
 
 const StepContents = styled.div`
-  width: 70%;
+  width: 100%;
   margin-top: 3%;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
   border-radius: 1rem;
   padding: 3rem 0;
+  min-height: 75vh;
+  position: relative;
 `;
 
 const CustomSteps = styled(Steps)`
-  width: 70%;
+  width: 100%;
   margin-top: 1.5rem;
 `;
 
