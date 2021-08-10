@@ -15,7 +15,7 @@ const SearchBar = ({ props }) => {
 const SearchBarContainer = styled.div`
   display: flex;
   flex-direction: row;
-  width: 70%;
+  width: 93%;
   border-radius: 1rem;
   border: 1px solid rgb(150, 150, 150);
   height: 3rem;

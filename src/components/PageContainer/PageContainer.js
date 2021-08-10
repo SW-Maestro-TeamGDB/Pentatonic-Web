@@ -15,7 +15,8 @@ const Container = styled.div`
   /* box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3); */
   padding: 1.5vh 1vw;
   height: auto;
-  width: 80%;
+  width: 60%;
+  min-width: 1200px;
   margin-top: 3vh;
 
   ${media.small} {

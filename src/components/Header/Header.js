@@ -134,7 +134,8 @@ const Fixed = styled.div`
 `;
 
 const HeaderContents = styled.div`
-  width: 80%;
+  width: 60%;
+  min-width: 1200px;
   display: flex;
   justify-content: space-between;
 `;
@@ -144,7 +145,7 @@ const UserContainer = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-right: 15px;
+  margin-right: 3%;
 `;
 
 const CustomDropdown = styled(Dropdown)`
