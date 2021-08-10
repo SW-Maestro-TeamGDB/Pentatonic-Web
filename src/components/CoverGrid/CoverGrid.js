@@ -6,40 +6,110 @@ import ThumbIcon from '../../images/ThumbIcon.svg';
 import ViewIcon from '../../images/ViewIcon.svg';
 import HeadPhoneIcon from '../../images/HeadPhoneIcon.svg';
 
+import TameImpala from './TameImpala.jpeg';
+import Hyukoh from './Hyukoh.jpeg';
+import Beatles from './Beatles.jpeg';
+import MenITrust from './MenITrust.jpeg';
+import NoSurprises from './NoSurprises.jpeg';
+import TheVolunteers from './TheVolunteers.jpeg';
+
+import drum from './drum.svg';
+import guitar from './guitar.svg';
+import piano from './piano.svg';
+import vocal from './vocal.svg';
+
 const CoverGrid = (props) => {
   const { idx, id } = props;
   const category = ['animals', 'arch', 'nature', 'people', 'tech'];
   const randomImg = `https://placeimg.com/300/300/${category[idx]}`;
 
+  const showSession = (session) => {
+    console.log(session);
+    return session.map((v) => {
+      return <InstrumentIcon key={`${id}+${v}`} src={sessionMatch(v)} />;
+    });
+  };
+
+  const sessionMatch = (v) => {
+    if (v === 'guitar') return guitar;
+    else if (v === 'drum') return drum;
+    else if (v === 'piano') return piano;
+    else if (v === 'vocal') return vocal;
+  };
+
+  const tempData = [
+    {
+      cover: '사이키델릭',
+      title: `Borderline`,
+      singer: 'Tame Impala',
+      img: TameImpala,
+      session: ['guitar', 'vocal', 'piano'],
+    },
+    {
+      cover: '3인 혁오',
+      title: `위잉위잉`,
+      singer: '혁오',
+      img: Hyukoh,
+      session: ['guitar', 'vocal', 'drum'],
+    },
+    {
+      cover: 'Cross The Road',
+      title: `Hey Jude`,
+      singer: 'The Beatles',
+      img: Beatles,
+      session: ['guitar', 'vocal', 'piano', 'drum'],
+    },
+    {
+      cover: '구름밴드',
+      title: `Numb`,
+      singer: 'Men I Trust',
+      img: MenITrust,
+      session: ['guitar', 'vocal'],
+    },
+    {
+      cover: '코리아 톰 요크',
+      title: `No Suprises`,
+      singer: 'Radio Head',
+      img: NoSurprises,
+      session: ['piano', 'vocal', 'drum'],
+    },
+    {
+      cover: '실력은 필요없어',
+      title: `Summer`,
+      singer: 'The Volunteers',
+      img: TheVolunteers,
+      session: ['guitar', 'vocal', 'drum'],
+    },
+  ];
+
   return (
     <CustomLink to={`/lounge/cover/${id}`}>
       <CoverContainer>
         <ImageContainer>
-          <CoverImage src={randomImg} />
+          <CoverImage src={tempData[idx].img} />
           <HeadPhoneImage src={HeadPhoneIcon} />
         </ImageContainer>
         <DataContainer>
           <CoverInform>
-            <CoverTitle>무지성합주</CoverTitle>
-            <SongInform>ColdPlay - Fix You</SongInform>
+            <CoverTitle>{tempData[idx].cover}</CoverTitle>
+            <SongInform>
+              {tempData[idx].title} - {tempData[idx].singer}
+            </SongInform>
           </CoverInform>
           <CoverMeta>
             <CountContainer>
               <LikeCount>
-                <CustomIcon src={ViewIcon} /> {parseInt(Math.random() * 300)}
+                <CustomIcon src={ViewIcon} />{' '}
+                {parseInt(Math.random() * 300 + 200)}
               </LikeCount>
               <SpacingSpan />
               <ViewCount>
-                <CustomIcon src={ThumbIcon} /> {parseInt(Math.random() * 300)}
+                <CustomIcon src={ThumbIcon} />{' '}
+                {parseInt(Math.random() * 500 + 600)}
               </ViewCount>
               <SpacingSpan />
             </CountContainer>
-            <SessionInform>
-              <CustomIcon src={ViewIcon} />
-              <CustomIcon src={ViewIcon} />
-              <CustomIcon src={ViewIcon} />
-              <CustomIcon src={ViewIcon} />
-            </SessionInform>
+            <SessionInform>{showSession(tempData[idx].session)}</SessionInform>
           </CoverMeta>
         </DataContainer>
       </CoverContainer>
@@ -67,8 +137,8 @@ const HeadPhoneImage = styled.img`
 
 const CoverImage = styled.img`
   width: 100%;
-  height: auto;
-  border-radius: 1rem;
+  min-height: 160px;
+  border-radius: 10px;
   transition: all ease-in-out 0.3s;
   z-index: 2;
 `;
@@ -92,7 +162,7 @@ const CoverContainer = styled.div`
   }
 
   &:hover ${CoverImage} {
-    transform: scale(1.2);
+    transform: scale(1.15);
     filter: brightness(50%);
   }
 `;
@@ -104,18 +174,18 @@ const ImageContainer = styled.div`
   align-items: center;
   overflow: hidden;
   position: relative;
-  width: 90%;
+  width: 95%;
 `;
 
 const DataContainer = styled.div`
   display: flex;
   flex-direction: column;
-  width: 85%;
-  margin-top: 0.5rem;
+  width: 90%;
+  margin-top: 14px;
 `;
 
 const CoverInform = styled.div`
-  width: 80%;
+  width: 100%;
   color: black;
 `;
 
@@ -127,6 +197,13 @@ const CoverMeta = styled.div`
   align-items: center;
   justify-content: space-between;
   margin-top: 5px;
+  position: relative;
+`;
+
+const InstrumentIcon = styled.img`
+  width: 1em;
+  height: 1rem;
+  margin-right: 0.2vw;
 `;
 
 const CustomIcon = styled.img`
@@ -143,13 +220,19 @@ const CoverTitle = styled.div`
 `;
 
 const SongInform = styled.div`
-  font-size: 16px;
+  font-size: 14px;
   color: rgb(50, 50, 50);
 `;
 
 const SessionInform = styled.div`
   width: 40%;
   height: auto;
+  position: absolute;
+  right: 0;
+  display: flex;
+  flex: row;
+  align-items: center;
+  justify-content: flex-end;
 `;
 
 const CountContainer = styled.span`

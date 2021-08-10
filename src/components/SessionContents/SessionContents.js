@@ -47,11 +47,7 @@ const SessionContents = (props) => {
     });
   }, [session, selectedSession]);
 
-  return (
-    <GridContainer templateColumn="1fr 1fr">
-      {showSessionContents()}
-    </GridContainer>
-  );
+  return <GridContainer>{showSessionContents()}</GridContainer>;
 };
 
 export default SessionContents;
