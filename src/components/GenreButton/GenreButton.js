@@ -46,7 +46,6 @@ const CustomButton = styled.span`
   font-weight: 500;
   text-align: center;
   min-width: 7rem;
-  margin-top: 0.5rem;
   transition: all ease 0.3s;
 
   &:hover {

@@ -16,7 +16,7 @@ const WeeklyChallenge = () => {
         <CoverGrid
           id={parseInt(Math.random() * 100)}
           key={i}
-          idx={parseInt(Math.random() * 5)}
+          idx={parseInt(Math.random() * 6)}
         />
       );
     });
@@ -24,14 +24,15 @@ const WeeklyChallenge = () => {
   return (
     <PageContainer>
       <PageImage
-        imgUrl="https://media.pitchfork.com/photos/6064da2beef32a677ce9dbfc/2:1/w_2560%2Cc_limit/Tame-Impala.jpg"
-        title="Tame Impala - 'Cause I'm a man"
-        centered
+        imgUrl="https://w.namu.la/s/8f16d9ad8ac378b6d2339ce927bbc9d6431dbf5277b241bf363ffa61cf5496caf1611f471aca282ff14bd8e544135b8f5edbbfebb6f942603cc9563f130a548cf40005956d405598ed3f6067522ad7b6aaf067e05dbc1e79085d5b90fb90ab5f9947a0cd3108efda6f8008666a1627cc"
+        title="Fix You - Coldplay"
+        position="top"
       />
       <PageDesc>
-        테임 임팔라는 오스트레일리아의 4인조 사이키델릭 밴드이다. 멤버는 케빈
-        파커, 도미닉 심퍼, 닉 올브룩, 제이 왓슨 으로 이루어져 있다. 그들의
-        밴드명은 임팔라 영양의 이름에서 따왔다.
+        콜드플레이(영어: Coldplay)는 1996년 영국 런던 UCL에서 결성된 얼터너티브
+        록 밴드이다. <br /> 밴드의 멤버는 그룹의 보컬이자 피아니스트,
+        기타리스트인 크리스 마틴, 리드 기타리스트 조니 버클랜드, 베이스 가이
+        베리먼, 그리고 드러머와 기타 악기 연주를 맡은 윌 챔피언이다.
       </PageDesc>
       <SearchBar />
       <SubContainer>
@@ -42,7 +43,9 @@ const WeeklyChallenge = () => {
           <CustomButton>새로운 커버 만들기</CustomButton>
         </MakingCoverLink>
       </SubContainer>
-      <GridContainer width="70%">{tempCover()}</GridContainer>
+      <GridContainer width="95%" templateColumn="250px">
+        {tempCover()}
+      </GridContainer>
     </PageContainer>
   );
 };
@@ -50,14 +53,14 @@ const WeeklyChallenge = () => {
 const PageDesc = styled.div`
   font-size: 1rem;
   margin: 3rem 0;
-  width: 50%;
+  width: 80%;
   text-align: center;
 `;
 
 const SubContainer = styled.div`
-  margin-top: 2rem;
+  margin: 2rem 0;
   position: relative;
-  width: 70%;
+  width: 100%;
   display: flex;
   flex-direction: row;
   align-items: center;

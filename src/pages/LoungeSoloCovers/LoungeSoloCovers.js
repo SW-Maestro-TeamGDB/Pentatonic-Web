@@ -20,7 +20,7 @@ const LoungeSoloCovers = () => {
         <CoverGrid
           id={parseInt(Math.random() * 100)}
           key={i}
-          idx={parseInt(Math.random() * 5)}
+          idx={parseInt(Math.random() * 6)}
         />
       );
     });
@@ -42,7 +42,9 @@ const LoungeSoloCovers = () => {
           <CustomButton>새로운 커버 만들기</CustomButton>
         </MakingCoverLink>
       </SubContainer>
-      <GridContainer width="70%">{tempCover()}</GridContainer>
+      <GridContainer width="95%" templateColumn="250px">
+        {tempCover()}
+      </GridContainer>
     </PageContainer>
   );
 };
@@ -50,14 +52,14 @@ const LoungeSoloCovers = () => {
 const PageDesc = styled.div`
   font-size: 1rem;
   margin: 3rem 0;
-  width: 50%;
+  width: 80%;
   text-align: center;
 `;
 
 const SubContainer = styled.div`
-  margin-top: 1rem;
+  margin: 2rem 0;
   position: relative;
-  width: 70%;
+  width: 93%;
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -81,7 +83,6 @@ const CustomButton = styled.span`
   cursor: pointer;
   font-size: 1rem;
 `;
-
 const CustomMenu = styled(Menu)`
   min-width: 7rem;
   text-align: center;

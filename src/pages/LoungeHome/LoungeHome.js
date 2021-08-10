@@ -14,7 +14,7 @@ const LoungeHome = () => {
         <CoverGrid
           id={parseInt(Math.random() * 100)}
           key={v}
-          idx={parseInt(Math.random() * 5)}
+          idx={parseInt(Math.random() * 6)}
         />
       );
     });
@@ -29,14 +29,14 @@ const LoungeHome = () => {
             <BoardTitle>떠오르는 솔로커버</BoardTitle>
             <BoardLink to="/lounge/solo">더보기</BoardLink>
           </BoardHeader>
-          <GridContainer templateColumn="265px">{tempCover()}</GridContainer>
+          <GridContainer templateColumn="250px">{tempCover()}</GridContainer>
         </BoardWrapper>
         <BoardWrapper>
           <BoardHeader>
             <BoardTitle>떠오르는 밴드커버</BoardTitle>
             <BoardLink to="/lounge/band">더보기</BoardLink>
           </BoardHeader>
-          <GridContainer templateColumn="265px">{tempCover()}</GridContainer>
+          <GridContainer templateColumn="250px">{tempCover()}</GridContainer>
         </BoardWrapper>
       </BoardContainer>
     </PageContainer>
@@ -45,12 +45,6 @@ const LoungeHome = () => {
 
 const Spacing = styled.div`
   margin: 1rem 0;
-`;
-
-const Divider = styled.div`
-  border-bottom: 1px solid lightgray;
-  width: 90%;
-  margin: 1vh 0;
 `;
 
 const BoardContainer = styled.div`
