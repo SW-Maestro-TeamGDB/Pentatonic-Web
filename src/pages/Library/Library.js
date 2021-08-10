@@ -6,12 +6,12 @@ import styled from 'styled-components';
 
 const Library = () => {
   const loadLibrary = () =>
-    Array.from({ length: 30 }, () => 0).map((v, i) => {
+    Array.from({ length: 5 }, () => 0).map((v, i) => {
       return (
         <LibraryList
           id={parseInt(Math.random() * 100)}
           key={i}
-          idx={parseInt(Math.random() * 5)}
+          idx={parseInt(Math.random() * 6)}
         />
       );
     });
@@ -35,7 +35,7 @@ const Spacing = styled.div`
 `;
 
 const LibraryContainer = styled.div`
-  width: 70%;
+  width: 100%;
 `;
 
 export default Library;

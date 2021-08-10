@@ -1,28 +1,83 @@
 import react from 'react';
 import styled from 'styled-components';
 import { Default } from '../../lib/Media';
-import { DeleteFilled } from '@ant-design/icons';
+import { DeleteFilled, EditOutlined } from '@ant-design/icons';
 import ThumbIcon from '../../images/ThumbIcon.svg';
 import ViewIcon from '../../images/ViewIcon.svg';
+
+import TameImpala from '../CoverGrid/TameImpala.jpeg';
+import Hyukoh from '../CoverGrid/Hyukoh.jpeg';
+import Beatles from '../CoverGrid/Beatles.jpeg';
+import MenITrust from '../CoverGrid/MenITrust.jpeg';
+import NoSurprises from '../CoverGrid/NoSurprises.jpeg';
+import TheVolunteers from '../CoverGrid/TheVolunteers.jpeg';
 
 const LibraryList = (props) => {
   const { idx, id } = props;
   const category = ['animals', 'arch', 'nature', 'people', 'tech'];
   const randomImg = `https://placeimg.com/300/300/${category[idx]}`;
 
+  const tempData = [
+    {
+      cover: '사이키델릭',
+      title: `Borderline`,
+      singer: 'Tame Impala',
+      img: TameImpala,
+      session: ['guitar', 'vocal', 'piano'],
+    },
+    {
+      cover: '3인 혁오',
+      title: `위잉위잉`,
+      singer: '혁오',
+      img: Hyukoh,
+      session: ['guitar', 'vocal', 'drum'],
+    },
+    {
+      cover: 'Cross The Road',
+      title: `Hey Jude`,
+      singer: 'The Beatles',
+      img: Beatles,
+      session: ['guitar', 'vocal', 'piano', 'drum'],
+    },
+    {
+      cover: '구름밴드',
+      title: `Numb`,
+      singer: 'Men I Trust',
+      img: MenITrust,
+      session: ['guitar', 'vocal'],
+    },
+    {
+      cover: '코리아 톰 요크',
+      title: `No Suprises`,
+      singer: 'Radio Head',
+      img: NoSurprises,
+      session: ['piano', 'vocal', 'drum'],
+    },
+    {
+      cover: '실력은 필요없어',
+      title: `Summer`,
+      singer: 'The Volunteers',
+      img: TheVolunteers,
+      session: ['guitar', 'vocal', 'drum'],
+    },
+  ];
+
   return (
     <>
       <CoverContainer>
         <ImageContainer>
-          <CoverImage src={randomImg} />
+          <CoverImage src={tempData[idx].img} />
         </ImageContainer>
         <Spacing />
         <CoverInform>
-          <CoverTitle>커버 타이틀</CoverTitle>
-          <SongInform>원곡 정보</SongInform>
+          <CoverTitle>{tempData[idx].title}</CoverTitle>
+          <SongInform>
+            {tempData[idx].title} - {tempData[idx].singer}
+          </SongInform>
         </CoverInform>
-        <CoverTime>2021-07-05</CoverTime>
+        <CoverTime>2021-07-{parseInt(Math.random() * 20 + 10)}</CoverTime>
         <DeleteContainer>
+          <CustomEditOutlined />
           <CustomDeleteFilled />
         </DeleteContainer>
       </CoverContainer>
@@ -55,8 +110,19 @@ const CoverTime = styled.div`
 `;
 
 const DeleteContainer = styled.div`
-  width: 7%;
+  width: 10%;
   font-size: 2em;
+`;
+
+const CustomEditOutlined = styled(EditOutlined)`
+  transition: all 0.2s ease-in-out;
+  cursor: pointer;
+
+  &:hover {
+    color: gray;
+  }
+
+  margin-right: 20%;
 `;
 
 const CustomDeleteFilled = styled(DeleteFilled)`
