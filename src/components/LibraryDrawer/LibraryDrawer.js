@@ -15,10 +15,6 @@ const LibraryDrawer = (props) => {
       );
     });
 
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  });
-
   return (
     <DrawerContainer>
       <Title>라이브러리</Title>

@@ -1,10 +1,30 @@
-import react from 'react';
+import react, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { Default } from '../../lib/Media';
 import { Link } from 'react-router-dom';
 import { Dropdown } from 'antd';
+import { useLocation } from 'react-router-dom';
+
+const changeName = (name) => {
+  if (name.indexOf('/studio') !== -1) {
+    return 'studio';
+  } else if (name.indexOf('/lounge') !== -1) {
+    return 'lounge';
+  } else if (name.indexOf('/artist') !== -1) {
+    return 'artist';
+  } else {
+    return '';
+  }
+};
 
 const Menu = () => {
+  const { pathname } = useLocation();
+  const [current, setCurrent] = useState(changeName(pathname));
+
+  useEffect(() => {
+    setCurrent(changeName(pathname));
+  }, [pathname]);
+
   const LoungeMenu = (
     <SubMenuContainer>
       <SubMenuSpacing />
@@ -44,21 +64,27 @@ const Menu = () => {
             placement="bottomCenter"
             getPopupContainer={(trigger) => trigger.parentNode}
           >
-            <MenuLink to="/lounge">라운지</MenuLink>
+            <LoungeLink to="/lounge" current={current}>
+              라운지
+            </LoungeLink>
           </Dropdown>
           <Dropdown
             overlay={StudioMenu}
             placement="bottomCenter"
             getPopupContainer={(trigger) => trigger.parentNode}
           >
-            <MenuLink to="/studio">스튜디오</MenuLink>
+            <StudioLink to="/studio" current={current}>
+              스튜디오
+            </StudioLink>
           </Dropdown>
           <Dropdown
             overlay={ArtistMenu}
             placement="bottomCenter"
             getPopupContainer={(trigger) => trigger.parentNode}
           >
-            <MenuLink to="/artist">아티스트</MenuLink>
+            <ArtistLink to="/artist" current={current}>
+              아티스트
+            </ArtistLink>
           </Dropdown>
         </MenuWrapper>
       </MenuContainer>
@@ -88,16 +114,47 @@ const SubMenuSpacing = styled.div`
   height: 1rem;
 `;
 
-const MenuLink = styled(Link)`
+const ArtistLink = styled(Link)`
+  font-size: 18px;
+  letter-spacing: 4px;
+  color: ${(props) => (props.current === 'artist' ? '#6236ff' : 'black')};
+  font-weight: 800;
+  line-height: 1.13;
+  letter-spacing: -0.4px;
+
+  &:hover {
+    color: ${(props) =>
+      props.current === 'artist' ? '#6236ff' : 'rgb(60,60,60)'};
+  }
+`;
+
+const LoungeLink = styled(Link)`
   font-size: 18px;
   letter-spacing: 4px;
   color: black;
   font-weight: 800;
   line-height: 1.13;
   letter-spacing: -0.4px;
+  color: ${(props) => (props.current === 'lounge' ? '#6236ff' : 'black')};
 
   &:hover {
-    color: rgb(60, 60, 60);
+    color: ${(props) =>
+      props.current === 'lounge' ? '#6236ff' : 'rgb(60,60,60)'};
+  }
+`;
+
+const StudioLink = styled(Link)`
+  font-size: 18px;
+  letter-spacing: 4px;
+  color: black;
+  font-weight: 800;
+  line-height: 1.13;
+  letter-spacing: -0.4px;
+  color: ${(props) => (props.current === 'studio' ? '#6236ff' : 'black')};
+
+  &:hover {
+    color: ${(props) =>
+      props.current === 'studio' ? '#6236ff' : 'rgb(60,60,60)'};
   }
 `;
 
