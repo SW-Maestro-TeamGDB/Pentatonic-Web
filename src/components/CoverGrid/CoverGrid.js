@@ -247,13 +247,14 @@ const LikeCount = styled.span`
   text-align: left;
   display: flex;
   flex-direction: row;
+  align-items: center;
 `;
 const ViewCount = styled.span`
-  margin: 0.3vw 0;
   font-size: 12px;
   text-align: left;
   display: flex;
   flex-direction: row;
+  align-items: center;
 `;
 
 const SpacingSpan = styled.span`
