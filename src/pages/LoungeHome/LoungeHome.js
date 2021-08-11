@@ -12,7 +12,7 @@ const LoungeHome = () => {
     [0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map((v) => {
       return (
         <CoverGrid
-          id={parseInt(Math.random() * 100)}
+          id={parseInt(Math.random() * 6)}
           key={v}
           idx={parseInt(Math.random() * 6)}
         />

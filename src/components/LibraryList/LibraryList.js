@@ -5,12 +5,12 @@ import { DeleteFilled, EditOutlined } from '@ant-design/icons';
 import ThumbIcon from '../../images/ThumbIcon.svg';
 import ViewIcon from '../../images/ViewIcon.svg';
 
-import TameImpala from '../CoverGrid/TameImpala.jpeg';
-import Hyukoh from '../CoverGrid/Hyukoh.jpeg';
-import Beatles from '../CoverGrid/Beatles.jpeg';
-import MenITrust from '../CoverGrid/MenITrust.jpeg';
-import NoSurprises from '../CoverGrid/NoSurprises.jpeg';
-import TheVolunteers from '../CoverGrid/TheVolunteers.jpeg';
+import TameImpala from '../../images/TempData/TameImpala.jpeg';
+import Hyukoh from '../../images/TempData/Hyukoh.jpeg';
+import Beatles from '../../images/TempData/Beatles.jpeg';
+import MenITrust from '../../images/TempData/MenITrust.jpeg';
+import NoSurprises from '../../images/TempData/NoSurprises.jpeg';
+import TheVolunteers from '../../images/TempData/TheVolunteers.jpeg';
 
 const LibraryList = (props) => {
   const { idx, id } = props;
@@ -143,8 +143,8 @@ const ImageContainer = styled.div`
 
 const CoverImage = styled.img`
   width: 100%;
-  height: auto;
   border-radius: 0.5vw;
+  object-fit: cover;
 `;
 
 const CoverInform = styled.div`

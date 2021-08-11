@@ -6,12 +6,12 @@ import ThumbIcon from '../../images/ThumbIcon.svg';
 import ViewIcon from '../../images/ViewIcon.svg';
 import HeadPhoneIcon from '../../images/HeadPhoneIcon.svg';
 
-import TameImpala from './TameImpala.jpeg';
-import Hyukoh from './Hyukoh.jpeg';
-import Beatles from './Beatles.jpeg';
-import MenITrust from './MenITrust.jpeg';
-import NoSurprises from './NoSurprises.jpeg';
-import TheVolunteers from './TheVolunteers.jpeg';
+import TameImpala from '../../images/TempData/TameImpala.jpeg';
+import Hyukoh from '../../images/TempData/Hyukoh.jpeg';
+import Beatles from '../../images/TempData/Beatles.jpeg';
+import MenITrust from '../../images/TempData/MenITrust.jpeg';
+import NoSurprises from '../../images/TempData/NoSurprises.jpeg';
+import TheVolunteers from '../../images/TempData/TheVolunteers.jpeg';
 
 import drum from './drum.svg';
 import guitar from './guitar.svg';
@@ -19,14 +19,14 @@ import piano from './piano.svg';
 import vocal from './vocal.svg';
 
 const CoverGrid = (props) => {
-  const { idx, id } = props;
+  const { idx } = props;
   const category = ['animals', 'arch', 'nature', 'people', 'tech'];
   const randomImg = `https://placeimg.com/300/300/${category[idx]}`;
 
   const showSession = (session) => {
     console.log(session);
     return session.map((v) => {
-      return <InstrumentIcon key={`${id}+${v}`} src={sessionMatch(v)} />;
+      return <InstrumentIcon key={`${idx}+${v}`} src={sessionMatch(v)} />;
     });
   };
 
@@ -83,7 +83,7 @@ const CoverGrid = (props) => {
   ];
 
   return (
-    <CustomLink to={`/lounge/cover/${id}`}>
+    <CustomLink to={`/lounge/cover/${idx}`}>
       <CoverContainer>
         <ImageContainer>
           <CoverImage src={tempData[idx].img} />
@@ -140,6 +140,7 @@ const CoverImage = styled.img`
   min-height: 160px;
   border-radius: 10px;
   transition: all ease-in-out 0.3s;
+  object-fit: cover;
   z-index: 2;
 `;
 
