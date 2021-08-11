@@ -62,9 +62,13 @@ body {
   border-color: #6236ff !important;
 }
 
+img {
+  -webkit-user-drag: none;
+}
+
 html {
   scroll-behavior: smooth;
-  overflow-y: scroll;
+  /* overflow-y: scroll; */
 }
 
 * {

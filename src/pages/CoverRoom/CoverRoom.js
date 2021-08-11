@@ -3,6 +3,8 @@ import styled from 'styled-components';
 import PageContainer from '../../components/PageContainer';
 import GridContainer from '../../components/GridContainer/GridContainer';
 import CoverRoomSession from '../../components/CoverRoomSession/CoverRoomSession';
+import LibraryDrawer from '../../components/LibraryDrawer/LibraryDrawer';
+import { Drawer } from 'antd';
 
 import { gql, useQuery } from '@apollo/client';
 import {
@@ -26,6 +28,12 @@ const CoverRoom = ({ match }) => {
   const idx = match.params.id;
   const { data } = useQuery(IS_LOGGED_IN);
   const [session, setSession] = useState([]);
+
+  // drawer
+  const [visibleDrawer, setVisibleDrawer] = useState(false);
+  const onClose = () => {
+    setVisibleDrawer(false);
+  };
 
   const tempData = [
     {
@@ -85,6 +93,7 @@ const CoverRoom = ({ match }) => {
           now={now}
           session={session}
           setSession={setSession}
+          setVisibleDrawer={setVisibleDrawer}
         />
       );
     });
@@ -146,6 +155,15 @@ const CoverRoom = ({ match }) => {
           )}
         </CommentForm>
       </CommentContainer>
+      <Drawer
+        placement="right"
+        closable={true}
+        onClose={onClose}
+        visible={visibleDrawer}
+        width="35%"
+      >
+        <LibraryDrawer />
+      </Drawer>
     </PageContainer>
   );
 };

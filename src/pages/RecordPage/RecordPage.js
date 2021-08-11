@@ -421,7 +421,7 @@ const RecordPage = (props) => {
 
 const Container = styled.div`
   width: 80%;
-  height: 70vh;
+  height: 75vh;
   position: relative;
 `;
 
@@ -460,7 +460,7 @@ const VisualizerContainer = styled.div`
 const Background = styled.div`
   background: url('https://w.namu.la/s/8f16d9ad8ac378b6d2339ce927bbc9d6431dbf5277b241bf363ffa61cf5496caf1611f471aca282ff14bd8e544135b8f5edbbfebb6f942603cc9563f130a548cf40005956d405598ed3f6067522ad7b6aaf067e05dbc1e79085d5b90fb90ab5f9947a0cd3108efda6f8008666a1627cc');
   margin-top: 6rem;
-  height: 26rem;
+  height: 29rem;
 `;
 
 const BackgroundBlur = styled.div`

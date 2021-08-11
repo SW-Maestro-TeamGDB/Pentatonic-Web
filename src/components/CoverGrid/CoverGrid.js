@@ -24,7 +24,6 @@ const CoverGrid = (props) => {
   const randomImg = `https://placeimg.com/300/300/${category[idx]}`;
 
   const showSession = (session) => {
-    console.log(session);
     return session.map((v) => {
       return <InstrumentIcon key={`${idx}+${v}`} src={sessionMatch(v)} />;
     });

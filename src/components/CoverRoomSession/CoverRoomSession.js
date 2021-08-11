@@ -6,8 +6,13 @@ import GridContainer from '../GridContainer/GridContainer';
 import CoverRoomSessionItem from '../CoverRoomSessionItem';
 
 const CoverRoomSession = (props) => {
-  const { session, setSession, sessionTitle, total, now } = props;
+  const { session, setSession, setVisibleDrawer, sessionTitle, total, now } =
+    props;
   const [selectedSession, setSelectedSession] = useState();
+
+  const onClickParticipate = () => {
+    setVisibleDrawer(true);
+  };
 
   const showSessionContents = () => {
     return Array.from({ length: now }, () => 0).map((v, i) => {
@@ -31,7 +36,9 @@ const CoverRoomSession = (props) => {
             {now}/{total}
           </SessionCount>
         </BoardTitle>
-        {now !== total ? <BoardLink>참여하기</BoardLink> : null}
+        {now !== total ? (
+          <BoardLink onClick={() => onClickParticipate()}>참여하기</BoardLink>
+        ) : null}
       </Header>
       <SessionContainer>
         {now ? (
