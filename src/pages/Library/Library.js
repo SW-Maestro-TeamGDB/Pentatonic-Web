@@ -12,6 +12,7 @@ const Library = () => {
           id={parseInt(Math.random() * 100)}
           key={i}
           idx={parseInt(Math.random() * 6)}
+          edit={true}
         />
       );
     });

@@ -13,7 +13,7 @@ import NoSurprises from '../../images/TempData/NoSurprises.jpeg';
 import TheVolunteers from '../../images/TempData/TheVolunteers.jpeg';
 
 const LibraryList = (props) => {
-  const { idx, id } = props;
+  const { idx, id, edit } = props;
   const category = ['animals', 'arch', 'nature', 'people', 'tech'];
   const randomImg = `https://placeimg.com/300/300/${category[idx]}`;
 
@@ -63,25 +63,25 @@ const LibraryList = (props) => {
   ];
 
   return (
-    <>
-      <CoverContainer>
-        <ImageContainer>
-          <CoverImage src={tempData[idx].img} />
-        </ImageContainer>
-        <Spacing />
-        <CoverInform>
-          <CoverTitle>{tempData[idx].title}</CoverTitle>
-          <SongInform>
-            {tempData[idx].title} - {tempData[idx].singer}
-          </SongInform>
-        </CoverInform>
-        <CoverTime>2021-07-{parseInt(Math.random() * 20 + 10)}</CoverTime>
+    <CoverContainer>
+      <ImageContainer>
+        <CoverImage src={tempData[idx].img} />
+      </ImageContainer>
+      <Spacing />
+      <CoverInform>
+        <CoverTitle>{tempData[idx].title}</CoverTitle>
+        <SongInform>
+          {tempData[idx].title} - {tempData[idx].singer}
+        </SongInform>
+      </CoverInform>
+      <CoverTime>2021-07-{parseInt(Math.random() * 20 + 10)}</CoverTime>
+      {edit ? (
         <DeleteContainer>
           <CustomEditOutlined />
           <CustomDeleteFilled />
         </DeleteContainer>
-      </CoverContainer>
-    </>
+      ) : null}
+    </CoverContainer>
   );
 };
 
@@ -91,7 +91,7 @@ const CoverContainer = styled.div`
   align-items: center;
   width: 100%;
   height: auto;
-  margin: 0.5vh 0;
+  margin: 0.7vw 0;
   color: black;
   border-radius: 1rem;
   padding: 0 1rem;
@@ -101,12 +101,12 @@ const CoverContainer = styled.div`
 `;
 
 const Spacing = styled.div`
-  width: 3%;
+  width: 2%;
 `;
 
 const CoverTime = styled.div`
-  font-size: 1rem;
-  width: 15%;
+  font-size: 0.8vw;
+  width: 20%;
 `;
 
 const DeleteContainer = styled.div`
@@ -134,17 +134,18 @@ const CustomDeleteFilled = styled(DeleteFilled)`
 `;
 
 const ImageContainer = styled.div`
-  margin: 1vw;
+  margin: 1vh 1vw;
   display: flex;
   align-items: center;
-  overflow: hidden;
-  width: 10%;
+  width: 6vw;
+  height: 5vw;
 `;
 
 const CoverImage = styled.img`
   width: 100%;
-  border-radius: 0.5vw;
+  border-radius: 1rem;
   object-fit: cover;
+  height: 100%;
 `;
 
 const CoverInform = styled.div`
@@ -167,12 +168,12 @@ const CustomIcon = styled.img`
 `;
 
 const CoverTitle = styled.div`
-  font-size: 2em;
+  font-size: 1.5vw;
   font-weight: bold;
 `;
 
 const SongInform = styled.div`
-  font-size: 1.2em;
+  font-size: 1vw;
   color: rgb(100, 100, 100);
 `;
 
