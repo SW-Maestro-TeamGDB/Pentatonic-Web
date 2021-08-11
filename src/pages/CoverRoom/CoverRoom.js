@@ -1,10 +1,15 @@
-import react, { useState } from 'react';
+import react, { useState, useEffect, useCallback } from 'react';
 import styled from 'styled-components';
 import PageContainer from '../../components/PageContainer';
 import GridContainer from '../../components/GridContainer/GridContainer';
 import CoverRoomSession from '../../components/CoverRoomSession/CoverRoomSession';
 
-import { currentUserVar } from '../../apollo/cache';
+import { gql, useQuery } from '@apollo/client';
+import {
+  currentUserVar,
+  isLoggedInVar,
+  IS_LOGGED_IN,
+} from '../../apollo/cache';
 
 import TameImpala from '../../images/TempData//TameImpala.jpeg';
 import Hyukoh from '../../images/TempData//Hyukoh.jpeg';
@@ -19,8 +24,8 @@ import UserAvatar from '../../images/UserAvatar.svg';
 
 const CoverRoom = ({ match }) => {
   const idx = match.params.id;
-
-  console.log(currentUserVar());
+  const { data } = useQuery(IS_LOGGED_IN);
+  const [session, setSession] = useState([]);
 
   const tempData = [
     {
@@ -69,7 +74,19 @@ const CoverRoom = ({ match }) => {
 
   const showCoverRoomSession = () => {
     return tempData[idx].session.map((v) => {
-      return <CoverRoomSession key={`CoverRoom + ${v}`} sessionTitle={v} />;
+      const total = parseInt(Math.random() * 3 + 2);
+      const now = parseInt(Math.random() * (total + 1));
+
+      return (
+        <CoverRoomSession
+          key={`CoverRoom + ${v}`}
+          sessionTitle={v}
+          total={total}
+          now={now}
+          session={session}
+          setSession={setSession}
+        />
+      );
     });
   };
 
@@ -104,13 +121,29 @@ const CoverRoom = ({ match }) => {
           <CurrentComment>{parseInt(Math.random() * 30)}</CurrentComment>
         </CommentHeader>
         <CommentForm>
-          <MyProfileImg
-            src={
-              currentUserVar().profileURI ? currentUserVar().profileURI : null
-            }
-          />
-          <CustomInput placeholder="게시물의 저작권 등 분쟁, 개인정보 노출로 인한 책임은 작성자 또는 게시자에게 있음을 유의해주세요" />
-          <CommentButton>등록</CommentButton>
+          {data.isLoggedIn ? (
+            <>
+              <MyProfileImg
+                src={
+                  // currentUserVar().profileURI
+                  //   ? currentUserVar().profileURI
+                  //   : null
+                  UserAvatar
+                }
+              />
+              <CustomInput placeholder="게시물의 저작권 등 분쟁, 개인정보 노출로 인한 책임은 작성자 또는 게시자에게 있음을 유의해주세요" />
+              <CommentButton>등록</CommentButton>
+            </>
+          ) : (
+            <>
+              <MyProfileImg src={UserAvatar} />
+              <CustomInput
+                placeholder="댓글을 작성하시려면 로그인이 필요합니다"
+                disabled
+              />
+              <CommentButton disabled>등록</CommentButton>
+            </>
+          )}
         </CommentForm>
       </CommentContainer>
     </PageContainer>

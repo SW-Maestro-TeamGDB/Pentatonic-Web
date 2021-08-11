@@ -6,22 +6,19 @@ import GridContainer from '../GridContainer/GridContainer';
 import CoverRoomSessionItem from '../CoverRoomSessionItem';
 
 const CoverRoomSession = (props) => {
-  const {
-    session,
-    setSession,
-    sessionSet,
-    setSessionSet,
-    selectedSession,
-    setSelectedSession,
-    sessionTitle,
-  } = props;
-
-  const total = parseInt(Math.random() * 3 + 2);
-  const now = parseInt(Math.random() * (total + 1));
+  const { session, setSession, sessionTitle, total, now } = props;
+  const [selectedSession, setSelectedSession] = useState();
 
   const showSessionContents = () => {
     return Array.from({ length: now }, () => 0).map((v, i) => {
-      return <CoverRoomSessionItem count={i} />;
+      return (
+        <CoverRoomSessionItem
+          key={`${sessionTitle}+${i}`}
+          count={i}
+          selectedSession={selectedSession}
+          setSelectedSession={setSelectedSession}
+        />
+      );
     });
   };
 
@@ -50,6 +47,7 @@ const CoverRoomSession = (props) => {
 const CoverRoomSessionContainer = styled.div`
   width: 100%;
   position: relative;
+  margin-top: 1rem;
 `;
 
 const SessionContainer = styled.div`

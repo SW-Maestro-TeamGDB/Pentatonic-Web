@@ -8,31 +8,25 @@ import GridContainer from '../GridContainer/GridContainer';
 import UserAvatar from '../../images/UserAvatar.svg';
 
 const CoverRoomSessionItem = (props) => {
-  const {
-    title,
-    number,
-    index,
-    onClickDelete,
-    selectedSession,
-    setSelectedSession,
-    count,
-  } = props;
-  const selected = selectedSession === title;
+  const { selectedSession, setSelectedSession, count } = props;
+  const selected = selectedSession === count;
 
   const onClickSession = () => {
     if (selected) {
       setSelectedSession(null);
     } else {
-      setSelectedSession(title);
+      setSelectedSession(count);
     }
   };
 
-  const tempNumber = parseInt(Math.random() * 15) + 1;
-
   return (
-    <SessionContentsContainer selected={selected}>
-      <SessionImg src={UserAvatar} />
-      <SessionId to={`/profile/${tempNumber}`}>USER{tempNumber}</SessionId>
+    <SessionContentsContainer>
+      <SessionImg
+        onClick={() => onClickSession()}
+        src={UserAvatar}
+        selected={selected}
+      />
+      <SessionId to={`/profile/${count}`}>USER{count + 1}</SessionId>
     </SessionContentsContainer>
   );
 };
@@ -42,7 +36,8 @@ const SessionImg = styled.img`
   height: 4rem;
   border-radius: 10px;
   cursor: pointer;
-  opacity: 0.3;
+  opacity: ${(props) => (props.selected ? 1 : 0.3)};
+  transition: opacity 0.3s ease;
 `;
 
 const SessionId = styled(Link)`
