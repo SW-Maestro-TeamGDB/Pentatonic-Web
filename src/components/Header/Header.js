@@ -26,14 +26,10 @@ const Header = () => {
     },
   });
 
-  useEffect(() => {
-    console.log(data);
-  });
-
   const [getUserInform, getUserInformResult] = useLazyQuery(GET_USER_INFORM, {
     fetchPolicy: 'network-only',
     onCompleted: (data) => {
-      currentUserVar(data.getPersonalInformation);
+      currentUserVar(data.getUserInfo);
     },
     onError: (error) => {
       console.log(error);
