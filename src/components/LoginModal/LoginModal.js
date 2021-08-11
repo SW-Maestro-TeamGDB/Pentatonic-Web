@@ -1,6 +1,6 @@
 import react, { useEffect, useState, useCallback } from 'react';
 import styled from 'styled-components';
-import { currentUserVar } from '../../apollo/cache';
+import { currentUserVar, isLoggedInVar } from '../../apollo/cache';
 import { gql, useMutation, useQuery, useLazyQuery } from '@apollo/client';
 import { Link } from 'react-router-dom';
 
@@ -33,6 +33,7 @@ const LoginModal = (props) => {
     if (loginResult.data?.login) {
       localStorage.setItem('token', loginResult.data.login);
       setModalToggle(false);
+      isLoggedInVar(true);
     } else if (loginResult.error) {
       setFormError(loginResult.error.message);
     }

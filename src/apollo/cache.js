@@ -1,10 +1,17 @@
 import { InMemoryCache, makeVar, gql } from '@apollo/client';
 
 export const currentUserVar = makeVar(null);
+export const isLoggedInVar = makeVar(!!localStorage.getItem('token'));
 
 export const GET_CURRENT_USER = gql`
   query {
     user @client
+  }
+`;
+
+export const IS_LOGGED_IN = gql`
+  query IsUserLoggedIn {
+    isLoggedIn @client
   }
 `;
 
@@ -28,6 +35,11 @@ export const cache = new InMemoryCache({
       fields: {
         user() {
           return currentUserVar();
+        },
+        isLoggedIn: {
+          read() {
+            return isLoggedInVar();
+          },
         },
       },
     },
