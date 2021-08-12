@@ -195,7 +195,6 @@ const RecordPage = (props) => {
   const [lyricsIndex, setLyricsIndex] = useState(0);
   const [endTime, setEndTime] = useState(lyrics[0].end);
 
-  // 매 count 갱신마다 렌더하므로 방법 고민해볼것
   useEffect(() => {
     if (count > endTime && lyricsIndex < lyricsLength - 1) {
       setEndTime(lyrics[lyricsIndex + 1].end);
@@ -210,7 +209,7 @@ const RecordPage = (props) => {
 
     setAudioSecond(remain % 60);
     setAudioMinute(parseInt(remain / 60));
-  }, [count]);
+  }, [parseInt(count)]);
 
   const init = () => {
     if (onRec === 1) {
