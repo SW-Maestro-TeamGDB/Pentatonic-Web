@@ -7,6 +7,7 @@ import styled from 'styled-components';
 import PlayIcon from '../../images/PlayIcon.svg';
 import StopIcon from '../../images/StopIcon.svg';
 import RetryIcon from '../../images/RetryIcon.svg';
+import PauseIcon from '../../images/PauseIcon.png';
 import SaveIcon from '../../images/SaveIcon.svg';
 import tempLyric from './lyrics.json';
 import { LeftOutlined, PauseOutlined } from '@ant-design/icons';
@@ -24,6 +25,10 @@ const RecordPage = (props) => {
   const [audioUrl, setAudioUrl] = useState();
   const [count, setCount] = useState(0);
   const [micAuthModalToggle, setMicAuthModalToggle] = useState(false);
+
+  const canSave = ((onRec === 0 && audioUrl) || onRec === 2) && countdown === 4;
+
+  console.log(canSave);
 
   // 카운트다운
   const [countdownState, setCountDownState] = useState(false);
@@ -128,7 +133,12 @@ const RecordPage = (props) => {
         />
       );
     } else if (onRec === 1) {
-      return <CustomPauseIcon onClick={onClickPause} />;
+      // return <CustomPauseIcon onClick={onClickPause} />;
+      return (
+        <PauseIconContainer>
+          <CustomPauseIcon src={PauseIcon} onClick={onClickPause} />
+        </PauseIconContainer>
+      );
     } else if (onRec === 2) {
       return <CustomPlayIcon src={PlayIcon} onClick={onClickResume} />;
     }
@@ -358,13 +368,21 @@ const RecordPage = (props) => {
         modalToggle={micAuthModalToggle}
         setModalToggle={setMicAuthModalToggle}
       />
-      <BackwardButton onClick={() => onClickStop()}>
-        <LeftOutlined />
-        <BackwardText>커버 정보 입력</BackwardText>
-      </BackwardButton>
       <Background>
+        <BackwardButton onClick={() => onClickStop()}>
+          <LeftOutlined />
+          <BackwardText>커버 정보 입력</BackwardText>
+        </BackwardButton>
         <BackgroundBlur>
-          <IconContainer>{showRecordingState()}</IconContainer>
+          <IconContainer canSave={canSave}>
+            {showRecordingState()}
+            {canSave ? (
+              <CustomPlayIcon
+                src={SaveIcon}
+                onClick={() => onSubmitAudioFile()}
+              />
+            ) : null}
+          </IconContainer>
           <LyricsContainer>
             <CurrentLyrics>{lyrics[lyricsIndex].text}</CurrentLyrics>
             <NextLyrics>
@@ -373,6 +391,14 @@ const RecordPage = (props) => {
                 : 'ㅤ'}
             </NextLyrics>
           </LyricsContainer>
+          <VisualizerContainer onRec={onRec}>
+            <AudioVisualizer
+              audioCtx={audioCtx}
+              source={sourceRef.current}
+              width={'500rem'}
+              height={'180rem'}
+            ></AudioVisualizer>
+          </VisualizerContainer>
         </BackgroundBlur>
       </Background>
       <ProgressContainer>
@@ -396,7 +422,7 @@ const RecordPage = (props) => {
           </RemainTimeContainer>
         </TimeContainer>
       </ProgressContainer>
-      {((onRec === 0 && audioUrl) || onRec === 2) && countdown === 4 ? (
+      {/* {((onRec === 0 && audioUrl) || onRec === 2) && countdown === 4 ? (
         <SubmitContainer>
           <SubmitButton
             onClick={() => onSubmitAudioFile()}
@@ -406,21 +432,13 @@ const RecordPage = (props) => {
             <SaveIconImg src={SaveIcon} />
           </SubmitButton>
         </SubmitContainer>
-      ) : null}
-      <VisualizerContainer onRec={onRec}>
-        <AudioVisualizer
-          audioCtx={audioCtx}
-          source={sourceRef.current}
-          width={'250px'}
-          height={'100px'}
-        ></AudioVisualizer>
-      </VisualizerContainer>
+      ) : null} */}
     </Container>
   );
 };
 
 const Container = styled.div`
-  width: 80%;
+  width: 85%;
   height: 75vh;
   position: relative;
 `;
@@ -439,28 +457,38 @@ const IconContainer = styled.div`
   top: 45%;
   left: 50%;
   transform: translate(-50%, -50%);
+
   display: flex;
-  flex-direction: row;
-  justify-content: space-evenly;
-  width: 40%;
-  z-index: 2;
+  justify-content: ${(props) => (props.canSave ? 'space-between' : 'center')};
+  align-items: center;
+  width: 20%;
 `;
 
 const VisualizerContainer = styled.div`
-  height: 10rem;
-  width: 15rem;
   position: absolute;
   top: 50%;
-  left: -40%;
-  transform: translate(-50%, -50%);
-  z-index: 1;
+  left: 50%;
+  transform: translate(-48%, -55%);
+  width: 100%;
+  height: 25rem;
+  z-index: -1;
   visibility: ${(props) => (props.onRec === 1 ? 'visible' : 'hidden')};
+
+  -webkit-filter: blur(2px) brightness(80%);
+  filter: blur(2px) brightness(80%);
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;
 
 const Background = styled.div`
   background: url('https://w.namu.la/s/8f16d9ad8ac378b6d2339ce927bbc9d6431dbf5277b241bf363ffa61cf5496caf1611f471aca282ff14bd8e544135b8f5edbbfebb6f942603cc9563f130a548cf40005956d405598ed3f6067522ad7b6aaf067e05dbc1e79085d5b90fb90ab5f9947a0cd3108efda6f8008666a1627cc');
-  margin-top: 6rem;
-  height: 29rem;
+  margin-top: 5vh;
+  height: 60vh;
+  z-index: 1;
+  position: relative;
+  border-radius: 1rem;
 `;
 
 const BackgroundBlur = styled.div`
@@ -469,16 +497,17 @@ const BackgroundBlur = styled.div`
   height: 100%;
   -webkit-backdrop-filter: blur(2px) brightness(40%);
   backdrop-filter: blur(2px) brightness(40%);
+  z-index: 2;
+  border-radius: 1rem;
 `;
 
 const SubmitContainer = styled.div`
   height: 2rem;
-  position: absolute;
-  bottom: 5%;
   width: 100%;
   display: flex;
   justify-content: flex-end;
   align-items: center;
+  margin-top: 3vh;
 `;
 
 const SubmitButton = styled.div`
@@ -497,25 +526,28 @@ const SubmitButton = styled.div`
 const BackwardButton = styled.div`
   position: absolute;
   cursor: pointer;
-  z-index: 2;
   font-size: 1.2rem;
   top: 5%;
-  left: 0%;
-  color: black;
+  left: 2%;
+  color: white;
 
   display: flex;
   justify-content: center;
   align-items: center;
 
+  transition: all 0.3s ease;
+  z-index: 3;
+
   &:hover {
-    color: gray;
+    color: lightgray;
   }
 `;
 
 const CountDownText = styled.div`
-  font-size: 6rem;
+  font-size: 5rem;
   font-weight: 900;
-  color: white;
+  color: #ffffff;
+  text-align: center;
 `;
 
 const BackwardText = styled.span`
@@ -539,25 +571,21 @@ const LyricsContainer = styled.div`
   left: 50%;
   bottom: 5%;
   transform: translate(-50%, 0);
-  width: 40vw;
-  z-index: 2;
-  background: rgba(255, 255, 255, 0.5);
-  padding: 1rem 1rem;
+  width: 85%;
+
+  background: rgba(255, 255, 255, 0.8);
+  padding: 1rem 1.5rem;
   border-radius: 1rem;
 `;
 
 const ProgressContainer = styled.div`
-  position: absolute;
-  bottom: 12%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  padding: 0 2rem;
-  z-index: 2;
+  padding: 0 0.5rem;
+  margin-top: 3vh;
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 108%;
-  box-sizing: border-box;
+  justify-content: center;
+  width: 100%;
 `;
 
 const TimeContainer = styled.div`
@@ -579,6 +607,19 @@ const CustomProgress = styled(Progress)`
   width: 100%;
 `;
 
+const CustomSaveIcon = styled.img`
+  filter: invert(100%);
+  transition: all ease-in-out 0.3s;
+  cursor: pointer;
+  width: 4rem;
+  height: 4rem;
+
+  &:hover {
+    /* color: rgb(100, 100, 100); */
+    transform: scale(1.03);
+  }
+`;
+
 const CustomPlayIcon = styled.img`
   filter: invert(100%);
   transition: all ease-in-out 0.3s;
@@ -587,24 +628,49 @@ const CustomPlayIcon = styled.img`
   height: 4rem;
 
   &:hover {
-    color: rgb(100, 100, 100);
-    transform: scale(1.05);
+    /* color: rgb(100, 100, 100); */
+    transform: scale(1.03);
   }
 `;
 
-const CustomPauseIcon = styled(PauseOutlined)`
+const CustomPauseIcon = styled.img`
   filter: invert(100%);
-  transition: all ease-in-out 0.3s;
+  transition: transform 0.4s ease-in-out, opacity 0.4s ease-in-out;
   cursor: pointer;
-  font-size: 5rem;
-  color: black;
   width: 5rem;
-  text-align: center;
+  height: 5rem;
+  opacity: 0;
+`;
+
+const PauseIconContainer = styled.div`
+  width: 50rem;
+  height: 25vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
 
   &:hover {
-    color: black;
-    transform: scale(1.05);
+    ${CustomPauseIcon} {
+      transform: scale(1.03);
+      opacity: 1;
+    }
   }
 `;
+
+// const CustomPauseIcon = styled(PauseOutlined)`
+//   filter: invert(100%);
+//   transition: all ease-in-out 0.3s;
+//   cursor: pointer;
+//   font-size: 4.5rem;
+//   color: black;
+//   width: 4.5rem;
+//   text-align: center;
+
+//   &:hover {
+//     /* color: black; */
+//     transform: scale(1.05);
+//   }
+// `;
 
 export default RecordPage;
