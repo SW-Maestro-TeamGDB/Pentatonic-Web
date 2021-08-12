@@ -1,17 +1,30 @@
 {
   "lyrics": [
-    { "text": "Fix You - Coldplay", "end": 10 },
-    { "text": "ㅤ", "end": 13 },
-    { "text": "When you try your best, but you don't succeed", "end": 21 },
+    { "text": "Fix You - Coldplay", "end": 9 },
+    { "text": "ㅤ", "end": 10 },
+    { "text": "ㅤ", "end": 11 },
+    { "text": "3", "end": 12 },
+    { "text": "2", "end": 13 },
+    { "text": "1", "end": 14 },
+    { "text": "When you try your best, but you don't succeed", "end": 20 },
     {
       "text": "When you get what you want ",
-      "end": 24
+      "end": 23
     },
     {
       "text": "but not what you need",
-      "end": 29
+      "end": 28
     },
-    { "text": "When you feel so tired, but you can't sleep", "end": 35 },
-    { "text": "Stuck in reverse", "end": 42 }
+    { "text": "When you feel so tired, but you can't sleep", "end": 34 },
+    { "text": "Stuck in reverse", "end": 42 },
+    { "text": "When the tears come streaming down your face", "end": 49 },
+    { "text": "When you lose something you can't replace", "end": 56 },
+    { "text": "When you love someone but it goes to waste", "end": 62 },
+    { "text": "Could it be worse?", "end": 72 },
+    { "text": "Lights will guide you home", "end": 80 },
+    { "text": "And ignite your bones", "end": 86 },
+    { "text": "And I will try to fix you", "end": 99 },
+    { "text": "ㅤ", "end": 105 },
+    { "text": "High up above or down below", "end": 112 }
   ]
 }

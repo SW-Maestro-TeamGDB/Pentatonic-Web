@@ -3,8 +3,12 @@ import styled from 'styled-components';
 import PlayIcon from '../../images/PlayIcon.svg';
 import StopIcon from '../../images/StopIcon.svg';
 
+import instrument from '../CoverMaking/inst.mp3';
+
 const RecordEdit = (props) => {
   const { audioFile, setAudioFile, inst } = props;
+
+  console.log(audioFile);
 
   const audio = new Audio(audioFile);
   const audioContext = new AudioContext();
@@ -94,7 +98,12 @@ const RecordEdit = (props) => {
 
   return (
     <Container>
-      <button onClick={() => onClickStart()}>시작</button>
+      <CustomAudio
+        controls
+        controlsList="nodownload"
+        src={audioFile ? audioFile.url : null}
+      />
+      {/* <button onClick={() => onClickStart()}>시작</button>
       <button onClick={() => onClickStop()}>중지</button>
 
       <br />
@@ -119,7 +128,7 @@ const RecordEdit = (props) => {
         }}
       >
         리버브 -
-      </button>
+      </button> */}
     </Container>
   );
 };
@@ -128,6 +137,11 @@ const Container = styled.div`
   width: 80%;
   height: 70vh;
   position: relative;
+`;
+
+const CustomAudio = styled.audio`
+  width: 100%;
+  margin-top: 3rem;
 `;
 
 export default RecordEdit;

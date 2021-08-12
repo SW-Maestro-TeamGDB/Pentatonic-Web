@@ -103,11 +103,11 @@ import AudioCanvas from '../AudioCanvas';
 // };
 
 const defaultOptions = {
-  canvasColor: '#ffffff',
+  canvasColor: 'transparent',
   lineColor: '#000000',
   lineAmount: 1,
   strokeWidth: 2,
-  strokeTightness: 10,
+  strokeTightness: 1,
   mirrored: false,
 };
 
@@ -206,66 +206,109 @@ const AudioVisualizer = (props) => {
 
     if (canvasRef.current && canvasContext) {
       // remove any 0ed out data nodes
-      let filteredData = dataArray.current.filter((x) => x > 0);
-
-      canvasContext.fillStyle = mergedOptions.canvasColor;
-      canvasContext.fillRect(
+      // let filteredData = dataArray.current.filter((x) => x > 0);
+      canvasContext.clearRect(
         0,
         0,
         canvasRef.current.width,
         canvasRef.current.height,
       );
+
+      // canvasContext.fillStyle = mergedOptions.canvasColor;
+      // canvasContext.fillRect(
+      //   0,
+      //   0,
+      //   canvasRef.current.width,
+      //   canvasRef.current.height,
+      // );
       canvasContext.lineWidth = mergedOptions.strokeWidth;
       canvasContext.strokeStyle = mergedOptions.lineColor;
       canvasContext.beginPath();
+      canvasContext.moveTo(0, canvasRef.current.height / 2);
 
-      let sliceWidth =
-        canvasRef.current.width /
-        filteredData.length /
-        (mergedOptions.mirrored ? 2 : 1);
+      // number of bar
+      const barCount = 16;
+      const barWidth = (canvasRef.current.width * 1.0) / barCount;
       let x = 0;
 
-      const drawFrequency = (i, drawHeight, drawBottom) => {
-        let frequencyPercent = filteredData[i] / 255;
-        let y = frequencyPercent * drawHeight + drawBottom;
-
-        i === 0 ? canvasContext.moveTo(x, y) : canvasContext.lineTo(x, y);
-
-        x += sliceWidth;
+      const drawWholeFrequency = (i) => {
+        const y =
+          (dataArray.current[i] / 255.0) * (canvasRef.current.height * 0.8);
+        // canvasContext.lineTo(x, y);
+        canvasContext.fillStyle = '#ffffff';
+        canvasContext.fillRect(
+          x,
+          canvasRef.current.height / 2 - y,
+          barWidth / 1.2,
+          y * 2,
+        );
+        x += barWidth;
       };
 
-      const drawWholeFrequency = (heightMultiplier) => {
-        let drawHeight = canvasRef.current.height; //* heightMultiplier;
-        let drawBottom =
-          (canvasRef.current.height * (1 - heightMultiplier)) /
-          mergedOptions.strokeTightness;
-
-        for (let i = 0; i < filteredData.length; i++) {
-          drawFrequency(i, drawHeight, drawBottom);
-        }
-
-        if (mergedOptions.mirrored) {
-          for (let i = filteredData.length; i > 0; i--) {
-            drawFrequency(i, drawHeight, drawBottom);
-          }
-        }
-
-        x += sliceWidth;
-        canvasContext.lineTo(x, drawHeight + drawBottom);
-        x = 0;
-      };
-
-      const interval = (1.05 - 0.25) / mergedOptions.lineAmount;
-
-      for (let i = 1.05; i > 0.25; i -= interval) {
+      for (
+        let i = 0;
+        i < dataArray.current.length;
+        i += parseInt(dataArray.current.length / barCount)
+      ) {
         drawWholeFrequency(i);
       }
+
+      // let sliceWidth =
+      //   canvasRef.current.width /
+      //   filteredData.length /
+      //   (mergedOptions.mirrored ? 2 : 1);
+      // let x = 0;
+
+      // const drawFrequency = (i, drawHeight, drawBottom) => {
+      //   let frequencyPercent = filteredData[i] / 255;
+      //   let y = frequencyPercent * drawHeight + drawBottom;
+
+      //   i === 0 ? canvasContext.moveTo(x, y) : canvasContext.lineTo(x, y);
+
+      //   x += sliceWidth;
+      // };
+
+      // const drawWholeFrequency = (heightMultiplier) => {
+      //   let drawHeight = canvasRef.current.height; //* heightMultiplier;
+      //   let drawBottom =
+      //     (canvasRef.current.height * (1 - heightMultiplier)) /
+      //     mergedOptions.strokeTightness;
+
+      //   for (let i = 0; i < filteredData.length; i++) {
+      //     drawFrequency(i, drawHeight, drawBottom);
+      //   }
+
+      //   if (mergedOptions.mirrored) {
+      //     for (let i = filteredData.length; i > 0; i--) {
+      //       drawFrequency(i, drawHeight, drawBottom);
+      //     }
+      //   }
+
+      //   x += sliceWidth;
+      //   canvasContext.lineTo(x, drawHeight + drawBottom);
+      //   x = 0;
+      // };
+
+      // const interval = (1.05 - 0.25) / mergedOptions.lineAmount;
+
+      // for (let i = 1.05; i > 0.25; i -= interval) {
+      //   drawWholeFrequency(i);
+      // }
 
       canvasContext.stroke();
     }
   }
 
-  return <AudioCanvas height={height} maxWidth={width} ref={canvasRef} />;
+  return (
+    <>
+      <AudioCanvas
+        height={height}
+        maxWidth={width}
+        ref={canvasRef}
+        style={{ zIndex: 1 }}
+      />
+    </>
+  );
 };
 
 export default AudioVisualizer;
