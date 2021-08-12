@@ -28,7 +28,44 @@ const RecordPage = (props) => {
 
   const canSave = ((onRec === 0 && audioUrl) || onRec === 2) && countdown === 4;
 
-  console.log(canSave);
+  // wav 파일 저장
+  const [sampleRate, setSampleRate] = useState();
+  const [leftChannel, setLeftChannel] = useState([]);
+  const [rightChannel, setRightChannel] = useState([]);
+  const [recordingLength, setRecordingLength] = useState(0);
+
+  const mergeBuffers = (channelBuffer, recordingLength) => {
+    let result = new Float32Array(recordingLength);
+    let offset = 0;
+    let lng = channelBuffer.length;
+    for (let i = 0; i < lng; i++) {
+      let buffer = channelBuffer[i];
+      result.set(buffer, offset);
+      offset += buffer.length;
+    }
+    return result;
+  };
+
+  const interleave = (leftChannel, rightChannel) => {
+    let length = leftChannel.length + rightChannel.length;
+    let result = new Float32Array(length);
+
+    let inputIndex = 0;
+
+    for (let index = 0; index < length; ) {
+      result[index++] = leftChannel[inputIndex];
+      result[index++] = rightChannel[inputIndex];
+      inputIndex++;
+    }
+    return result;
+  };
+
+  const writeUTFBytes = (view, offset, string) => {
+    let lng = string.length;
+    for (let i = 0; i < lng; i++) {
+      view.setUint8(offset + i, string.charCodeAt(i));
+    }
+  };
 
   // 카운트다운
   const [countdownState, setCountDownState] = useState(false);
@@ -101,6 +138,7 @@ const RecordPage = (props) => {
     runCountDown();
   };
 
+  // countdown interval => useEffect로 1초마다 생성후 제거
   useEffect(() => {
     const interval = setInterval(() => {
       if (countdown > 1 && countdown < 4 && countdownState === true) {
@@ -151,7 +189,7 @@ const RecordPage = (props) => {
     setModalToggle(true);
   }, []);
 
-  // 임시 가사
+  // 가사
   const lyrics = tempLyric.lyrics;
   const lyricsLength = lyrics.length;
   const [lyricsIndex, setLyricsIndex] = useState(0);
@@ -224,8 +262,15 @@ const RecordPage = (props) => {
     // 음원정보를 담은 노드를 생성하거나 음원을 실행또는 디코딩 시키는 일을 한다
     const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
     setAudioCtx(audioCtx);
+
+    // wav 파일 저장
+    setSampleRate(audioCtx.sampleRate);
+
+    let bufferSize = 2048;
+
     // 자바스크립트를 통해 음원의 진행상태에 직접접근에 사용된다.
-    const analyser = audioCtx.createScriptProcessor(0, 1, 1);
+    // const analyser = audioCtx.createScriptProcessor(0, 1, 1);
+    const analyser = audioCtx.createScriptProcessor(bufferSize, 2, 2); // 테스트
     setAnalyser(analyser);
 
     function makeSound(stream) {
@@ -251,9 +296,20 @@ const RecordPage = (props) => {
         setOnRec(1);
 
         analyser.onaudioprocess = function (e) {
+          let left = e.inputBuffer.getChannelData(0);
+          let right = e.inputBuffer.getChannelData(1);
+
           if (mediaRecorder.state === 'recording') {
             setCount(e.playbackTime);
+
+            // wav 파일 저장
+            setLeftChannel((prev) => [...prev, new Float32Array(left)]);
+            setRightChannel((prev) => [...prev, new Float32Array(right)]);
+            setRecordingLength(
+              (recordingLength) => recordingLength + bufferSize,
+            );
           }
+
           if (mediaRecorder.state === 'paused') {
             setOnRec(2);
             mediaRecorder.pause();
@@ -277,7 +333,17 @@ const RecordPage = (props) => {
 
             mediaRecorder.ondataavailable = function (e) {
               setAudioUrl(e.data);
-              setAudioFile(window.URL.createObjectURL(e.data));
+
+              setAudioFile({
+                blob: e.data,
+                url: window.URL.createObjectURL(e.data),
+                type: 'audio/wav',
+              });
+              // const sound = new File([e.data], 'soundBlob', {
+              //   lastModified: new Date().getTime(),
+              //   type: 'audio/mp3',
+              // });
+
               // setOnRec(0);
             };
           } else {
@@ -311,18 +377,65 @@ const RecordPage = (props) => {
   };
 
   const onSubmitAudioFile = () => {
-    if (parseInt(count) < 60) {
-      return notification['warning']({
-        key: 'audioNotification',
-        message: '',
-        description: '1분 이상의 녹음만 저장 가능합니다',
-        placement: 'bottomRight',
-        duration: 3,
-      });
-    }
+    // if (parseInt(count) < 60) {
+    //   return notification['warning']({
+    //     key: 'audioNotification',
+    //     message: '',
+    //     description: '1분 이상의 녹음만 저장 가능합니다',
+    //     placement: 'bottomRight',
+    //     duration: 3,
+    //   });
+    // }
 
     media.ondataavailable = (e) => {
-      setAudioFile(window.URL.createObjectURL(e.data));
+      // setAudioFile(window.URL.createObjectURL(e.data));
+
+      let leftBuffer = mergeBuffers(leftChannel, recordingLength);
+      let rightBuffer = mergeBuffers(rightChannel, recordingLength);
+      let interleaved = interleave(leftBuffer, rightBuffer);
+
+      let buffer = new ArrayBuffer(44 + interleaved.length * 2);
+      let view = new DataView(buffer);
+
+      // RIFF chunk descriptor
+      writeUTFBytes(view, 0, 'RIFF');
+      view.setUint32(4, 44 + interleaved.length * 2, true);
+      writeUTFBytes(view, 8, 'WAVE');
+      // FMT sub-chunk
+      writeUTFBytes(view, 12, 'fmt ');
+      view.setUint32(16, 16, true);
+      view.setUint16(20, 1, true);
+      // stereo (2 channels)
+      view.setUint16(22, 2, true);
+      view.setUint32(24, sampleRate, true);
+      view.setUint32(28, sampleRate * 4, true);
+      view.setUint16(32, 4, true);
+      view.setUint16(34, 16, true);
+      // data sub-chunk
+      writeUTFBytes(view, 36, 'data');
+      view.setUint32(40, interleaved.length * 2, true);
+
+      // write the PCM samples
+      let lng = interleaved.length;
+      let index = 44;
+      let volume = 1;
+      for (let i = 0; i < lng; i++) {
+        view.setInt16(index, interleaved[i] * (0x7fff * volume), true);
+        index += 2;
+      }
+
+      const type = 'audio/wav';
+
+      // our final binary blob
+      const blob = new Blob([view], { type: type });
+      const audioUrl = URL.createObjectURL(blob);
+
+      setAudioFile({
+        blob: blob,
+        url: audioUrl,
+        test: URL.createObjectURL(e.data),
+        type,
+      });
     };
 
     if (onRec === 2) {
