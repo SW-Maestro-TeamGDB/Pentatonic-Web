@@ -5,7 +5,7 @@ import { PlusOutlined, MinusOutlined } from '@ant-design/icons';
 import { Slider } from 'antd';
 
 const RecordEditSlider = (props) => {
-  const { value, setValue, title, desc, max, min } = props;
+  const { value, setValue, title, desc, max, min, unit = 1 } = props;
 
   const onChangeValue = (value) => {
     setValue(value);
@@ -13,13 +13,13 @@ const RecordEditSlider = (props) => {
 
   const onClickPlus = () => {
     if (value + 1 <= max) {
-      setValue((value) => value + 1);
+      setValue((value) => value + unit);
     }
   };
 
   const onClickMinus = () => {
     if (value - 1 >= min) {
-      setValue((value) => value - 1);
+      setValue((value) => value - unit);
     }
   };
 
@@ -47,7 +47,12 @@ const RecordEditSlider = (props) => {
 };
 
 const Container = styled.div`
-  width: 90%;
+  width: 100%;
+  margin: 1.5rem 0;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;
 
 const SliderContainer = styled.div`
@@ -55,7 +60,7 @@ const SliderContainer = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  width: 100%;
+  width: 90%;
 `;
 
 const SliderWrapper = styled.div`
@@ -100,6 +105,7 @@ const SliderHeader = styled.div`
   justify-content: space-between;
   align-items: center;
   width: 95%;
+  box-sizing: border-box;
 `;
 
 const SliderTitle = styled.div`
