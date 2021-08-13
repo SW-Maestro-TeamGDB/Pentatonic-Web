@@ -2,13 +2,23 @@ import react, { useState, useEffect, useCallback } from 'react';
 import styled from 'styled-components';
 import PlayIcon from '../../images/PlayIcon.svg';
 import StopIcon from '../../images/StopIcon.svg';
+import RecordEditSlider from '../../components/RecordEditSlider';
+import { PlusOutlined, MinusOutlined } from '@ant-design/icons';
+import { Slider } from 'antd';
+import GridContainer from '../../components/GridContainer/GridContainer';
 import AudioPlayer, { RHAP_UI } from 'react-h5-audio-player';
 import './AudioPlayer.css';
 
 import instrument from '../CoverMaking/inst.mp3';
 
 const RecordEdit = (props) => {
-  const { audioFile, setAudioFile, inst } = props;
+  const { setPage, audioFile, setAudioFile, inst } = props;
+
+  // slider value
+  const [volume, setVolume] = useState(50);
+  const [sync, setSync] = useState(-20);
+  const [reverb, setReverb] = useState(0);
+  const [gain, setGain] = useState(0);
 
   const audio = new Audio(audioFile);
   const audioContext = new AudioContext();
@@ -129,6 +139,49 @@ const RecordEdit = (props) => {
           ]}
         />
       </AudioPlayerContainer>
+      <EditConatiner>
+        <GridContainer>
+          <RecordEditSlider
+            value={volume}
+            setValue={setVolume}
+            title="볼륨 조절"
+            desc={`${volume}%`}
+            max={100}
+            min={0}
+          />
+          <RecordEditSlider
+            value={sync}
+            setValue={setSync}
+            title="싱크 조절"
+            desc={`${sync}ms`}
+            max={200}
+            min={-500}
+            unit={5}
+          />
+          <RecordEditSlider
+            value={reverb}
+            setValue={setReverb}
+            title="리버브"
+            desc={`${reverb}%`}
+            max={100}
+            min={0}
+          />
+          <RecordEditSlider
+            value={gain}
+            setValue={setGain}
+            title="게인"
+            desc={`${gain}%`}
+            max={100}
+            min={0}
+          />
+        </GridContainer>
+      </EditConatiner>
+      <ButtonConatiner>
+        <BackwardButton onClick={() => setPage(1)}>
+          다시 녹음하기
+        </BackwardButton>
+        <SubmitButton>업로드</SubmitButton>
+      </ButtonConatiner>
       {/* <button onClick={() => onClickStart()}>시작</button>
       <button onClick={() => onClickStop()}>중지</button>
 
@@ -160,13 +213,154 @@ const RecordEdit = (props) => {
 };
 
 const Container = styled.div`
-  width: 80%;
-  height: 70vh;
+  width: 90%;
   position: relative;
+  margin-top: 1rem;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
 `;
 
 const AudioPlayerContainer = styled.div`
+  width: 100%;
   margin-top: 3rem;
+`;
+
+const EditConatiner = styled.div`
+  display: flex;
+  margin: 3rem 0;
+  width: 100%;
+`;
+
+const ButtonConatiner = styled.div`
+  width: 60%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-top: 2rem;
+  justify-content: space-evenly;
+`;
+
+const BackwardButton = styled.div`
+  border-radius: 10px;
+  height: 3rem;
+  width: 10rem;
+  font-size: 1rem;
+  border: none;
+  color: white;
+  font-weight: 700;
+  cursor: pointer;
+  background-color: black;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  &:hover {
+    background-color: rgb(50, 50, 50);
+  }
+`;
+
+const BackwardText = styled.span`
+  margin-left: 1rem;
+  font-size: 80%;
+`;
+
+const SubmitButton = styled.div`
+  border-radius: 10px;
+  height: 3rem;
+  width: 10rem;
+  font-size: 1rem;
+  border: none;
+  color: white;
+  font-weight: 700;
+  cursor: pointer;
+  background-image: linear-gradient(to right, #6236ff, #9b66ff);
+  background-size: 500%;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  &:hover {
+    animation: gradient 3s ease infinite;
+  }
+
+  @keyframes gradient {
+    0% {
+      background-position: 0% 50%;
+    }
+    50% {
+      background-position: 100% 50%;
+    }
+    100% {
+      background-position: 0% 50%;
+    }
+  }
+`;
+
+const SliderContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+`;
+
+const SliderWrapper = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  position: relative;
+  justify-content: center;
+  width: 100%;
+  margin-top: 1rem;
+`;
+
+const CustomSlider = styled(Slider)`
+  width: 80%;
+`;
+
+const SliderPlusIcon = styled(PlusOutlined)`
+  width: 10%;
+  cursor: pointer;
+  color: gray;
+  transition: all 0.3s ease-in-out;
+  font-size: 1.5em;
+
+  &:hover {
+    color: #000000;
+  }
+`;
+
+const SliderMinusIcon = styled(MinusOutlined)`
+  width: 10%;
+  cursor: pointer;
+  color: gray;
+  transition: all 0.3s ease-in-out;
+  font-size: 1.5em;
+  &:hover {
+    color: #000000;
+  }
+`;
+
+const SliderHeader = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 95%;
+`;
+
+const SliderTitle = styled.div`
+  font-size: 1.2rem;
+  font-weight: 800;
+`;
+
+const SliderValue = styled.div`
+  font-size: 1rem;
+  font-weight: 700;
 `;
 
 export default RecordEdit;
