@@ -2,13 +2,13 @@ import react, { useState, useEffect, useCallback } from 'react';
 import styled from 'styled-components';
 import PlayIcon from '../../images/PlayIcon.svg';
 import StopIcon from '../../images/StopIcon.svg';
+import AudioPlayer, { RHAP_UI } from 'react-h5-audio-player';
+import './AudioPlayer.css';
 
 import instrument from '../CoverMaking/inst.mp3';
 
 const RecordEdit = (props) => {
   const { audioFile, setAudioFile, inst } = props;
-
-  console.log(audioFile);
 
   const audio = new Audio(audioFile);
   const audioContext = new AudioContext();
@@ -98,11 +98,26 @@ const RecordEdit = (props) => {
 
   return (
     <Container>
-      <CustomAudio
-        controls
-        controlsList="nodownload"
-        src={audioFile ? audioFile.url : null}
-      />
+      <AudioPlayerContainer>
+        <AudioPlayer
+          src={audioFile ? audioFile.url : null}
+          onPlay={() => console.log('play')}
+          onPause={() => console.log('pause')}
+          onClickStop={() => console.log('stop')}
+          onSeeked={() => {
+            console.log('seeked');
+          }}
+          onSeeking={() => console.log('seeking')}
+          customAdditionalControls={[]}
+          customVolumeControls={[]}
+          customProgressBarSection={[
+            RHAP_UI.CURRENT_TIME,
+            RHAP_UI.PROGRESS_BAR,
+            <div>-</div>,
+            RHAP_UI.CURRENT_LEFT_TIME,
+          ]}
+        />
+      </AudioPlayerContainer>
       {/* <button onClick={() => onClickStart()}>시작</button>
       <button onClick={() => onClickStop()}>중지</button>
 
@@ -139,8 +154,7 @@ const Container = styled.div`
   position: relative;
 `;
 
-const CustomAudio = styled.audio`
-  width: 100%;
+const AudioPlayerContainer = styled.div`
   margin-top: 3rem;
 `;
 
