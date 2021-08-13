@@ -368,8 +368,9 @@ const RecordPage = (props) => {
       track.stop();
     });
 
-    // 미디어 캡처 중지\
-    if (media.state === 'recording') media.stop();
+    // 미디어 캡처 중지
+    if (media && media.state === 'recording') media.stop();
+
     // 메서드가 호출 된 노드 연결 해제
     analyser.disconnect();
     source.disconnect();

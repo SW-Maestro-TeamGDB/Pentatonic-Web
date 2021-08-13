@@ -82,34 +82,45 @@ const RecordEdit = (props) => {
     }
   };
 
-  const onClickStart = () => {
-    console.log('play');
+  const onClickStart = (e) => {
     inst.play();
-    audio.play();
   };
 
-  const onClickStop = () => {
-    console.log('stop');
+  const onClickPause = () => {
     inst.pause();
-    audio.pause();
-    inst.currentTime = 0;
-    audio.currentTime = 0;
   };
+
+  const onClickSeeked = (e) => {
+    inst.currentTime = e.target.currentTime;
+  };
+
+  const onClickSeeking = () => {
+    inst.pause();
+  };
+
+  // 언마운트시 반주 정지
+  useEffect(() => {
+    return () => {
+      inst.pause();
+      inst.currentTime = 0;
+    };
+  }, []);
 
   return (
     <Container>
       <AudioPlayerContainer>
         <AudioPlayer
           src={audioFile ? audioFile.url : null}
-          onPlay={() => console.log('play')}
-          onPause={() => console.log('pause')}
+          onPlay={() => onClickStart()}
+          onPause={() => onClickPause()}
           onClickStop={() => console.log('stop')}
-          onSeeked={() => {
-            console.log('seeked');
+          onSeeked={(e) => {
+            onClickSeeked(e);
           }}
           onSeeking={() => console.log('seeking')}
           customAdditionalControls={[]}
           customVolumeControls={[]}
+          autoPlay={false}
           customProgressBarSection={[
             RHAP_UI.CURRENT_TIME,
             RHAP_UI.PROGRESS_BAR,
