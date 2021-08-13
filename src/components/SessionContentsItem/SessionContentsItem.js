@@ -93,11 +93,13 @@ const SessionContentsContainer = styled.div`
   box-sizing: border-box;
   cursor: pointer;
   color: ${(props) => (props.selected ? 'white' : 'gray')};
-  background-color: ${(props) => (props.selected ? 'gray' : 'white')};
+  background-color: ${(props) =>
+    props.selected ? 'rgba(98, 54, 255, 0.7)' : 'white'};
   transition: all 0.3s ease-in-out;
 
   &:hover {
-    background-color: ${(props) => (props.selected ? 'gray' : '#f0f0f0')};
+    background-color: ${(props) =>
+      props.selected ? 'rgba(98, 54, 255, 0.7)' : 'rgba(98, 54, 255, 0.12)'};
   }
 `;
 

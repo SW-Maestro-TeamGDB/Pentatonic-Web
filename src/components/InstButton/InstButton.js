@@ -37,6 +37,7 @@ const InstButtonContainer = styled.div`
   display: flex;
   width: 100%;
   font-size: 1.2rem;
+  font-weight: 700;
   padding: 0.5rem 0;
   border-radius: 0.5rem;
   align-items: center;
@@ -44,11 +45,14 @@ const InstButtonContainer = styled.div`
   cursor: pointer;
   transition: all 0.3s ease-in-out;
   justify-content: center;
-  color: ${(props) => (!props.selected ? 'white' : 'gray')};
-  background-color: ${(props) => (!props.selected ? 'gray' : 'white')};
+  color: ${(props) => (props.selected ? 'white' : 'gray')};
+  background-color: ${(props) =>
+    props.selected ? 'rgba(98, 54, 255, 0.7)' : 'white'};
+  transition: all 0.3s ease-in-out;
 
   &:hover {
-    background-color: ${(props) => (!props.selected ? 'gray' : '#f0f0f0')};
+    background-color: ${(props) =>
+      props.selected ? 'rgba(98, 54, 255, 0.7)' : 'rgba(98, 54, 255, 0.12)'};
   }
 `;
 
