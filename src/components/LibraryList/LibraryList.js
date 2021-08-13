@@ -91,7 +91,7 @@ const CoverContainer = styled.div`
   align-items: center;
   width: 100%;
   height: auto;
-  margin: 0.7vw 0;
+  margin-bottom: 0.7vw;
   color: black;
   border-radius: 1rem;
   padding: 0 1rem;

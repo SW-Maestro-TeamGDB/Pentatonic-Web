@@ -28,7 +28,7 @@ const LibraryDrawer = (props) => {
 
 const Title = styled.div`
   font-size: 2vw;
-  height: 4vw;
+  height: 7%;
   font-weight: 800;
   border-bottom: 1px solid #eee;
   width: 90%;
@@ -45,7 +45,7 @@ const SubmitButtonConatiner = styled.div`
   align-items: center;
   background-color: white;
   width: 100%;
-  height: 6vw;
+  height: 13%;
   z-index: 2;
 `;
 
@@ -53,8 +53,8 @@ const LibaryContainer = styled.div`
   z-index: 1;
   width: 100%;
   position: absolute;
-  top: 5vw;
-  height: 90%;
+  top: 11%;
+  height: 77%;
   overflow-y: scroll;
 `;
 
@@ -67,9 +67,8 @@ const DrawerContainer = styled.div`
 
 const SubmitButton = styled.button`
   border-radius: 10px;
-  bottom: 0%;
-  width: 90%;
-  height: 3.5vw;
+  width: 80%;
+  height: 60%;
   border: none;
   color: white;
   font-size: 1.3vw;
