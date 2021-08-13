@@ -103,18 +103,15 @@ const CoverMaking = ({ match }) => {
 };
 
 const CustomSteps = styled(Steps)`
-  width: 100%;
+  width: 80%;
   margin-top: 1rem;
 `;
 
 const StepContents = styled.div`
   width: 100%;
-  margin-top: 3%;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
-  border-radius: 1rem;
+  /* box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3); */
   display: flex;
   justify-content: center;
-  padding-bottom: 3vh;
   margin-bottom: 3vh;
 `;
 

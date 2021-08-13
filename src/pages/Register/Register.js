@@ -113,7 +113,7 @@ const StepContents = styled.div`
 `;
 
 const CustomSteps = styled(Steps)`
-  width: 100%;
+  width: 80%;
   margin-top: 1.5rem;
 `;
 
