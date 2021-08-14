@@ -22,6 +22,7 @@ const CoverMaking = (props) => {
   });
   const [informError, setInformError] = useState(null);
   const [sessionError, setSessionError] = useState(null);
+  const [instError, setInstError] = useState();
   const [session, setSession] = useState([]); // 세션
   const [sessionSet, setSessionSet] = useState(new Set([])); // 세션 종류 저장
   const [sessionAddToggle, setSessionAddToggle] = useState(1); // 세션 추가 토글
@@ -49,6 +50,11 @@ const CoverMaking = (props) => {
       check = false;
     } else if (!selectedSession) {
       setSessionError('녹음에 참여할 세션을 골라주세요');
+      check = false;
+    }
+
+    if (selectInst.length === 0) {
+      setInstError('녹음에 사용될 반주를 하나 이상 골라주세요');
       check = false;
     }
 
@@ -158,6 +164,9 @@ const CoverMaking = (props) => {
               selectInst={selectInst}
             />
           </InstContainer>
+          <ErrorContainer>
+            {instError ? <ErrorMessage>{instError}</ErrorMessage> : null}
+          </ErrorContainer>
         </InputContainer>
         <SubmitButton onClick={() => onClickSubmitButton()}>
           다음으로
@@ -182,7 +191,7 @@ const Container = styled.div`
 
 const InputContainer = styled.div`
   width: 100%;
-  margin-top: 2rem;
+  margin: 2rem 0 1rem;
 `;
 
 const SessionContainer = styled.div`

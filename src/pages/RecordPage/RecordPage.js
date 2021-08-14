@@ -377,15 +377,15 @@ const RecordPage = (props) => {
   };
 
   const onSubmitAudioFile = () => {
-    // if (parseInt(count) < 60) {
-    //   return notification['warning']({
-    //     key: 'audioNotification',
-    //     message: '',
-    //     description: '1분 이상의 녹음만 저장 가능합니다',
-    //     placement: 'bottomRight',
-    //     duration: 3,
-    //   });
-    // }
+    if (parseInt(count) < 60) {
+      return notification['warning']({
+        key: 'audioNotification',
+        message: '',
+        description: '1분 이상의 녹음만 저장 가능합니다',
+        placement: 'bottomRight',
+        duration: 3,
+      });
+    }
 
     media.ondataavailable = (e) => {
       // setAudioFile(window.URL.createObjectURL(e.data));
