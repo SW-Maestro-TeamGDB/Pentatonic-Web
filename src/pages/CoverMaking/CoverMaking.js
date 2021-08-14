@@ -54,6 +54,7 @@ const CoverMaking = ({ match }) => {
       description: '음원 편집',
       content: (
         <RecordEdit
+          setPage={setPage}
           audioFile={audioFile}
           setAudioFile={setAudioFile}
           inst={inst}
@@ -61,29 +62,6 @@ const CoverMaking = ({ match }) => {
       ),
     },
   ];
-
-  const showPage = () => {
-    if (page === 0) {
-      return <CoverForm setPage={setPage} audioDuration={audioDuration} />;
-    } else if (page === 1) {
-      return (
-        <RecordPage
-          setPage={setPage}
-          setAudioFile={setAudioFile}
-          audioDuration={audioDuration}
-          inst={inst}
-        />
-      );
-    } else if (page === 2) {
-      return (
-        <RecordEdit
-          audioFile={audioFile}
-          setAudioFile={setAudioFile}
-          inst={inst}
-        />
-      );
-    }
-  };
 
   return (
     <PageContainer>

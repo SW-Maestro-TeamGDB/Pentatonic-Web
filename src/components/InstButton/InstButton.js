@@ -51,7 +51,7 @@ const InstButtonContainer = styled.div`
   transition: all 0.3s ease-in-out;
 
   &:hover {
-    background-color: ${(props) =>
+    background-color: ${(props) =>  
       props.selected ? 'rgba(98, 54, 255, 0.7)' : 'rgba(98, 54, 255, 0.12)'};
   }
 `;
