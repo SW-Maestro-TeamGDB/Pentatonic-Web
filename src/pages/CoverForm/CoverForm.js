@@ -5,7 +5,6 @@ import PageContainer from '../../components/PageContainer';
 import RecordPage from '../RecordPage';
 import RecordEdit from '../RecordEdit';
 import SessionAddPanel from '../../components/SessionAddPanel';
-import GridContainer from '../../components/GridContainer/GridContainer';
 import SessionContents from '../../components/SessionContents';
 import InstSelect from '../../components/InstSelect';
 import { Upload } from 'antd';
@@ -175,6 +174,10 @@ const Container = styled.div`
   align-items: center;
   position: relative;
   width: 100%;
+  padding-bottom: 3vh;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+  border-radius: 1rem;
+  margin-top: 4%;
 `;
 
 const InputContainer = styled.div`
