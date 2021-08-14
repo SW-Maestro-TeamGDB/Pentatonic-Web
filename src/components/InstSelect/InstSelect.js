@@ -14,6 +14,7 @@ const InstSelect = (props) => {
           setSelectInst={setSelectInst}
           selectInst={selectInst}
           key={'selectInst' + i}
+          selected={selectInst.indexOf(v) === -1 ? false : true}
         />
       );
     });

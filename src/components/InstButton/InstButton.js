@@ -4,15 +4,12 @@ import { media } from '../../lib/Media';
 import SearchIcon from '../../images/SearchIcon.svg';
 
 const InstButton = (props) => {
-  const { session, setSelectInst, selectInst } = props;
-  const [selected, setSelected] = useState(selectInst.indexOf(session));
+  const { session, setSelectInst, selectInst, selected } = props;
 
   const onClickSessionItem = () => {
     if (selected) {
-      setSelected(false);
       setSelectInst([...selectInst.filter((v) => v !== session)]);
     } else {
-      setSelected(true);
       setSelectInst([...selectInst, session]);
     }
   };
@@ -41,14 +38,14 @@ const InstButtonContainer = styled.div`
   cursor: pointer;
   transition: all 0.3s ease-in-out;
   justify-content: center;
-  color: ${(props) => (!props.selected ? 'white' : 'gray')};
+  color: ${(props) => (props.selected ? 'white' : 'gray')};
   background-color: ${(props) =>
-    !props.selected ? 'rgba(98, 54, 255, 0.7)' : 'white'};
+    props.selected ? 'rgba(98, 54, 255, 0.7)' : 'white'};
   transition: all 0.3s ease-in-out;
 
   &:hover {
     background-color: ${(props) =>
-      !props.selected ? 'rgba(98, 54, 255, 0.7)' : 'rgba(98, 54, 255, 0.12)'};
+      props.selected ? 'rgba(98, 54, 255, 0.7)' : 'rgba(98, 54, 255, 0.12)'};
   }
 `;
 
