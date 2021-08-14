@@ -35,9 +35,7 @@ const LoungeSoloCovers = () => {
       <SearchBar />
       <SubContainer>
         <GenreButton genre={genre} setGenre={setGenre} />
-        <MakingCoverLink
-          to={`/studio/cover/${parseInt(Math.random() * 10000)}`}
-        >
+        <MakingCoverLink to={`/studio/solo`}>
           <MakingIconImg src={MakingIcon} />
           <CustomButton>새로운 커버 만들기</CustomButton>
         </MakingCoverLink>

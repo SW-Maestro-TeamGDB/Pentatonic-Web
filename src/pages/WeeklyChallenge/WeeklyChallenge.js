@@ -37,7 +37,7 @@ const WeeklyChallenge = () => {
       <SearchBar />
       <SubContainer>
         <MakingCoverLink
-          to={`/studio/cover/${parseInt(Math.random() * 10000)}`}
+          to={`/studio/${parseInt(Math.random() * 10000)}/cover`}
         >
           <MakingIconImg src={MakingIcon} />
           <CustomButton>새로운 커버 만들기</CustomButton>
@@ -60,7 +60,7 @@ const PageDesc = styled.div`
 const SubContainer = styled.div`
   margin: 2rem 0;
   position: relative;
-  width: 100%;
+  width: 93%;
   display: flex;
   flex-direction: row;
   align-items: center;

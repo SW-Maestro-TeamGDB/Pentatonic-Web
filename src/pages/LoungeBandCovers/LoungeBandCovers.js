@@ -58,9 +58,7 @@ const LoungeBandCovers = () => {
       <SearchBar />
       <SubContainer>
         <GenreButton genre={genre} setGenre={setGenre} />
-        <MakingCoverLink
-          to={`/studio/cover/${parseInt(Math.random() * 10000)}`}
-        >
+        <MakingCoverLink to={`/studio/band`}>
           <MakingIconImg src={MakingIcon} />
           <CustomButton>새로운 커버 만들기</CustomButton>
         </MakingCoverLink>
