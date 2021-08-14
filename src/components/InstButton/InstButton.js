@@ -17,10 +17,6 @@ const InstButton = (props) => {
     }
   };
 
-  useEffect(() => {
-    console.log(selected);
-  }, [selected]);
-
   return (
     <InstButtonContainer
       onClick={() => {
@@ -45,14 +41,14 @@ const InstButtonContainer = styled.div`
   cursor: pointer;
   transition: all 0.3s ease-in-out;
   justify-content: center;
-  color: ${(props) => (props.selected ? 'white' : 'gray')};
+  color: ${(props) => (!props.selected ? 'white' : 'gray')};
   background-color: ${(props) =>
-    props.selected ? 'rgba(98, 54, 255, 0.7)' : 'white'};
+    !props.selected ? 'rgba(98, 54, 255, 0.7)' : 'white'};
   transition: all 0.3s ease-in-out;
 
   &:hover {
-    background-color: ${(props) =>  
-      props.selected ? 'rgba(98, 54, 255, 0.7)' : 'rgba(98, 54, 255, 0.12)'};
+    background-color: ${(props) =>
+      !props.selected ? 'rgba(98, 54, 255, 0.7)' : 'rgba(98, 54, 255, 0.12)'};
   }
 `;
 
