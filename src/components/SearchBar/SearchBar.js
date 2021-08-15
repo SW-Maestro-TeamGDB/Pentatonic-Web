@@ -15,14 +15,31 @@ const SearchBar = (props) => {
 
 const CustomInput = styled.input`
   border: none;
-  width: 90%;
-  height: 80%;
+  width: 100%;
+  height: 100%;
   outline: none;
   margin-left: 1rem;
   font-family: 'NanumSquare';
   font-size: 16px;
   font-weight: 400;
   background-color: transparent;
+  position: absolute;
+  padding-left: 1.5rem;
+  padding-right: 7%;
+
+  border-radius: 1rem;
+  border: 3px solid rgba(98, 54, 255, 0);
+  background-color: rgba(98, 54, 255, 0.03);
+
+  outline: none;
+
+  &:hover {
+    border: 3px solid rgba(98, 54, 255, 0.05);
+  }
+
+  &:focus {
+    border: 3px solid rgba(98, 54, 255, 0.1);
+  }
 
   ::placeholder {
     font-size: 16px;
@@ -34,25 +51,21 @@ const SearchBarContainer = styled.div`
   display: flex;
   flex-direction: row;
   width: 70%;
-  border-radius: 1rem;
-  border: 3px solid rgba(98, 54, 255, 0.1);
-  background-color: rgba(98, 54, 255, 0.03);
   height: 3.5rem;
   align-items: center;
   justify-content: space-between;
 
-  ${CustomInput} ::foucs {
-    background-color: red;
-  }
+  position: relative;
 `;
 
 const CustomIcon = styled.img`
   width: 1.2rem;
-  margin-right: 2rem;
   cursor: pointer;
   filter: invert(38%) sepia(91%) saturate(5568%) hue-rotate(241deg)
     brightness(101%) contrast(101%);
   opacity: 0.3;
+  position: absolute;
+  right: 0;
 `;
 
 export default SearchBar;
