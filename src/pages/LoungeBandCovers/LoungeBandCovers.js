@@ -2,6 +2,7 @@ import react, { useState } from 'react';
 import { Space, Dropdown, Menu, Button } from 'antd';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
+import MakingCoverButton from '../../components/MakingCoverButton';
 import PageContainer from '../../components/PageContainer';
 import WeeklyBanner from '../../components/WeeklyBanner/WeeklyBanner';
 import SearchBar from '../../components/SearchBar';
@@ -58,10 +59,7 @@ const LoungeBandCovers = () => {
       <SearchBar placeholder="커버 제목, 아티스트, 곡을 입력해주세요" />
       <SubContainer>
         <GenreButton genre={genre} setGenre={setGenre} />
-        <MakingCoverLink to={`/studio/band`}>
-          <MakingIconImg src={MakingIcon} />
-          <CustomButton>새로운 커버 만들기</CustomButton>
-        </MakingCoverLink>
+        <MakingCoverButton link={`/studio/band`} title="새로운 커버 만들기" />
       </SubContainer>
       <GridContainer width="95%" templateColumn="250px">
         {tempCover()}
@@ -78,12 +76,13 @@ const PageDesc = styled.div`
 `;
 
 const SubContainer = styled.div`
-  margin: 5rem 0 1rem;
+  margin: 4rem 0 1rem;
   position: relative;
   width: 93%;
   display: flex;
   flex-direction: row;
   align-items: center;
+  justify-content: space-between;
 `;
 
 const MakingIconImg = styled.img`

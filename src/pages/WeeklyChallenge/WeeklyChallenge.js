@@ -1,6 +1,7 @@
 import react, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
+import MakingCoverButton from '../../components/MakingCoverButton';
 import PageContainer from '../../components/PageContainer';
 import WeeklyBanner from '../../components/WeeklyBanner/WeeklyBanner';
 import SearchBar from '../../components/SearchBar';
@@ -36,12 +37,10 @@ const WeeklyChallenge = () => {
       </PageDesc>
       <SearchBar placeholder="커버 제목을 입력해주세요" />
       <SubContainer>
-        <MakingCoverLink
-          to={`/studio/${parseInt(Math.random() * 10000)}/cover`}
-        >
-          <MakingIconImg src={MakingIcon} />
-          <CustomButton>새로운 커버 만들기</CustomButton>
-        </MakingCoverLink>
+        <MakingCoverButton
+          link={`/studio/band/weekly/cover`}
+          title="새로운 커버 만들기"
+        />
       </SubContainer>
       <GridContainer width="95%" templateColumn="250px">
         {tempCover()}
@@ -64,6 +63,7 @@ const SubContainer = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
+  justify-content: flex-end;
 `;
 
 const MakingIconImg = styled.img`

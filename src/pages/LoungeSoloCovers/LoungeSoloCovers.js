@@ -2,6 +2,7 @@ import react, { useState } from 'react';
 import { Space, Dropdown, Menu, Button } from 'antd';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
+import MakingCoverButton from '../../components/MakingCoverButton';
 import PageContainer from '../../components/PageContainer';
 import WeeklyBanner from '../../components/WeeklyBanner/WeeklyBanner';
 import SearchBar from '../../components/SearchBar';
@@ -35,12 +36,7 @@ const LoungeSoloCovers = () => {
       <SearchBar placeholder="커버 제목을 입력해주세요" />
       <SubContainer>
         <GenreButton genre={genre} setGenre={setGenre} />
-        <MakingCoverLink to={`/studio/solo`}>
-          <CustomButton>
-            새로운 커버 만들기
-            <MakingIconImg src={MakingIcon} />
-          </CustomButton>
-        </MakingCoverLink>
+        <MakingCoverButton link={`/studio/solo`} title="새로운 커버 만들기" />
       </SubContainer>
       <GridContainer width="95%" templateColumn="250px">
         {tempCover()}
@@ -63,37 +59,7 @@ const SubContainer = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
-`;
-
-const MakingIconImg = styled.img`
-  width: 1rem;
-  margin-left: 0.5rem;
-  filter: invert(100%);
-`;
-
-const MakingCoverLink = styled(Link)`
-  position: absolute;
-  right: 1rem;
-  color: black;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-`;
-
-const CustomButton = styled.div`
-  cursor: pointer;
-  min-width: 12em;
-  padding: 0.8vh 0.7vw;
-  color: white;
-  background-image: linear-gradient(to right, #6236ff, #9b66ff);
-  border-radius: 10px;
-
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  font-size: 16px;
-  font-weight: 700;
+  justify-content: space-between;
 `;
 
 export default LoungeSoloCovers;
