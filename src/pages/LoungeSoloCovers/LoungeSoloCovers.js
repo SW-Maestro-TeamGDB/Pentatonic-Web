@@ -32,12 +32,14 @@ const LoungeSoloCovers = () => {
         title="떠오르는 솔로커버"
       />
       <PageDesc>새롭게 떠오르는 솔로 커버를 감상해보세요</PageDesc>
-      <SearchBar />
+      <SearchBar placeholder="커버 제목을 입력해주세요" />
       <SubContainer>
         <GenreButton genre={genre} setGenre={setGenre} />
         <MakingCoverLink to={`/studio/solo`}>
-          <MakingIconImg src={MakingIcon} />
-          <CustomButton>새로운 커버 만들기</CustomButton>
+          <CustomButton>
+            새로운 커버 만들기
+            <MakingIconImg src={MakingIcon} />
+          </CustomButton>
         </MakingCoverLink>
       </SubContainer>
       <GridContainer width="95%" templateColumn="250px">
@@ -55,7 +57,7 @@ const PageDesc = styled.div`
 `;
 
 const SubContainer = styled.div`
-  margin: 2rem 0;
+  margin: 4rem 0 1rem;
   position: relative;
   width: 93%;
   display: flex;
@@ -65,7 +67,8 @@ const SubContainer = styled.div`
 
 const MakingIconImg = styled.img`
   width: 1rem;
-  margin-right: 0.5rem;
+  margin-left: 0.5rem;
+  filter: invert(100%);
 `;
 
 const MakingCoverLink = styled(Link)`
@@ -77,13 +80,20 @@ const MakingCoverLink = styled(Link)`
   align-items: center;
 `;
 
-const CustomButton = styled.span`
+const CustomButton = styled.div`
   cursor: pointer;
-  font-size: 1rem;
-`;
-const CustomMenu = styled(Menu)`
-  min-width: 7rem;
-  text-align: center;
+  min-width: 12em;
+  padding: 0.8vh 0.7vw;
+  color: white;
+  background-image: linear-gradient(to right, #6236ff, #9b66ff);
+  border-radius: 10px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  font-size: 16px;
+  font-weight: 700;
 `;
 
 export default LoungeSoloCovers;

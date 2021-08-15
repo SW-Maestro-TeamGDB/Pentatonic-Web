@@ -3,25 +3,15 @@ import styled from 'styled-components';
 import { Default } from '../../lib/Media';
 import SearchIcon from '../../images/SearchIcon.svg';
 
-const SearchBar = ({ props }) => {
+const SearchBar = (props) => {
+  const { placeholder } = props;
   return (
     <SearchBarContainer>
-      <CustomInput />
+      <CustomInput placeholder={placeholder ? placeholder : null} />
       <CustomIcon src={SearchIcon} />
     </SearchBarContainer>
   );
 };
-
-const SearchBarContainer = styled.div`
-  display: flex;
-  flex-direction: row;
-  width: 93%;
-  border-radius: 1rem;
-  border: 1px solid rgb(150, 150, 150);
-  height: 3rem;
-  align-items: center;
-  justify-content: space-between;
-`;
 
 const CustomInput = styled.input`
   border: none;
@@ -32,12 +22,37 @@ const CustomInput = styled.input`
   font-family: 'NanumSquare';
   font-size: 16px;
   font-weight: 400;
+  background-color: transparent;
+
+  ::placeholder {
+    font-size: 16px;
+  }
+`;
+
+const SearchBarContainer = styled.div`
+  padding-left: 0.5rem;
+  display: flex;
+  flex-direction: row;
+  width: 70%;
+  border-radius: 1rem;
+  border: 3px solid rgba(98, 54, 255, 0.1);
+  background-color: rgba(98, 54, 255, 0.03);
+  height: 3.5rem;
+  align-items: center;
+  justify-content: space-between;
+
+  ${CustomInput} ::foucs {
+    background-color: red;
+  }
 `;
 
 const CustomIcon = styled.img`
-  width: 1rem;
+  width: 1.2rem;
   margin-right: 2rem;
   cursor: pointer;
+  filter: invert(38%) sepia(91%) saturate(5568%) hue-rotate(241deg)
+    brightness(101%) contrast(101%);
+  opacity: 0.3;
 `;
 
 export default SearchBar;

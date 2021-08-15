@@ -34,7 +34,7 @@ const WeeklyChallenge = () => {
         기타리스트인 크리스 마틴, 리드 기타리스트 조니 버클랜드, 베이스 가이
         베리먼, 그리고 드러머와 기타 악기 연주를 맡은 윌 챔피언이다.
       </PageDesc>
-      <SearchBar />
+      <SearchBar placeholder="커버 제목을 입력해주세요" />
       <SubContainer>
         <MakingCoverLink
           to={`/studio/${parseInt(Math.random() * 10000)}/cover`}
@@ -58,7 +58,7 @@ const PageDesc = styled.div`
 `;
 
 const SubContainer = styled.div`
-  margin: 2rem 0;
+  margin: 4rem 0 1rem;
   position: relative;
   width: 93%;
   display: flex;

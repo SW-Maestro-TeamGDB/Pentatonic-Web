@@ -55,7 +55,7 @@ const LoungeBandCovers = () => {
         position="top"
       />
       <PageDesc>새롭게 떠오르는 밴드 커버를 감상하고 참여해보세요</PageDesc>
-      <SearchBar />
+      <SearchBar placeholder="커버 제목, 아티스트, 곡을 입력해주세요" />
       <SubContainer>
         <GenreButton genre={genre} setGenre={setGenre} />
         <MakingCoverLink to={`/studio/band`}>
@@ -78,7 +78,7 @@ const PageDesc = styled.div`
 `;
 
 const SubContainer = styled.div`
-  margin: 2rem 0;
+  margin: 5rem 0 1rem;
   position: relative;
   width: 93%;
   display: flex;
