@@ -13,8 +13,16 @@ const Studio = ({ match }) => {
       <Route exact path={match.path} component={StudioHome} />
       <Route path={`${match.path}/band`} component={StudioBandCover} exact />
       <Route path={`${match.path}/solo`} component={StudioSoloCover} exact />
-      <Route path={`${match.path}/:id`} component={MusicInformation} exact />
-      <Route path={`${match.path}/:id/cover`} component={CoverMaking} exact />
+      <Route
+        path={`${match.path}/:sort/:id`}
+        component={MusicInformation}
+        exact
+      />
+      <Route
+        path={`${match.path}/:sort/:id/cover`}
+        component={CoverMaking}
+        exact
+      />
     </>
   );
 };
