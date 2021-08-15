@@ -1,5 +1,5 @@
 import react, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import styled from 'styled-components';
 import PageContainer from '../../components/PageContainer';
 import RecordPage from '../RecordPage';
@@ -28,9 +28,7 @@ const CoverMaking = (props) => {
   const [sessionAddToggle, setSessionAddToggle] = useState(1); // 세션 추가 토글
   const [selectedSession, setSelectedSession] = useState(null); // 녹음 참여 세션
   const [selectInst, setSelectInst] = useState([]); // 녹음 선택 인스트
-  const backToMusicInfo = () => {
-    return pageUrl.substr(0, pageUrl.length - 6);
-  };
+  const history = useHistory();
 
   const tempInst = ['기타', '보컬', '베이스', '드럼', '키보드'];
 
@@ -82,7 +80,7 @@ const CoverMaking = (props) => {
     <Container>
       <SongMetaContainer>
         <BannerBackground />
-        <BackwardButton to={backToMusicInfo()}>
+        <BackwardButton onClick={() => history.goBack()}>
           <LeftOutlined />
         </BackwardButton>
         <SongTitle>Fix You - Coldplay</SongTitle>
@@ -229,7 +227,7 @@ const UploadText = styled.div`
   color: #3d3d3d;
 `;
 
-const BackwardButton = styled(Link)`
+const BackwardButton = styled.div`
   position: absolute;
   cursor: pointer;
   z-index: 2;
