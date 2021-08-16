@@ -34,12 +34,12 @@ const StudioSoloCover = () => {
           />
         </ButtonContainer>
         <MakingCoverButton
-          link={`/studio/band/1/cover`}
+          link={`/studio/solo/1/cover`}
           title="자유곡 커버 만들기"
         />
       </SubContainer>
       <SongContainer>
-        <SongList link="/studio/band/1" />
+        <SongList link="/studio/solo/1" />
       </SongContainer>
     </PageContainer>
   );
