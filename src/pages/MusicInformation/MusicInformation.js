@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import CoverGrid from '../../components/CoverGrid/CoverGrid';
 import PageContainer from '../../components/PageContainer';
 import GridContainer from '../../components/GridContainer';
+import DifficultyIcon from '../../components/DifficultyIcon';
 
 const MusicInformation = ({ match }) => {
   const type = match.params.sort;
@@ -57,7 +58,9 @@ const MusicInformation = ({ match }) => {
               </MusicMeta>
               <MusicMeta>
                 <MetaTitle>난이도</MetaTitle>
-                <MetaContents>● ○ ○ ○ ○</MetaContents>
+                <DifficultyContents>
+                  <DifficultyIcon value={2} />
+                </DifficultyContents>
               </MusicMeta>
             </GridContainer>
           </MusicMetaWrapper>
@@ -137,8 +140,13 @@ const MetaTitle = styled.div`
 `;
 
 const MetaContents = styled.div`
-  width: 70%;
+  width: 30%;
   color: #222222;
+`;
+
+const DifficultyContents = styled.div`
+  width: 30%;
+  transform: translateX(-3%);
 `;
 
 const ButtonContainer = styled.div`

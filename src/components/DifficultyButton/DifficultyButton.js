@@ -1,5 +1,6 @@
 import react from 'react';
 import styled from 'styled-components';
+import DifficultyIcon from '../DifficultyIcon';
 import { Space, Dropdown, Menu, Button, Select } from 'antd';
 import { Default } from '../../lib/Media';
 
@@ -10,20 +11,40 @@ const DifficultyButton = (props) => {
       <Menu.Item key={0} onClick={() => setDifficulty('전체')}>
         전체
       </Menu.Item>
-      <Menu.Item key={1} onClick={() => setDifficulty(1)}>
-        1
+      <Menu.Item
+        key={1}
+        onClick={() => setDifficulty(1)}
+        style={{ margin: '0.2rem 0' }}
+      >
+        <DifficultyIcon value={1} />
       </Menu.Item>
-      <Menu.Item key={2} onClick={() => setDifficulty(2)}>
-        2
+      <Menu.Item
+        key={2}
+        onClick={() => setDifficulty(2)}
+        style={{ margin: '0.2rem 0' }}
+      >
+        <DifficultyIcon value={2} />
       </Menu.Item>
-      <Menu.Item key={3} onClick={() => setDifficulty(3)}>
-        3
+      <Menu.Item
+        key={3}
+        onClick={() => setDifficulty(3)}
+        style={{ margin: '0.2rem 0' }}
+      >
+        <DifficultyIcon value={3} />
       </Menu.Item>
-      <Menu.Item key={4} onClick={() => setDifficulty(4)}>
-        4
+      <Menu.Item
+        key={4}
+        onClick={() => setDifficulty(4)}
+        style={{ margin: '0.2rem 0' }}
+      >
+        <DifficultyIcon value={4} />
       </Menu.Item>
-      <Menu.Item key={5} onClick={() => setDifficulty(5)}>
-        5
+      <Menu.Item
+        key={5}
+        onClick={() => setDifficulty(5)}
+        style={{ margin: '0.2rem 0' }}
+      >
+        <DifficultyIcon value={5} />
       </Menu.Item>
     </CustomMenu>
   );

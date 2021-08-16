@@ -2,6 +2,7 @@ import react from 'react';
 import styled from 'styled-components';
 import { media } from '../../lib/Media';
 import { Link } from 'react-router-dom';
+import DifficultyIcon from '../DifficultyIcon';
 
 const SongList = (props) => {
   const { link } = props;
@@ -16,7 +17,12 @@ const SongList = (props) => {
       </SongTitleContainer>
       <ArtistContainer>ColdPlay</ArtistContainer>
       <SessionContainer>보컬,기타,드럼,베이스</SessionContainer>
-      <DifficultyContainer>난이도 ● ○ ○ ○ ○</DifficultyContainer>
+      <DifficultyContainer>
+        난이도
+        <IconContainer>
+          <DifficultyIcon value={2} />
+        </IconContainer>
+      </DifficultyContainer>
     </SongInformLink>
   );
 };
@@ -60,6 +66,11 @@ const SongImg = styled.div`
   box-sizing: border-box;
 `;
 
+const IconContainer = styled.div`
+  width: 60%;
+  margin-left: 1rem;
+`;
+
 const SongTitleContainer = styled.div`
   width: 30%;
   height: 100%;
@@ -98,7 +109,7 @@ const SessionContainer = styled.div`
 `;
 
 const DifficultyContainer = styled.div`
-  width: 20%;
+  width: 25%;
   font-size: 1rem;
   color: #222222;
   font-weight: 700;
