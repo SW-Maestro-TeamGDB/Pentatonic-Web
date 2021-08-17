@@ -313,7 +313,7 @@ const RecordPage = (props) => {
             setOnRec(2);
             mediaRecorder.pause();
           }
-          // 30초 지나면 자동으로 음성 저장 및 녹음 중지
+          // 곡 길이만큼 시간 지나면 자동으로 음성 저장 및 녹음 중지
           if (e.playbackTime > audioDuration) {
             stream.getAudioTracks().forEach(function (track) {
               track.stop();
@@ -333,11 +333,6 @@ const RecordPage = (props) => {
             mediaRecorder.ondataavailable = function (e) {
               setAudioUrl(e.data);
 
-              setAudioFile({
-                blob: e.data,
-                url: window.URL.createObjectURL(e.data),
-                type: 'audio/wav',
-              });
               // const sound = new File([e.data], 'soundBlob', {
               //   lastModified: new Date().getTime(),
               //   type: 'audio/mp3',
@@ -359,7 +354,6 @@ const RecordPage = (props) => {
   const offRecAudio = () => {
     // dataavailable 이벤트로 Blob 데이터에 대한 응답을 받을 수 있음
     media.ondataavailable = function (e) {
-      setAudioUrl(e.data);
       setOnRec(0); // false 로 수정
     };
 
@@ -376,67 +370,72 @@ const RecordPage = (props) => {
     source.disconnect();
   };
 
-  const onSubmitAudioFile = () => {
-    if (parseInt(count) < 60) {
-      return notification['warning']({
-        key: 'audioNotification',
-        message: '',
-        description: '1분 이상의 녹음만 저장 가능합니다',
-        placement: 'bottomRight',
-        duration: 3,
-      });
+  const makeAudioFile = () => {
+    // setAudioFile(window.URL.createObjectURL(e.data));
+
+    let leftBuffer = mergeBuffers(leftChannel, recordingLength);
+    let rightBuffer = mergeBuffers(rightChannel, recordingLength);
+    let interleaved = interleave(leftBuffer, rightBuffer);
+
+    let buffer = new ArrayBuffer(44 + interleaved.length * 2);
+    let view = new DataView(buffer);
+
+    // RIFF chunk descriptor
+    writeUTFBytes(view, 0, 'RIFF');
+    view.setUint32(4, 44 + interleaved.length * 2, true);
+    writeUTFBytes(view, 8, 'WAVE');
+    // FMT sub-chunk
+    writeUTFBytes(view, 12, 'fmt ');
+    view.setUint32(16, 16, true);
+    view.setUint16(20, 1, true);
+    // stereo (2 channels)
+    view.setUint16(22, 2, true);
+    view.setUint32(24, sampleRate, true);
+    view.setUint32(28, sampleRate * 4, true);
+    view.setUint16(32, 4, true);
+    view.setUint16(34, 16, true);
+    // data sub-chunk
+    writeUTFBytes(view, 36, 'data');
+    view.setUint32(40, interleaved.length * 2, true);
+
+    // write the PCM samples
+    let lng = interleaved.length;
+    let index = 44;
+    let volume = 1;
+    for (let i = 0; i < lng; i++) {
+      view.setInt16(index, interleaved[i] * (0x7fff * volume), true);
+      index += 2;
     }
 
-    media.ondataavailable = (e) => {
-      // setAudioFile(window.URL.createObjectURL(e.data));
+    const type = 'audio/wav';
 
-      let leftBuffer = mergeBuffers(leftChannel, recordingLength);
-      let rightBuffer = mergeBuffers(rightChannel, recordingLength);
-      let interleaved = interleave(leftBuffer, rightBuffer);
+    // our final binary blob
+    const blob = new Blob([view], { type: type });
+    const audioUrl = URL.createObjectURL(blob);
 
-      let buffer = new ArrayBuffer(44 + interleaved.length * 2);
-      let view = new DataView(buffer);
+    setAudioFile({
+      blob: blob,
+      url: audioUrl,
+      type,
+    });
+  };
 
-      // RIFF chunk descriptor
-      writeUTFBytes(view, 0, 'RIFF');
-      view.setUint32(4, 44 + interleaved.length * 2, true);
-      writeUTFBytes(view, 8, 'WAVE');
-      // FMT sub-chunk
-      writeUTFBytes(view, 12, 'fmt ');
-      view.setUint32(16, 16, true);
-      view.setUint16(20, 1, true);
-      // stereo (2 channels)
-      view.setUint16(22, 2, true);
-      view.setUint32(24, sampleRate, true);
-      view.setUint32(28, sampleRate * 4, true);
-      view.setUint16(32, 4, true);
-      view.setUint16(34, 16, true);
-      // data sub-chunk
-      writeUTFBytes(view, 36, 'data');
-      view.setUint32(40, interleaved.length * 2, true);
+  const onSubmitAudioFile = () => {
+    // if (parseInt(count) < 60) {
+    //   return notification['warning']({
+    //     key: 'audioNotification',
+    //     message: '',
+    //     description: '1분 이상의 녹음만 저장 가능합니다',
+    //     placement: 'bottomRight',
+    //     duration: 3,
+    //   });
+    // }
 
-      // write the PCM samples
-      let lng = interleaved.length;
-      let index = 44;
-      let volume = 1;
-      for (let i = 0; i < lng; i++) {
-        view.setInt16(index, interleaved[i] * (0x7fff * volume), true);
-        index += 2;
-      }
+    // media.ondataavailable = (e) => {
+    //   makeAudioFile();
+    // };
 
-      const type = 'audio/wav';
-
-      // our final binary blob
-      const blob = new Blob([view], { type: type });
-      const audioUrl = URL.createObjectURL(blob);
-
-      setAudioFile({
-        blob: blob,
-        url: audioUrl,
-        test: URL.createObjectURL(e.data),
-        type,
-      });
-    };
+    makeAudioFile();
 
     if (onRec === 2) {
       stream.getAudioTracks().forEach(function (track) {
