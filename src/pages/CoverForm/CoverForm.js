@@ -312,12 +312,12 @@ const SongTitle = styled.div`
 `;
 
 const CustomTitle = styled.div`
-  font-size: 1.5rem;
-  font-weight: 900;
+  font-size: 1.2rem;
+  font-weight: 800;
 `;
 
 const CustomDescription = styled.div`
-  font-size: 1.2rem;
+  font-size: 1rem;
   font-weight: 500;
   margin: 0.2rem 0 1rem;
   color: #3d3d3d;

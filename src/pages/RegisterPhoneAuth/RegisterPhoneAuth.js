@@ -212,12 +212,12 @@ const PhoneNumberContainer = styled.div`
 `;
 
 const CustomTitle = styled.div`
-  font-size: 1.5rem;
-  font-weight: 900;
+  font-size: 1.2rem;
+  font-weight: 800;
 `;
 
 const CustomDescription = styled.div`
-  font-size: 1.2rem;
+  font-size: 1rem;
   font-weight: 500;
   margin: 0.2rem 0 1rem;
   color: #3d3d3d;
@@ -274,12 +274,14 @@ const CustomCheckbox = styled(Checkbox)`
 
 const ButtonConatiner = styled.div`
   position: absolute;
-  width: 50vw;
+  width: 100%;
   min-width: 70%;
+  left: 50%;
+  transform: translateX(-50%);
   bottom: 0;
   display: flex;
   flex-direction: row;
-  justify-content: space-around;
+  justify-content: space-evenly;
 `;
 
 const AuthButton = styled.button`
