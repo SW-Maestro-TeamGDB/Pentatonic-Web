@@ -14,9 +14,27 @@ import PageImage from '../../components/PageImage/PageImage';
 import GenreButton from '../../components/GenreButton/GenreButton';
 import GridContainer from '../../components/GridContainer/GridContainer';
 
+import tempData from '../../data/songs/tempData.json';
+
 const StudioBandCover = () => {
   const [genre, setGenre] = useState('전체');
   const [difficulty, setDifficulty] = useState('전체');
+
+  const showTempCover = () =>
+    [0, 1, 2, 3]
+      .filter(
+        (v) => difficulty === tempData[v].difficulty || difficulty === '전체',
+      )
+      .map((v) => {
+        return (
+          <SongList
+            link={`/studio/band/${v}`}
+            id={v}
+            key={`SongList + ${v}`}
+            data={tempData[v]}
+          />
+        );
+      });
 
   return (
     <PageContainer>
@@ -35,13 +53,11 @@ const StudioBandCover = () => {
           />
         </ButtonContainer>
         <MakingCoverButton
-          link={`/studio/band/1/cover`}
+          link={`/studio/band/0/cover`}
           title="자유곡 커버 만들기"
         />
       </SubContainer>
-      <SongContainer>
-        <SongList link="/studio/band/1" />
-      </SongContainer>
+      <SongContainer>{showTempCover()}</SongContainer>
     </PageContainer>
   );
 };

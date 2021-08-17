@@ -20,7 +20,7 @@ import piano from './piano.svg';
 import vocal from './vocal.svg';
 
 const CoverGrid = (props) => {
-  const { idx } = props;
+  const { idx, title, artist } = props;
   const category = ['animals', 'arch', 'nature', 'people', 'tech'];
   const randomImg = `https://placeimg.com/300/300/${category[idx]}`;
 
@@ -149,7 +149,9 @@ const CoverGrid = (props) => {
           <CoverInform>
             <CoverTitle>{tempData[idx].cover}</CoverTitle>
             <SongInform>
-              {tempData[idx].title} - {tempData[idx].singer}
+              {title
+                ? `${title} - ${artist}`
+                : `${tempData[idx].title} - ${tempData[idx].singer}`}
             </SongInform>
           </CoverInform>
           <CoverMeta>

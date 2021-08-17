@@ -10,6 +10,8 @@ import InstSelect from '../../components/InstSelect';
 import { Upload } from 'antd';
 import { LeftOutlined, PictureOutlined } from '@ant-design/icons';
 
+import tempData from '../../data/songs/tempData.json';
+
 const { Dragger } = Upload;
 
 const CoverMaking = (props) => {

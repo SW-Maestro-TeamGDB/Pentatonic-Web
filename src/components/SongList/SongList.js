@@ -5,22 +5,21 @@ import { Link } from 'react-router-dom';
 import DifficultyIcon from '../DifficultyIcon';
 
 const SongList = (props) => {
-  const { link } = props;
-  const weekly = true;
+  const { link, data } = props;
 
   return (
     <SongInformLink to={link}>
-      <SongImg />
+      <SongImg img={data.img} />
       <SongTitleContainer>
-        Fix You
-        {weekly ? <WeeklyBanner>Weekly</WeeklyBanner> : null}
+        {data.title}
+        {data.weekly ? <WeeklyBanner>Weekly</WeeklyBanner> : null}
       </SongTitleContainer>
-      <ArtistContainer>ColdPlay</ArtistContainer>
+      <ArtistContainer>{data.artist}</ArtistContainer>
       <SessionContainer>보컬,기타,드럼,베이스</SessionContainer>
       <DifficultyContainer>
         난이도
         <IconContainer>
-          <DifficultyIcon value={2} />
+          <DifficultyIcon value={data.difficulty} />
         </IconContainer>
       </DifficultyContainer>
     </SongInformLink>
@@ -56,7 +55,7 @@ const WeeklyBanner = styled.div`
 `;
 
 const SongImg = styled.div`
-  background-image: url('https://media.pitchfork.com/photos/608a33343bbb6032f540a222/2:1/w_2912,h_1456,c_limit/coldplay.jpg');
+  background-image: ${(props) => `url(${props.img})`};
   background-repeat: no-repeat;
   background-position: top center;
   background-size: cover;
@@ -75,7 +74,7 @@ const SongTitleContainer = styled.div`
   width: 30%;
   height: 100%;
   text-align: left;
-  font-size: 1.5rem;
+  font-size: 1.3rem;
   font-weight: 700;
   padding-left: 2.5rem;
   display: flex;
@@ -87,9 +86,9 @@ const SongTitleContainer = styled.div`
 const ArtistContainer = styled.div`
   width: 20%;
   text-align: left;
-  font-size: 1.2rem;
+  font-size: 1.1rem;
   color: #222222;
-  font-weight: 700;
+  font-weight: 600;
   padding-left: 2.5rem;
   display: flex;
   flex-direction: row;
@@ -98,9 +97,9 @@ const ArtistContainer = styled.div`
 
 const SessionContainer = styled.div`
   width: 25%;
-  font-size: 1rem;
+  font-size: 0.9rem;
   color: #222222;
-  font-weight: 700;
+  font-weight: 500;
   padding-left: 2.5rem;
   display: flex;
   flex-direction: row;

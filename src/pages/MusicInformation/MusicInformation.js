@@ -6,54 +6,65 @@ import PageContainer from '../../components/PageContainer';
 import GridContainer from '../../components/GridContainer';
 import DifficultyIcon from '../../components/DifficultyIcon';
 
+import tempData from '../../data/songs/tempData.json';
+
 const MusicInformation = ({ match }) => {
   const type = match.params.sort;
+  const id = match.params.id;
   const typeName = type === 'band' ? '밴드' : '솔로';
   const tempCover = () =>
     [0, 1, 2, 3].map((v) => {
-      return <CoverGrid id={0} key={v} idx={0} />;
+      return (
+        <CoverGrid
+          id={tempData[id].weekly ? 0 : parseInt(Math.random() * 6 + 1)}
+          key={v}
+          idx={tempData[id].weekly ? 0 : parseInt(Math.random() * 6 + 1)}
+          title={tempData[id].title}
+          artist={tempData[id].artist}
+        />
+      );
     });
 
   return (
     <PageContainer>
       <MusicInformContainer>
-        <MusicInformImg />
+        <MusicInformImg img={tempData[id].img} />
         <MusicMetaContainer>
-          <MusicTitle>Fix You</MusicTitle>
+          <MusicTitle>{tempData[id].title}</MusicTitle>
           <MusicMetaWrapper>
             <GridContainer>
               <MusicMeta>
                 <MetaTitle>아티스트</MetaTitle>
-                <MetaContents>ColdPlay</MetaContents>
+                <MetaContents>{tempData[id].artist}</MetaContents>
               </MusicMeta>
               <MusicMeta>
                 <MetaTitle>작곡</MetaTitle>
-                <MetaContents>ColdPlay</MetaContents>
+                <MetaContents>{tempData[id].composer}</MetaContents>
               </MusicMeta>
               <MusicMeta>
                 <MetaTitle>앨범</MetaTitle>
-                <MetaContents>X&Y</MetaContents>
+                <MetaContents>{tempData[id].album}</MetaContents>
               </MusicMeta>
               <MusicMeta>
                 <MetaTitle>작사</MetaTitle>
-                <MetaContents>ColdPlay</MetaContents>
+                <MetaContents>{tempData[id].lyricist}</MetaContents>
               </MusicMeta>
               <MusicMeta>
                 <MetaTitle>발매</MetaTitle>
-                <MetaContents>2005.06.06</MetaContents>
+                <MetaContents>{tempData[id].release}</MetaContents>
               </MusicMeta>
               <MusicMeta>
                 <MetaTitle>편곡</MetaTitle>
-                <MetaContents>-</MetaContents>
+                <MetaContents>{tempData[id].arrangement}</MetaContents>
               </MusicMeta>
               <MusicMeta>
                 <MetaTitle>장르</MetaTitle>
-                <MetaContents>락</MetaContents>
+                <MetaContents>{tempData[id].genre}</MetaContents>
               </MusicMeta>
               <MusicMeta>
                 <MetaTitle>난이도</MetaTitle>
                 <DifficultyContents>
-                  <DifficultyIcon value={2} />
+                  <DifficultyIcon value={tempData[id].difficulty} />
                 </DifficultyContents>
               </MusicMeta>
             </GridContainer>
@@ -70,7 +81,11 @@ const MusicInformation = ({ match }) => {
       <BoardContainer>
         <BoardHeader>
           <BoardTitle>이 곡의 {typeName}커버</BoardTitle>
-          <BoardLink to={`/lounge/${type}`}>더보기</BoardLink>
+          <BoardLink
+            to={tempData[id].weekly ? '/lounge/weekly' : `/lounge/${type}`}
+          >
+            더보기
+          </BoardLink>
         </BoardHeader>
         <GridContainer templateColumn="250px">{tempCover()}</GridContainer>
       </BoardContainer>
@@ -91,7 +106,7 @@ const MusicInformContainer = styled.div`
 `;
 
 const MusicInformImg = styled.div`
-  background-image: url('https://media.pitchfork.com/photos/608a33343bbb6032f540a222/2:1/w_2912,h_1456,c_limit/coldplay.jpg');
+  background-image: ${(props) => `url(${props.img})`};
   background-repeat: no-repeat;
   background-position: top center;
   background-size: cover;
@@ -129,12 +144,12 @@ const MusicMeta = styled.div`
 `;
 
 const MetaTitle = styled.div`
-  width: 30%;
+  width: 20%;
   color: #999999;
 `;
 
 const MetaContents = styled.div`
-  width: 30%;
+  width: 80%;
   color: #222222;
 `;
 

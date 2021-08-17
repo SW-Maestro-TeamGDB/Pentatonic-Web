@@ -3,6 +3,8 @@ import styled from 'styled-components';
 import LibraryList from '../LibraryList/LibraryList';
 
 const LibraryDrawer = (props) => {
+  const { title } = props;
+
   const loadLibrary = () =>
     Array.from({ length: 10 }, () => 0).map((v, i) => {
       return (

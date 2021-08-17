@@ -14,15 +14,33 @@ import PageImage from '../../components/PageImage/PageImage';
 import GenreButton from '../../components/GenreButton/GenreButton';
 import GridContainer from '../../components/GridContainer/GridContainer';
 
+import tempData from '../../data/songs/tempData.json';
+
 const StudioSoloCover = () => {
   const [genre, setGenre] = useState('전체');
   const [difficulty, setDifficulty] = useState('전체');
+
+  const showTempCover = () =>
+    [0, 1, 2, 3]
+      .filter(
+        (v) => difficulty === tempData[v].difficulty || difficulty === '전체',
+      )
+      .map((v) => {
+        return (
+          <SongList
+            link={`/studio/solo/${v}`}
+            id={v}
+            key={`SongList + ${v}`}
+            data={tempData[v]}
+          />
+        );
+      });
 
   return (
     <PageContainer>
       <PageTitle>솔로 커버</PageTitle>
       <PageDesc>
-        펜타토닉에서 제공하는 반주에 맞춰 혼자서 음악을 녹음해보세요
+        펜타토닉에서 제공하는 반주에 맞춰 혼자서 음악을 커버해보세요
       </PageDesc>
       <SearchBar placeholder="아티스트나 곡을 입력해주세요" />
       <SubContainer>
@@ -35,13 +53,11 @@ const StudioSoloCover = () => {
           />
         </ButtonContainer>
         <MakingCoverButton
-          link={`/studio/solo/1/cover`}
+          link={`/studio/solo/0/cover`}
           title="자유곡 커버 만들기"
         />
       </SubContainer>
-      <SongContainer>
-        <SongList link="/studio/solo/1" />
-      </SongContainer>
+      <SongContainer>{showTempCover()}</SongContainer>
     </PageContainer>
   );
 };
@@ -51,6 +67,10 @@ const PageDesc = styled.div`
   margin: 0.5em 0 3rem;
   width: 80%;
   text-align: center;
+`;
+
+const Spacing = styled.div`
+  width: 1rem;
 `;
 
 const PageTitle = styled.div`
@@ -67,10 +87,6 @@ const SongContainer = styled.div`
   width: 93%;
 
   position: relative;
-`;
-
-const Spacing = styled.div`
-  width: 1rem;
 `;
 
 const ButtonContainer = styled.div`
