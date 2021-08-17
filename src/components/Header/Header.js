@@ -131,9 +131,14 @@ const Fixed = styled.div`
 
 const HeaderContents = styled.div`
   width: 60%;
-  min-width: 1200px;
+  min-width: 1000px;
   display: flex;
   justify-content: space-between;
+
+  ${media.medium} {
+    width: 90%;
+    min-width: 600px;
+  }
 `;
 
 const UserContainer = styled.div`

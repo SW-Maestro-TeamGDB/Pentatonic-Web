@@ -28,15 +28,15 @@ const CustomImg = styled.div`
   background-position: ${(props) => props.pose} center;
   background-size: 100%;
 
-  border-top-left-radius: 3rem;
-  border-top-right-radius: 3rem;
+  border-top-left-radius: 5vh;
+  border-top-right-radius: 5vh;
 
-  height: 15rem;
-  width: 100%;
+  height: 20vh;
+  width: 95%;
 `;
 
 const PageImageContainer = styled.div`
-  height: 15rem;
+  height: 20vh;
   width: 100%;
 
   display: flex;
@@ -49,7 +49,7 @@ const PageImageContainer = styled.div`
 `;
 
 const PageTitle = styled.div`
-  font-size: 3vw;
+  font-size: 5vh;
   font-weight: 900;
   color: white;
   letter-spacing: -0.2rem;
