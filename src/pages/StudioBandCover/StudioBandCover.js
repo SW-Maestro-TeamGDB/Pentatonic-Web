@@ -28,6 +28,7 @@ const StudioBandCover = () => {
       <SubContainer>
         <ButtonContainer>
           <GenreButton genre={genre} setGenre={setGenre} />
+          <Spacing />
           <DifficultyButton
             difficulty={difficulty}
             setDifficulty={setDifficulty}
@@ -52,6 +53,10 @@ const PageDesc = styled.div`
   text-align: center;
 `;
 
+const Spacing = styled.div`
+  width: 1rem;
+`;
+
 const PageTitle = styled.div`
   font-size: 2rem;
   font-weight: 800;
@@ -69,9 +74,7 @@ const SongContainer = styled.div`
 `;
 
 const ButtonContainer = styled.div`
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  column-gap: 1rem;
+  display: flex;
 `;
 
 const SubContainer = styled.div`

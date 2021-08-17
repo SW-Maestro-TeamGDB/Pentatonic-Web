@@ -28,6 +28,7 @@ const StudioSoloCover = () => {
       <SubContainer>
         <ButtonContainer>
           <GenreButton genre={genre} setGenre={setGenre} />
+          <Spacing />
           <DifficultyButton
             difficulty={difficulty}
             setDifficulty={setDifficulty}
@@ -68,10 +69,12 @@ const SongContainer = styled.div`
   position: relative;
 `;
 
+const Spacing = styled.div`
+  width: 1rem;
+`;
+
 const ButtonContainer = styled.div`
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  column-gap: 1rem;
+  display: flex;
 `;
 
 const SubContainer = styled.div`
