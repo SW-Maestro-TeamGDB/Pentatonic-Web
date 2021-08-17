@@ -11,7 +11,7 @@ const Library = () => {
         <LibraryList
           id={parseInt(Math.random() * 100)}
           key={i}
-          idx={parseInt(Math.random() * 6)}
+          idx={parseInt(Math.random() * 7)}
           edit={true}
         />
       );

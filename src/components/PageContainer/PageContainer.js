@@ -16,8 +16,13 @@ const Container = styled.div`
   padding: 1.5vh 1vw;
   height: auto;
   width: 60%;
-  min-width: 1200px;
+  min-width: 1000px;
   margin-top: 3vh;
+
+  ${media.medium} {
+    width: 90%;
+    min-width: 600px;
+  }
 
   ${media.small} {
     width: 90%;

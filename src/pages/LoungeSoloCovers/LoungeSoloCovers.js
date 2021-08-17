@@ -19,9 +19,9 @@ const LoungeSoloCovers = () => {
     Array.from({ length: 30 }, () => 0).map((v, i) => {
       return (
         <CoverGrid
-          id={parseInt(Math.random() * 6)}
+          id={parseInt(Math.random() * 6 + 1)}
           key={i}
-          idx={parseInt(Math.random() * 6)}
+          idx={parseInt(Math.random() * 6 + 1)}
         />
       );
     });

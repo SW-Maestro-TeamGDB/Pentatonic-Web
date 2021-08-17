@@ -13,13 +13,7 @@ import GridContainer from '../../components/GridContainer/GridContainer';
 const WeeklyChallenge = () => {
   const tempCover = () =>
     Array.from({ length: 30 }, () => 0).map((v, i) => {
-      return (
-        <CoverGrid
-          id={parseInt(Math.random() * 6)}
-          key={i}
-          idx={parseInt(Math.random() * 6)}
-        />
-      );
+      return <CoverGrid id={0} key={i} idx={0} />;
     });
 
   return (

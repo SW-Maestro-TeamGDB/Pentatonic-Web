@@ -11,13 +11,7 @@ const MusicInformation = ({ match }) => {
   const typeName = type === 'band' ? '밴드' : '솔로';
   const tempCover = () =>
     [0, 1, 2, 3].map((v) => {
-      return (
-        <CoverGrid
-          id={parseInt(Math.random() * 6)}
-          key={v}
-          idx={parseInt(Math.random() * 6)}
-        />
-      );
+      return <CoverGrid id={0} key={v} idx={0} />;
     });
 
   return (

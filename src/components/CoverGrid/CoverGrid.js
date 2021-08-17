@@ -12,6 +12,7 @@ import Beatles from '../../images/TempData/Beatles.jpeg';
 import MenITrust from '../../images/TempData/MenITrust.jpeg';
 import NoSurprises from '../../images/TempData/NoSurprises.jpeg';
 import TheVolunteers from '../../images/TempData/TheVolunteers.jpeg';
+import FixYou from '../../images/TempData/FixYou.png';
 
 import drum from './drum.svg';
 import guitar from './guitar.svg';
@@ -25,7 +26,12 @@ const CoverGrid = (props) => {
 
   const showSession = (session) => {
     return session.map((v) => {
-      return <InstrumentIcon key={`${idx}+${v}`} src={sessionMatch(v)} />;
+      return (
+        <InstrumentIcon
+          key={`${idx}+${v.session}`}
+          src={sessionMatch(v.session)}
+        />
+      );
     });
   };
 
@@ -36,48 +42,99 @@ const CoverGrid = (props) => {
     else if (v === 'vocal') return vocal;
   };
 
+  const randomTitle = [
+    '멋진 밴드',
+    '기가막힌 밴드',
+    '무지성 합주',
+    'On the next level',
+    'WarmPlay',
+    'Fix Everything',
+    '사이키델릭',
+    '구름밴드',
+    'Cross the road',
+    '코리아 락 밴드',
+    '실력따윈 필요없어',
+    '초보방',
+  ];
+  const titleSize = randomTitle.length;
+
   const tempData = [
+    {
+      cover: `${randomTitle[parseInt(Math.random() * titleSize)]}`,
+      title: `Fix You`,
+      singer: 'ColdPlay',
+      img: FixYou,
+      sessions: [
+        { session: 'guitar', maxMember: 4, currentMember: 3 },
+        { session: 'vocal', maxMember: 3, currentMember: 1 },
+        { session: 'drum', maxMember: 2, currentMember: 2 },
+      ],
+    },
     {
       cover: '사이키델릭',
       title: `Borderline`,
       singer: 'Tame Impala',
       img: TameImpala,
-      session: ['guitar', 'vocal', 'piano'],
+      sessions: [
+        { session: 'guitar', maxMember: 3, currentMember: 1 },
+        { session: 'piano', maxMember: 2, currentMember: 1 },
+        { session: 'vocal', maxMember: 3, currentMember: 0 },
+      ],
     },
     {
       cover: '3인 혁오',
       title: `위잉위잉`,
       singer: '혁오',
       img: Hyukoh,
-      session: ['guitar', 'vocal', 'drum'],
+      sessions: [
+        { session: 'guitar', maxMember: 2, currentMember: 2 },
+        { session: 'vocal', maxMember: 4, currentMember: 4 },
+        { session: 'drum', maxMember: 2, currentMember: 2 },
+      ],
     },
     {
       cover: 'Cross The Road',
       title: `Hey Jude`,
       singer: 'The Beatles',
       img: Beatles,
-      session: ['guitar', 'vocal', 'piano', 'drum'],
+      sessions: [
+        { session: 'guitar', maxMember: 4, currentMember: 1 },
+        { session: 'piano', maxMember: 1, currentMember: 1 },
+        { session: 'vocal', maxMember: 4, currentMember: 4 },
+        { session: 'drum', maxMember: 2, currentMember: 2 },
+      ],
     },
     {
       cover: '구름밴드',
       title: `Numb`,
       singer: 'Men I Trust',
       img: MenITrust,
-      session: ['guitar', 'vocal'],
+      sessions: [
+        { session: 'guitar', maxMember: 5, currentMember: 4 },
+        { session: 'vocal', maxMember: 2, currentMember: 1 },
+      ],
     },
     {
       cover: '코리아 톰 요크',
       title: `No Suprises`,
       singer: 'Radio Head',
       img: NoSurprises,
-      session: ['piano', 'vocal', 'drum'],
+      sessions: [
+        { session: 'piano', maxMember: 1, currentMember: 1 },
+        { session: 'vocal', maxMember: 3, currentMember: 2 },
+        { session: 'drum', maxMember: 2, currentMember: 2 },
+      ],
     },
     {
       cover: '실력은 필요없어',
       title: `Summer`,
       singer: 'The Volunteers',
       img: TheVolunteers,
-      session: ['guitar', 'vocal', 'drum'],
+      sessions: [
+        { session: 'guitar', maxMember: 4, currentMember: 3 },
+        { session: 'vocal', maxMember: 3, currentMember: 1 },
+        { session: 'drum', maxMember: 2, currentMember: 2 },
+      ],
     },
   ];
 
@@ -108,7 +165,7 @@ const CoverGrid = (props) => {
               </ViewCount>
               <SpacingSpan />
             </CountContainer>
-            <SessionInform>{showSession(tempData[idx].session)}</SessionInform>
+            <SessionInform>{showSession(tempData[idx].sessions)}</SessionInform>
           </CoverMeta>
         </DataContainer>
       </CoverContainer>

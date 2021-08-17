@@ -19,6 +19,7 @@ import Beatles from '../../images/TempData//Beatles.jpeg';
 import MenITrust from '../../images/TempData//MenITrust.jpeg';
 import NoSurprises from '../../images/TempData//NoSurprises.jpeg';
 import TheVolunteers from '../../images/TempData//TheVolunteers.jpeg';
+import FixYou from '../../images/TempData/FixYou.png';
 
 import ThumbIcon from '../../images/ThumbIcon.svg';
 import ViewIcon from '../../images/ViewIcon.svg';
@@ -35,62 +36,122 @@ const CoverRoom = ({ match }) => {
     setVisibleDrawer(false);
   };
 
+  const randomTitle = [
+    '멋진 밴드',
+    '기가막힌 밴드',
+    '무지성 합주',
+    'On the next level',
+    'WarmPlay',
+    'Fix Everything',
+    '사이키델릭',
+    '구름밴드',
+    'Cross the road',
+    '코리아 락 밴드',
+    '실력따윈 필요없어',
+    '초보방',
+  ];
+  const titleSize = randomTitle.length;
+
+  const changeName = (name) => {
+    if (name === 'guitar') {
+      return '기타';
+    } else if (name === 'vocal') {
+      return '보컬';
+    } else if (name === 'drum') {
+      return '드럼';
+    } else if (name === 'piano') {
+      return '피아노';
+    }
+  };
+
   const tempData = [
+    {
+      cover: `${randomTitle[parseInt(Math.random() * titleSize)]}`,
+      title: `Fix You`,
+      singer: 'ColdPlay',
+      img: FixYou,
+      sessions: [
+        { session: 'guitar', maxMember: 4, currentMember: 3 },
+        { session: 'vocal', maxMember: 3, currentMember: 1 },
+        { session: 'drum', maxMember: 2, currentMember: 2 },
+      ],
+    },
     {
       cover: '사이키델릭',
       title: `Borderline`,
       singer: 'Tame Impala',
       img: TameImpala,
-      session: ['일렉기타', '보컬', '피아노'],
+      sessions: [
+        { session: 'guitar', maxMember: 3, currentMember: 1 },
+        { session: 'piano', maxMember: 2, currentMember: 1 },
+        { session: 'vocal', maxMember: 3, currentMember: 0 },
+      ],
     },
     {
       cover: '3인 혁오',
       title: `위잉위잉`,
       singer: '혁오',
       img: Hyukoh,
-      session: ['일렉기타', '보컬', '드럼'],
+      sessions: [
+        { session: 'guitar', maxMember: 2, currentMember: 2 },
+        { session: 'vocal', maxMember: 4, currentMember: 4 },
+        { session: 'drum', maxMember: 2, currentMember: 2 },
+      ],
     },
     {
       cover: 'Cross The Road',
       title: `Hey Jude`,
       singer: 'The Beatles',
       img: Beatles,
-      session: ['일렉기타', '보컬', '피아노', '드럼'],
+      sessions: [
+        { session: 'guitar', maxMember: 4, currentMember: 1 },
+        { session: 'piano', maxMember: 1, currentMember: 1 },
+        { session: 'vocal', maxMember: 4, currentMember: 4 },
+        { session: 'drum', maxMember: 2, currentMember: 2 },
+      ],
     },
     {
       cover: '구름밴드',
       title: `Numb`,
       singer: 'Men I Trust',
       img: MenITrust,
-      session: ['일렉기타', '보컬'],
+      sessions: [
+        { session: 'guitar', maxMember: 5, currentMember: 4 },
+        { session: 'vocal', maxMember: 2, currentMember: 1 },
+      ],
     },
     {
       cover: '코리아 톰 요크',
       title: `No Suprises`,
       singer: 'Radio Head',
       img: NoSurprises,
-      session: ['피아노', '보컬', '드럼'],
+      sessions: [
+        { session: 'piano', maxMember: 1, currentMember: 1 },
+        { session: 'vocal', maxMember: 3, currentMember: 2 },
+        { session: 'drum', maxMember: 2, currentMember: 2 },
+      ],
     },
     {
       cover: '실력은 필요없어',
       title: `Summer`,
       singer: 'The Volunteers',
       img: TheVolunteers,
-      session: ['일렉기타', '보컬', '드럼'],
+      sessions: [
+        { session: 'guitar', maxMember: 4, currentMember: 3 },
+        { session: 'vocal', maxMember: 3, currentMember: 1 },
+        { session: 'drum', maxMember: 2, currentMember: 2 },
+      ],
     },
   ];
 
   const showCoverRoomSession = () => {
-    return tempData[idx].session.map((v) => {
-      const total = parseInt(Math.random() * 3 + 2);
-      const now = parseInt(Math.random() * (total + 1));
-
+    return tempData[idx].sessions.map((v) => {
       return (
         <CoverRoomSession
           key={`CoverRoom + ${v}`}
-          sessionTitle={v}
-          total={total}
-          now={now}
+          sessionTitle={changeName(v.session)}
+          total={v.maxMember}
+          now={v.currentMember}
           session={session}
           setSession={setSession}
           setVisibleDrawer={setVisibleDrawer}
