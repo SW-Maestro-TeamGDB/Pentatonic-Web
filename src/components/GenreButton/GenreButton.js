@@ -1,8 +1,7 @@
 import react from 'react';
 import styled from 'styled-components';
-import { Space, Dropdown, Menu, Button } from 'antd';
+import { Space, Dropdown, Menu, Button, Select } from 'antd';
 import { Default } from '../../lib/Media';
-import SearchIcon from '../../images/SearchIcon.svg';
 
 const GenreButton = (props) => {
   const { genre, setGenre } = props;
@@ -39,29 +38,18 @@ const GenreButton = (props) => {
 const CustomButton = styled.span`
   cursor: pointer;
   font-size: 0.9rem;
-  background-color: black;
-  color: white;
+  border: 1px solid #6236ff;
+  color: #6236ff;
   padding: 0.5vh 0.5vw;
   border-radius: 0.5rem;
-  font-weight: 500;
+  font-weight: 700;
   text-align: center;
   min-width: 7rem;
   transition: all ease 0.3s;
 
   &:hover {
-    background-color: #3d3d3d;
+    border: 1px solid rgba(98, 54, 255, 0.8);
   }
-`;
-
-const SearchBarContainer = styled.div`
-  display: flex;
-  flex-direction: row;
-  width: 70%;
-  border-radius: 1rem;
-  border: 1px solid rgb(150, 150, 150);
-  height: 3rem;
-  align-items: center;
-  justify-content: space-between;
 `;
 
 const CustomMenu = styled(Menu)`
