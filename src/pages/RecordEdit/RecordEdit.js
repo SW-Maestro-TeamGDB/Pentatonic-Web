@@ -6,6 +6,7 @@ import RecordEditSlider from '../../components/RecordEditSlider';
 import { PlusOutlined, MinusOutlined } from '@ant-design/icons';
 import { Slider } from 'antd';
 import GridContainer from '../../components/GridContainer/GridContainer';
+import UploadCompleteModal from '../../components/UploadCompleteModal';
 import AudioPlayer, { RHAP_UI } from 'react-h5-audio-player';
 import './AudioPlayer.css';
 
@@ -13,6 +14,8 @@ import instrument from '../CoverMaking/inst.mp3';
 
 const RecordEdit = (props) => {
   const { setPage, audioFile, setAudioFile, inst } = props;
+  // 업로드 모달
+  const [modalToggle, setModalToggle] = useState(false);
 
   // slider value
   const [volume, setVolume] = useState(50);
@@ -108,6 +111,10 @@ const RecordEdit = (props) => {
     inst.pause();
   };
 
+  const submitRecord = () => {
+    setModalToggle(true);
+  };
+
   // 언마운트시 반주 정지
   useEffect(() => {
     return () => {
@@ -180,8 +187,12 @@ const RecordEdit = (props) => {
         <BackwardButton onClick={() => setPage(1)}>
           다시 녹음하기
         </BackwardButton>
-        <SubmitButton>업로드</SubmitButton>
+        <SubmitButton onClick={submitRecord}>업로드</SubmitButton>
       </ButtonConatiner>
+      <UploadCompleteModal
+        setModalToggle={setModalToggle}
+        modalToggle={modalToggle}
+      />
       {/* <button onClick={() => onClickStart()}>시작</button>
       <button onClick={() => onClickStop()}>중지</button>
 
