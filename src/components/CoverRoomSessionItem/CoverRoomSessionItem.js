@@ -21,23 +21,33 @@ const CoverRoomSessionItem = (props) => {
 
   return (
     <SessionContentsContainer>
-      <SessionImg
-        onClick={() => onClickSession()}
-        src={UserAvatar}
-        selected={selected}
-      />
+      <ImgContainer>
+        <SessionImg
+          onClick={() => onClickSession()}
+          src={UserAvatar}
+          selected={selected}
+        />
+      </ImgContainer>
       <SessionId to={`/profile/${count}`}>USER{count + 1}</SessionId>
     </SessionContentsContainer>
   );
 };
 
-const SessionImg = styled.img`
+const ImgContainer = styled.div`
+  overflow: hidden;
   width: 4rem;
   height: 4rem;
-  border-radius: 10px;
+  border-radius: 100%;
+`;
+
+const SessionImg = styled.img`
+  width: 100%;
+  height: 100%;
   cursor: pointer;
   opacity: ${(props) => (props.selected ? 1 : 0.3)};
   transition: opacity 0.3s ease;
+
+  object-fit: cover;
 `;
 
 const SessionId = styled(Link)`
