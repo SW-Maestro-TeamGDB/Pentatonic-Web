@@ -237,7 +237,7 @@ const RecordPage = (props) => {
   const onClickPause = () => {
     inst.pause();
     audioCtx.suspend();
-    if (media.state === 'recording') {
+    if (media && media.state === 'recording') {
       media.pause();
     }
     setOnRec(2);
