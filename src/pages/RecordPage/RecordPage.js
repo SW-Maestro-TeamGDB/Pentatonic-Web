@@ -412,7 +412,7 @@ const RecordPage = (props) => {
     // our final binary blob
     const blob = new Blob([view], { type: type });
     const audioUrl = URL.createObjectURL(blob);
-
+    setAudioUrl(audioUrl);
     setAudioFile({
       blob: blob,
       url: audioUrl,
