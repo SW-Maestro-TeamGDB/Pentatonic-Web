@@ -6,6 +6,7 @@ import StudioSoloCover from '../StudioSoloCover';
 import MusicInformation from '../MusicInformation';
 import CoverMaking from '../CoverMaking';
 import RecordPage from '../RecordPage';
+import RecordMaking from '../RecordMaking/RecordMaking';
 
 const Studio = ({ match }) => {
   return (
@@ -21,6 +22,11 @@ const Studio = ({ match }) => {
       <Route
         path={`${match.path}/:sort/:id/cover`}
         component={CoverMaking}
+        exact
+      />
+      <Route
+        path={`${match.path}/:sort/:id/record`}
+        component={RecordMaking}
         exact
       />
     </>

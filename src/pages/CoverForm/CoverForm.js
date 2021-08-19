@@ -14,7 +14,7 @@ import tempData from '../../data/songs/tempData.json';
 
 const { Dragger } = Upload;
 
-const CoverMaking = (props) => {
+const CoverForm = (props) => {
   const { setPage, audioDuration, pageUrl } = props;
   const [bandData, setBandData] = useState({
     name: null,
@@ -373,4 +373,4 @@ const ErrorMessage = styled.span`
   color: #cb0000;
 `;
 
-export default CoverMaking;
+export default CoverForm;
