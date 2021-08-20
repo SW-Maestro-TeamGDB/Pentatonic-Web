@@ -18,13 +18,7 @@ import Menu from '../Menu';
 const Header = () => {
   const [menuToggle, setMenuToggle] = useState(false);
   const [modalToggle, setModalToggle] = useState(false);
-  const { data } = useQuery(GET_CURRENT_USER, {
-    fetchPolicy: 'network-only',
-    onError: (error) => {},
-    onCompleted: (data) => {
-      console.log(data);
-    },
-  });
+  const { data } = useQuery(GET_CURRENT_USER);
 
   const [getUserInform, getUserInformResult] = useLazyQuery(GET_USER_INFORM, {
     fetchPolicy: 'network-only',
@@ -56,10 +50,6 @@ const Header = () => {
       getUserInform();
     }
   }, [localStorage.getItem('token')]);
-
-  useEffect(() => {
-    console.log(data);
-  }, [data]);
 
   return (
     <Fixed>

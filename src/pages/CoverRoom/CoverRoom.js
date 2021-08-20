@@ -11,6 +11,7 @@ import {
   currentUserVar,
   isLoggedInVar,
   IS_LOGGED_IN,
+  GET_CURRENT_USER,
 } from '../../apollo/cache';
 
 import TameImpala from '../../images/TempData//TameImpala.jpeg';
@@ -27,8 +28,9 @@ import UserAvatar from '../../images/UserAvatar.svg';
 
 const CoverRoom = ({ match }) => {
   const idx = match.params.id;
-  const { data } = useQuery(IS_LOGGED_IN);
+  // const { data } = useQuery(IS_LOGGED_IN);
   const [session, setSession] = useState([]);
+  const { data } = useQuery(GET_CURRENT_USER);
 
   // drawer
   const [visibleDrawer, setVisibleDrawer] = useState(false);
@@ -191,15 +193,10 @@ const CoverRoom = ({ match }) => {
           <CurrentComment>{parseInt(Math.random() * 30)}</CurrentComment>
         </CommentHeader>
         <CommentForm>
-          {data.isLoggedIn ? (
+          {data.user ? (
             <>
               <MyProfileImg
-                src={
-                  // currentUserVar().profileURI
-                  //   ? currentUserVar().profileURI
-                  //   : null
-                  UserAvatar
-                }
+                src={data.user.profileURI ? data.user.profileURI : UserAvatar}
               />
               <CustomInput placeholder="게시물의 저작권 등 분쟁, 개인정보 노출로 인한 책임은 작성자 또는 게시자에게 있음을 유의해주세요" />
               <CommentButton>등록</CommentButton>
