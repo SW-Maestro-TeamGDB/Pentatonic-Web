@@ -201,15 +201,15 @@ const RecordPage = (props) => {
       setLyricsIndex(lyricsIndex + 1);
     }
 
-    const time = parseInt(count);
-    const remain = parseInt(audioDuration - count);
+    const time = count;
+    const remain = audioDuration - count;
 
     setSecond(time % 60);
     setMinute(parseInt(time / 60));
 
     setAudioSecond(remain % 60);
     setAudioMinute(parseInt(remain / 60));
-  }, [parseInt(count)]);
+  }, [count]);
 
   const init = () => {
     if (onRec === 1) {
@@ -299,7 +299,7 @@ const RecordPage = (props) => {
           let right = e.inputBuffer.getChannelData(1);
 
           if (mediaRecorder.state === 'recording') {
-            setCount(e.playbackTime);
+            setCount(parseInt(e.playbackTime));
 
             // wav 파일 저장
             setLeftChannel((prev) => [...prev, new Float32Array(left)]);
@@ -349,6 +349,10 @@ const RecordPage = (props) => {
         // setMicAuthModalToggle(true);
       });
   };
+
+  useEffect(() => {
+    console.log(count);
+  }, [count]);
 
   // 사용자가 음성 녹음을 중지했을 때
   const offRecAudio = () => {
