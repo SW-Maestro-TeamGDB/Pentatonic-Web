@@ -1,4 +1,4 @@
-import react from 'react';
+import react, { useState, useEffect, useRef } from 'react';
 import styled from 'styled-components';
 import { Default } from '../../lib/Media';
 import { DeleteFilled, EditOutlined } from '@ant-design/icons';
@@ -13,8 +13,20 @@ import NoSurprises from '../../images/TempData/NoSurprises.jpeg';
 import TheVolunteers from '../../images/TempData/TheVolunteers.jpeg';
 import FixYou from '../../images/TempData/FixYou.png';
 
+import PlayIcon from '../../images/PlayIcon.svg';
+import PauseIcon from '../../images/PauseIcon.png';
+
+import instrument from '../../pages/CoverMaking/inst.mp3';
+
 const LibraryList = (props) => {
   const { idx, id, edit } = props;
+  const [audioState, setAudioState] = useState(0); // 0:정지 , 1:재생 , 2:일시정지
+  const [inst, setInst] = useState();
+  const instRef = useRef();
+
+  useEffect(() => {
+    instRef.current = inst;
+  }, [inst]);
 
   const randomTitle = [
     '멋진 밴드',
@@ -112,25 +124,68 @@ const LibraryList = (props) => {
     },
   ];
 
+  const onClickStart = () => {
+    inst.play();
+    setAudioState(1);
+  };
+
+  const onClickPause = () => {
+    inst.pause();
+    setAudioState(2);
+  };
+
+  const onClickIcon = () => {
+    if (audioState === 1) {
+      inst.pause();
+      setAudioState(2);
+    } else {
+      inst.play();
+      setAudioState(1);
+    }
+  };
+
+  useEffect(() => {
+    const audio = new Audio();
+    audio.src = instrument;
+    setInst(audio);
+
+    return () => {
+      instRef.current.pause();
+      instRef.current.currentTime = 0;
+    };
+  }, []);
+
   return (
     <CoverContainer>
       <ImageContainer>
         <CoverImage src={tempData[idx].img} />
       </ImageContainer>
-      <Spacing />
+      <Spacing width={'2%'} />
       <CoverInform>
         <CoverTitle>{tempData[idx].cover}</CoverTitle>
         <SongInform>
           {tempData[idx].title} - {tempData[idx].singer}
         </SongInform>
       </CoverInform>
-      <CoverTime>2021-07-{parseInt(Math.random() * 20 + 10)}</CoverTime>
+      {edit ? <CoverTime>2021-07-10</CoverTime> : null}
+      <Spacing width={'3%'} />
       {edit ? (
-        <DeleteContainer>
-          <CustomEditOutlined />
-          <CustomDeleteFilled />
-        </DeleteContainer>
+        <>
+          <DeleteContainer>
+            <CustomEditOutlined />
+            <CustomDeleteFilled />
+          </DeleteContainer>
+          <Spacing width={'10%'} />
+        </>
       ) : null}
+      <IconContainer onClick={onClickIcon}>
+        {audioState === 1 ? (
+          <CustomPauseIcon src={PauseIcon} />
+        ) : (
+          <CustomPlayIcon src={PlayIcon} />
+        )}
+      </IconContainer>
+      <Spacing width={'5%'} />
     </CoverContainer>
   );
 };
@@ -141,17 +196,66 @@ const CoverContainer = styled.div`
   align-items: center;
   width: 100%;
   height: auto;
-  margin-bottom: 0.7vw;
+  margin-bottom: 1vw;
   color: black;
   border-radius: 1rem;
   padding: 0 1rem;
+  position: relative;
+
   &:hover {
     background-color: rgba(200, 200, 200, 0.1);
   }
 `;
 
+const CustomPlayIcon = styled.img`
+  width: 1.2vw;
+  height: 1.2vw;
+  filter: invert(27%) sepia(32%) saturate(5932%) hue-rotate(244deg)
+    brightness(93%) contrast(120%);
+`;
+
+const CustomPauseIcon = styled.img`
+  width: 1.5vw;
+  height: 1.5vw;
+  filter: invert(27%) sepia(32%) saturate(5932%) hue-rotate(244deg)
+    brightness(93%) contrast(120%);
+`;
+
+const IconContainer = styled.div`
+  width: 5vw;
+  height: 3vw;
+
+  -ms-user-select: none;
+  -moz-user-select: -moz-none;
+  -khtml-user-select: none;
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-user-drag: none;
+
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 1px solid #6236ff;
+  border-radius: 1rem;
+  color: #6236ff;
+
+  &:hover {
+    background-color: #6236ff;
+
+    ${CustomPlayIcon} {
+      filter: invert(100%);
+    }
+
+    ${CustomPauseIcon} {
+      filter: invert(100%);
+    }
+  }
+`;
+
 const Spacing = styled.div`
-  width: 2%;
+  width: ${(props) => props.width};
 `;
 
 const CoverTime = styled.div`
@@ -188,7 +292,7 @@ const ImageContainer = styled.div`
   display: flex;
   align-items: center;
   width: 6vw;
-  height: 5vw;
+  height: 4vw;
 `;
 
 const CoverImage = styled.img`

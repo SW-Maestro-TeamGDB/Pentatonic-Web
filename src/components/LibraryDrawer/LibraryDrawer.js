@@ -58,6 +58,7 @@ const LibaryContainer = styled.div`
   top: 11%;
   height: 77%;
   overflow-y: scroll;
+  padding: 0 1vw;
 `;
 
 const DrawerContainer = styled.div`
