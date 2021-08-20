@@ -3,6 +3,7 @@ import { Progress, Modal, notification } from 'antd';
 import RecordModal from '../../components/RecordModal/RecordModal';
 import MicAuthModal from '../../components/MicAuthModal';
 import AudioVisualizer from '../../components/AudioVisualizer';
+import { useMediaQuery } from 'react-responsive';
 import styled from 'styled-components';
 import PlayIcon from '../../images/PlayIcon.svg';
 import StopIcon from '../../images/StopIcon.svg';
@@ -25,6 +26,10 @@ const RecordPage = (props) => {
   const [audioUrl, setAudioUrl] = useState();
   const [count, setCount] = useState(0);
   const [micAuthModalToggle, setMicAuthModalToggle] = useState(false);
+
+  const isMobile = useMediaQuery({
+    query: '(max-width:1024px)',
+  });
 
   const canSave = ((onRec === 0 && audioUrl) || onRec === 2) && countdown === 4;
 
@@ -166,7 +171,7 @@ const RecordPage = (props) => {
     if (onRec === 0) {
       return (
         <CustomPlayIcon
-          src={audioUrl ? RetryIcon : PlayIcon}
+          src={audioCtx ? RetryIcon : PlayIcon}
           onClick={onClickStart}
         />
       );
@@ -281,78 +286,66 @@ const RecordPage = (props) => {
     }
 
     // 마이크 사용 권한 획득
-    navigator.mediaDevices
-      .getUserMedia({ audio: true })
-      .then((stream) => {
-        const mediaRecorder = new MediaRecorder(stream);
-        init();
-        inst.play();
-        mediaRecorder.start();
+    navigator.mediaDevices.getUserMedia({ audio: true }).then((stream) => {
+      const mediaRecorder = new MediaRecorder(stream);
+      init();
+      inst.play();
+      mediaRecorder.start();
 
-        setStream(stream);
-        setMedia(mediaRecorder);
-        makeSound(stream);
-        setOnRec(1);
+      setStream(stream);
+      setMedia(mediaRecorder);
+      makeSound(stream);
+      setOnRec(1);
 
-        analyser.onaudioprocess = function (e) {
-          let left = e.inputBuffer.getChannelData(0);
-          let right = e.inputBuffer.getChannelData(1);
+      analyser.onaudioprocess = function (e) {
+        let left = e.inputBuffer.getChannelData(0);
+        let right = e.inputBuffer.getChannelData(1);
 
+        if (mediaRecorder.state === 'recording') {
+          setCount(parseInt(e.playbackTime));
+
+          // wav 파일 저장
+          setLeftChannel((prev) => [...prev, new Float32Array(left)]);
+          setRightChannel((prev) => [...prev, new Float32Array(right)]);
+          setRecordingLength((recordingLength) => recordingLength + bufferSize);
+        }
+
+        if (mediaRecorder.state === 'paused') {
+          setOnRec(2);
+          mediaRecorder.pause();
+        }
+        // 곡 길이만큼 시간 지나면 자동으로 음성 저장 및 녹음 중지
+        if (e.playbackTime > audioDuration) {
+          stream.getAudioTracks().forEach(function (track) {
+            track.stop();
+          });
+          init();
+
+          // 녹음 중지
           if (mediaRecorder.state === 'recording') {
-            setCount(parseInt(e.playbackTime));
-
-            // wav 파일 저장
-            setLeftChannel((prev) => [...prev, new Float32Array(left)]);
-            setRightChannel((prev) => [...prev, new Float32Array(right)]);
-            setRecordingLength(
-              (recordingLength) => recordingLength + bufferSize,
-            );
+            mediaRecorder.stop();
           }
+          setOnRec(0);
 
-          if (mediaRecorder.state === 'paused') {
-            setOnRec(2);
-            mediaRecorder.pause();
-          }
-          // 곡 길이만큼 시간 지나면 자동으로 음성 저장 및 녹음 중지
-          if (e.playbackTime > audioDuration) {
-            stream.getAudioTracks().forEach(function (track) {
-              track.stop();
-            });
-            init();
+          // 메서드가 호출 된 노드 연결 해제
+          analyser.disconnect();
+          audioCtx.createMediaStreamSource(stream).disconnect();
 
-            // 녹음 중지
-            if (mediaRecorder.state === 'recording') {
-              mediaRecorder.stop();
-            }
-            setOnRec(0);
-
-            // 메서드가 호출 된 노드 연결 해제
-            analyser.disconnect();
-            audioCtx.createMediaStreamSource(stream).disconnect();
-
-            mediaRecorder.ondataavailable = function (e) {
-              setAudioUrl(e.data);
-
-              // const sound = new File([e.data], 'soundBlob', {
-              //   lastModified: new Date().getTime(),
-              //   type: 'audio/mp3',
-              // });
-
-              // setOnRec(0);
-            };
-          } else {
-            // setOnRec(1);
-          }
-        };
-      })
-      .catch(() => {
-        // setMicAuthModalToggle(true);
-      });
+          mediaRecorder.ondataavailable = function (e) {
+            setAudioUrl(e.data);
+            // const sound = new File([e.data], 'soundBlob', {
+            //   lastModified: new Date().getTime(),
+            //   type: 'audio/mp3',
+            // });
+            // setOnRec(0);
+          };
+        }
+      };
+    });
+    // .catch(() => {
+    //   setMicAuthModalToggle(true);
+    // });
   };
-
-  useEffect(() => {
-    console.log(count);
-  }, [count]);
 
   // 사용자가 음성 녹음을 중지했을 때
   const offRecAudio = () => {
@@ -503,14 +496,16 @@ const RecordPage = (props) => {
                 : 'ㅤ'}
             </NextLyrics>
           </LyricsContainer>
-          <VisualizerContainer onRec={onRec}>
-            <AudioVisualizer
-              audioCtx={audioCtx}
-              source={sourceRef.current}
-              width={'500rem'}
-              height={'180rem'}
-            ></AudioVisualizer>
-          </VisualizerContainer>
+          {isMobile ? null : (
+            <VisualizerContainer onRec={onRec}>
+              <AudioVisualizer
+                audioCtx={audioCtx}
+                source={sourceRef.current}
+                width={'500rem'}
+                height={'180rem'}
+              ></AudioVisualizer>
+            </VisualizerContainer>
+          )}
         </BackgroundBlur>
       </Background>
       <ProgressContainer>
