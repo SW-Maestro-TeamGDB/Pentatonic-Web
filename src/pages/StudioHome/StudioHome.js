@@ -1,11 +1,12 @@
 import react, { useState } from 'react';
 import styled from 'styled-components';
 import PageContainer from '../../components/PageContainer';
+import StudioBanner from '../../components/StudioBanner/StudioBanner';
 
 const StudioHome = () => {
   return (
     <PageContainer>
-      <h3>스튜디오 홈</h3>
+      <StudioBanner />
     </PageContainer>
   );
 };

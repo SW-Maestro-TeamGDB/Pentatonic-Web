@@ -54,6 +54,14 @@ body {
   touch-action: none;
 }
 
+.ant-carousel .slick-dots li button {
+  height: 0.5rem;
+}
+
+.slick-dots li.slick-active button {
+  height: 0.5rem;
+}
+
 ::-webkit-scrollbar-track {
   background: #f0f0f0;
 }

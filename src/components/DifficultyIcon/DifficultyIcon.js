@@ -7,8 +7,6 @@ const DifficultyIcon = (props) => {
   const { value } = props;
   const last = 5 - value;
 
-  console.log(value);
-
   const showFilledIcons = () => {
     return [...Array(value)].map((v, i) => {
       return (
