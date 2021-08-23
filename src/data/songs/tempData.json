@@ -10,7 +10,12 @@
     "release": "2005.06.06",
     "genre": "락",
     "difficulty": 2,
-    "weekly": true
+    "weekly": true,
+    "sessions": [
+      { "session": "guitar" },
+      { "session": "vocal" },
+      { "session": "drum" }
+    ]
   },
   {
     "img": "https://ww.namu.la/s/01307f8b17639439d0b9e5f2efcd5a147efa145519665ae7e5a927c2e8821ef3ff6566edc62d3ad31117c95d50d2f1fd4801e495239410a7d46679b95e43a93b367383e45326843b1169acebcb009e59b29912e9f4cffd970c75bce96835c163",
@@ -23,7 +28,12 @@
     "release": "2008.05.28",
     "genre": "락",
     "difficulty": 4,
-    "weekly": false
+    "weekly": false,
+    "sessions": [
+      { "session": "guitar" },
+      { "session": "piano" },
+      { "session": "vocal" }
+    ]
   },
   {
     "img": "https://image.genie.co.kr/Y/IMAGE/IMG_ALBUM/081/172/042/81172042_1552452730746_1_600x600.JPG/dims/resize/Q_80,0",
@@ -36,7 +46,13 @@
     "release": "2019.03.13",
     "genre": "가요",
     "difficulty": 3,
-    "weekly": false
+    "weekly": false,
+    "sessions": [
+      { "session": "guitar" },
+      { "session": "vocal" },
+      { "session": "drum" },
+      { "session": "piano" }
+    ]
   },
   {
     "img": "https://image.genie.co.kr/Y/IMAGE/IMG_ALBUM/081/437/804/81437804_1588929423345_1_600x600.JPG/dims/resize/Q_80,0",
@@ -49,6 +65,7 @@
     "release": "2020.05.10",
     "genre": "락",
     "difficulty": 1,
-    "weekly": false
+    "weekly": false,
+    "sessions": [{ "session": "guitar" }, { "session": "vocal" }]
   }
 ]
