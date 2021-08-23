@@ -60,15 +60,15 @@ const IconWrapper = styled.div`
 `;
 
 const FilledIcon = styled.div`
-  width: 1rem;
-  height: 1rem;
+  width: 1em;
+  height: 1em;
   background-color: #6236ff;
   border-radius: 100%;
 `;
 
 const EmptyIcon = styled.div`
-  width: 1rem;
-  height: 1rem;
+  width: 1em;
+  height: 1em;
   background-color: #dddddd;
   border-radius: 100%;
 `;

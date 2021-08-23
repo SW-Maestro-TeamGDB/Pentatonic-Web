@@ -71,23 +71,6 @@ const Background = styled.div`
   }
 `;
 
-const BannerContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  height: 25vw;
-  width: 100%;
-  border-radius: 10px;
-  cursor: pointer;
-
-  ${Background} {
-    filter: brightness(50%);
-
-    &:hover {
-      filter: brightness(70%);
-    }
-  }
-`;
-
 const BannerContents = styled.div`
   position: absolute;
   bottom: 15%;

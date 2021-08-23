@@ -73,14 +73,14 @@ const BoardHeader = styled.div`
 `;
 
 const BoardTitle = styled.nav`
-  font-size: 24px;
+  font-size: 20px;
   font-weight: 600;
   width: 100%;
   color: black;
 `;
 
 const BoardLink = styled(Link)`
-  font-size: 20px;
+  font-size: 16px;
   font-weight: 500;
   color: #bbbbbb;
   position: absolute;
