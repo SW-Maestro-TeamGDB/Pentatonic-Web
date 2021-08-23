@@ -14,10 +14,10 @@ import NoSurprises from '../../images/TempData/NoSurprises.jpeg';
 import TheVolunteers from '../../images/TempData/TheVolunteers.jpeg';
 import FixYou from '../../images/TempData/FixYou.png';
 
-import drum from './drum.svg';
-import guitar from './guitar.svg';
-import piano from './piano.svg';
-import vocal from './vocal.svg';
+import drum from '../../images/Session/drum.svg';
+import guitar from '../../images/Session/guitar.svg';
+import piano from '../../images/Session/piano.svg';
+import vocal from '../../images/Session/vocal.svg';
 
 const CoverGrid = (props) => {
   const { idx, title, artist } = props;
@@ -240,7 +240,7 @@ const DataContainer = styled.div`
   display: flex;
   flex-direction: column;
   width: 90%;
-  margin-top: 14px;
+  margin-top: 10px;
 `;
 
 const CoverInform = styled.div`
@@ -260,26 +260,26 @@ const CoverMeta = styled.div`
 `;
 
 const InstrumentIcon = styled.img`
-  width: 1em;
-  height: 1rem;
+  width: 12px;
+  height: 12px;
   margin-right: 0.2vw;
 `;
 
 const CustomIcon = styled.img`
-  width: 1em;
-  height: 1rem;
+  width: 12px;
+  height: 12px;
   filter: invert(80%) sepia(0%) saturate(468%) hue-rotate(238deg)
     brightness(96%) contrast(86%);
   margin-right: 0.2vw;
 `;
 
 const CoverTitle = styled.div`
-  font-size: 20px;
+  font-size: 18px;
   font-weight: bold;
 `;
 
 const SongInform = styled.div`
-  font-size: 14px;
+  font-size: 12px;
   color: rgb(50, 50, 50);
 `;
 
@@ -298,17 +298,19 @@ const CountContainer = styled.span`
   display: flex;
   align-items: center;
   color: #bababa;
+
+  font-weight: 600;
 `;
 
 const LikeCount = styled.span`
-  font-size: 12px;
+  font-size: 11px;
   text-align: left;
   display: flex;
   flex-direction: row;
   align-items: center;
 `;
 const ViewCount = styled.span`
-  font-size: 12px;
+  font-size: 11px;
   text-align: left;
   display: flex;
   flex-direction: row;
