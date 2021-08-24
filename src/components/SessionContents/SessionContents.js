@@ -36,7 +36,7 @@ const SessionContents = (props) => {
       return (
         <SessionContentsItem
           title={v.session}
-          number={v.member}
+          number={v.maxMember}
           index={index}
           onClickDelete={onClickDelete}
           selectedSession={selectedSession}

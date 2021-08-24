@@ -3,6 +3,9 @@ import styled from 'styled-components';
 import { Default } from '../../lib/Media';
 import { Upload, Collapse, Select } from 'antd';
 import { PlusCircleFilled } from '@ant-design/icons';
+import { changeSessoinNameToKorean } from '../../lib/changeSessionNameToKorean/changeSessionNameToKorean';
+
+import sessionType from '../../data/sessionType.json';
 
 const { Panel } = Collapse;
 const { Option } = Select;
@@ -12,7 +15,7 @@ const SessionAddPanel = (props) => {
   const [sessionError, setSessionError] = useState(null);
   const [inputSession, setInputSession] = useState({
     session: '세션 선택',
-    member: '인원 선택',
+    maxMember: '인원 선택',
   });
 
   useEffect(() => {
@@ -24,7 +27,7 @@ const SessionAddPanel = (props) => {
       return setSessionError('이미 등록된 세션입니다');
     } else if (inputSession.session === '세션 선택') {
       return setSessionError('세션을 선택해주세요');
-    } else if (inputSession.member === '인원 선택') {
+    } else if (inputSession.maxMember === '인원 선택') {
       return setSessionError('인원을 선택해주세요');
     }
 
@@ -33,6 +36,16 @@ const SessionAddPanel = (props) => {
 
     setSession([...session, inputSession]);
     setSessionSet(temp);
+  };
+
+  const showSessionType = () => {
+    return sessionType.map((v, i) => {
+      return (
+        <Option key={v.session}>
+          <Centered>{changeSessoinNameToKorean(v.session)}</Centered>
+        </Option>
+      );
+    });
   };
 
   useEffect(() => {
@@ -56,46 +69,29 @@ const SessionAddPanel = (props) => {
                 setInputSession({ ...inputSession, session: value });
               }}
             >
-              <Option value="보컬">
-                <Centered>보컬</Centered>
-              </Option>
-              <Option value="기타">
-                <Centered>기타</Centered>
-              </Option>
-              <Option value="베이스">
-                <Centered>베이스</Centered>
-              </Option>
-              <Option value="드럼">
-                <Centered>드럼</Centered>
-              </Option>
-              <Option value="키보드">
-                <Centered>키보드</Centered>
-              </Option>
-              <Option value="가야금">
-                <Centered>가야금</Centered>
-              </Option>
+              {showSessionType()}
             </SessionSelect>
             <MemberSelect
               defaultValue="인원 선택"
-              value={inputSession.member}
+              value={inputSession.maxMember}
               onChange={(value) => {
-                setInputSession({ ...inputSession, member: value });
+                setInputSession({ ...inputSession, maxMember: value });
               }}
               dropdownMatchSelectWidth="100%"
             >
-              <Option value="1">
+              <Option value={1}>
                 <Centered>1</Centered>
               </Option>
-              <Option value="2">
+              <Option value={2}>
                 <Centered>2</Centered>
               </Option>
-              <Option value="3">
+              <Option value={3}>
                 <Centered>3</Centered>
               </Option>
-              <Option value="4">
+              <Option value={4}>
                 <Centered>4</Centered>
               </Option>
-              <Option value="5">
+              <Option value={5}>
                 <Centered>5</Centered>
               </Option>
             </MemberSelect>

@@ -4,6 +4,8 @@ import styled from 'styled-components';
 import { Default } from '../../lib/Media';
 import GridContainer from '../GridContainer/GridContainer';
 
+import { changeSessoinNameToKorean } from '../../lib/changeSessionNameToKorean/changeSessionNameToKorean';
+
 const SessionContentsItem = (props) => {
   const {
     title,
@@ -27,7 +29,7 @@ const SessionContentsItem = (props) => {
     <SessionContentsContainer selected={selected}>
       <SessionMeta onClick={() => onClickSession()}>
         <SessionTitle>
-          {title}{' '}
+          {changeSessoinNameToKorean(title)}{' '}
           {selected ? <SelectedContainer>SELECTED</SelectedContainer> : null}
         </SessionTitle>
         <SessionMember>
