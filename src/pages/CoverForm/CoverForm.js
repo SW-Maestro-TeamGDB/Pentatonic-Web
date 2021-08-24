@@ -1,5 +1,6 @@
 import react, { useEffect, useState } from 'react';
 import { Link, useHistory } from 'react-router-dom';
+import { useQuery, gql, useLazyQuery, useMutation } from '@apollo/client';
 import styled from 'styled-components';
 import PageContainer from '../../components/PageContainer';
 import RecordPage from '../RecordPage';
@@ -7,10 +8,16 @@ import RecordEdit from '../RecordEdit';
 import SessionAddPanel from '../../components/SessionAddPanel';
 import SessionContents from '../../components/SessionContents';
 import InstSelect from '../../components/InstSelect';
-import { Upload } from 'antd';
+import { Upload, notification } from 'antd';
 import { LeftOutlined, PictureOutlined } from '@ant-design/icons';
 
 import tempData from '../../data/songs/tempData.json';
+
+const UPLOAD_IMAGE_FILE = gql`
+  mutation Mutation($uploadImageFileInput: UploadImageInput!) {
+    uploadImageFile(input: $uploadImageFileInput)
+  }
+`;
 
 const { Dragger } = Upload;
 
@@ -31,6 +38,16 @@ const CoverForm = (props) => {
   const [selectedSession, setSelectedSession] = useState(null); // 녹음 참여 세션
   const [selectInst, setSelectInst] = useState([]); // 녹음 선택 인스트
   const history = useHistory();
+
+  const [uploadImage, uploadImageResult] = useMutation(UPLOAD_IMAGE_FILE, {
+    fetchPolicy: 'no-cache',
+    onError: (error) => {
+      // console.log(error);
+    },
+    onCompleted: (data) => {
+      setBandData({ ...bandData, backgroundURI: data.uploadImageFile });
+    },
+  });
 
   const tempInst = ['기타', '보컬', '베이스', '드럼', '키보드'];
 
@@ -78,6 +95,39 @@ const CoverForm = (props) => {
     else window.scrollTo(0, 0);
   };
 
+  const imageFileCheck = (file) => {
+    const acceptType = ['image/png', 'image/jpeg', 'image/bmp'];
+
+    if (acceptType.indexOf(file.type) == -1) {
+      notification['warning']({
+        key: 'imagFilyTypeNotification',
+        message: '이미지 파일 형식 오류',
+        description: `png , jpeg , bmp 형식의 파일만 업로드 할 수 있습니다`,
+        placement: 'bottomRight',
+        duration: 5,
+        style: {
+          width: '30rem',
+        },
+      });
+      return false;
+    }
+    return true;
+  };
+
+  const submitImageFile = (data) => {
+    if (imageFileCheck(data.file)) {
+      uploadImage({
+        variables: {
+          uploadImageFileInput: { file: data.file },
+        },
+      });
+    }
+  };
+
+  useEffect(() => {
+    console.log(bandData);
+  }, [bandData]);
+
   return (
     <Container>
       <SongMetaContainer>
@@ -113,20 +163,29 @@ const CoverForm = (props) => {
           <CustomDescription>
             커버를 나타낼 대표 이미지를 설정합니다
           </CustomDescription>
-          <Dragger
-            style={{
-              backgroundColor: 'transparent',
-              border: '2px solid lightgray',
-              borderRadius: '0.8rem',
-              padding: '1rem 0',
-            }}
+          <CustomDragger
+            customRequest={(data) => submitImageFile(data)}
+            maxCount={1}
+            showUploadList={false}
           >
-            <CustomPictureIcon />
+            {bandData.backgroundURI ? (
+              <CoverImage src={bandData.backgroundURI} />
+            ) : (
+              <>
+                <CustomPictureIcon />
+                <UploadText>
+                  업로드하지 않을 시, 기본 음원커버 이미지가 설정됩니다.
+                </UploadText>
+              </>
+            )}
+          </CustomDragger>
+          {bandData.backgroundURI ? (
             <UploadText>
-              업로드하지 않을 시, 기본 음원커버 이미지가 설정됩니다.
+              사진 변경을 원한다면 클릭하거나 파일을 드래그 해주세요.
             </UploadText>
-          </Dragger>
+          ) : null}
         </InputContainer>
+
         <InputContainer>
           <CustomTitle>세션 프리셋</CustomTitle>
           <CustomDescription>
@@ -193,6 +252,40 @@ const Container = styled.div`
   margin-top: 4%;
 `;
 
+const CustomPictureIcon = styled(PictureOutlined)`
+  font-size: 4rem;
+  margin-top: 0.5rem;
+  color: gray;
+  transition: all 0.3s ease-in-out !important;
+`;
+
+const UploadText = styled.div`
+  margin-top: 1.5rem;
+  margin-bottom: 1rem;
+  color: gray;
+  text-align: center;
+  transition: all 0.3s ease-in-out !important;
+`;
+
+const CustomDragger = styled(Dragger)`
+  background-color: transparent !important;
+  border: 2px solid lightgray !important;
+  border-radius: 0.8rem !important;
+  padding: 1rem 0 !important;
+
+  &:hover {
+    ${CustomPictureIcon} {
+      color: #444444;
+    }
+
+    ${UploadText} {
+      color: #444444;
+    }
+
+    border: 2px solid gray !important;
+  }
+`;
+
 const InputContainer = styled.div`
   width: 100%;
   margin: 2rem 0 1rem;
@@ -218,15 +311,10 @@ const InstContainer = styled.div`
   margin: 2.5rem 0;
 `;
 
-const CustomPictureIcon = styled(PictureOutlined)`
-  color: #3d3d3d;
-  font-size: 3rem;
-  margin-top: 0.5rem;
-`;
-
-const UploadText = styled.div`
-  margin-top: 0.5rem;
-  color: #3d3d3d;
+const CoverImage = styled.img`
+  height: 15vw;
+  max-width: 80%;
+  border-radius: 10px;
 `;
 
 const BackwardButton = styled.div`
