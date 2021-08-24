@@ -1,0 +1,1 @@
+export { changeSessoinNameToKorean } from './ScrollToTop';

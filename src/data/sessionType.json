@@ -1,0 +1,13 @@
+[
+  { "session": "VOCAL" },
+  { "session": "ACOUSTIC_GUITAR" },
+  { "session": "ELECTRIC_GUITAR" },
+  { "session": "BASS" },
+  { "session": "DRUM" },
+  { "session": "KEYBOARD" },
+  { "session": "VIOLIN" },
+  { "session": "CELLO" },
+  { "session": "GAYAGEUM" },
+  { "session": "HAEGEUM" },
+  { "session": "GEOMUNGO" }
+]
