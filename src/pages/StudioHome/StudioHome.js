@@ -135,12 +135,7 @@ const CoverLinkContainer = styled(Link)`
   justify-content: center;
   align-items: center;
 
-  transition: all 0.3s ease-in-out;
   position: relative;
-
-  &:hover {
-    background-color: rgba(98, 54, 255, 0.4);
-  }
 `;
 
 const BandIconContainer = styled.img`

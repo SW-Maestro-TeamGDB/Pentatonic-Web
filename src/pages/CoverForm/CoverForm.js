@@ -19,20 +19,29 @@ const UPLOAD_IMAGE_FILE = gql`
   }
 `;
 
+const CREATE_BAND = gql`
+  mutation Mutation($createBandInput: CreateBandInput!) {
+    createBand(input: $createBandInput) {
+      bandId
+    }
+  }
+`;
+
 const { Dragger } = Upload;
 
 const CoverForm = (props) => {
   const { setPage, audioDuration, pageUrl } = props;
+  const [bandId, setBandId] = useState();
   const [bandData, setBandData] = useState({
     name: null,
     introduce: null,
-    backgroundURI: null,
-    songId: null,
+    backGroundURI: null,
+    songId: '611824fd287e5b0012e18160',
   });
   const [informError, setInformError] = useState(null);
   const [sessionError, setSessionError] = useState(null);
   const [instError, setInstError] = useState();
-  const [session, setSession] = useState([]); // 세션
+  const [session, setSession] = useState([]); // 세션 데이터
   const [sessionSet, setSessionSet] = useState(new Set([])); // 세션 종류 저장
   const [sessionAddToggle, setSessionAddToggle] = useState(1); // 세션 추가 토글
   const [selectedSession, setSelectedSession] = useState(null); // 녹음 참여 세션
@@ -45,7 +54,18 @@ const CoverForm = (props) => {
       // console.log(error);
     },
     onCompleted: (data) => {
-      setBandData({ ...bandData, backgroundURI: data.uploadImageFile });
+      setBandData({ ...bandData, backGroundURI: data.uploadImageFile });
+    },
+  });
+
+  const [createBand, createBandResult] = useMutation(CREATE_BAND, {
+    fetchPolicy: 'no-cache',
+    onError: (error) => {
+      console.log(error);
+    },
+    onCompleted: (data) => {
+      setBandId(data.createBand.bandId);
+      setPage(1);
     },
   });
 
@@ -91,8 +111,13 @@ const CoverForm = (props) => {
   }, [session, selectedSession]);
 
   const onClickSubmitButton = () => {
-    if (formCheck()) setPage(1);
-    else window.scrollTo(0, 0);
+    if (formCheck()) {
+      createBand({
+        variables: {
+          createBandInput: { sessionConfig: session, band: bandData },
+        },
+      });
+    } else window.scrollTo(0, 0);
   };
 
   const imageFileCheck = (file) => {
@@ -123,10 +148,6 @@ const CoverForm = (props) => {
       });
     }
   };
-
-  useEffect(() => {
-    console.log(bandData);
-  }, [bandData]);
 
   return (
     <Container>
@@ -168,8 +189,8 @@ const CoverForm = (props) => {
             maxCount={1}
             showUploadList={false}
           >
-            {bandData.backgroundURI ? (
-              <CoverImage src={bandData.backgroundURI} />
+            {bandData.backGroundURI ? (
+              <CoverImage src={bandData.backGroundURI} />
             ) : (
               <>
                 <CustomPictureIcon />
@@ -179,13 +200,12 @@ const CoverForm = (props) => {
               </>
             )}
           </CustomDragger>
-          {bandData.backgroundURI ? (
+          {bandData.backGroundURI ? (
             <UploadText>
               사진 변경을 원한다면 클릭하거나 파일을 드래그 해주세요.
             </UploadText>
           ) : null}
         </InputContainer>
-
         <InputContainer>
           <CustomTitle>세션 프리셋</CustomTitle>
           <CustomDescription>
