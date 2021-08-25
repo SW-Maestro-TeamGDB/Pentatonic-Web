@@ -30,14 +30,15 @@ const CREATE_BAND = gql`
 const { Dragger } = Upload;
 
 const CoverForm = (props) => {
-  const { setPage, audioDuration, pageUrl } = props;
-  const [bandId, setBandId] = useState();
-  const [bandData, setBandData] = useState({
-    name: null,
-    introduce: null,
-    backGroundURI: null,
-    songId: '611824fd287e5b0012e18160',
-  });
+  const {
+    setPage,
+    audioDuration,
+    pageUrl,
+    bandData,
+    setBandData,
+    bandId,
+    setBandId,
+  } = props;
   const [informError, setInformError] = useState(null);
   const [sessionError, setSessionError] = useState(null);
   const [instError, setInstError] = useState();
@@ -118,6 +119,7 @@ const CoverForm = (props) => {
         },
       });
     } else window.scrollTo(0, 0);
+    setPage(1);
   };
 
   const imageFileCheck = (file) => {

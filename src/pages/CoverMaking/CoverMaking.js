@@ -16,6 +16,14 @@ const CoverMaking = ({ match }) => {
   const [inst, setInst] = useState();
   const pageUrl = match.url;
 
+  const [bandId, setBandId] = useState();
+  const [bandData, setBandData] = useState({
+    name: null,
+    introduce: null,
+    backGroundURI: null,
+    songId: '611824fd287e5b0012e18160',
+  });
+
   // 샘플 오디오
   const audio = new Audio();
   audio.src = instrument;
@@ -36,6 +44,10 @@ const CoverMaking = ({ match }) => {
           setPage={setPage}
           audioDuration={audioDuration}
           pageUrl={pageUrl}
+          bandData={bandData}
+          setBandData={setBandData}
+          bandId={bandId}
+          setBandId={setBandId}
         />
       ),
     },
@@ -47,6 +59,7 @@ const CoverMaking = ({ match }) => {
           setAudioFile={setAudioFile}
           audioDuration={audioDuration}
           inst={inst}
+          bandData={bandId}
         />
       ),
     },
@@ -58,6 +71,10 @@ const CoverMaking = ({ match }) => {
           audioFile={audioFile}
           setAudioFile={setAudioFile}
           inst={inst}
+          bandData={bandData}
+          setBandData={setBandData}
+          bandId={bandId}
+          setBandId={setBandId}
         />
       ),
     },
