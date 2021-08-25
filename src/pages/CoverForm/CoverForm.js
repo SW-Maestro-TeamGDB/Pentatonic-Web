@@ -19,14 +19,6 @@ const UPLOAD_IMAGE_FILE = gql`
   }
 `;
 
-const CREATE_BAND = gql`
-  mutation Mutation($createBandInput: CreateBandInput!) {
-    createBand(input: $createBandInput) {
-      bandId
-    }
-  }
-`;
-
 const { Dragger } = Upload;
 
 const CoverForm = (props) => {
@@ -38,14 +30,17 @@ const CoverForm = (props) => {
     setBandData,
     bandId,
     setBandId,
+    selectedSession,
+    setSelectedSession,
+    setSession,
+    session,
   } = props;
   const [informError, setInformError] = useState(null);
   const [sessionError, setSessionError] = useState(null);
   const [instError, setInstError] = useState();
-  const [session, setSession] = useState([]); // 세션 데이터
   const [sessionSet, setSessionSet] = useState(new Set([])); // 세션 종류 저장
   const [sessionAddToggle, setSessionAddToggle] = useState(1); // 세션 추가 토글
-  const [selectedSession, setSelectedSession] = useState(null); // 녹음 참여 세션
+
   const [selectInst, setSelectInst] = useState([]); // 녹음 선택 인스트
   const history = useHistory();
 
@@ -56,17 +51,6 @@ const CoverForm = (props) => {
     },
     onCompleted: (data) => {
       setBandData({ ...bandData, backGroundURI: data.uploadImageFile });
-    },
-  });
-
-  const [createBand, createBandResult] = useMutation(CREATE_BAND, {
-    fetchPolicy: 'no-cache',
-    onError: (error) => {
-      console.log(error);
-    },
-    onCompleted: (data) => {
-      setBandId(data.createBand.bandId);
-      setPage(1);
     },
   });
 
@@ -113,13 +97,15 @@ const CoverForm = (props) => {
 
   const onClickSubmitButton = () => {
     if (formCheck()) {
-      createBand({
-        variables: {
-          createBandInput: { sessionConfig: session, band: bandData },
-        },
-      });
+      if (bandData.backGroundURI === null) {
+        setBandData({
+          ...bandData,
+          backGroundURI:
+            'https://media.pitchfork.com/photos/608a33343bbb6032f540a222/2:1/w_2912,h_1456,c_limit/coldplay.jpg',
+        });
+      }
+      setPage(1);
     } else window.scrollTo(0, 0);
-    setPage(1);
   };
 
   const imageFileCheck = (file) => {

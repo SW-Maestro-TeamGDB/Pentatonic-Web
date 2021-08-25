@@ -23,6 +23,8 @@ const CoverMaking = ({ match }) => {
     backGroundURI: null,
     songId: '611824fd287e5b0012e18160',
   });
+  const [session, setSession] = useState([]); // 세션 데이터
+  const [selectedSession, setSelectedSession] = useState(null); // 녹음 참여 세션
 
   // 샘플 오디오
   const audio = new Audio();
@@ -46,8 +48,10 @@ const CoverMaking = ({ match }) => {
           pageUrl={pageUrl}
           bandData={bandData}
           setBandData={setBandData}
-          bandId={bandId}
-          setBandId={setBandId}
+          selectedSession={selectedSession}
+          setSelectedSession={setSelectedSession}
+          session={session}
+          setSession={setSession}
         />
       ),
     },
@@ -59,7 +63,7 @@ const CoverMaking = ({ match }) => {
           setAudioFile={setAudioFile}
           audioDuration={audioDuration}
           inst={inst}
-          bandData={bandId}
+          bandData={bandData}
         />
       ),
     },
@@ -69,12 +73,12 @@ const CoverMaking = ({ match }) => {
         <RecordEdit
           setPage={setPage}
           audioFile={audioFile}
-          setAudioFile={setAudioFile}
           inst={inst}
           bandData={bandData}
-          setBandData={setBandData}
           bandId={bandId}
           setBandId={setBandId}
+          selectedSession={selectedSession}
+          session={session}
         />
       ),
     },
