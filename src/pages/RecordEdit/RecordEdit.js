@@ -1,27 +1,59 @@
 import react, { useState, useEffect, useCallback } from 'react';
 import styled from 'styled-components';
-import PlayIcon from '../../images/PlayIcon.svg';
-import StopIcon from '../../images/StopIcon.svg';
-import RecordEditSlider from '../../components/RecordEditSlider';
-import { PlusOutlined, MinusOutlined } from '@ant-design/icons';
-import { Slider } from 'antd';
+import { useQuery, gql, useLazyQuery, useMutation } from '@apollo/client';
 import GridContainer from '../../components/GridContainer/GridContainer';
 import UploadCompleteModal from '../../components/UploadCompleteModal';
 import AudioPlayer, { RHAP_UI } from 'react-h5-audio-player';
+import RecordEditSlider from '../../components/RecordEditSlider';
+
+import PlayIcon from '../../images/PlayIcon.svg';
+import StopIcon from '../../images/StopIcon.svg';
+import { PlusOutlined, MinusOutlined } from '@ant-design/icons';
+import { Slider } from 'antd';
+
 import './AudioPlayer.css';
 
-import instrument from '../CoverMaking/inst.mp3';
+const UPLOAD_COVER_FILE = gql`
+  mutation Mutation($uploadCoverFileInput: UploadCoverFileInput!) {
+    uploadCoverFile(input: $uploadCoverFileInput)
+  }
+`;
 
 const RecordEdit = (props) => {
-  const { setPage, audioFile, setAudioFile, inst } = props;
+  const {
+    setPage,
+    audioFile,
+    setAudioFile,
+    inst,
+    bandData,
+    setBandData,
+    bandId,
+    setBandId,
+  } = props;
   // 업로드 모달
   const [modalToggle, setModalToggle] = useState(false);
+
+  console.log(audioFile);
 
   // slider value
   const [volume, setVolume] = useState(50);
   const [sync, setSync] = useState(-20);
   const [reverb, setReverb] = useState(0);
   const [gain, setGain] = useState(0);
+
+  const [uploadCoverFile, uploadCoverFileResult] = useMutation(
+    UPLOAD_COVER_FILE,
+    {
+      fetchPolicy: 'no-cache',
+      onError: (error) => {
+        console.log(error);
+      },
+      onCompleted: (data) => {
+        console.log(data);
+        setModalToggle(true);
+      },
+    },
+  );
 
   const audio = new Audio(audioFile);
   const audioContext = new AudioContext();
@@ -112,7 +144,11 @@ const RecordEdit = (props) => {
   };
 
   const submitRecord = () => {
-    setModalToggle(true);
+    uploadCoverFile({
+      variables: {
+        uploadCoverFileInput: { file: audioFile.file },
+      },
+    });
   };
 
   // 언마운트시 반주 정지

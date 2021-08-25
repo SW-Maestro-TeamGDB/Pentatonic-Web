@@ -15,7 +15,7 @@ import { LeftOutlined, PauseOutlined } from '@ant-design/icons';
 import hihat from './hihat.mp3';
 
 const RecordPage = (props) => {
-  const { setPage, setAudioFile, audioDuration, inst } = props;
+  const { setPage, setAudioFile, audioDuration, inst, bandId } = props;
   const [countdown, setCountDown] = useState(4);
   const [audioCtx, setAudioCtx] = useState();
   const [stream, setStream] = useState();
@@ -333,10 +333,7 @@ const RecordPage = (props) => {
 
           mediaRecorder.ondataavailable = function (e) {
             setAudioUrl(e.data);
-            // const sound = new File([e.data], 'soundBlob', {
-            //   lastModified: new Date().getTime(),
-            //   type: 'audio/mp3',
-            // });
+
             // setOnRec(0);
           };
         }
@@ -404,15 +401,23 @@ const RecordPage = (props) => {
       index += 2;
     }
 
-    const type = 'audio/wav';
+    const type = 'audio/mp3';
 
     // our final binary blob
     const blob = new Blob([view], { type: type });
+
+    // 파일 이름 bandId.mp3
+    const file = new File([blob], `${bandId}.mp3`, {
+      lastModified: new Date().getTime(),
+      type: type,
+    });
+
     const audioUrl = URL.createObjectURL(blob);
     setAudioUrl(audioUrl);
     setAudioFile({
       blob: blob,
       url: audioUrl,
+      file: file,
       type,
     });
   };
