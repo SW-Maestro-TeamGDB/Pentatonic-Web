@@ -36,6 +36,10 @@ body {
   box-shadow: 0 0 0 5px rgba(98, 54, 255, 0.12);
 }
 
+.ant-modal-content {
+  border-radius: 1rem;
+}
+
 .ant-slider {
   box-sizing: border-box;
   margin: 0;
