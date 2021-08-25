@@ -13,9 +13,32 @@ import { Slider } from 'antd';
 
 import './AudioPlayer.css';
 
+const CREATE_BAND = gql`
+  mutation Mutation($createBandInput: CreateBandInput!) {
+    createBand(input: $createBandInput) {
+      bandId
+    }
+  }
+`;
+
 const UPLOAD_COVER_FILE = gql`
   mutation Mutation($uploadCoverFileInput: UploadCoverFileInput!) {
     uploadCoverFile(input: $uploadCoverFileInput)
+  }
+`;
+
+const UPLOAD_COVER = gql`
+  mutation UploadCoverMutation($uploadCoverInput: UploadCoverInput!) {
+    uploadCover(input: $uploadCoverInput) {
+      coverId
+      coverURI
+    }
+  }
+`;
+
+const JOIN_BAND = gql`
+  mutation JoinBandMutation($joinBandInput: JoinBandInput!) {
+    joinBand(input: $joinBandInput)
   }
 `;
 
@@ -23,15 +46,18 @@ const RecordEdit = (props) => {
   const {
     setPage,
     audioFile,
-    setAudioFile,
     inst,
     bandData,
-    setBandData,
     bandId,
     setBandId,
+    selectedSession,
+    session,
   } = props;
   // 업로드 모달
   const [modalToggle, setModalToggle] = useState(false);
+  const [coverURI, setCoverURI] = useState();
+  const [coverId, setCoverId] = useState();
+  const [modalLoading, setModalLoading] = useState(true);
 
   console.log(audioFile);
 
@@ -49,11 +75,70 @@ const RecordEdit = (props) => {
         console.log(error);
       },
       onCompleted: (data) => {
-        console.log(data);
-        setModalToggle(true);
+        setCoverURI(data.uploadCoverFile);
+        uploadCover({
+          variables: {
+            uploadCoverInput: {
+              cover: {
+                name: bandData.name,
+                coverURI: data.uploadCoverFile,
+                songId: bandData.songId,
+                position: selectedSession,
+              },
+            },
+          },
+        });
       },
     },
   );
+
+  const [uploadCover, uploadCoverResult] = useMutation(UPLOAD_COVER, {
+    fetchPolicy: 'no-cache',
+    onError: (error) => {
+      console.log(error);
+    },
+    onCompleted: (data) => {
+      setCoverURI(data.uploadCover.coverURI);
+      setCoverId(data.uploadCover.coverId);
+      createBand({
+        variables: {
+          createBandInput: { sessionConfig: session, band: bandData },
+        },
+      });
+    },
+  });
+
+  const [createBand, createBandResult] = useMutation(CREATE_BAND, {
+    fetchPolicy: 'no-cache',
+    onError: (error) => {
+      console.log(error);
+    },
+    onCompleted: (data) => {
+      setBandId(data.createBand.bandId);
+      joinBand({
+        variables: {
+          joinBandInput: {
+            band: {
+              bandId: data.createBand.bandId,
+            },
+            session: {
+              position: selectedSession,
+              coverId: coverId,
+            },
+          },
+        },
+      });
+    },
+  });
+
+  const [joinBand, joinBandResult] = useMutation(JOIN_BAND, {
+    onError: (error) => {
+      console.log(error);
+    },
+    onCompleted: (data) => {
+      setModalLoading(false);
+    },
+  });
 
   const audio = new Audio(audioFile);
   const audioContext = new AudioContext();
@@ -144,6 +229,7 @@ const RecordEdit = (props) => {
   };
 
   const submitRecord = () => {
+    setModalToggle(true);
     uploadCoverFile({
       variables: {
         uploadCoverFileInput: { file: audioFile.file },
@@ -228,6 +314,7 @@ const RecordEdit = (props) => {
       <UploadCompleteModal
         setModalToggle={setModalToggle}
         modalToggle={modalToggle}
+        modalLoading={modalLoading}
       />
       {/* <button onClick={() => onClickStart()}>시작</button>
       <button onClick={() => onClickStop()}>중지</button>

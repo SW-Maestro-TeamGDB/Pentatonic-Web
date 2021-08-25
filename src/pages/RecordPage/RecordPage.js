@@ -15,7 +15,7 @@ import { LeftOutlined, PauseOutlined } from '@ant-design/icons';
 import hihat from './hihat.mp3';
 
 const RecordPage = (props) => {
-  const { setPage, setAudioFile, audioDuration, inst, bandId } = props;
+  const { setPage, setAudioFile, audioDuration, inst, bandData } = props;
   const [countdown, setCountDown] = useState(4);
   const [audioCtx, setAudioCtx] = useState();
   const [stream, setStream] = useState();
@@ -406,8 +406,8 @@ const RecordPage = (props) => {
     // our final binary blob
     const blob = new Blob([view], { type: type });
 
-    // 파일 이름 bandId.mp3
-    const file = new File([blob], `${bandId}.mp3`, {
+    // 파일 이름 cover.mp3
+    const file = new File([blob], 'cover.mp3', {
       lastModified: new Date().getTime(),
       type: type,
     });
