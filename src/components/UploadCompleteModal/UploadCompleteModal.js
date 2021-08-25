@@ -2,10 +2,10 @@ import react, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import { Modal } from 'antd';
-import { CheckCircleOutlined } from '@ant-design/icons';
+import { CheckCircleOutlined, LoadingOutlined } from '@ant-design/icons';
 
 const UploadCompleteModal = (props) => {
-  const { modalToggle, setModalToggle } = props;
+  const { modalToggle, setModalToggle, modalLoading } = props;
 
   const closeModal = () => {
     setModalToggle(false);
@@ -17,16 +17,27 @@ const UploadCompleteModal = (props) => {
       onCancel={closeModal}
       footer={null}
       centered
+      closable={false}
+      maskClosable={false}
     >
       <ModalContainer>
-        <CustomCheckIcon />
-        <TextWrapper>커버가 업로드 되었습니다.</TextWrapper>
-        <ButtonContainer>
-          <CoverRoomButton to="/lounge/cover/0">
-            커버룸 확인하기
-          </CoverRoomButton>
-          <LibraryButton to="/library">라이브러리 확인하기</LibraryButton>
-        </ButtonContainer>
+        {modalLoading ? (
+          <>
+            <CustomLoadingIcon />
+            <UploadText>커버를 업로드 중입니다</UploadText>
+          </>
+        ) : (
+          <>
+            <CustomCheckIcon />
+            <TextWrapper>커버가 업로드 되었습니다.</TextWrapper>
+            <ButtonContainer>
+              <CoverRoomButton to="/lounge/cover/0">
+                커버룸 확인하기
+              </CoverRoomButton>
+              <LibraryButton to="/library">라이브러리 확인하기</LibraryButton>
+            </ButtonContainer>
+          </>
+        )}
       </ModalContainer>
     </CustomModal>
   );
@@ -37,13 +48,24 @@ const CustomModal = styled(Modal)`
   overflow: hidden;
 `;
 
+const UploadText = styled.div`
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-top: 7vh;
+`;
+
+const CustomLoadingIcon = styled(LoadingOutlined)`
+  font-size: 8rem;
+  color: #6236ff;
+`;
+
 const ModalContainer = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
   width: 100%;
-  height: auto;
+  height: 25rem;
   padding: 6vh 0;
 `;
 
