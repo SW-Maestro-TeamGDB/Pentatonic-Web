@@ -22,11 +22,17 @@ const LibraryList = (props) => {
   const { idx, id, edit } = props;
   const [audioState, setAudioState] = useState(0); // 0:정지 , 1:재생 , 2:일시정지
   const [inst, setInst] = useState();
+  const [editToggle, setEditToggle] = useState(false);
+  const [editTitle, setEditTitle] = useState();
   const instRef = useRef();
 
   useEffect(() => {
     instRef.current = inst;
   }, [inst]);
+
+  useEffect(() => {
+    setEditTitle();
+  }, [editToggle]);
 
   const randomTitle = [
     '멋진 밴드',
@@ -144,6 +150,10 @@ const LibraryList = (props) => {
     }
   };
 
+  const onClickEditToggle = () => {
+    setEditToggle(!editToggle);
+  };
+
   useEffect(() => {
     const audio = new Audio();
     audio.src = instrument;
@@ -162,17 +172,29 @@ const LibraryList = (props) => {
       </ImageContainer>
       <Spacing width={'2%'} />
       <CoverInform>
-        <CoverTitle>{tempData[idx].cover}</CoverTitle>
-        <SongInform>
-          {tempData[idx].title} - {tempData[idx].singer}
-        </SongInform>
+        {editToggle ? (
+          <CustomInput
+            placeholder="변경 할 제목을 입력해주세요"
+            onChange={(e) => setEditTitle(e.target.value)}
+            maxLength="14"
+          />
+        ) : (
+          <>
+            <CoverTitle>{tempData[idx].cover}</CoverTitle>
+            <SongInform>
+              {tempData[idx].title} - {tempData[idx].singer}
+            </SongInform>
+          </>
+        )}
       </CoverInform>
       {edit ? <CoverTime>2021-07-10</CoverTime> : null}
       <Spacing width={'3%'} />
       {edit ? (
         <>
           <EditButtonContainer>
-            <EditButton>편집</EditButton>
+            <EditButton onClick={onClickEditToggle}>
+              {editToggle ? '수정 완료' : '수정'}
+            </EditButton>
             <DeleteButton>삭제</DeleteButton>
           </EditButtonContainer>
           <Spacing width={'3%'} />
@@ -294,13 +316,18 @@ const CoverTime = styled.div`
 
 const EditButtonContainer = styled.div`
   width: 23%;
-  font-size: 2em;
   font-weight: 700;
 
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
+
+  -ms-user-select: none;
+  -moz-user-select: -moz-none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  user-select: none;
 `;
 
 const AudioButtonContainer = styled.div`
@@ -316,6 +343,12 @@ const AudioButtonContainer = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+
+  -ms-user-select: none;
+  -moz-user-select: -moz-none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  user-select: none;
 `;
 
 const EditButton = styled.div`
@@ -324,7 +357,7 @@ const EditButton = styled.div`
   color: #9561ff;
   width: 4.5rem;
   height: 2.5rem;
-  font-size: 0.8vw;
+  font-size: 0.7vw;
   cursor: pointer;
   background-color: white;
 
@@ -339,7 +372,7 @@ const DeleteButton = styled.div`
   color: #222;
   width: 4.5rem;
   height: 2.5rem;
-  font-size: 0.8vw;
+  font-size: 0.7vw;
   cursor: pointer;
   background-color: white;
 
@@ -405,6 +438,27 @@ const SongInform = styled.div`
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+`;
+
+const CustomInput = styled.input`
+  width: 90%;
+  color: black;
+  border: 2px solid lightgray;
+  transition: all ease 0.3s;
+  outline: none;
+  height: 3rem;
+  border-radius: 0.8rem;
+  margin: 0.2rem 0;
+  padding: 0 1rem;
+  font-size: 1.2rem;
+
+  &:focus {
+    border: 2px solid black;
+  }
+
+  ::placeholder {
+    font-size: 1rem;
+  }
 `;
 
 export default LibraryList;
