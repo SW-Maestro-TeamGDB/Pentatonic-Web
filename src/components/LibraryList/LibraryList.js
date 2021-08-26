@@ -171,20 +171,36 @@ const LibraryList = (props) => {
       <Spacing width={'3%'} />
       {edit ? (
         <>
-          <DeleteContainer>
-            <CustomEditOutlined />
-            <CustomDeleteFilled />
-          </DeleteContainer>
-          <Spacing width={'10%'} />
+          <EditButtonContainer>
+            <EditButton>편집</EditButton>
+            <DeleteButton>삭제</DeleteButton>
+          </EditButtonContainer>
+          <Spacing width={'3%'} />
         </>
       ) : null}
-      <IconContainer onClick={onClickIcon}>
-        {audioState === 1 ? (
-          <CustomPauseIcon src={PauseIcon} />
-        ) : (
-          <CustomPlayIcon src={PlayIcon} />
-        )}
-      </IconContainer>
+      {edit ? (
+        <AudioButtonContainer onClick={onClickIcon}>
+          {audioState === 1 ? (
+            <>
+              <LibararyPagePauseIcon src={PauseIcon} color="white" />
+            </>
+          ) : (
+            <>
+              <LibararyPagePlayIcon src={PlayIcon} color="white" />
+              <Spacing width={'5%'} />
+              재생
+            </>
+          )}
+        </AudioButtonContainer>
+      ) : (
+        <IconContainer onClick={onClickIcon}>
+          {audioState === 1 ? (
+            <CustomPauseIcon src={PauseIcon} />
+          ) : (
+            <CustomPlayIcon src={PlayIcon} />
+          )}
+        </IconContainer>
+      )}
       <Spacing width={'5%'} />
     </CoverContainer>
   );
@@ -207,6 +223,18 @@ const CoverContainer = styled.div`
   }
 `;
 
+const LibararyPagePauseIcon = styled.img`
+  width: 0.9vw;
+  height: 0.9vw;
+  filter: invert(100%);
+`;
+
+const LibararyPagePlayIcon = styled.img`
+  width: 0.9vw;
+  height: 0.9vw;
+  filter: invert(100%);
+`;
+
 const CustomPlayIcon = styled.img`
   width: 1.2vw;
   height: 1.2vw;
@@ -222,8 +250,9 @@ const CustomPauseIcon = styled.img`
 `;
 
 const IconContainer = styled.div`
-  width: 5vw;
+  width: 4vw;
   height: 3vw;
+  background-color: white;
 
   -ms-user-select: none;
   -moz-user-select: -moz-none;
@@ -238,7 +267,7 @@ const IconContainer = styled.div`
   justify-content: center;
   align-items: center;
   border: 1px solid #6236ff;
-  border-radius: 1rem;
+  border-radius: 0.8vw;
   color: #6236ff;
 
   &:hover {
@@ -263,28 +292,60 @@ const CoverTime = styled.div`
   width: 20%;
 `;
 
-const DeleteContainer = styled.div`
-  width: 10%;
+const EditButtonContainer = styled.div`
+  width: 23%;
   font-size: 2em;
+  font-weight: 700;
+
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
 `;
 
-const CustomEditOutlined = styled(EditOutlined)`
-  transition: all 0.2s ease-in-out;
+const AudioButtonContainer = styled.div`
+  border-radius: 8px;
+  color: white;
+  width: 8rem;
+  height: 2.5rem;
+  font-size: 0.8vw;
   cursor: pointer;
+  background-image: linear-gradient(to right, #6236ff, #9b66ff);
+  font-weight: 700;
 
-  &:hover {
-    color: gray;
-  }
-
-  margin-right: 20%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;
 
-const CustomDeleteFilled = styled(DeleteFilled)`
-  transition: all 0.2s ease-in-out;
+const EditButton = styled.div`
+  border-radius: 8px;
+  border: solid 1px #9561ff;
+  color: #9561ff;
+  width: 4.5rem;
+  height: 2.5rem;
+  font-size: 0.8vw;
   cursor: pointer;
-  &:hover {
-    color: rgba(255, 0, 0, 0.5);
-  }
+  background-color: white;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
+const DeleteButton = styled.div`
+  border-radius: 8px;
+  border: solid 1px #222;
+  color: #222;
+  width: 4.5rem;
+  height: 2.5rem;
+  font-size: 0.8vw;
+  cursor: pointer;
+  background-color: white;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;
 
 const ImageContainer = styled.div`
@@ -303,9 +364,16 @@ const CoverImage = styled.img`
 `;
 
 const CoverInform = styled.div`
-  width: 75%;
+  width: 50%;
   color: black;
-  padding-left: 1vw;
+  padding-left: 0.5vw;
+
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  box-sizing: border-box;
+
+  padding-right: 2vw;
 `;
 
 const CoverMeta = styled.div`
@@ -322,13 +390,21 @@ const CustomIcon = styled.img`
 `;
 
 const CoverTitle = styled.div`
-  font-size: 1.5vw;
+  font-size: 1.3vw;
   font-weight: bold;
+
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 `;
 
 const SongInform = styled.div`
-  font-size: 1vw;
+  font-size: 0.9vw;
   color: rgb(100, 100, 100);
+
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 `;
 
 export default LibraryList;

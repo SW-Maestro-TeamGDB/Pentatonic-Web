@@ -18,7 +18,7 @@ const Library = () => {
     });
 
   return (
-    <PageContainer>
+    <PageContainer width="50%">
       <PageTitle>라이브러리</PageTitle>
       <Spacing />
       <LibraryContainer>{loadLibrary()}</LibraryContainer>
@@ -27,12 +27,13 @@ const Library = () => {
 };
 
 const PageTitle = styled.div`
-  font-size: 2.5rem;
+  font-size: 2rem;
   font-weight: 800;
+  margin-top: 1rem;
 `;
 
 const Spacing = styled.div`
-  height: 2rem;
+  height: 3rem;
 `;
 
 const LibraryContainer = styled.div`
