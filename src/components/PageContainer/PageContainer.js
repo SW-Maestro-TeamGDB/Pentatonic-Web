@@ -2,8 +2,9 @@ import react from 'react';
 import styled from 'styled-components';
 import { media } from '../../lib/Media';
 
-const PageContainer = ({ children }) => {
-  return <Container>{children}</Container>;
+const PageContainer = ({ children, width }) => {
+  console.log(width);
+  return <Container width={width}>{children}</Container>;
 };
 
 const Container = styled.div`
@@ -15,7 +16,7 @@ const Container = styled.div`
   /* box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3); */
   padding: 1.5vh 1vw;
   height: auto;
-  width: 60%;
+  width: ${(props) => (props.width ? props.width : '60%')};
   min-width: 1000px;
   margin-top: 3vh;
 
