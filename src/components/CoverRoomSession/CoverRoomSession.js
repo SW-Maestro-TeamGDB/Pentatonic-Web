@@ -1,5 +1,7 @@
 import react, { useEffect, useState, useCallback } from 'react';
 import { Collapse } from 'antd';
+import { gql, useQuery } from '@apollo/client';
+import { IS_LOGGED_IN } from '../../apollo/cache';
 import styled from 'styled-components';
 import { Default } from '../../lib/Media';
 import GridContainer from '../GridContainer/GridContainer';
@@ -9,9 +11,10 @@ const CoverRoomSession = (props) => {
   const { session, setSession, setVisibleDrawer, sessionTitle, total, now } =
     props;
   const [selectedSession, setSelectedSession] = useState();
+  const { data } = useQuery(IS_LOGGED_IN);
 
   const onClickParticipate = () => {
-    setVisibleDrawer(true);
+    if (data.isLoggedIn) setVisibleDrawer(true);
   };
 
   const showSessionContents = () => {
@@ -37,7 +40,13 @@ const CoverRoomSession = (props) => {
           </SessionCount>
         </BoardTitle>
         {now !== total ? (
-          <BoardLink onClick={() => onClickParticipate()}>참여하기</BoardLink>
+          <BoardLink
+            onClick={() => {
+              onClickParticipate();
+            }}
+          >
+            참여하기
+          </BoardLink>
         ) : null}
       </Header>
       <SessionContainer>
