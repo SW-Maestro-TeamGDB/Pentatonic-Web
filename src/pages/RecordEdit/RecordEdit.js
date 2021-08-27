@@ -59,8 +59,6 @@ const RecordEdit = (props) => {
   const [coverId, setCoverId] = useState();
   const [modalLoading, setModalLoading] = useState(true);
 
-  console.log(audioFile);
-
   // slider value
   const [volume, setVolume] = useState(50);
   const [sync, setSync] = useState(-20);
@@ -75,7 +73,6 @@ const RecordEdit = (props) => {
         console.log(error);
       },
       onCompleted: (data) => {
-        setCoverURI(data.uploadCoverFile);
         uploadCover({
           variables: {
             uploadCoverInput: {
@@ -252,11 +249,9 @@ const RecordEdit = (props) => {
           src={audioFile ? audioFile.url : null}
           onPlay={() => onClickStart()}
           onPause={() => onClickPause()}
-          onClickStop={() => console.log('stop')}
           onSeeked={(e) => {
             onClickSeeked(e);
           }}
-          onSeeking={() => console.log('seeking')}
           customAdditionalControls={[]}
           customVolumeControls={[]}
           autoPlay={false}

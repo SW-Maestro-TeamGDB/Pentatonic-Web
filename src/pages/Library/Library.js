@@ -1,27 +1,56 @@
-import react from 'react';
+import react, { useEffect, useState } from 'react';
+import { useQuery, gql, useLazyQuery } from '@apollo/client';
+import { GET_CURRENT_USER } from '../../apollo/cache';
 import PageContainer from '../../components/PageContainer';
 import LibraryList from '../../components/LibraryList';
 import SearchBar from '../../components/SearchBar';
 import styled from 'styled-components';
 
+const GET_USER_INFO = gql`
+  query Query($getUserInfoUserId: Id) {
+    getUserInfo(userId: $getUserInfoUserId) {
+      library {
+        coverId
+        coverURI
+        songId
+        name
+        position
+      }
+    }
+  }
+`;
+
 const Library = () => {
+  const [libraryData, setLibraryData] = useState([]);
+  const userData = useQuery(GET_CURRENT_USER);
+  const [getUserInfo] = useLazyQuery(GET_USER_INFO, {
+    onCompleted: (data) => {
+      setLibraryData(...libraryData, data.getUserInfo.library);
+    },
+  });
+
+  useEffect(() => {
+    if (userData.data.user) {
+      getUserInfo({
+        variables: {
+          getUserInfoUserId: userData.data.user.id,
+        },
+      });
+    }
+  }, [userData.data.user]);
+
   const loadLibrary = () =>
-    Array.from({ length: 5 }, () => 0).map((v, i) => {
-      return (
-        <LibraryList
-          id={parseInt(Math.random() * 100)}
-          key={i}
-          idx={parseInt(Math.random() * 7)}
-          edit={true}
-        />
-      );
+    libraryData.map((v, i) => {
+      return <LibraryList data={v} key={v.coverId} edit={true} />;
     });
 
   return (
     <PageContainer width="50%">
       <PageTitle>라이브러리</PageTitle>
       <Spacing />
-      <LibraryContainer>{loadLibrary()}</LibraryContainer>
+      <LibraryContainer>
+        {libraryData ? loadLibrary() : '저장된 라이브러리가 없습니다'}
+      </LibraryContainer>
     </PageContainer>
   );
 };

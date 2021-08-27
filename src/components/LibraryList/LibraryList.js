@@ -1,7 +1,9 @@
 import react, { useState, useEffect, useRef } from 'react';
 import styled from 'styled-components';
+import { useQuery, gql, useLazyQuery } from '@apollo/client';
 import { Default } from '../../lib/Media';
-import { DeleteFilled, EditOutlined } from '@ant-design/icons';
+import { DeleteFilled, EditOutlined, LoadingOutlined } from '@ant-design/icons';
+import { Skeleton } from 'antd';
 import ThumbIcon from '../../images/ThumbIcon.svg';
 import ViewIcon from '../../images/ViewIcon.svg';
 
@@ -15,16 +17,34 @@ import FixYou from '../../images/TempData/FixYou.png';
 
 import PlayIcon from '../../images/PlayIcon.svg';
 import PauseIcon from '../../images/PauseIcon.png';
+import SkeletonImage from 'antd/lib/skeleton/Image';
+import SkeletonAvatar from 'antd/lib/skeleton/Avatar';
 
-import instrument from '../../pages/CoverMaking/inst.mp3';
+const GET_SONG = gql`
+  query Query($getSongSongId: ObjectID!) {
+    getSong(songId: $getSongSongId) {
+      name
+      songImg
+      artist
+    }
+  }
+`;
 
 const LibraryList = (props) => {
-  const { idx, id, edit } = props;
+  const { data, edit, visible } = props;
+  const [songData, setSongData] = useState();
   const [audioState, setAudioState] = useState(0); // 0:정지 , 1:재생 , 2:일시정지
   const [inst, setInst] = useState();
   const [editToggle, setEditToggle] = useState(false);
   const [editTitle, setEditTitle] = useState();
   const instRef = useRef();
+
+  const getSong = useQuery(GET_SONG, {
+    variables: { getSongSongId: data.songId },
+    onCompleted: (data) => {
+      setSongData(data.getSong);
+    },
+  });
 
   useEffect(() => {
     instRef.current = inst;
@@ -33,102 +53,6 @@ const LibraryList = (props) => {
   useEffect(() => {
     setEditTitle();
   }, [editToggle]);
-
-  const randomTitle = [
-    '멋진 밴드',
-    '기가막힌 밴드',
-    '무지성 합주',
-    'On the next level',
-    'WarmPlay',
-    'Fix Everything',
-    '사이키델릭',
-    '구름밴드',
-    'Cross the road',
-    '코리아 락 밴드',
-    '실력따윈 필요없어',
-    '초보방',
-  ];
-  const titleSize = randomTitle.length;
-
-  const tempData = [
-    {
-      cover: `${randomTitle[parseInt(Math.random() * titleSize)]}`,
-      title: `Fix You`,
-      singer: 'ColdPlay',
-      img: FixYou,
-      sessions: [
-        { session: 'guitar', maxMember: 4, currentMember: 3 },
-        { session: 'vocal', maxMember: 3, currentMember: 1 },
-        { session: 'drum', maxMember: 2, currentMember: 2 },
-      ],
-    },
-    {
-      cover: '사이키델릭',
-      title: `Borderline`,
-      singer: 'Tame Impala',
-      img: TameImpala,
-      sessions: [
-        { session: 'guitar', maxMember: 3, currentMember: 1 },
-        { session: 'piano', maxMember: 2, currentMember: 1 },
-        { session: 'vocal', maxMember: 3, currentMember: 0 },
-      ],
-    },
-    {
-      cover: '3인 혁오',
-      title: `위잉위잉`,
-      singer: '혁오',
-      img: Hyukoh,
-      sessions: [
-        { session: 'guitar', maxMember: 2, currentMember: 2 },
-        { session: 'vocal', maxMember: 4, currentMember: 4 },
-        { session: 'drum', maxMember: 2, currentMember: 2 },
-      ],
-    },
-    {
-      cover: 'Cross The Road',
-      title: `Hey Jude`,
-      singer: 'The Beatles',
-      img: Beatles,
-      sessions: [
-        { session: 'guitar', maxMember: 4, currentMember: 1 },
-        { session: 'piano', maxMember: 1, currentMember: 1 },
-        { session: 'vocal', maxMember: 4, currentMember: 4 },
-        { session: 'drum', maxMember: 2, currentMember: 2 },
-      ],
-    },
-    {
-      cover: '구름밴드',
-      title: `Numb`,
-      singer: 'Men I Trust',
-      img: MenITrust,
-      sessions: [
-        { session: 'guitar', maxMember: 5, currentMember: 4 },
-        { session: 'vocal', maxMember: 2, currentMember: 1 },
-      ],
-    },
-    {
-      cover: '코리아 톰 요크',
-      title: `No Suprises`,
-      singer: 'Radio Head',
-      img: NoSurprises,
-      sessions: [
-        { session: 'piano', maxMember: 1, currentMember: 1 },
-        { session: 'vocal', maxMember: 3, currentMember: 2 },
-        { session: 'drum', maxMember: 2, currentMember: 2 },
-      ],
-    },
-    {
-      cover: '실력은 필요없어',
-      title: `Summer`,
-      singer: 'The Volunteers',
-      img: TheVolunteers,
-      sessions: [
-        { session: 'guitar', maxMember: 4, currentMember: 3 },
-        { session: 'vocal', maxMember: 3, currentMember: 1 },
-        { session: 'drum', maxMember: 2, currentMember: 2 },
-      ],
-    },
-  ];
 
   const onClickStart = () => {
     inst.play();
@@ -156,74 +80,95 @@ const LibraryList = (props) => {
 
   useEffect(() => {
     const audio = new Audio();
-    audio.src = instrument;
+    audio.src = data.coverURI;
     setInst(audio);
 
     return () => {
       instRef.current.pause();
       instRef.current.currentTime = 0;
     };
-  }, []);
+  }, [data]);
+
+  useEffect(() => {
+    if (!visible && instRef.current) {
+      setAudioState(0);
+      instRef.current.pause();
+      instRef.current.currentTime = 0;
+    }
+  }, [visible]);
 
   return (
     <CoverContainer>
-      <ImageContainer>
-        <CoverImage src={tempData[idx].img} />
-      </ImageContainer>
-      <Spacing width={'2%'} />
-      <CoverInform>
-        {editToggle ? (
-          <CustomInput
-            placeholder="변경 할 제목을 입력해주세요"
-            onChange={(e) => setEditTitle(e.target.value)}
-            maxLength="14"
-          />
-        ) : (
-          <>
-            <CoverTitle>{tempData[idx].cover}</CoverTitle>
-            <SongInform>
-              {tempData[idx].title} - {tempData[idx].singer}
-            </SongInform>
-          </>
-        )}
-      </CoverInform>
-      {edit ? <CoverTime>2021-07-10</CoverTime> : null}
-      <Spacing width={'3%'} />
-      {edit ? (
+      {songData ? (
         <>
-          <EditButtonContainer>
-            <EditButton onClick={onClickEditToggle}>
-              {editToggle ? '수정 완료' : '수정'}
-            </EditButton>
-            <DeleteButton>삭제</DeleteButton>
-          </EditButtonContainer>
+          <ImageContainer>
+            <CoverImage src={songData.songImg} />
+          </ImageContainer>
+          <Spacing width={'2%'} />
+          <CoverInform>
+            {editToggle ? (
+              <CustomInput
+                placeholder="변경 할 제목을 입력해주세요"
+                onChange={(e) => setEditTitle(e.target.value)}
+                maxLength="14"
+              />
+            ) : (
+              <>
+                <CoverTitle>{data.name}</CoverTitle>
+                <SongInform>
+                  {songData.name} - {songData.artist}
+                </SongInform>
+              </>
+            )}
+          </CoverInform>
+          {edit ? <CoverTime>2021-07-10</CoverTime> : null}
           <Spacing width={'3%'} />
+          {edit ? (
+            <>
+              <EditButtonContainer>
+                <EditButton onClick={onClickEditToggle}>
+                  {editToggle ? '수정 완료' : '수정'}
+                </EditButton>
+                <DeleteButton>삭제</DeleteButton>
+              </EditButtonContainer>
+              <Spacing width={'3%'} />
+            </>
+          ) : null}
+          {edit ? (
+            <AudioButtonContainer onClick={onClickIcon}>
+              {audioState === 1 ? (
+                <>
+                  <LibararyPagePauseIcon src={PauseIcon} color="white" />
+                </>
+              ) : (
+                <>
+                  <LibararyPagePlayIcon src={PlayIcon} color="white" />
+                  <Spacing width={'5%'} />
+                  재생
+                </>
+              )}
+            </AudioButtonContainer>
+          ) : (
+            <IconContainer onClick={onClickIcon}>
+              {audioState === 1 ? (
+                <CustomPauseIcon src={PauseIcon} />
+              ) : (
+                <CustomPlayIcon src={PlayIcon} />
+              )}
+            </IconContainer>
+          )}
+          <Spacing width={'5%'} />
         </>
-      ) : null}
-      {edit ? (
-        <AudioButtonContainer onClick={onClickIcon}>
-          {audioState === 1 ? (
-            <>
-              <LibararyPagePauseIcon src={PauseIcon} color="white" />
-            </>
-          ) : (
-            <>
-              <LibararyPagePlayIcon src={PlayIcon} color="white" />
-              <Spacing width={'5%'} />
-              재생
-            </>
-          )}
-        </AudioButtonContainer>
       ) : (
-        <IconContainer onClick={onClickIcon}>
-          {audioState === 1 ? (
-            <CustomPauseIcon src={PauseIcon} />
-          ) : (
-            <CustomPlayIcon src={PlayIcon} />
-          )}
-        </IconContainer>
+        <>
+          <Skeleton.Button size={'large'} />
+          <Spacing width={'5%'} />
+          <Skeleton
+            title={{ width: '80%' }}
+            paragraph={{ width: '80%', rows: 1 }}
+          />
+        </>
       )}
-      <Spacing width={'5%'} />
     </CoverContainer>
   );
 };

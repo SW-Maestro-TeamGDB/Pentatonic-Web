@@ -29,7 +29,6 @@ const LoginModal = (props) => {
   }, [modalToggle]);
 
   useEffect(() => {
-    console.log(loginResult);
     if (loginResult.data?.login) {
       localStorage.setItem('token', loginResult.data.login);
       setModalToggle(false);

@@ -3,7 +3,6 @@ import styled from 'styled-components';
 import { media } from '../../lib/Media';
 
 const PageContainer = ({ children, width }) => {
-  console.log(width);
   return <Container width={width}>{children}</Container>;
 };
 
