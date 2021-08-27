@@ -220,7 +220,7 @@ const CoverRoom = ({ match }) => {
         visible={visibleDrawer}
         width="35%"
       >
-        <LibraryDrawer title={`${tempData[idx].title}`} />
+        <LibraryDrawer visible={visibleDrawer} />
       </Drawer>
     </PageContainer>
   );

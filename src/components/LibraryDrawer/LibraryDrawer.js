@@ -1,20 +1,46 @@
-import react, { useEffect } from 'react';
+import react, { useEffect, useState } from 'react';
+import { useQuery, gql, useLazyQuery } from '@apollo/client';
+import { GET_CURRENT_USER } from '../../apollo/cache';
 import styled from 'styled-components';
 import LibraryList from '../LibraryList/LibraryList';
 
+const GET_USER_INFO = gql`
+  query Query($getUserInfoUserId: Id) {
+    getUserInfo(userId: $getUserInfoUserId) {
+      library {
+        coverId
+        coverURI
+        songId
+        name
+        position
+      }
+    }
+  }
+`;
+
 const LibraryDrawer = (props) => {
-  const { title } = props;
+  const { visible } = props;
+  const [libraryData, setLibraryData] = useState([]);
+  const userData = useQuery(GET_CURRENT_USER);
+  const [getUserInfo] = useLazyQuery(GET_USER_INFO, {
+    onCompleted: (data) => {
+      setLibraryData(...libraryData, data.getUserInfo.library);
+    },
+  });
+
+  useEffect(() => {
+    if (userData.data.user) {
+      getUserInfo({
+        variables: {
+          getUserInfoUserId: userData.data.user.id,
+        },
+      });
+    }
+  }, [userData.data.user]);
 
   const loadLibrary = () =>
-    Array.from({ length: 10 }, () => 0).map((v, i) => {
-      return (
-        <LibraryList
-          id={parseInt(Math.random() * 100)}
-          key={i}
-          idx={parseInt(Math.random() * 6)}
-          edit={false}
-        />
-      );
+    libraryData.map((v, i) => {
+      return <LibraryList data={v} key={v.coverId} visible={visible} />;
     });
 
   return (
