@@ -37,7 +37,7 @@ const Library = () => {
         },
       });
     }
-  }, [userData.data.user]);
+  }, [userData]);
 
   const loadLibrary = () =>
     libraryData.map((v, i) => {
@@ -49,7 +49,11 @@ const Library = () => {
       <PageTitle>라이브러리</PageTitle>
       <Spacing />
       <LibraryContainer>
-        {libraryData ? loadLibrary() : '저장된 라이브러리가 없습니다'}
+        {libraryData ? (
+          loadLibrary()
+        ) : (
+          <NoLibraryText>저장된 라이브러리가 없습니다</NoLibraryText>
+        )}
       </LibraryContainer>
     </PageContainer>
   );
@@ -63,6 +67,13 @@ const PageTitle = styled.div`
 
 const Spacing = styled.div`
   height: 3rem;
+`;
+
+const NoLibraryText = styled.div`
+  text-align: center;
+  color: #666666;
+  font-size: 1.2rem;
+  font-weight: 700;
 `;
 
 const LibraryContainer = styled.div`

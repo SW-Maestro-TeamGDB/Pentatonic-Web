@@ -46,7 +46,13 @@ const LibraryDrawer = (props) => {
   return (
     <DrawerContainer>
       <Title>라이브러리</Title>
-      <LibaryContainer>{loadLibrary()}</LibaryContainer>
+      <LibaryContainer>
+        {libraryData ? (
+          loadLibrary()
+        ) : (
+          <NoLibraryText>참여 할 수 있는 라이브러리가 없습니다</NoLibraryText>
+        )}
+      </LibaryContainer>
       <SubmitButtonConatiner>
         <SubmitButton>참여하기</SubmitButton>
       </SubmitButtonConatiner>
@@ -75,6 +81,14 @@ const SubmitButtonConatiner = styled.div`
   width: 100%;
   height: 13%;
   z-index: 2;
+`;
+
+const NoLibraryText = styled.div`
+  text-align: center;
+  color: #666666;
+  font-size: 1.2rem;
+  font-weight: 700;
+  margin-top: 1rem;
 `;
 
 const LibaryContainer = styled.div`
