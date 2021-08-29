@@ -40,8 +40,21 @@ const Library = () => {
 
   const loadLibrary = () =>
     libraryData.map((v, i) => {
-      return <LibraryList data={v} key={v.coverId} edit={true} />;
+      return (
+        <LibraryList
+          data={v}
+          key={v.coverId}
+          edit={true}
+          libraryData={libraryData}
+          setLibraryData={setLibraryData}
+        />
+      );
     });
+
+  useEffect(() => {
+    loadLibrary();
+    console.log(libraryData);
+  }, [libraryData]);
 
   return (
     <PageContainer width="50%">

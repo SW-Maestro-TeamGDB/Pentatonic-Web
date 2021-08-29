@@ -31,6 +31,14 @@ const GET_SONG = gql`
   }
 `;
 
+const GET_COVER = gql`
+  query Query($getCoverCoverId: ObjectID!) {
+    getCover(coverId: $getCoverCoverId) {
+      name
+    }
+  }
+`;
+
 const UPDATE_COVER = gql`
   mutation Mutation($updateCoverInput: UpdateCoverInput!) {
     updateCover(input: $updateCoverInput) {
@@ -40,16 +48,14 @@ const UPDATE_COVER = gql`
   }
 `;
 
-const GET_COVER = gql`
-  query Query($getCoverCoverId: ObjectID!) {
-    getCover(coverId: $getCoverCoverId) {
-      name
-    }
+const DELETE_COVER = gql`
+  mutation DeleteCoverMutation($deleteCoverInput: DeleteCoverInput!) {
+    deleteCover(input: $deleteCoverInput)
   }
 `;
 
 const LibraryList = (props) => {
-  const { data, edit, visible } = props;
+  const { data, edit, visible, libraryData, setLibraryData } = props;
   const [songData, setSongData] = useState();
   const [coverTitle, setCoverTitle] = useState();
   const [audioState, setAudioState] = useState(0); // 0:정지 , 1:재생 , 2:일시정지
@@ -91,6 +97,20 @@ const LibraryList = (props) => {
     },
   });
 
+  const [deleteCover, deleteCoverResult] = useMutation(DELETE_COVER, {
+    onCompleted: () => {
+      setDeleteModal(false);
+      setLibraryData(libraryData.filter((v) => v.coverId != data.coverId));
+      notification['success']({
+        key: 'successEditTitle',
+        message: '',
+        description: '라이브러리를 삭제했습니다',
+        placement: 'bottomRight',
+        duration: 3,
+      });
+    },
+  });
+
   useEffect(() => {
     instRef.current = inst;
   }, [inst]);
@@ -126,6 +146,18 @@ const LibraryList = (props) => {
           cover: {
             coverId: data.coverId,
             name: editTitle,
+          },
+        },
+      },
+    });
+  };
+
+  const onClickDeleteButton = () => {
+    deleteCover({
+      variables: {
+        deleteCoverInput: {
+          cover: {
+            coverId: data.coverId,
           },
         },
       },
@@ -219,7 +251,9 @@ const LibraryList = (props) => {
                 ) : (
                   <>
                     <EditButton onClick={onClickEditToggle}>수정</EditButton>
-                    <DeleteButton>삭제</DeleteButton>
+                    <DeleteButton onClick={() => setDeleteModal(true)}>
+                      삭제
+                    </DeleteButton>
                   </>
                 )}
               </EditButtonContainer>
@@ -271,6 +305,7 @@ const LibraryList = (props) => {
         modalToggle={deleteModal}
         setModalToggle={setDeleteModal}
         text="커버를 삭제하시겠습니까?"
+        afterRequest={onClickDeleteButton}
       />
     </CoverContainer>
   );
