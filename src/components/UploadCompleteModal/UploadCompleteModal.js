@@ -14,7 +14,6 @@ const UploadCompleteModal = (props) => {
   return (
     <CustomModal
       visible={modalToggle}
-      onCancel={closeModal}
       footer={null}
       centered
       closable={false}
