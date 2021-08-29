@@ -1,9 +1,10 @@
 import react, { useState, useEffect, useRef } from 'react';
 import styled from 'styled-components';
-import { useQuery, gql, useLazyQuery } from '@apollo/client';
+import { useQuery, gql, useLazyQuery, useMutation } from '@apollo/client';
 import { Default } from '../../lib/Media';
 import { DeleteFilled, EditOutlined, LoadingOutlined } from '@ant-design/icons';
-import { Skeleton } from 'antd';
+import { Skeleton, notification } from 'antd';
+import QuestionModal from '../QuestionModal.js/QuestionModal';
 import ThumbIcon from '../../images/ThumbIcon.svg';
 import ViewIcon from '../../images/ViewIcon.svg';
 
@@ -30,19 +31,47 @@ const GET_SONG = gql`
   }
 `;
 
+const UPDATE_COVER = gql`
+  mutation Mutation($updateCoverInput: UpdateCoverInput!) {
+    updateCover(input: $updateCoverInput) {
+      coverId
+      name
+    }
+  }
+`;
+
 const LibraryList = (props) => {
   const { data, edit, visible } = props;
   const [songData, setSongData] = useState();
   const [audioState, setAudioState] = useState(0); // 0:정지 , 1:재생 , 2:일시정지
   const [inst, setInst] = useState();
+  const [editModal, setEditModal] = useState(false);
+  const [deleteModal, setDeleteModal] = useState(false);
   const [editToggle, setEditToggle] = useState(false);
   const [editTitle, setEditTitle] = useState();
+  const [editTitleError, setEditTitleError] = useState();
   const instRef = useRef();
 
   const getSong = useQuery(GET_SONG, {
     variables: { getSongSongId: data.songId },
     onCompleted: (data) => {
       setSongData(data.getSong);
+    },
+  });
+
+  console.log(data);
+
+  const [updateCover, updateCoverResult] = useMutation(UPDATE_COVER, {
+    onCompleted: (data) => {
+      setEditModal(false);
+      setEditToggle(!editToggle);
+      notification['success']({
+        key: 'successEditTitle',
+        message: '',
+        description: '라이브러리의 제목을 수정했습니다',
+        placement: 'bottomRight',
+        duration: 3,
+      });
     },
   });
 
@@ -74,9 +103,34 @@ const LibraryList = (props) => {
     }
   };
 
-  const onClickEditToggle = () => {
-    setEditToggle(!editToggle);
+  const onClickEditButton = () => {
+    updateCover({
+      variables: {
+        updateCoverInput: {
+          cover: {
+            coverId: data.coverId,
+            name: editTitle,
+          },
+        },
+      },
+    });
   };
+
+  const onClickEditToggle = () => {
+    if (editToggle == true) {
+      if (!editTitle) {
+        setEditTitleError('수정할 제목을 입력해주세요');
+      } else {
+        setEditModal(true);
+      }
+    } else {
+      setEditToggle(!editToggle);
+    }
+  };
+
+  useEffect(() => {
+    setEditTitleError();
+  }, [editTitle]);
 
   useEffect(() => {
     const audio = new Audio();
@@ -107,11 +161,16 @@ const LibraryList = (props) => {
           <Spacing width={'2%'} />
           <CoverInform>
             {editToggle ? (
-              <CustomInput
-                placeholder="변경 할 제목을 입력해주세요"
-                onChange={(e) => setEditTitle(e.target.value)}
-                maxLength="14"
-              />
+              <>
+                <CustomInput
+                  placeholder="변경 할 제목을 입력해주세요"
+                  onChange={(e) => setEditTitle(e.target.value)}
+                  maxLength="14"
+                />
+                {editTitleError ? (
+                  <ErrorMessage>{editTitleError}</ErrorMessage>
+                ) : null}
+              </>
             ) : (
               <>
                 <CoverTitle>{data.name}</CoverTitle>
@@ -126,10 +185,21 @@ const LibraryList = (props) => {
           {edit ? (
             <>
               <EditButtonContainer>
-                <EditButton onClick={onClickEditToggle}>
-                  {editToggle ? '수정 완료' : '수정'}
-                </EditButton>
-                <DeleteButton>삭제</DeleteButton>
+                {editToggle ? (
+                  <>
+                    <EditButton onClick={onClickEditToggle}>
+                      수정 완료
+                    </EditButton>
+                    <DeleteButton onClick={() => setEditToggle(false)}>
+                      수정 취소
+                    </DeleteButton>
+                  </>
+                ) : (
+                  <>
+                    <EditButton onClick={onClickEditToggle}>수정</EditButton>
+                    <DeleteButton>삭제</DeleteButton>
+                  </>
+                )}
               </EditButtonContainer>
               <Spacing width={'3%'} />
             </>
@@ -169,6 +239,17 @@ const LibraryList = (props) => {
           />
         </>
       )}
+      <QuestionModal
+        modalToggle={editModal}
+        setModalToggle={setEditModal}
+        text="커버의 제목을 수정하시겠습니까?"
+        afterRequest={onClickEditButton}
+      />
+      <QuestionModal
+        modalToggle={deleteModal}
+        setModalToggle={setDeleteModal}
+        text="커버를 삭제하시겠습니까?"
+      />
     </CoverContainer>
   );
 };
@@ -200,6 +281,11 @@ const LibararyPagePlayIcon = styled.img`
   width: 0.9vw;
   height: 0.9vw;
   filter: invert(100%);
+`;
+
+const ErrorMessage = styled.div`
+  color: #cb0000;
+  padding-left: 1rem;
 `;
 
 const CustomPlayIcon = styled.img`
@@ -391,7 +477,7 @@ const CustomInput = styled.input`
   border: 2px solid lightgray;
   transition: all ease 0.3s;
   outline: none;
-  height: 3rem;
+  height: 2.8rem;
   border-radius: 0.8rem;
   margin: 0.2rem 0;
   padding: 0 1rem;
