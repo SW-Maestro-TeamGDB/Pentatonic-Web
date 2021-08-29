@@ -11,10 +11,9 @@ const GET_USER_INFO = gql`
     getUserInfo(userId: $getUserInfoUserId) {
       library {
         coverId
-        coverURI
         songId
-        name
-        position
+        coverURI
+        date
       }
     }
   }

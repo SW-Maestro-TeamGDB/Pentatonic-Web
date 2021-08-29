@@ -40,9 +40,18 @@ const UPDATE_COVER = gql`
   }
 `;
 
+const GET_COVER = gql`
+  query Query($getCoverCoverId: ObjectID!) {
+    getCover(coverId: $getCoverCoverId) {
+      name
+    }
+  }
+`;
+
 const LibraryList = (props) => {
   const { data, edit, visible } = props;
   const [songData, setSongData] = useState();
+  const [coverTitle, setCoverTitle] = useState();
   const [audioState, setAudioState] = useState(0); // 0:정지 , 1:재생 , 2:일시정지
   const [inst, setInst] = useState();
   const [editModal, setEditModal] = useState(false);
@@ -59,12 +68,19 @@ const LibraryList = (props) => {
     },
   });
 
-  console.log(data);
+  const [getCover] = useLazyQuery(GET_COVER, {
+    fetchPolicy: 'network-only',
+    variables: { getCoverCoverId: data.coverId },
+    onCompleted: (data) => {
+      setCoverTitle(data.getCover.name);
+    },
+  });
 
   const [updateCover, updateCoverResult] = useMutation(UPDATE_COVER, {
-    onCompleted: (data) => {
+    onCompleted: () => {
       setEditModal(false);
       setEditToggle(!editToggle);
+      getCover();
       notification['success']({
         key: 'successEditTitle',
         message: '',
@@ -129,6 +145,10 @@ const LibraryList = (props) => {
   };
 
   useEffect(() => {
+    getCover();
+  }, []);
+
+  useEffect(() => {
     setEditTitleError();
   }, [editTitle]);
 
@@ -153,7 +173,7 @@ const LibraryList = (props) => {
 
   return (
     <CoverContainer>
-      {songData ? (
+      {songData && coverTitle ? (
         <>
           <ImageContainer>
             <CoverImage src={songData.songImg} />
@@ -173,14 +193,16 @@ const LibraryList = (props) => {
               </>
             ) : (
               <>
-                <CoverTitle>{data.name}</CoverTitle>
+                <CoverTitle>{coverTitle}</CoverTitle>
                 <SongInform>
                   {songData.name} - {songData.artist}
                 </SongInform>
               </>
             )}
           </CoverInform>
-          {edit ? <CoverTime>2021-07-10</CoverTime> : null}
+          {edit && data.date ? (
+            <CoverTime>{data.date.substr(0, 10)}</CoverTime>
+          ) : null}
           <Spacing width={'3%'} />
           {edit ? (
             <>
