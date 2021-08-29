@@ -23,6 +23,7 @@ const Library = () => {
   const [libraryData, setLibraryData] = useState([]);
   const userData = useQuery(GET_CURRENT_USER);
   const [getUserInfo] = useLazyQuery(GET_USER_INFO, {
+    fetchPolicy: 'network-only',
     onCompleted: (data) => {
       setLibraryData(...libraryData, data.getUserInfo.library);
     },
@@ -39,21 +40,23 @@ const Library = () => {
   }, [userData]);
 
   const loadLibrary = () =>
-    libraryData.map((v, i) => {
-      return (
-        <LibraryList
-          data={v}
-          key={v.coverId}
-          edit={true}
-          libraryData={libraryData}
-          setLibraryData={setLibraryData}
-        />
-      );
-    });
+    libraryData
+      .slice(0, libraryData.length)
+      .reverse()
+      .map((v) => {
+        return (
+          <LibraryList
+            data={v}
+            key={v.coverId}
+            edit={true}
+            libraryData={libraryData}
+            setLibraryData={setLibraryData}
+          />
+        );
+      });
 
   useEffect(() => {
     loadLibrary();
-    console.log(libraryData);
   }, [libraryData]);
 
   return (
