@@ -15,8 +15,8 @@ const Container = styled.div`
   /* box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3); */
   padding: 1.5vh 1vw;
   height: auto;
-  width: ${(props) => (props.width ? props.width : '60%')};
-  min-width: 1000px;
+  width: ${(props) => (props.width ? `${props.width}` : '60%')};
+  min-width: ${(props) => (props.width ? `${props.width}` : '1000px')};
   margin-top: 3vh;
 
   ${media.medium} {
