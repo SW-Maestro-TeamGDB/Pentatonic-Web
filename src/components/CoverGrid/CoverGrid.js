@@ -20,7 +20,7 @@ import piano from '../../images/Session/piano.svg';
 import vocal from '../../images/Session/vocal.svg';
 
 const CoverGrid = (props) => {
-  const { idx, title, artist } = props;
+  const { idx, title, artist, img } = props;
   const category = ['animals', 'arch', 'nature', 'people', 'tech'];
   const randomImg = `https://placeimg.com/300/300/${category[idx]}`;
 
@@ -138,16 +138,18 @@ const CoverGrid = (props) => {
     },
   ];
 
+  console.log(img);
+
   return (
     <CustomLink to={`/lounge/cover/${idx}`}>
       <CoverContainer>
         <ImageContainer>
-          <CoverImage src={tempData[idx].img} />
+          <CoverImage src={img ? img : tempData[idx].img} />
           <HeadPhoneImage src={HeadPhoneIcon} />
         </ImageContainer>
         <DataContainer>
           <CoverInform>
-            <CoverTitle>{tempData[idx].cover}</CoverTitle>
+            <CoverTitle>{img ? title : tempData[idx].cover}</CoverTitle>
             <SongInform>
               {title
                 ? `${title} - ${artist}`
@@ -167,7 +169,9 @@ const CoverGrid = (props) => {
               </ViewCount>
               <SpacingSpan />
             </CountContainer>
-            <SessionInform>{showSession(tempData[idx].sessions)}</SessionInform>
+            <SessionInform>
+              {img ? null : showSession(tempData[idx].sessions)}
+            </SessionInform>
           </CoverMeta>
         </DataContainer>
       </CoverContainer>

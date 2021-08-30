@@ -2,7 +2,6 @@ import { Collapse } from 'antd';
 import react, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { Default } from '../../lib/Media';
-import GridContainer from '../GridContainer/GridContainer';
 
 import { changeSessoinNameToKorean } from '../../lib/changeSessionNameToKorean/changeSessionNameToKorean';
 
