@@ -1,26 +1,53 @@
-import react from 'react';
+import react, { useState, useEffect } from 'react';
 import PageContainer from '../../components/PageContainer';
 import { useQuery, gql } from '@apollo/client';
 import { GET_CURRENT_USER, currentUserVar } from '../../apollo/cache';
 
-const Profile = () => {
-  const { data } = useQuery(GET_CURRENT_USER);
-  const user = data.user;
+const GET_USER_INFO = gql`
+  query Query($getUserInfoUserId: Id) {
+    getUserInfo(userId: $getUserInfoUserId) {
+      id
+      username
+      profileURI
+      introduce
+      followerCount
+      followingCount
+      followingStatus
+      band {
+        name
+        backGroundURI
+        likeCount
+        bandId
+      }
+    }
+  }
+`;
+
+const Profile = ({ match }) => {
+  const currentUser = localStorage.getItem('UserInfo');
+  const id = match.params.id;
+  const [userData, setUserData] = useState();
+  const [error, setError] = useState(false);
+  const getUserInfo = useQuery(GET_USER_INFO, {
+    variables: {
+      getUserInfoUserId: id,
+    },
+    onCompleted: (data) => {
+      if (data.getUserInfo) setUserData(data.getUserInfo);
+      else setError(true);
+    },
+    onError: (error) => {
+      setError(true);
+    },
+  });
+
+  useEffect(() => {
+    console.log(userData);
+  }, [userData]);
 
   return (
     <PageContainer>
-      <h1>프로필</h1>
-      {user ? (
-        <>
-          <h3>{user.id}</h3>
-          <h3>{user.introduce}</h3>
-          <h3>{user.phoneNumber}</h3>
-          <h3>{user.prime}</h3>
-          <img src={user.profileURI} />
-          <h3>{user.type}</h3>
-          <h3>{user.username}</h3>
-        </>
-      ) : null}
+      {!error ? <h1>프로필</h1> : '존재하지 않는 유저입니다'}
     </PageContainer>
   );
 };

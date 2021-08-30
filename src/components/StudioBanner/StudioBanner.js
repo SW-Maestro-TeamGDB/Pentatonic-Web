@@ -21,7 +21,7 @@ const StudioBanner = () => {
       title: 'Roll',
       singer: 'The Internet',
       image:
-        'https://w.namu.la/s/6397238de77fb85cfc7fecbb63f01136119bf5fda326c451ee51f93e3dfbb1553fbf1839dbeab17f4a71deea38ab81175aeaf260754afb59927e4272852cc70666ec4ff05337e77f9b908e5370f8b8c07953f6120223307ab46f67744ea15f75',
+        'https://vejasp.abril.com.br/wp-content/uploads/2019/04/the-internet-oct-2018.jpeg.jpg?quality=70&strip=info&w=1000',
     },
     {
       id: 3,
