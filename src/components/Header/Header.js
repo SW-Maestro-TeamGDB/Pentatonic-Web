@@ -23,6 +23,7 @@ const Header = () => {
   const [getUserInform, getUserInformResult] = useLazyQuery(GET_USER_INFORM, {
     fetchPolicy: 'network-only',
     onCompleted: (data) => {
+      localStorage.setItem('userInfo', JSON.stringify(data.getUserInfo));
       currentUserVar(data.getUserInfo);
     },
     onError: (error) => {

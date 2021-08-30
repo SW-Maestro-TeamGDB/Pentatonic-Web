@@ -9,9 +9,11 @@ const MyMenu = (props) => {
     currentUserVar(null);
     isLoggedInVar(false);
   };
+  const userInfo = JSON.parse(localStorage.getItem('userInfo'));
+
   return (
     <MenuContainer>
-      <MenuLink to="/profile">마이페이지</MenuLink>
+      <MenuLink to={`/profile/${userInfo.id}`}>마이페이지</MenuLink>
       <MenuLink to="/liked">좋아요 누른 커버</MenuLink>
       <MenuLink to="/library">라이브러리</MenuLink>
       <MenuButton onClick={onClickLogout}>로그아웃</MenuButton>

@@ -30,7 +30,7 @@ function App() {
             <Route path="/lounge" component={Lounge} />
             <Route path="/studio" component={Studio} />
             <Route path="/artist" component={Artist} />
-            <Route path="/profile" component={Profile} />
+            <Route path="/profile/:id" component={Profile} />
             <Route path="/register" component={Register} />
             <Route path="/library" component={Library} />
             <Route path="/liked" component={Liked} />
