@@ -39,28 +39,30 @@ const Library = () => {
     }
   }, [userData]);
 
-  const loadLibrary = () =>
-    libraryData
-      .slice(0, libraryData.length)
-      .reverse()
-      .map((v) => {
-        return (
-          <LibraryList
-            data={v}
-            key={v.coverId}
-            edit={true}
-            libraryData={libraryData}
-            setLibraryData={setLibraryData}
-          />
-        );
-      });
+  const loadLibrary = () => {
+    if (libraryData.length > 0)
+      return libraryData
+        .slice(0, libraryData.length)
+        .reverse()
+        .map((v) => {
+          return (
+            <LibraryList
+              data={v}
+              key={v.coverId}
+              edit={true}
+              libraryData={libraryData}
+              setLibraryData={setLibraryData}
+            />
+          );
+        });
+  };
 
   useEffect(() => {
     loadLibrary();
   }, [libraryData]);
 
   return (
-    <PageContainer width="50%">
+    <PageContainer width="52%">
       <PageTitle>라이브러리</PageTitle>
       <Spacing />
       <LibraryContainer>

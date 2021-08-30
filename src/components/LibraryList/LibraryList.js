@@ -290,8 +290,8 @@ const LibraryList = (props) => {
           <Skeleton.Button size={'large'} />
           <Spacing width={'5%'} />
           <Skeleton
-            title={{ width: '80%' }}
-            paragraph={{ width: '80%', rows: 1 }}
+            title={{ width: '95%' }}
+            paragraph={{ width: '95%', rows: 1 }}
           />
         </>
       )}
