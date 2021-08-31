@@ -33,6 +33,14 @@ const GET_USER_INFO = gql`
   }
 `;
 
+const CHANGE_PROFILE = gql`
+  mutation ChangeProfileMutation($changeProfileInput: ChangeProfileInput!) {
+    changeProfile(input: $changeProfileInput) {
+      id
+    }
+  }
+`;
+
 const UPLOAD_IMAGE_FILE = gql`
   mutation Mutation($uploadImageFileInput: UploadImageInput!) {
     uploadImageFile(input: $uploadImageFileInput)
@@ -52,6 +60,7 @@ const Profile = ({ match }) => {
   const ID = match.params.id;
   const [userData, setUserData] = useState();
   const [error, setError] = useState(false);
+  const [nameError, setNameError] = useState();
   const [loading, setLoading] = useState(true);
   const [edit, setEdit] = useState(false);
   const [editUserData, setEditUserData] = useState({
@@ -68,8 +77,18 @@ const Profile = ({ match }) => {
       // console.log(error);
     },
     onCompleted: (data) => {
-      console.log(data);
       setEditUserData({ ...editUserData, profileURI: data.uploadImageFile });
+    },
+  });
+
+  const [changeProfile] = useMutation(CHANGE_PROFILE, {
+    fetchPolicy: 'no-cache',
+    onError: (error) => {
+      console.log(error);
+    },
+    onCompleted: (data) => {
+      getUserInfo();
+      setEdit(false);
     },
   });
 
@@ -128,10 +147,10 @@ const Profile = ({ match }) => {
     const username = editUserData.username;
 
     if (!username) {
-      setError('닉네임을 입력해주세요');
+      setNameError('닉네임을 입력해주세요');
       return false;
     } else if (username.length < 2) {
-      setError('2글자 이상의 닉네임을 입력해주세요');
+      setNameError('2글자 이상의 닉네임을 입력해주세요');
       return false;
     }
 
@@ -167,6 +186,25 @@ const Profile = ({ match }) => {
     }
   };
 
+  const onClickProfileChange = () => {
+    if (usernameCheck()) {
+      // 이름 변경하지 않는 경우 이름 프로퍼티 제외
+      if (editUserData.username === userData.username) {
+        let temp = editUserData;
+        delete temp.username;
+        setEditUserData(temp);
+      }
+
+      changeProfile({
+        variables: {
+          changeProfileInput: {
+            user: editUserData,
+          },
+        },
+      });
+    }
+  };
+
   useEffect(() => {
     getUserInfo();
   }, []);
@@ -184,6 +222,10 @@ const Profile = ({ match }) => {
     console.log(editUserData);
   }, [editUserData]);
 
+  useEffect(() => {
+    setNameError();
+  }, [editUserData.username]);
+
   return (
     <PageContainer width="55%">
       {!error ? (
@@ -198,7 +240,10 @@ const Profile = ({ match }) => {
                     customRequest={(data) => submitImageFile(data)}
                   >
                     {editUserData.profileURI === userData.profileURI ? (
-                      <CustomPictureIcon />
+                      <>
+                        <EditProfile src={userData.profileURI} opacity="0.3" />
+                        <CustomPictureIcon />
+                      </>
                     ) : (
                       <DraggerContents>
                         <EditProfile src={editUserData.profileURI} />
@@ -224,6 +269,9 @@ const Profile = ({ match }) => {
                       defaultValue={editUserData.username}
                       maxLength="14"
                     />
+                    {nameError ? (
+                      <ErrorMessage>{nameError}</ErrorMessage>
+                    ) : null}
                     <CustomTextArea
                       placeholder="자기소개를 입력해주세요"
                       onChange={(e) =>
@@ -261,7 +309,7 @@ const Profile = ({ match }) => {
                 <FollowButtonContainer>
                   {currentUser.id === userData.id ? (
                     edit ? (
-                      <FollowButton onClick={() => setEdit(false)}>
+                      <FollowButton onClick={onClickProfileChange}>
                         수정 완료
                       </FollowButton>
                     ) : (
@@ -312,10 +360,17 @@ const Profile = ({ match }) => {
   );
 };
 
+const ErrorMessage = styled.div`
+  color: #cb0000;
+  font-size: 0.7rem;
+  margin-bottom: 0.5rem;
+  padding-left: 3%;
+`;
+
 const CustomPictureIcon = styled(PictureOutlined)`
-  font-size: 5rem;
+  font-size: 4.5rem;
   transition: all 0.3s ease-in-out !important;
-  color: lightgray;
+  color: #444;
 
   position: absolute;
   left: 50%;
@@ -342,6 +397,8 @@ const EditProfile = styled.img`
   height: 100%;
   border-radius: 10px;
   transition: all 0.3s ease-in-out;
+
+  opacity: ${(props) => (props.opacity ? props.opacity : 1)};
 `;
 
 const DraggerContents = styled.div`
@@ -380,10 +437,7 @@ const CustomDragger = styled(Dragger)`
   align-items: center;
 
   &:hover {
-    ${CustomPictureIcon} {
-      color: #999;
-    }
-
+    border: 2px solid #999 !important;
     box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.2);
   }
 `;
@@ -417,14 +471,14 @@ const CustomInput = styled.input`
   border-radius: 0.8rem;
   margin: 0 0 0.5rem;
   padding: 0 0.8rem;
-  font-size: 1rem;
+  font-size: 0.9rem;
 
   &:focus {
     box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.2);
   }
 
   ::placeholder {
-    font-size: 1rem;
+    font-size: 0.8rem;
     color: #777;
   }
 `;
@@ -439,7 +493,7 @@ const CustomTextArea = styled.textarea`
   border-radius: 0.8rem;
   margin: 0;
   padding: 0.5rem 0.8rem;
-  font-size: 1rem;
+  font-size: 0.9rem;
 
   resize: none;
 
@@ -448,7 +502,7 @@ const CustomTextArea = styled.textarea`
   }
 
   ::placeholder {
-    font-size: 1rem;
+    font-size: 0.8rem;
     color: #777;
   }
 
@@ -600,7 +654,7 @@ const UserImage = styled.div`
 
 const UserInfo = styled.div`
   width: 50%;
-  height: 8.5rem;
+  min-height: 8.5rem;
 
   display: flex;
   flex-direction: column;
@@ -612,9 +666,10 @@ const UserName = styled.div`
   letter-spacing: -0.6px;
 `;
 
-const UserIntroduce = styled.div`
+const UserIntroduce = styled.pre`
   margin-top: 1.3rem;
   font-size: 1rem;
+  font-family: 'NanumSquare';
 
   // 자기소개 텍스트 최대 3줄표시
   overflow: hidden;
