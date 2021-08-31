@@ -4,7 +4,7 @@ import { useQuery, gql, useLazyQuery, useMutation } from '@apollo/client';
 import { Default } from '../../lib/Media';
 import { DeleteFilled, EditOutlined, LoadingOutlined } from '@ant-design/icons';
 import { Skeleton, notification } from 'antd';
-import QuestionModal from '../QuestionModal.js/QuestionModal';
+import QuestionModal from '../QuestionModal';
 import ThumbIcon from '../../images/ThumbIcon.svg';
 import ViewIcon from '../../images/ViewIcon.svg';
 
