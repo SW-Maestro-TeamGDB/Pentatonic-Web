@@ -70,6 +70,7 @@ const Profile = ({ match }) => {
   });
 
   const [unfollowModal, setUnfollowModal] = useState(false);
+  const [editUserDataModal, setEditUserDataModal] = useState(false);
 
   const [uploadImage, uploadImageResult] = useMutation(UPLOAD_IMAGE_FILE, {
     fetchPolicy: 'no-cache',
@@ -84,10 +85,12 @@ const Profile = ({ match }) => {
   const [changeProfile] = useMutation(CHANGE_PROFILE, {
     fetchPolicy: 'no-cache',
     onError: (error) => {
-      console.log(error);
+      setNameError(error.message);
+      setEditUserDataModal(false);
     },
     onCompleted: (data) => {
       getUserInfo();
+      setEditUserDataModal(false);
       setEdit(false);
     },
   });
@@ -266,6 +269,7 @@ const Profile = ({ match }) => {
                           username: e.target.value,
                         })
                       }
+                      value={editUserData.username}
                       defaultValue={editUserData.username}
                       maxLength="14"
                     />
@@ -280,6 +284,7 @@ const Profile = ({ match }) => {
                           introduce: e.target.value,
                         })
                       }
+                      value={editUserData.introduce}
                       defaultValue={editUserData.introduce}
                       maxLength="100"
                     />
@@ -309,7 +314,7 @@ const Profile = ({ match }) => {
                 <FollowButtonContainer>
                   {currentUser.id === userData.id ? (
                     edit ? (
-                      <FollowButton onClick={onClickProfileChange}>
+                      <FollowButton onClick={() => setEditUserDataModal(true)}>
                         수정 완료
                       </FollowButton>
                     ) : (
@@ -351,6 +356,12 @@ const Profile = ({ match }) => {
               text={`${userData.username}님의 팔로잉을 취소하시겠습니까?`}
               afterRequest={unfollow}
             />
+            <QuestionModal
+              modalToggle={editUserDataModal}
+              setModalToggle={setEditUserDataModal}
+              text="프로필을 수정하시겠습니까?"
+              afterRequest={onClickProfileChange}
+            />
           </>
         ) : null
       ) : (
@@ -362,7 +373,7 @@ const Profile = ({ match }) => {
 
 const ErrorMessage = styled.div`
   color: #cb0000;
-  font-size: 0.7rem;
+  font-size: 0.8rem;
   margin-bottom: 0.5rem;
   padding-left: 3%;
 `;
