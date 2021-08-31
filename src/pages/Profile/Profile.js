@@ -1,10 +1,11 @@
 import react, { useState, useEffect } from 'react';
 import PageContainer from '../../components/PageContainer';
-import { useQuery, gql, useLazyQuery } from '@apollo/client';
+import { useQuery, gql, useLazyQuery, useMutation } from '@apollo/client';
 import { GET_CURRENT_USER, currentUserVar } from '../../apollo/cache';
 import { SettingFilled, PlusCircleFilled } from '@ant-design/icons';
 import GridContainer from '../../components/GridContainer';
 import CoverGrid from '../../components/CoverGrid';
+import QuestionModal from '../../components/QuestionModal/QuestionModal';
 import styled from 'styled-components';
 
 const GET_USER_INFO = gql`
@@ -27,6 +28,12 @@ const GET_USER_INFO = gql`
   }
 `;
 
+const FOLLOW = gql`
+  mutation Mutation($followInput: FollowInput!) {
+    follow(input: $followInput)
+  }
+`;
+
 const Profile = ({ match }) => {
   const currentUser = JSON.parse(localStorage.getItem('userInfo'));
   const ID = match.params.id;
@@ -34,12 +41,15 @@ const Profile = ({ match }) => {
   const [error, setError] = useState(false);
   const [loading, setLoading] = useState(true);
 
-  const getUserInfo = useQuery(GET_USER_INFO, {
+  const [unfollowModal, setUnfollowModal] = useState(false);
+
+  const [getUserInfo] = useLazyQuery(GET_USER_INFO, {
     fetchPolicy: 'network-only',
     variables: {
       getUserInfoUserId: ID,
     },
     onCompleted: (data) => {
+      console.log(data);
       if (data.getUserInfo) {
         setUserData(data.getUserInfo);
         setLoading(false);
@@ -55,11 +65,39 @@ const Profile = ({ match }) => {
     },
   });
 
+  const [follow, followResult] = useMutation(FOLLOW, {
+    variables: {
+      followInput: {
+        following: ID,
+      },
+    },
+    onCompleted: (data) => {
+      getUserInfo();
+    },
+  });
+
   const showCoverHistory = () => {
     return userData.band.map((v) => {
       return <CoverGrid key={v.bandId} title={v.name} img={v.backGroundURI} />;
     });
   };
+
+  const onClickFollowing = () => {
+    follow();
+  };
+
+  const onClickUnfollow = () => {
+    setUnfollowModal(true);
+  };
+
+  const unfollow = () => {
+    setUnfollowModal(false);
+    follow();
+  };
+
+  useEffect(() => {
+    getUserInfo();
+  }, []);
 
   return (
     <PageContainer width="55%">
@@ -91,9 +129,11 @@ const Profile = ({ match }) => {
                       <CustomSettingIcon /> 프로필 수정
                     </FollowButton>
                   ) : userData.followingStatus ? (
-                    <FollowingButton>팔로잉</FollowingButton>
+                    <FollowingButton onClick={onClickUnfollow}>
+                      팔로잉
+                    </FollowingButton>
                   ) : (
-                    <FollowButton>
+                    <FollowButton onClick={onClickFollowing}>
                       <CustomFollowIcon />
                       팔로우
                     </FollowButton>
@@ -115,6 +155,12 @@ const Profile = ({ match }) => {
                 </GridContainer>
               )}
             </CoverHistoryContainer>
+            <QuestionModal
+              modalToggle={unfollowModal}
+              setModalToggle={setUnfollowModal}
+              text={`${userData.username}님의 팔로잉을 취소하시겠습니까?`}
+              afterRequest={unfollow}
+            />
           </>
         ) : null
       ) : (
