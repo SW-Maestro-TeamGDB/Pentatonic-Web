@@ -2,10 +2,15 @@ import react, { useState, useEffect } from 'react';
 import PageContainer from '../../components/PageContainer';
 import { useQuery, gql, useLazyQuery, useMutation } from '@apollo/client';
 import { GET_CURRENT_USER, currentUserVar } from '../../apollo/cache';
-import { SettingFilled, PlusCircleFilled } from '@ant-design/icons';
+import {
+  SettingFilled,
+  PlusCircleFilled,
+  PictureOutlined,
+} from '@ant-design/icons';
 import GridContainer from '../../components/GridContainer';
 import CoverGrid from '../../components/CoverGrid';
 import QuestionModal from '../../components/QuestionModal/QuestionModal';
+import { Upload, notification } from 'antd';
 import styled from 'styled-components';
 
 const GET_USER_INFO = gql`
@@ -28,11 +33,19 @@ const GET_USER_INFO = gql`
   }
 `;
 
+const UPLOAD_IMAGE_FILE = gql`
+  mutation Mutation($uploadImageFileInput: UploadImageInput!) {
+    uploadImageFile(input: $uploadImageFileInput)
+  }
+`;
+
 const FOLLOW = gql`
   mutation Mutation($followInput: FollowInput!) {
     follow(input: $followInput)
   }
 `;
+
+const { Dragger } = Upload;
 
 const Profile = ({ match }) => {
   const currentUser = JSON.parse(localStorage.getItem('userInfo'));
@@ -40,8 +53,25 @@ const Profile = ({ match }) => {
   const [userData, setUserData] = useState();
   const [error, setError] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [edit, setEdit] = useState(false);
+  const [editUserData, setEditUserData] = useState({
+    introduce: null,
+    profileURI: null,
+    username: null,
+  });
 
   const [unfollowModal, setUnfollowModal] = useState(false);
+
+  const [uploadImage, uploadImageResult] = useMutation(UPLOAD_IMAGE_FILE, {
+    fetchPolicy: 'no-cache',
+    onError: (error) => {
+      // console.log(error);
+    },
+    onCompleted: (data) => {
+      console.log(data);
+      setEditUserData({ ...editUserData, profileURI: data.uploadImageFile });
+    },
+  });
 
   const [getUserInfo] = useLazyQuery(GET_USER_INFO, {
     fetchPolicy: 'network-only',
@@ -49,7 +79,6 @@ const Profile = ({ match }) => {
       getUserInfoUserId: ID,
     },
     onCompleted: (data) => {
-      console.log(data);
       if (data.getUserInfo) {
         setUserData(data.getUserInfo);
         setLoading(false);
@@ -95,9 +124,65 @@ const Profile = ({ match }) => {
     follow();
   };
 
+  const usernameCheck = () => {
+    const username = editUserData.username;
+
+    if (!username) {
+      setError('닉네임을 입력해주세요');
+      return false;
+    } else if (username.length < 2) {
+      setError('2글자 이상의 닉네임을 입력해주세요');
+      return false;
+    }
+
+    return true;
+  };
+
+  const imageFileCheck = (file) => {
+    const acceptType = ['image/png', 'image/jpeg', 'image/bmp'];
+
+    if (acceptType.indexOf(file.type) == -1) {
+      notification['warning']({
+        key: 'imagFilyTypeNotification',
+        message: '이미지 파일 형식 오류',
+        description: `png , jpeg , bmp 형식의 파일만 업로드 할 수 있습니다`,
+        placement: 'bottomRight',
+        duration: 5,
+        style: {
+          width: '30rem',
+        },
+      });
+      return false;
+    }
+    return true;
+  };
+
+  const submitImageFile = (data) => {
+    if (imageFileCheck(data.file)) {
+      uploadImage({
+        variables: {
+          uploadImageFileInput: { file: data.file },
+        },
+      });
+    }
+  };
+
   useEffect(() => {
     getUserInfo();
   }, []);
+
+  useEffect(() => {
+    if (userData)
+      setEditUserData({
+        introduce: userData.introduce,
+        profileURI: userData.profileURI,
+        username: userData.username,
+      });
+  }, [userData]);
+
+  useEffect(() => {
+    console.log(editUserData);
+  }, [editUserData]);
 
   return (
     <PageContainer width="55%">
@@ -106,28 +191,85 @@ const Profile = ({ match }) => {
           <>
             <UserInfoContainer>
               <UserImageContainer>
-                <UserImage src={userData.profileURI} />
+                {edit ? (
+                  <CustomDragger
+                    maxCount={1}
+                    showUploadList={false}
+                    customRequest={(data) => submitImageFile(data)}
+                  >
+                    {editUserData.profileURI === userData.profileURI ? (
+                      <CustomPictureIcon />
+                    ) : (
+                      <DraggerContents>
+                        <EditProfile src={editUserData.profileURI} />
+                        <CustomUnvisiblePictureIcon />
+                      </DraggerContents>
+                    )}
+                  </CustomDragger>
+                ) : (
+                  <UserImage src={userData.profileURI} />
+                )}
               </UserImageContainer>
               <UserInfo>
-                <UserName>{userData.username}</UserName>
-                <UserIntroduce>{userData.introduce}</UserIntroduce>
+                {edit ? (
+                  <>
+                    <CustomInput
+                      placeholder="닉네임을 입력해주세요"
+                      onChange={(e) =>
+                        setEditUserData({
+                          ...editUserData,
+                          username: e.target.value,
+                        })
+                      }
+                      defaultValue={editUserData.username}
+                      maxLength="14"
+                    />
+                    <CustomTextArea
+                      placeholder="자기소개를 입력해주세요"
+                      onChange={(e) =>
+                        setEditUserData({
+                          ...editUserData,
+                          introduce: e.target.value,
+                        })
+                      }
+                      defaultValue={editUserData.introduce}
+                      maxLength="100"
+                    />
+                  </>
+                ) : (
+                  <>
+                    <UserName>{userData.username}</UserName>
+                    <UserIntroduce>{userData.introduce}</UserIntroduce>
+                  </>
+                )}
               </UserInfo>
               <MetaContainer>
                 <FollowContainer>
-                  <FollowWrapper>
-                    {userData.followerCount}
-                    <FollowContainerTitle>팔로워</FollowContainerTitle>
-                  </FollowWrapper>
-                  <FollowWrapper>
-                    {userData.followingCount}
-                    <FollowContainerTitle>팔로우</FollowContainerTitle>
-                  </FollowWrapper>
+                  {edit ? null : (
+                    <>
+                      <FollowWrapper>
+                        {userData.followerCount}
+                        <FollowContainerTitle>팔로워</FollowContainerTitle>
+                      </FollowWrapper>
+                      <FollowWrapper>
+                        {userData.followingCount}
+                        <FollowContainerTitle>팔로우</FollowContainerTitle>
+                      </FollowWrapper>
+                    </>
+                  )}
                 </FollowContainer>
                 <FollowButtonContainer>
                   {currentUser.id === userData.id ? (
-                    <FollowButton>
-                      <CustomSettingIcon /> 프로필 수정
-                    </FollowButton>
+                    edit ? (
+                      <FollowButton onClick={() => setEdit(false)}>
+                        수정 완료
+                      </FollowButton>
+                    ) : (
+                      <FollowButton onClick={() => setEdit(true)}>
+                        <CustomSettingIcon />
+                        프로필 수정
+                      </FollowButton>
+                    )
                   ) : userData.followingStatus ? (
                     <FollowingButton onClick={onClickUnfollow}>
                       팔로잉
@@ -170,6 +312,90 @@ const Profile = ({ match }) => {
   );
 };
 
+const CustomPictureIcon = styled(PictureOutlined)`
+  font-size: 5rem;
+  transition: all 0.3s ease-in-out !important;
+  color: lightgray;
+
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+`;
+
+const CustomUnvisiblePictureIcon = styled(PictureOutlined)`
+  font-size: 4rem;
+  transition: all 0.3s ease-in-out !important;
+  color: white;
+
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  opacity: 0;
+
+  visibility: hidden;
+`;
+
+const EditProfile = styled.img`
+  width: 100%;
+  height: 100%;
+  border-radius: 10px;
+  transition: all 0.3s ease-in-out;
+`;
+
+const DraggerContents = styled.div`
+  width: 9rem;
+  height: 9rem;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: all 0.3s ease-in-out;
+
+  &:hover ${CustomUnvisiblePictureIcon} {
+    visibility: visible;
+    font-size: 3.5rem;
+    opacity: 1;
+  }
+
+  &:hover ${EditProfile} {
+    filter: brightness(70%);
+  }
+`;
+
+const CustomDragger = styled(Dragger)`
+  background-color: transparent !important;
+  border: 2px solid lightgray !important;
+  border-radius: 0.8rem !important;
+  padding: 1rem 0 !important;
+
+  width: 9rem !important;
+  height: 9rem !important;
+
+  transition: all 0.3s ease-in-out !important;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  &:hover {
+    ${CustomPictureIcon} {
+      color: #999;
+    }
+
+    box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.2);
+  }
+`;
+
+/* ${CustomPictureIcon} {
+      color: #444444;
+    }
+
+    ${UploadText} {
+      color: #444444;
+    } */
+
 const NoCoverText = styled.div`
   font-size: 1rem;
   width: 100%;
@@ -179,6 +405,56 @@ const NoCoverText = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+`;
+
+const CustomInput = styled.input`
+  width: 100%;
+  color: #222;
+  border: 2px solid lightgray;
+  transition: all ease 0.3s;
+  outline: none;
+  height: 2.8rem;
+  border-radius: 0.8rem;
+  margin: 0 0 0.5rem;
+  padding: 0 0.8rem;
+  font-size: 1rem;
+
+  &:focus {
+    box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.2);
+  }
+
+  ::placeholder {
+    font-size: 1rem;
+    color: #777;
+  }
+`;
+
+const CustomTextArea = styled.textarea`
+  width: 100%;
+  color: #222;
+  border: 2px solid lightgray;
+  transition: all ease 0.3s;
+  outline: none;
+  height: 5.5rem;
+  border-radius: 0.8rem;
+  margin: 0;
+  padding: 0.5rem 0.8rem;
+  font-size: 1rem;
+
+  resize: none;
+
+  &:focus {
+    box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.2);
+  }
+
+  ::placeholder {
+    font-size: 1rem;
+    color: #777;
+  }
+
+  ::-webkit-scrollbar {
+    display: none;
+  }
 `;
 
 const CustomSettingIcon = styled(SettingFilled)`
@@ -245,6 +521,12 @@ const FollowButton = styled.div`
 
   transition: all 0.3s ease-in-out;
 
+  -ms-user-select: none;
+  -moz-user-select: -moz-none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  user-select: none;
+
   &:hover {
     border-color: #666;
     color: #666;
@@ -299,12 +581,15 @@ const UserImageContainer = styled.div`
   align-items: center;
   border-radius: 10px;
 
+  width: 9rem;
+  height: 9rem;
+
   margin: 0 5%;
 `;
 
 const UserImage = styled.div`
-  width: 9rem;
-  height: 9rem;
+  width: 100%;
+  height: 100%;
 
   background-image: url(${(props) => props.src});
   background-repeat: no-repeat;

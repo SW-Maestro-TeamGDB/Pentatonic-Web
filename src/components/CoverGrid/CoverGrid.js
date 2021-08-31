@@ -138,8 +138,6 @@ const CoverGrid = (props) => {
     },
   ];
 
-  console.log(img);
-
   return (
     <CustomLink to={`/lounge/cover/${idx}`}>
       <CoverContainer>
