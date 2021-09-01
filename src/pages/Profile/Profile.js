@@ -11,6 +11,7 @@ import GridContainer from '../../components/GridContainer';
 import CoverGrid from '../../components/CoverGrid';
 import QuestionModal from '../../components/QuestionModal/QuestionModal';
 import NotFoundPage from '../NotFoundPage';
+import PositionGrid from '../../components/PositionGrid';
 import { Upload, notification } from 'antd';
 import styled from 'styled-components';
 
@@ -112,6 +113,7 @@ const Profile = ({ match }) => {
       }
     },
     onError: (error) => {
+      console.log(error);
       setError(true);
       setLoading(false);
     },
@@ -207,6 +209,13 @@ const Profile = ({ match }) => {
         },
       });
     }
+  };
+
+  // 임시데이터
+  const showPosition = () => {
+    return Array.from({ length: 3 }, () => 0).map((v, i) => {
+      return <PositionGrid id={i % 4} key={i} />;
+    });
   };
 
   useEffect(() => {
@@ -339,14 +348,29 @@ const Profile = ({ match }) => {
             </UserInfoContainer>
             <UserSessionContainer>
               <BoardTitle>포지션</BoardTitle>
-              <UserSession> </UserSession>
+              <UserSession>
+                {userData.band.length > 0 ? (
+                  <Padding>
+                    <GridContainer
+                      templateColumn="180px"
+                      rowGap="1.5rem"
+                      columnGap="1.5rem"
+                      autoFill
+                    >
+                      {showPosition()}
+                    </GridContainer>
+                  </Padding>
+                ) : (
+                  <NoPosition>참여한 포지션이 없습니다</NoPosition>
+                )}
+              </UserSession>
             </UserSessionContainer>
             <CoverHistoryContainer>
               <BoardTitle>커버 히스토리</BoardTitle>
               {userData.band.length === 0 ? (
-                <NoCoverText>참여한 밴드가 없습니다</NoCoverText>
+                <NoCoverText>참여한 커버가 없습니다</NoCoverText>
               ) : (
-                <GridContainer templateColumn="250px">
+                <GridContainer templateColumn="250px" autoFill>
                   {showCoverHistory()}
                 </GridContainer>
               )}
@@ -377,6 +401,18 @@ const ErrorMessage = styled.div`
   font-size: 0.8rem;
   margin-bottom: 0.5rem;
   padding-left: 3%;
+`;
+
+const NoPosition = styled.div`
+  font-size: 1.4rem;
+  color: #9b94b3;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  height: 12rem;
+  letter-spacing: -0.5px;
+  font-weight: 800;
 `;
 
 const CustomPictureIcon = styled(PictureOutlined)`
@@ -463,10 +499,13 @@ const CustomDragger = styled(Dragger)`
     } */
 
 const NoCoverText = styled.div`
-  font-size: 1rem;
+  font-size: 1.4rem;
   width: 100%;
   height: 12rem;
   margin-top: 1rem;
+  letter-spacing: -0.5px;
+  font-weight: 800;
+  color: #9b94b3;
 
   display: flex;
   justify-content: center;
@@ -616,11 +655,12 @@ const UserSessionContainer = styled.div`
 
 const UserSession = styled.div`
   width: 100%;
-  height: 12rem;
+  height: auto;
   border-radius: 10px;
-  background-color: #f7f4ff;
+  background-color: rgba(153, 127, 249, 0.15);
 
   margin-top: 1rem;
+  min-height: 12rem;
 `;
 
 const CoverHistoryContainer = styled.div`
@@ -722,6 +762,14 @@ const BoardTitle = styled.nav`
   font-weight: 600;
   width: 100%;
   color: black;
+`;
+
+const Padding = styled.div`
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+
+  padding: 1.5rem 1.5rem;
 `;
 
 export default Profile;
