@@ -10,6 +10,7 @@ import {
 import GridContainer from '../../components/GridContainer';
 import CoverGrid from '../../components/CoverGrid';
 import QuestionModal from '../../components/QuestionModal/QuestionModal';
+import NotFoundPage from '../NotFoundPage';
 import { Upload, notification } from 'antd';
 import styled from 'styled-components';
 
@@ -365,7 +366,7 @@ const Profile = ({ match }) => {
           </>
         ) : null
       ) : (
-        '존재하지 않는 유저입니다'
+        <NotFoundPage desc="존재하지 않는 유저입니다" />
       )}
     </PageContainer>
   );

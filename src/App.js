@@ -16,6 +16,7 @@ import Library from './pages/Library';
 import Liked from './pages/Liked';
 import Login from './pages/Login/Login';
 import FindAccount from './pages/FindAccount';
+import NotFoundPage from './pages/NotFoundPage';
 
 function App() {
   return (
@@ -35,6 +36,7 @@ function App() {
             <Route path="/library" component={Library} />
             <Route path="/liked" component={Liked} />
             <Route path="/account" component={FindAccount} />
+            <Route path="*" component={NotFoundPage} exact />
           </Switch>
         </Centered>
       </Router>
