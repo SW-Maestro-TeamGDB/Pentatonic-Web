@@ -5,10 +5,25 @@ import { media } from '../../lib/Media';
 import SearchIcon from '../../images/SearchIcon.svg';
 
 const GridContainer = (props) => {
-  const { children, width, templateColumn } = props;
+  const {
+    children,
+    width,
+    templateColumn,
+    autoFill,
+    columnGap = '1rem',
+    rowGap = '1rem',
+  } = props;
+
+  console.log(autoFill);
 
   return (
-    <Container width={width} templateColumn={templateColumn}>
+    <Container
+      width={width}
+      templateColumn={templateColumn}
+      columnGap={columnGap}
+      rowGap={rowGap}
+      autoFill={autoFill}
+    >
       {children}
     </Container>
   );
@@ -20,10 +35,12 @@ const Container = styled.div`
   display: grid;
   grid-template-columns: ${(props) =>
     props.templateColumn
-      ? `repeat(auto-fit, minmax(${props.templateColumn}, 1fr))`
+      ? `repeat(${props.autoFill ? 'auto-fill' : 'auto-fit'}, minmax(${
+          props.templateColumn
+        }, 1fr))`
       : '1fr 1fr'};
-  grid-column-gap: 1rem;
-  grid-row-gap: 1rem;
+  grid-column-gap: ${(props) => props.columnGap};
+  grid-row-gap: ${(props) => props.rowGap};
 `;
 
 export default GridContainer;
