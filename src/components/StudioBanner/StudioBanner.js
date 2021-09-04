@@ -12,16 +12,16 @@ const StudioBanner = () => {
   const tempData = [
     {
       id: 1,
-      title: 'Han',
-      singer: 'Berhana',
-      image: 'https://i.ytimg.com/vi/Chezi1Ojjtc/maxresdefault.jpg',
-    },
-    {
-      id: 2,
       title: 'Roll',
       singer: 'The Internet',
       image:
         'https://vejasp.abril.com.br/wp-content/uploads/2019/04/the-internet-oct-2018.jpeg.jpg?quality=70&strip=info&w=1000',
+    },
+    {
+      id: 2,
+      title: 'Han',
+      singer: 'Berhana',
+      image: 'https://i.ytimg.com/vi/Chezi1Ojjtc/maxresdefault.jpg',
     },
     {
       id: 3,

@@ -61,7 +61,7 @@ const ArtistBanner = () => {
 
 const CustomCarousel = styled(Carousel)`
   width: 100%;
-  height: 22vw;
+  height: 16vw;
   position: relative;
 `;
 

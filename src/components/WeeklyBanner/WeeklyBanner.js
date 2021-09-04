@@ -47,10 +47,10 @@ const BannerContainer = styled.div`
   overflow: hidden;
 
   ${Background} {
-    filter: brightness(50%);
+    filter: brightness(60%);
 
     &:hover {
-      filter: brightness(70%);
+      filter: brightness(80%);
     }
   }
 `;
