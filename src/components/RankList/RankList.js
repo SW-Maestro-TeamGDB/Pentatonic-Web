@@ -95,7 +95,7 @@ const RankIcon = styled.div`
 `;
 
 const ListTitle = styled.div`
-  width: 50%;
+  width: 45%;
   height: 100%;
   text-align: left;
   font-size: 16px;
