@@ -47,10 +47,8 @@ const Menu = () => {
   const ArtistMenu = (
     <SubMenuContainer>
       <SubMenuSpacing />
-      <SubMenuLink to="/artist/rising/band">라이징 밴드</SubMenuLink>
-      <SubMenuLink to="/artist/rising/solo">라이징 아티스트</SubMenuLink>
       <SubMenuLink to="/artist/rank/band">밴드 랭킹</SubMenuLink>
-      <SubMenuLink to="/artist/rank/solo">아티스트 랭킹</SubMenuLink>
+      <SubMenuLink to="/artist/rank/artist">아티스트 랭킹</SubMenuLink>
       <SubMenuSpacing />
     </SubMenuContainer>
   );
