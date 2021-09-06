@@ -1,6 +1,10 @@
 import react, { useEffect, useState, useCallback } from 'react';
 import styled from 'styled-components';
-import { currentUserVar, isLoggedInVar } from '../../apollo/cache';
+import {
+  currentUserVar,
+  isLoggedInVar,
+  GET_USER_INFORM,
+} from '../../apollo/cache';
 import { gql, useMutation, useQuery, useLazyQuery } from '@apollo/client';
 import { Link } from 'react-router-dom';
 
@@ -19,6 +23,27 @@ const LoginModal = (props) => {
     errorPolicy: 'all',
     onError: (errors) => {
       setFormError('로그인에 실패했습니다');
+    },
+    onCompleted: (data) => {
+      getUserInform({
+        variables: {
+          getUserInfoUserId: id,
+        },
+      });
+    },
+  });
+
+  const [getUserInform, getUserInformResult] = useLazyQuery(GET_USER_INFORM, {
+    fetchPolicy: 'no-cache',
+    // 여기에 variables 넣으면 id값 바뀔때마다 query 실행됨
+    onCompleted: (data) => {
+      localStorage.setItem('userInfo', JSON.stringify(data.getUserInfo));
+      currentUserVar(data.getUserInfo);
+      setID('');
+      setPassword('');
+    },
+    onError: (err) => {
+      console.log(err);
     },
   });
 
@@ -50,8 +75,6 @@ const LoginModal = (props) => {
     }
 
     login({ variables: { id, password } });
-    setID('');
-    setPassword('');
   };
 
   return (

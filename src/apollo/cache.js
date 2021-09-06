@@ -1,7 +1,9 @@
 import { InMemoryCache, makeVar, gql } from '@apollo/client';
 
 export const currentUserVar = makeVar(null);
-export const isLoggedInVar = makeVar(!!localStorage.getItem('token'));
+export const isLoggedInVar = makeVar(
+  !!localStorage.getItem('token') && !!localStorage.getItem('userInfo'),
+);
 
 export const GET_CURRENT_USER = gql`
   query {
@@ -16,14 +18,12 @@ export const IS_LOGGED_IN = gql`
 `;
 
 export const GET_USER_INFORM = gql`
-  query {
-    getUserInfo {
+  query Query($getUserInfoUserId: Id!) {
+    getUserInfo(userId: $getUserInfoUserId) {
       id
       username
       profileURI
-      phoneNumber
       prime
-      introduce
       type
     }
   }

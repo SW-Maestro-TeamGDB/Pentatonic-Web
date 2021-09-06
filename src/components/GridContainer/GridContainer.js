@@ -14,8 +14,6 @@ const GridContainer = (props) => {
     rowGap = '1rem',
   } = props;
 
-  console.log(autoFill);
-
   return (
     <Container
       width={width}

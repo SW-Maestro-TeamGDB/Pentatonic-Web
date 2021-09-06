@@ -47,8 +47,14 @@ const Header = () => {
   });
 
   useEffect(() => {
-    if (localStorage.getItem('token')) {
-      getUserInform();
+    if (localStorage.getItem('token') && localStorage.getItem('userInfo')) {
+      const userInfo = JSON.parse(localStorage.getItem('userInfo'));
+      if (userInfo)
+        getUserInform({
+          variables: {
+            getUserInfoUserId: userInfo.id,
+          },
+        });
     }
   }, [localStorage.getItem('token')]);
 
@@ -86,14 +92,14 @@ const Header = () => {
             <UserContainer>
               {data?.user ? (
                 <CustomDropdown
-                  overlay={MyMenu}
+                  overlay={<MyMenu />}
                   trigger={['click']}
                   placement="bottomCenter"
                   getPopupContainer={(trigger) => trigger.parentNode}
                 >
                   <ProfileContainer>
-                    <UserImg src={data?.user?.profileURI} />
-                    <UserName>{data?.user?.username}</UserName>
+                    <UserImg src={data?.user.profileURI} />
+                    <UserName>{data?.user.username}</UserName>
                   </ProfileContainer>
                 </CustomDropdown>
               ) : (
