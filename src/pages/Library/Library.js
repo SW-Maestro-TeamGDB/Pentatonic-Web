@@ -7,7 +7,7 @@ import SearchBar from '../../components/SearchBar';
 import styled from 'styled-components';
 
 const GET_USER_INFO = gql`
-  query Query($getUserInfoUserId: Id) {
+  query Query($getUserInfoUserId: Id!) {
     getUserInfo(userId: $getUserInfoUserId) {
       library {
         coverId
@@ -27,6 +27,9 @@ const Library = () => {
     onCompleted: (data) => {
       setLibraryData(...libraryData, data.getUserInfo.library);
     },
+    onError: (error) => {
+      console.log(error);
+    },
   });
 
   useEffect(() => {
@@ -40,7 +43,7 @@ const Library = () => {
   }, [userData]);
 
   const loadLibrary = () => {
-    if (libraryData.length > 0)
+    if (libraryData)
       return libraryData
         .slice(0, libraryData.length)
         .reverse()

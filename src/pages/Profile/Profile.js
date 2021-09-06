@@ -16,7 +16,7 @@ import { Upload, notification } from 'antd';
 import styled from 'styled-components';
 
 const GET_USER_INFO = gql`
-  query Query($getUserInfoUserId: Id) {
+  query Query($getUserInfoUserId: Id!) {
     getUserInfo(userId: $getUserInfoUserId) {
       id
       username
@@ -58,7 +58,7 @@ const FOLLOW = gql`
 const { Dragger } = Upload;
 
 const Profile = ({ match }) => {
-  const currentUser = JSON.parse(localStorage.getItem('userInfo'));
+  const { data } = useQuery(GET_CURRENT_USER);
   const ID = match.params.id;
   const [userData, setUserData] = useState();
   const [error, setError] = useState(false);
@@ -137,7 +137,7 @@ const Profile = ({ match }) => {
   };
 
   const onClickFollowing = () => {
-    follow();
+    if (data.user) follow();
   };
 
   const onClickUnfollow = () => {
@@ -239,6 +239,10 @@ const Profile = ({ match }) => {
     setNameError();
   }, [editUserData.username]);
 
+  useEffect(() => {
+    getUserInfo();
+  }, [data]);
+
   return (
     <PageContainer width="55%">
       {!error ? (
@@ -322,7 +326,7 @@ const Profile = ({ match }) => {
                   )}
                 </FollowContainer>
                 <FollowButtonContainer>
-                  {currentUser.id === userData.id ? (
+                  {data.user && data.user.id === userData.id ? (
                     edit ? (
                       <FollowButton onClick={() => setEditUserDataModal(true)}>
                         수정 완료

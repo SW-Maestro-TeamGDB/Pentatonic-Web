@@ -9,6 +9,7 @@ const MyMenu = (props) => {
     currentUserVar(null);
     isLoggedInVar(false);
   };
+
   const userInfo = JSON.parse(localStorage.getItem('userInfo'));
 
   return (

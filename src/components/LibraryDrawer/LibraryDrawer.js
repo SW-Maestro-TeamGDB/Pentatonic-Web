@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import LibraryList from '../LibraryList/LibraryList';
 
 const GET_USER_INFO = gql`
-  query Query($getUserInfoUserId: Id) {
+  query Query($getUserInfoUserId: Id!) {
     getUserInfo(userId: $getUserInfoUserId) {
       library {
         coverId

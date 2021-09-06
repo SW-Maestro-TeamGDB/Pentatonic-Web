@@ -79,6 +79,7 @@ const RankContainer = styled.div`
   justify-content: center;
   align-items: center;
   margin-right: 3%;
+  margin-left: 2%;
 `;
 
 const RankIcon = styled.div`
