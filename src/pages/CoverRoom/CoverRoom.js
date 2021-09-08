@@ -147,10 +147,10 @@ const CoverRoom = ({ match }) => {
   ];
 
   const showCoverRoomSession = () => {
-    return tempData[idx].sessions.map((v) => {
+    return tempData[idx].sessions.map((v, i) => {
       return (
         <CoverRoomSession
-          key={`CoverRoom + ${v}`}
+          key={`CoverRoom + ${v} + ${i}`}
           sessionTitle={changeName(v.session)}
           total={v.maxMember}
           now={v.currentMember}

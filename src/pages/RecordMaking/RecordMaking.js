@@ -7,6 +7,8 @@ import RecordEdit from '../RecordEdit';
 import instrument from '../CoverMaking/inst.mp3';
 import RecordForm from '../RecordForm';
 
+import LoginAuth from '../../lib/LoginAuth';
+
 const { Step } = Steps;
 
 const RecordMaking = ({ match }) => {
@@ -64,19 +66,21 @@ const RecordMaking = ({ match }) => {
   ];
 
   return (
-    <PageContainer>
-      <CustomSteps progressDot current={page}>
-        {pages.map((item) => (
-          <Step
-            progressDot
-            key={item.title}
-            title={item.title}
-            description={item.description}
-          />
-        ))}
-      </CustomSteps>
-      <StepContents>{pages[page].content}</StepContents>
-    </PageContainer>
+    <LoginAuth>
+      <PageContainer>
+        <CustomSteps progressDot current={page}>
+          {pages.map((item) => (
+            <Step
+              progressDot
+              key={item.title}
+              title={item.title}
+              description={item.description}
+            />
+          ))}
+        </CustomSteps>
+        <StepContents>{pages[page].content}</StepContents>
+      </PageContainer>
+    </LoginAuth>
   );
 };
 

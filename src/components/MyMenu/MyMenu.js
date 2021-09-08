@@ -6,8 +6,8 @@ import styled from 'styled-components';
 const MyMenu = (props) => {
   const onClickLogout = () => {
     localStorage.clear();
-    currentUserVar(null);
     isLoggedInVar(false);
+    currentUserVar(null);
   };
 
   const userInfo = JSON.parse(localStorage.getItem('userInfo'));

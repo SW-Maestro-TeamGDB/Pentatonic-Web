@@ -7,6 +7,8 @@ import RecordPage from '../RecordPage';
 import RecordEdit from '../RecordEdit';
 import instrument from './inst.mp3';
 
+import LoginAuth from '../../lib/LoginAuth';
+
 const { Step } = Steps;
 
 const CoverMaking = ({ match }) => {
@@ -85,19 +87,21 @@ const CoverMaking = ({ match }) => {
   ];
 
   return (
-    <PageContainer>
-      <CustomSteps progressDot current={page}>
-        {pages.map((item) => (
-          <Step
-            progressDot
-            key={item.title}
-            title={item.title}
-            description={item.description}
-          />
-        ))}
-      </CustomSteps>
-      <StepContents>{pages[page].content}</StepContents>
-    </PageContainer>
+    <LoginAuth>
+      <PageContainer>
+        <CustomSteps progressDot current={page}>
+          {pages.map((item) => (
+            <Step
+              progressDot
+              key={item.title}
+              title={item.title}
+              description={item.description}
+            />
+          ))}
+        </CustomSteps>
+        <StepContents>{pages[page].content}</StepContents>
+      </PageContainer>
+    </LoginAuth>
   );
 };
 
