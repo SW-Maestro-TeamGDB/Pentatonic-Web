@@ -10,7 +10,6 @@ import SessionContents from '../../components/SessionContents';
 import InstSelect from '../../components/InstSelect';
 import { Upload, notification } from 'antd';
 import { LeftOutlined, PictureOutlined } from '@ant-design/icons';
-
 import tempData from '../../data/songs/tempData.json';
 
 const UPLOAD_IMAGE_FILE = gql`

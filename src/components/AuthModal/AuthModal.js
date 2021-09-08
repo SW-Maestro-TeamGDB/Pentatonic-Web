@@ -6,9 +6,14 @@ import FindAccountModal from '../FindAccoutModal/FindAccountModal';
 import FindIdModal from '../FindIdModal.js/FindIdModal';
 import FindPasswordModal from '../FindPasswordModal';
 
+import { useHistory } from 'react-router-dom';
+
 const AuthModal = (props) => {
-  const { modalToggle, setModalToggle } = props;
+  const { modalToggle, setModalToggle, action, pageAuth = 'false' } = props;
   const [pageStep, setPageStep] = useState(0);
+  const [login, setLogin] = useState();
+
+  const history = useHistory();
 
   const closeModal = () => {
     setModalToggle(false);
@@ -26,6 +31,8 @@ const AuthModal = (props) => {
           modalToggle={modalToggle}
           closeModal={closeModal}
           setPageStep={setPageStep}
+          action={action}
+          setLogin={setLogin}
         />
       );
     } else if (pageStep === 1) {
@@ -58,11 +65,19 @@ const AuthModal = (props) => {
     }
   };
 
+  useEffect(() => {
+    if (pageAuth === true && modalToggle === false && !login) {
+      return history.goBack();
+    }
+  }, [modalToggle]);
+
   return (
     <CustomModal
       visible={modalToggle}
       onCancel={closeModal}
       footer={null}
+      keyboard={false}
+      destroyOnClose
       centered
     >
       {showModal()}

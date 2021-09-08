@@ -15,7 +15,14 @@ const LOGIN = gql`
 `;
 
 const LoginModal = (props) => {
-  const { modalToggle, setModalToggle, closeModal, setPageStep } = props;
+  const {
+    modalToggle,
+    setModalToggle,
+    closeModal,
+    setPageStep,
+    setLogin,
+    action,
+  } = props;
   const [id, setID] = useState('');
   const [password, setPassword] = useState('');
   const [FormError, setFormError] = useState(null);
@@ -30,6 +37,7 @@ const LoginModal = (props) => {
           getUserInfoUserId: id,
         },
       });
+      setLogin(true);
     },
   });
 
@@ -41,6 +49,8 @@ const LoginModal = (props) => {
       currentUserVar(data.getUserInfo);
       setID('');
       setPassword('');
+      setModalToggle(false);
+      isLoggedInVar(true);
     },
     onError: (err) => {
       console.log(err);
@@ -56,8 +66,9 @@ const LoginModal = (props) => {
   useEffect(() => {
     if (loginResult.data?.login) {
       localStorage.setItem('token', loginResult.data.login);
-      setModalToggle(false);
-      isLoggedInVar(true);
+      if (action) {
+        action();
+      }
     } else if (loginResult.error) {
       setFormError(loginResult.error.message);
     }
