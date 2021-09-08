@@ -7,14 +7,20 @@ import { Default } from '../../lib/Media';
 import GridContainer from '../GridContainer/GridContainer';
 import CoverRoomSessionItem from '../CoverRoomSessionItem';
 
+import AuthModal from '../../components/AuthModal';
+
 const CoverRoomSession = (props) => {
   const { session, setSession, setVisibleDrawer, sessionTitle, total, now } =
     props;
   const [selectedSession, setSelectedSession] = useState();
-  const { data } = useQuery(IS_LOGGED_IN);
+  const [modalToggle, setModalToggle] = useState(false);
+  const { data } = useQuery(IS_LOGGED_IN, {
+    fetchPolicy: 'network-only',
+  });
 
   const onClickParticipate = () => {
     if (data.isLoggedIn) setVisibleDrawer(true);
+    else setModalToggle(true);
   };
 
   const showSessionContents = () => {
@@ -56,6 +62,11 @@ const CoverRoomSession = (props) => {
           <NoSession>참여한 세션이 없습니다</NoSession>
         )}
       </SessionContainer>
+      <AuthModal
+        modalToggle={modalToggle}
+        setModalToggle={setModalToggle}
+        action={() => setVisibleDrawer(true)}
+      />
     </CoverRoomSessionContainer>
   );
 };
