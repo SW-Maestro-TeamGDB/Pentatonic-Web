@@ -6,6 +6,8 @@ import LibraryList from '../../components/LibraryList';
 import SearchBar from '../../components/SearchBar';
 import styled from 'styled-components';
 
+import LoginAuth from '../../lib/LoginAuth';
+
 const GET_USER_INFO = gql`
   query Query($getUserInfoUserId: Id!) {
     getUserInfo(userId: $getUserInfoUserId) {
@@ -23,7 +25,6 @@ const Library = () => {
   const [libraryData, setLibraryData] = useState([]);
   const userData = useQuery(GET_CURRENT_USER);
   const [getUserInfo] = useLazyQuery(GET_USER_INFO, {
-    fetchPolicy: 'network-only',
     onCompleted: (data) => {
       setLibraryData(...libraryData, data.getUserInfo.library);
     },
@@ -61,21 +62,32 @@ const Library = () => {
   };
 
   useEffect(() => {
-    loadLibrary();
+    if (libraryData) {
+      loadLibrary();
+    }
   }, [libraryData]);
 
+  // 언마운트시 libraryData 초기화
+  useEffect(() => {
+    return () => {
+      setLibraryData([]);
+    };
+  }, []);
+
   return (
-    <PageContainer width="52%">
-      <PageTitle>라이브러리</PageTitle>
-      <Spacing />
-      <LibraryContainer>
-        {libraryData ? (
-          loadLibrary()
-        ) : (
-          <NoLibraryText>저장된 라이브러리가 없습니다</NoLibraryText>
-        )}
-      </LibraryContainer>
-    </PageContainer>
+    <LoginAuth>
+      <PageContainer width="52%">
+        <PageTitle>라이브러리</PageTitle>
+        <Spacing />
+        <LibraryContainer>
+          {libraryData && libraryData.length > 0 ? (
+            loadLibrary()
+          ) : (
+            <NoLibraryText>저장된 라이브러리가 없습니다</NoLibraryText>
+          )}
+        </LibraryContainer>
+      </PageContainer>
+    </LoginAuth>
   );
 };
 
