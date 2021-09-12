@@ -2,6 +2,7 @@ import react from 'react';
 import styled from 'styled-components';
 import { media } from '../../lib/Media';
 import { Link } from 'react-router-dom';
+import { Skeleton } from 'antd';
 import DifficultyIcon from '../DifficultyIcon';
 
 const SongList = (props) => {
@@ -9,22 +10,53 @@ const SongList = (props) => {
 
   return (
     <SongInformLink to={link}>
-      <SongImg img={data.img} />
-      <SongTitleContainer>
-        {data.title}
-        {data.weekly ? <WeeklyBanner>Weekly</WeeklyBanner> : null}
-      </SongTitleContainer>
-      <ArtistContainer>{data.artist}</ArtistContainer>
-      <SessionContainer>보컬,기타,드럼,베이스</SessionContainer>
-      <DifficultyContainer>
-        난이도
-        <IconContainer>
-          <DifficultyIcon value={data.difficulty} />
-        </IconContainer>
-      </DifficultyContainer>
+      {!data ? (
+        <>
+          <SongImg img={data.img} />
+          <SongTitleContainer>
+            {data.title}
+            {data.weekly ? <WeeklyBanner>Weekly</WeeklyBanner> : null}
+          </SongTitleContainer>
+          <ArtistContainer>{data.artist}</ArtistContainer>
+          <SessionContainer>보컬,기타,드럼,베이스</SessionContainer>
+          <DifficultyContainer>
+            난이도
+            <IconContainer>
+              <DifficultyIcon value={data.difficulty} />
+            </IconContainer>
+          </DifficultyContainer>
+        </>
+      ) : (
+        <SkeletonContainer>
+          <Skeleton.Button
+            size={'large'}
+            active
+            style={{ width: '10rem', height: '5.5rem' }}
+          />
+          <Spacing width={'5%'} />
+          <Skeleton
+            title={{ width: '95%' }}
+            paragraph={{ width: '95%', rows: 1 }}
+            active
+          />
+        </SkeletonContainer>
+      )}
     </SongInformLink>
   );
 };
+
+const SkeletonContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  height: 7rem;
+  width: 100%;
+  align-items: center;
+`;
+
+const Spacing = styled.div`
+  width: ${(props) => props.width};
+`;
 
 const SongInformLink = styled(Link)`
   width: 100%;
