@@ -2,6 +2,7 @@ import react from 'react';
 import styled from 'styled-components';
 import { Default } from '../../lib/Media';
 import { Link } from 'react-router-dom';
+import { Skeleton } from 'antd';
 import DifficultyIcon from '../DifficultyIcon';
 
 import ThumbIcon from '../../images/ThumbIcon.svg';
@@ -23,7 +24,7 @@ import vocal from '../../images/Session/vocal.svg';
 import tempData from '../../data/songs/tempData.json';
 
 const SongGrid = (props) => {
-  const { idx } = props;
+  const { idx, data } = props;
 
   const showSession = (session) => {
     return session.map((v) => {
@@ -47,20 +48,43 @@ const SongGrid = (props) => {
     <CustomLink to={`/studio/band/${idx}`}>
       <CoverContainer>
         <ImageContainer>
-          <CoverImage src={tempData[idx].img} />
-          <RecordIcon src={vocal} />
+          {data ? (
+            <>
+              <CoverImage src={tempData[idx].img} />
+              <RecordIcon src={vocal} />
+            </>
+          ) : (
+            <>
+              <Skeleton.Button
+                style={{ width: '50rem', height: '50rem' }}
+                active
+              />
+            </>
+          )}
         </ImageContainer>
         <DataContainer>
-          <CoverInform>
-            <CoverTitle>{tempData[idx].title}</CoverTitle>
-            <CoverArtist>{tempData[idx].artist}</CoverArtist>
-          </CoverInform>
-          <CoverMeta>
-            <DifficultyContainer>
-              <DifficultyIcon value={tempData[idx].difficulty} />
-            </DifficultyContainer>
-            <SessionInform>{showSession(tempData[idx].sessions)}</SessionInform>
-          </CoverMeta>
+          {data ? (
+            <>
+              <CoverInform>
+                <CoverTitle>{tempData[idx].title}</CoverTitle>
+                <CoverArtist>{tempData[idx].artist}</CoverArtist>
+              </CoverInform>
+              <CoverMeta>
+                <DifficultyContainer>
+                  <DifficultyIcon value={tempData[idx].difficulty} />
+                </DifficultyContainer>
+                <SessionInform>
+                  {showSession(tempData[idx].sessions)}
+                </SessionInform>
+              </CoverMeta>
+            </>
+          ) : (
+            <Skeleton
+              title={{ width: '100%' }}
+              paragraph={{ width: '100%', rows: 0 }}
+              active
+            />
+          )}
         </DataContainer>
       </CoverContainer>
     </CustomLink>
