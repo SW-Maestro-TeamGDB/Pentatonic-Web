@@ -19,8 +19,12 @@ import guitar from '../../images/Session/guitar.svg';
 import piano from '../../images/Session/piano.svg';
 import vocal from '../../images/Session/vocal.svg';
 
+import { Skeleton } from 'antd';
+import SkeletonImage from 'antd/lib/skeleton/Image';
+import SkeletonAvatar from 'antd/lib/skeleton/Avatar';
+
 const CoverGrid = (props) => {
-  const { idx, title, artist, img } = props;
+  const { idx, title, artist, img, data } = props;
   const category = ['animals', 'arch', 'nature', 'people', 'tech'];
   const randomImg = `https://placeimg.com/300/300/${category[idx]}`;
 
@@ -142,35 +146,51 @@ const CoverGrid = (props) => {
     <CustomLink to={`/lounge/cover/${idx}`}>
       <CoverContainer>
         <ImageContainer>
-          <CoverImage src={img ? img : tempData[idx].img} />
-          <HeadPhoneImage src={HeadPhoneIcon} />
+          {data ? (
+            <>
+              <CoverImage src={img ? img : tempData[idx].img} />
+              <HeadPhoneImage src={HeadPhoneIcon} />
+            </>
+          ) : (
+            <Skeleton.Button style={{ width: '100rem', height: '100rem' }} />
+          )}
         </ImageContainer>
         <DataContainer>
-          <CoverInform>
-            <CoverTitle>{img ? title : tempData[idx].cover}</CoverTitle>
-            <SongInform>
-              {title
-                ? `${title} - ${artist}`
-                : `${tempData[idx].title} - ${tempData[idx].singer}`}
-            </SongInform>
-          </CoverInform>
-          <CoverMeta>
-            <CountContainer>
-              <LikeCount>
-                <CustomIcon src={ViewIcon} />{' '}
-                {parseInt(Math.random() * 300 + 200)}
-              </LikeCount>
-              <SpacingSpan />
-              <ViewCount>
-                <CustomIcon src={ThumbIcon} />{' '}
-                {parseInt(Math.random() * 500 + 600)}
-              </ViewCount>
-              <SpacingSpan />
-            </CountContainer>
-            <SessionInform>
-              {img ? null : showSession(tempData[idx].sessions)}
-            </SessionInform>
-          </CoverMeta>
+          {data ? (
+            <>
+              {' '}
+              <CoverInform>
+                <CoverTitle>{img ? title : tempData[idx].cover}</CoverTitle>
+                <SongInform>
+                  {title
+                    ? `${title} - ${artist}`
+                    : `${tempData[idx].title} - ${tempData[idx].singer}`}
+                </SongInform>
+              </CoverInform>
+              <CoverMeta>
+                <CountContainer>
+                  <LikeCount>
+                    <CustomIcon src={ViewIcon} />{' '}
+                    {parseInt(Math.random() * 300 + 200)}
+                  </LikeCount>
+                  <SpacingSpan />
+                  <ViewCount>
+                    <CustomIcon src={ThumbIcon} />{' '}
+                    {parseInt(Math.random() * 500 + 600)}
+                  </ViewCount>
+                  <SpacingSpan />
+                </CountContainer>
+                <SessionInform>
+                  {img ? null : showSession(tempData[idx].sessions)}
+                </SessionInform>
+              </CoverMeta>
+            </>
+          ) : (
+            <Skeleton
+              title={{ width: '100%' }}
+              paragraph={{ width: '100%', rows: 1 }}
+            />
+          )}
         </DataContainer>
       </CoverContainer>
     </CustomLink>
