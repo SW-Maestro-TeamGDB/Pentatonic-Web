@@ -2,6 +2,7 @@ import react from 'react';
 import styled from 'styled-components';
 import { Default } from '../../lib/Media';
 import { Link } from 'react-router-dom';
+import { Skeleton } from 'antd';
 import ThumbIcon from '../../images/ThumbIcon.svg';
 import ViewIcon from '../../images/ViewIcon.svg';
 import HeadPhoneIcon from '../../images/HeadPhoneIcon.svg';
@@ -18,10 +19,6 @@ import drum from '../../images/Session/drum.svg';
 import guitar from '../../images/Session/guitar.svg';
 import piano from '../../images/Session/piano.svg';
 import vocal from '../../images/Session/vocal.svg';
-
-import { Skeleton } from 'antd';
-import SkeletonImage from 'antd/lib/skeleton/Image';
-import SkeletonAvatar from 'antd/lib/skeleton/Avatar';
 
 const CoverGrid = (props) => {
   const { idx, title, artist, img, data } = props;
@@ -152,7 +149,10 @@ const CoverGrid = (props) => {
               <HeadPhoneImage src={HeadPhoneIcon} />
             </>
           ) : (
-            <Skeleton.Button style={{ width: '100rem', height: '100rem' }} />
+            <Skeleton.Button
+              style={{ width: '50rem', height: '50rem' }}
+              active
+            />
           )}
         </ImageContainer>
         <DataContainer>
@@ -189,6 +189,7 @@ const CoverGrid = (props) => {
             <Skeleton
               title={{ width: '100%' }}
               paragraph={{ width: '100%', rows: 1 }}
+              active
             />
           )}
         </DataContainer>
