@@ -1,4 +1,5 @@
 import react, { useState } from 'react';
+import { useQuery, gql, useLazyQuery } from '@apollo/client';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import WeeklyBanner from '../../components/WeeklyBanner/WeeklyBanner';
@@ -7,17 +8,51 @@ import SearchBar from '../../components/SearchBar';
 import CoverGrid from '../../components/CoverGrid/CoverGrid';
 import GridContainer from '../../components/GridContainer/GridContainer';
 
+const QUERY_BAND = gql`
+  query Query($queryBandFilter: QueryBandInput!) {
+    queryBand(filter: $queryBandFilter) {
+      backGroundURI
+      song {
+        artist
+        name
+      }
+      name
+      session {
+        position
+      }
+      likeCount
+      bandId
+    }
+  }
+`;
+
 const LoungeHome = () => {
-  const tempCover = () =>
-    [0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map((v) => {
-      return (
-        <CoverGrid
-          id={parseInt(Math.random() * 7)}
-          key={v}
-          idx={parseInt(Math.random() * 7)}
-        />
-      );
-    });
+  // const tempCover = () =>
+  //   [0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map((v) => {
+  //     return (
+  //       <CoverGrid
+  //         id={parseInt(Math.random() * 7)}
+  //         key={v}
+  //         idx={parseInt(Math.random() * 7)}
+  //       />
+  //     );
+  //   });
+
+  const tempCover = () => {
+    if (data) {
+      return data.queryBand.map((v, i) => {
+        return <CoverGrid key={`bandData+${i}`} data={v} />;
+      });
+    }
+  };
+
+  const { data } = useQuery(QUERY_BAND, {
+    variables: {
+      queryBandFilter: {
+        type: 'NAME',
+      },
+    },
+  });
 
   return (
     <PageContainer>

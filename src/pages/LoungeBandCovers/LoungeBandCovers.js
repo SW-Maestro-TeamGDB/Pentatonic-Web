@@ -1,5 +1,6 @@
 import react, { useState } from 'react';
 import { Space, Dropdown, Menu, Button } from 'antd';
+import { useQuery, gql, useLazyQuery } from '@apollo/client';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import MakingCoverButton from '../../components/MakingCoverButton';
@@ -11,6 +12,24 @@ import MakingIcon from '../../images/MakingIcon.svg';
 import PageImage from '../../components/PageImage/PageImage';
 import GenreButton from '../../components/GenreButton/GenreButton';
 import GridContainer from '../../components/GridContainer/GridContainer';
+
+const QUERY_BAND = gql`
+  query Query($queryBandFilter: QueryBandInput!) {
+    queryBand(filter: $queryBandFilter) {
+      backGroundURI
+      song {
+        artist
+        name
+      }
+      name
+      session {
+        position
+      }
+      likeCount
+      bandId
+    }
+  }
+`;
 
 const LoungeBandCovers = () => {
   const [genre, setGenre] = useState('전체');
@@ -37,16 +56,32 @@ const LoungeBandCovers = () => {
     </CustomMenu>
   );
 
-  const tempCover = () =>
-    Array.from({ length: 30 }, () => 0).map((v, i) => {
-      return (
-        <CoverGrid
-          id={parseInt(Math.random() * 100)}
-          key={i}
-          idx={parseInt(Math.random() * 6 + 1)}
-        />
-      );
-    });
+  // const tempCover = () =>
+  //   Array.from({ length: 30 }, () => 0).map((v, i) => {
+  //     return (
+  //       <CoverGrid
+  //         id={parseInt(Math.random() * 100)}
+  //         key={i}
+  //         idx={parseInt(Math.random() * 6 + 1)}
+  //       />
+  //     );
+  //   });
+
+  const tempCover = () => {
+    if (data) {
+      return data.queryBand.map((v, i) => {
+        return <CoverGrid key={`bandData+${i}`} data={v} />;
+      });
+    }
+  };
+
+  const { data } = useQuery(QUERY_BAND, {
+    variables: {
+      queryBandFilter: {
+        type: 'NAME',
+      },
+    },
+  });
 
   return (
     <PageContainer>

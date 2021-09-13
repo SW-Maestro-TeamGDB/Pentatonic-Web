@@ -1,5 +1,6 @@
 import react, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { useQuery, gql, useLazyQuery } from '@apollo/client';
 import styled from 'styled-components';
 import MakingCoverButton from '../../components/MakingCoverButton';
 import PageContainer from '../../components/PageContainer';
@@ -10,11 +11,40 @@ import MakingIcon from '../../images/MakingIcon.svg';
 import PageImage from '../../components/PageImage';
 import GridContainer from '../../components/GridContainer/GridContainer';
 
+const QUERY_BAND = gql`
+  query Query($queryBandFilter: QueryBandInput!) {
+    queryBand(filter: $queryBandFilter) {
+      backGroundURI
+      song {
+        artist
+        name
+      }
+      name
+      session {
+        position
+      }
+      likeCount
+      bandId
+    }
+  }
+`;
+
 const WeeklyChallenge = () => {
-  const tempCover = () =>
-    Array.from({ length: 30 }, () => 0).map((v, i) => {
-      return <CoverGrid id={0} key={i} idx={0} />;
-    });
+  const tempCover = () => {
+    if (data) {
+      return data.queryBand.map((v, i) => {
+        return <CoverGrid key={`bandData+${i}`} data={v} />;
+      });
+    }
+  };
+
+  const { data } = useQuery(QUERY_BAND, {
+    variables: {
+      queryBandFilter: {
+        type: 'NAME',
+      },
+    },
+  });
 
   return (
     <PageContainer>
