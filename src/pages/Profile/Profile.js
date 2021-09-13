@@ -132,7 +132,7 @@ const Profile = ({ match }) => {
 
   const showCoverHistory = () => {
     return userData.band.map((v) => {
-      return <CoverGrid key={v.bandId} title={v.name} img={v.backGroundURI} />;
+      return <CoverGrid key={v.bandId} data={v} />;
     });
   };
 

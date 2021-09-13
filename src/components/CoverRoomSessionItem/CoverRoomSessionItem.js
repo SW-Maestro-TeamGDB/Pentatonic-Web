@@ -1,11 +1,20 @@
-import { Collapse } from 'antd';
 import react, { useEffect, useState } from 'react';
+import { Collapse } from 'antd';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import { Default } from '../../lib/Media';
+import { useQuery, gql, useLazyQuery } from '@apollo/client';
 import GridContainer from '../GridContainer/GridContainer';
 
 import UserAvatar from '../../images/UserAvatar.svg';
+
+const GET_USER_INFORM = gql`
+  query Query($getUserInfoUserId: Id!) {
+    getUserInfo(userId: $getUserInfoUserId) {
+      profileURI
+    }
+  }
+`;
 
 const CoverRoomSessionItem = (props) => {
   const {
@@ -17,6 +26,18 @@ const CoverRoomSessionItem = (props) => {
     data,
   } = props;
   const selected = selectedSession === count;
+  const [profileURI, setProfileURI] = useState();
+  const [getUserProfile] = useLazyQuery(GET_USER_INFORM, {
+    onCompleted: (data) => {
+      setProfileURI(data.getUserInfo.profileURI);
+    },
+  });
+
+  useEffect(() => {
+    if (data.coverBy) {
+      getUserProfile({ variables: { getUserInfoUserId: data.coverBy } });
+    }
+  }, [data]);
 
   const onClickSession = () => {
     if (selected) {
@@ -33,12 +54,12 @@ const CoverRoomSessionItem = (props) => {
 
   return (
     <SessionContentsContainer>
-      {data ? (
+      {data && profileURI ? (
         <>
           <ImgContainer>
             <SessionImg
               onClick={() => onClickSession()}
-              src={UserAvatar}
+              src={profileURI}
               selected={selected}
             />
           </ImgContainer>
