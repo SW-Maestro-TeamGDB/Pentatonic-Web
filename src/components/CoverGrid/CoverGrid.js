@@ -44,6 +44,8 @@ const CoverGrid = (props) => {
     else return 'https://avatars.githubusercontent.com/u/51112542?s=64&v=4';
   };
 
+  console.log(data);
+
   const randomTitle = [
     '멋진 밴드',
     '기가막힌 밴드',
@@ -141,10 +143,10 @@ const CoverGrid = (props) => {
   ];
 
   return (
-    <CustomLink to={`/lounge/cover/${data.bandId}`}>
+    <CustomLink to={data ? `/lounge/cover/${data.bandId}` : `/`}>
       <CoverContainer>
         <ImageContainer>
-          {data.backGroundURI ? (
+          {data?.backGroundURI ? (
             <>
               <CoverImage src={data.backGroundURI} />
               <HeadPhoneImage src={HeadPhoneIcon} />
@@ -161,21 +163,23 @@ const CoverGrid = (props) => {
             <>
               <CoverInform>
                 <CoverTitle>{data.name}</CoverTitle>
-                <SongInform>{`${data.song.name} - ${data.song.artist}`}</SongInform>
+                <SongInform>
+                  {data.song ? `${data.song.name} - ${data.song.artist}` : null}
+                </SongInform>
               </CoverInform>
               <CoverMeta>
                 <CountContainer>
                   <LikeCount>
                     <CustomIcon src={ThumbIcon} /> {data.likeCount}
                   </LikeCount>
-                  {/* <SpacingSpan />
+                  <SpacingSpan />
                   <ViewCount>
-                    <CustomIcon src={ThumbIcon} />
-                  </ViewCount> */}
+                    <CustomIcon src={ViewIcon} /> {0}
+                  </ViewCount>
                   <SpacingSpan />
                 </CountContainer>
                 <SessionInform>
-                  {img ? null : showSession(data.session)}
+                  {!data.session ? null : showSession(data.session)}
                 </SessionInform>
               </CoverMeta>
             </>
