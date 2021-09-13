@@ -1,4 +1,4 @@
-const changeSessoinNameToKorean = (name) => {
+const changeSessionNameToKorean = (name) => {
   if (name === 'VOCAL') {
     return '보컬';
   } else if (name === 'ACOUSTIC_GUITAR') {
@@ -26,4 +26,4 @@ const changeSessoinNameToKorean = (name) => {
   }
 };
 
-export { changeSessoinNameToKorean };
+export { changeSessionNameToKorean };

@@ -3,7 +3,7 @@ import react, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { Default } from '../../lib/Media';
 
-import { changeSessoinNameToKorean } from '../../lib/changeSessionNameToKorean/changeSessionNameToKorean';
+import { changeSessionNameToKorean } from '../../lib/changeSessionNameToKorean';
 
 const SessionContentsItem = (props) => {
   const {
@@ -28,7 +28,7 @@ const SessionContentsItem = (props) => {
     <SessionContentsContainer selected={selected}>
       <SessionMeta onClick={() => onClickSession()}>
         <SessionTitle>
-          {changeSessoinNameToKorean(title)}{' '}
+          {changeSessionNameToKorean(title)}{' '}
           {selected ? <SelectedContainer>SELECTED</SelectedContainer> : null}
         </SessionTitle>
         <SessionMember>

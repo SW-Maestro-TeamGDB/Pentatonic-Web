@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { Default } from '../../lib/Media';
 import { Upload, Collapse, Select } from 'antd';
 import { PlusCircleFilled } from '@ant-design/icons';
-import { changeSessoinNameToKorean } from '../../lib/changeSessionNameToKorean/changeSessionNameToKorean';
+import { changeSessionNameToKorean } from '../../lib/changeSessionNameToKorean';
 
 import sessionType from '../../data/sessionType.json';
 
@@ -42,7 +42,7 @@ const SessionAddPanel = (props) => {
     return sessionType.map((v, i) => {
       return (
         <Option key={v.session}>
-          <Centered>{changeSessoinNameToKorean(v.session)}</Centered>
+          <Centered>{changeSessionNameToKorean(v.session)}</Centered>
         </Option>
       );
     });

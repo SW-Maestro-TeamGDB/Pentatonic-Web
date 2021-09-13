@@ -2,7 +2,7 @@ import react from 'react';
 import styled from 'styled-components';
 import { Default } from '../../lib/Media';
 import DifficultyIcon from '../DifficultyIcon';
-import { changeSessoinNameToKorean } from '../../lib/changeSessionNameToKorean/changeSessionNameToKorean';
+import { changeSessionNameToKorean } from '../../lib/changeSessionNameToKorean';
 
 import drum from '../../images/Session/drum.svg';
 import guitar from '../../images/Session/guitar.svg';
@@ -43,7 +43,7 @@ const PositionGrid = (props) => {
     <Container>
       <SessionIcon src={tempData[id].icon} />
       <SessionTitle>
-        {changeSessoinNameToKorean(tempData[id].name)}
+        {changeSessionNameToKorean(tempData[id].name)}
       </SessionTitle>
       <SessionMeta>
         <SessionLevel>

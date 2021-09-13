@@ -1,1 +1,1 @@
-export { changeSessoinNameToKorean } from './ScrollToTop';
+export { changeSessionNameToKorean } from './changeSessionNameToKorean';
