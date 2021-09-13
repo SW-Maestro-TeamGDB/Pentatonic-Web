@@ -10,8 +10,15 @@ import CoverRoomSessionItem from '../CoverRoomSessionItem';
 import AuthModal from '../../components/AuthModal';
 
 const CoverRoomSession = (props) => {
-  const { session, setSession, setVisibleDrawer, sessionTitle, total, now } =
-    props;
+  const {
+    session,
+    setSession,
+    setVisibleDrawer,
+    sessionTitle,
+    total,
+    now,
+    cover,
+  } = props;
   const [selectedSession, setSelectedSession] = useState();
   const [modalToggle, setModalToggle] = useState(false);
   const { data } = useQuery(IS_LOGGED_IN, {
@@ -23,12 +30,22 @@ const CoverRoomSession = (props) => {
     else setModalToggle(true);
   };
 
+  useEffect(() => {
+    const coverURI = cover[selectedSession]?.coverURI;
+    if (coverURI) {
+      setSession([...session, coverURI]);
+    }
+  }, [selectedSession]);
+
   const showSessionContents = () => {
-    return Array.from({ length: now }, () => 0).map((v, i) => {
+    return cover.map((v, i) => {
       return (
         <CoverRoomSessionItem
           key={`${sessionTitle}+${i}`}
+          data={v}
           count={i}
+          session={session}
+          setSession={setSession}
           selectedSession={selectedSession}
           setSelectedSession={setSelectedSession}
         />

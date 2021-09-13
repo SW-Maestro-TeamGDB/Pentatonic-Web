@@ -8,27 +8,43 @@ import GridContainer from '../GridContainer/GridContainer';
 import UserAvatar from '../../images/UserAvatar.svg';
 
 const CoverRoomSessionItem = (props) => {
-  const { selectedSession, setSelectedSession, count } = props;
+  const {
+    selectedSession,
+    setSelectedSession,
+    session,
+    setSession,
+    count,
+    data,
+  } = props;
   const selected = selectedSession === count;
 
   const onClickSession = () => {
     if (selected) {
       setSelectedSession(null);
+      removeSession();
     } else {
       setSelectedSession(count);
     }
   };
 
+  const removeSession = () => {
+    setSession(session.filter((uri) => uri !== data.coverURI));
+  };
+
   return (
     <SessionContentsContainer>
-      <ImgContainer>
-        <SessionImg
-          onClick={() => onClickSession()}
-          src={UserAvatar}
-          selected={selected}
-        />
-      </ImgContainer>
-      <SessionId to={`/profile/${count}`}>USER{count + 1}</SessionId>
+      {data ? (
+        <>
+          <ImgContainer>
+            <SessionImg
+              onClick={() => onClickSession()}
+              src={UserAvatar}
+              selected={selected}
+            />
+          </ImgContainer>
+          <SessionId to={`/profile/${data.coverBy}`}>{data.coverBy}</SessionId>
+        </>
+      ) : null}
     </SessionContentsContainer>
   );
 };
