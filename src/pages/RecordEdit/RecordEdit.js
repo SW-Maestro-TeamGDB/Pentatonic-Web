@@ -11,7 +11,7 @@ import StopIcon from '../../images/StopIcon.svg';
 import { PlusOutlined, MinusOutlined } from '@ant-design/icons';
 import { Slider } from 'antd';
 
-import './AudioPlayer.css';
+import '../../styles/AudioPlayer.css';
 
 const CREATE_BAND = gql`
   mutation Mutation($createBandInput: CreateBandInput!) {
@@ -258,7 +258,7 @@ const RecordEdit = (props) => {
           customProgressBarSection={[
             RHAP_UI.CURRENT_TIME,
             RHAP_UI.PROGRESS_BAR,
-            <div>-</div>,
+            <span className="dash">-</span>,
             RHAP_UI.CURRENT_LEFT_TIME,
           ]}
         />
@@ -491,5 +491,7 @@ const SliderValue = styled.div`
   font-size: 1rem;
   font-weight: 700;
 `;
+
+const SpacingWithDash = styled.div``;
 
 export default RecordEdit;

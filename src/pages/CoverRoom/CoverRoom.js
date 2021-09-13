@@ -6,10 +6,11 @@ import CoverRoomSession from '../../components/CoverRoomSession/CoverRoomSession
 import LibraryDrawer from '../../components/LibraryDrawer/LibraryDrawer';
 import { Drawer } from 'antd';
 import NotFoundPage from '../NotFoundPage';
+import AudioPlayer, { RHAP_UI } from 'react-h5-audio-player';
+import { LoadingOutlined, ReloadOutlined } from '@ant-design/icons';
 
 import { changeSessionNameToKorean } from '../../lib/changeSessionNameToKorean';
-
-import { gql, useQuery } from '@apollo/client';
+import { gql, useQuery, useMutation } from '@apollo/client';
 import {
   currentUserVar,
   isLoggedInVar,
@@ -28,6 +29,8 @@ import FixYou from '../../images/TempData/FixYou.png';
 import ThumbIcon from '../../images/ThumbIcon.svg';
 import ViewIcon from '../../images/ViewIcon.svg';
 import UserAvatar from '../../images/UserAvatar.svg';
+
+import '../../styles/AudioPlayer.css';
 
 const GET_BAND = gql`
   query Query($getBandBandId: ObjectID!) {
@@ -55,11 +58,20 @@ const GET_BAND = gql`
   }
 `;
 
+const MERGE_AUDIOS = gql`
+  mutation MergeAudiosMutation($mergeAudiosInput: MergeAudiosInput!) {
+    mergeAudios(input: $mergeAudiosInput)
+  }
+`;
+
 const CoverRoom = ({ match }) => {
   const bandId = match.params.id;
   const [session, setSession] = useState([]);
+  const [audio, setAudio] = useState(null);
   const { data } = useQuery(GET_CURRENT_USER);
   const [coverData, setCoverData] = useState();
+  const [mode, setMode] = useState(0); // 0: select , 1: audio
+
   const { loading, error, getBand } = useQuery(GET_BAND, {
     fetchPolicy: 'network-only',
     variables: {
@@ -70,107 +82,26 @@ const CoverRoom = ({ match }) => {
     },
   });
 
+  const [mergeAudios, mergeAudiosResult] = useMutation(MERGE_AUDIOS, {
+    onCompleted: (data) => {
+      setAudio(data.mergeAudios);
+    },
+    onError: (error) => {
+      alert('음원 병합에 실패하였습니다.');
+      setMode(0);
+    },
+  });
+
   // drawer
   const [visibleDrawer, setVisibleDrawer] = useState(false);
   const onClose = () => {
     setVisibleDrawer(false);
   };
 
-  const randomTitle = [
-    '멋진 밴드',
-    '기가막힌 밴드',
-    '무지성 합주',
-    'On the next level',
-    'WarmPlay',
-    'Fix Everything',
-    '사이키델릭',
-    '구름밴드',
-    'Cross the road',
-    '코리아 락 밴드',
-    '실력따윈 필요없어',
-    '초보방',
-  ];
-  const titleSize = randomTitle.length;
-
-  const tempData = [
-    {
-      cover: `${randomTitle[parseInt(Math.random() * titleSize)]}`,
-      title: `Fix You`,
-      singer: 'ColdPlay',
-      img: FixYou,
-      sessions: [
-        { session: 'guitar', maxMember: 4, currentMember: 3 },
-        { session: 'vocal', maxMember: 3, currentMember: 1 },
-        { session: 'drum', maxMember: 2, currentMember: 2 },
-      ],
-    },
-    {
-      cover: '사이키델릭',
-      title: `Borderline`,
-      singer: 'Tame Impala',
-      img: TameImpala,
-      sessions: [
-        { session: 'guitar', maxMember: 3, currentMember: 1 },
-        { session: 'piano', maxMember: 2, currentMember: 1 },
-        { session: 'vocal', maxMember: 3, currentMember: 0 },
-      ],
-    },
-    {
-      cover: '3인 혁오',
-      title: `위잉위잉`,
-      singer: '혁오',
-      img: Hyukoh,
-      sessions: [
-        { session: 'guitar', maxMember: 2, currentMember: 2 },
-        { session: 'vocal', maxMember: 4, currentMember: 4 },
-        { session: 'drum', maxMember: 2, currentMember: 2 },
-      ],
-    },
-    {
-      cover: 'Cross The Road',
-      title: `Hey Jude`,
-      singer: 'The Beatles',
-      img: Beatles,
-      sessions: [
-        { session: 'guitar', maxMember: 4, currentMember: 1 },
-        { session: 'piano', maxMember: 1, currentMember: 1 },
-        { session: 'vocal', maxMember: 4, currentMember: 4 },
-        { session: 'drum', maxMember: 2, currentMember: 2 },
-      ],
-    },
-    {
-      cover: '구름밴드',
-      title: `Numb`,
-      singer: 'Men I Trust',
-      img: MenITrust,
-      sessions: [
-        { session: 'guitar', maxMember: 5, currentMember: 4 },
-        { session: 'vocal', maxMember: 2, currentMember: 1 },
-      ],
-    },
-    {
-      cover: '코리아 톰 요크',
-      title: `No Suprises`,
-      singer: 'Radio Head',
-      img: NoSurprises,
-      sessions: [
-        { session: 'piano', maxMember: 1, currentMember: 1 },
-        { session: 'vocal', maxMember: 3, currentMember: 2 },
-        { session: 'drum', maxMember: 2, currentMember: 2 },
-      ],
-    },
-    {
-      cover: '실력은 필요없어',
-      title: `Summer`,
-      singer: 'The Volunteers',
-      img: TheVolunteers,
-      sessions: [
-        { session: 'guitar', maxMember: 4, currentMember: 3 },
-        { session: 'vocal', maxMember: 3, currentMember: 1 },
-        { session: 'drum', maxMember: 2, currentMember: 2 },
-      ],
-    },
-  ];
+  const onClickToSelect = () => {
+    setSession([]);
+    setMode(0);
+  };
 
   const showCoverRoomSession = () => {
     return coverData.session.map((v, i) => {
@@ -189,14 +120,36 @@ const CoverRoom = ({ match }) => {
     });
   };
 
+  const onClickSubmit = () => {
+    if (session.length === 0) {
+      alert('하나 이상의 세션을 선택해주세요');
+    } else {
+      setMode(1);
+      mergeAudios({
+        variables: {
+          mergeAudiosInput: {
+            audios: session,
+          },
+        },
+      });
+    }
+  };
+
+  useEffect(() => {
+    console.log(!audio);
+  }, [audio]);
+
   return (
     <PageContainer>
       {!loading && coverData ? (
         <>
-          {' '}
-          <CoverBannerContainer>
+          <CoverBannerContainer mode={mode}>
             <CoverBackground url={coverData.backGroundURI} />
-            <BannerContents>
+            <BackwardButton onClick={() => onClickToSelect()} mode={mode}>
+              <CustomReloadIcon />
+              다시 조합하기
+            </BackwardButton>
+            <BannerContents mode={mode}>
               <CoverTitle>{coverData.name}</CoverTitle>
               <CoverDesc>{coverData.introduce}</CoverDesc>
               <CoverMetaContainer>
@@ -211,13 +164,40 @@ const CoverRoom = ({ match }) => {
                 <SpacingSpan />
               </CoverMetaContainer>
             </BannerContents>
-            <SubmitButton onClick={() => console.log(session)}>
-              감상하기
-            </SubmitButton>
+            {mode === 1 ? (
+              audio ? (
+                <AudioPlayerContainer>
+                  <AudioPlayerWrapper>
+                    <AudioPlayer
+                      src={audio ? audio : null}
+                      customAdditionalControls={[]}
+                      customVolumeControls={[]}
+                      autoPlay={false}
+                      customProgressBarSection={[
+                        RHAP_UI.CURRENT_TIME,
+                        RHAP_UI.PROGRESS_BAR,
+                        <span className="dash">-</span>,
+                        RHAP_UI.CURRENT_LEFT_TIME,
+                      ]}
+                    />
+                  </AudioPlayerWrapper>
+                </AudioPlayerContainer>
+              ) : (
+                <LoadingIconContainer>
+                  <CustomLoadingIcon />
+                </LoadingIconContainer>
+              )
+            ) : (
+              <SubmitButton onClick={() => onClickSubmit()}>
+                감상하기
+              </SubmitButton>
+            )}
           </CoverBannerContainer>
-          <SessionContainer>
-            <GridContainer>{showCoverRoomSession()}</GridContainer>
-          </SessionContainer>
+          {mode === 1 ? null : (
+            <SessionContainer>
+              <GridContainer>{showCoverRoomSession()}</GridContainer>
+            </SessionContainer>
+          )}
           <CommentContainer>
             <CommentHeader>
               댓글
@@ -277,6 +257,25 @@ const MyProfileImg = styled.img`
   border-radius: 10rem;
 `;
 
+const BackwardButton = styled.div`
+  cursor: pointer;
+  position: absolute;
+  top: 8%;
+  left: 3%;
+  color: #fff;
+
+  font-size: 18px;
+  font-weight: 700;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  visibility: ${(props) => (props.mode === 1 ? 'visible' : 'hidden')};
+  filter: ${(props) => (props.mode === 1 ? 'opacity(100%)' : 'opacity(0%)')};
+  transition: filter 0.5s ease-in-out;
+`;
+
 const CustomInput = styled.input`
   width: 80%;
   color: black;
@@ -317,6 +316,27 @@ const CommentContainer = styled.div`
   padding: 1rem 0;
 `;
 
+const CustomReloadIcon = styled(ReloadOutlined)`
+  padding-right: 8px;
+  line-height: 1;
+`;
+
+const AudioPlayerContainer = styled.div`
+  width: 100%;
+  position: absolute;
+  bottom: 5%;
+  z-index: 2;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
+const AudioPlayerWrapper = styled.div`
+  width: 80%;
+  height: 100%;
+`;
+
 const CommentHeader = styled.div`
   display: flex;
   flex-direction: row;
@@ -346,22 +366,27 @@ const CoverBackground = styled.div`
 
 const CoverBannerContainer = styled.div`
   width: 100%;
-  height: 25vw;
+  height: ${(props) => (props.mode === 1 ? '40rem' : '25rem')};
   position: relative;
   display: flex;
   flex-direction: column;
+  justify-content: center;
+
+  transition: height 0.3s ease-in-out;
 
   ${CoverBackground} {
-    filter: brightness(50%);
+    filter: brightness(40%);
   }
 `;
 
 const BannerContents = styled.div`
   position: absolute;
-  bottom: 25%;
+  top: ${(props) => (props.mode === 1 ? '5%' : '30%')};
   display: flex;
   flex-direction: column;
   right: 3%;
+
+  transition: top 0.3s ease-in-out;
 `;
 
 const CoverTitle = styled.span`
@@ -393,7 +418,7 @@ const CoverMetaContainer = styled.div`
   display: flex;
   align-items: center;
   justify-content: flex-end;
-  margin-top: 3%;
+  margin-top: 5%;
   color: white;
 `;
 
@@ -456,6 +481,18 @@ const CommentButton = styled.button`
   &:hover {
     background-color: rgb(50, 50, 50);
   }
+`;
+
+const LoadingIconContainer = styled.div`
+  width: 100%;
+  position: absolute;
+  bottom: 20%;
+  text-align: center;
+`;
+
+const CustomLoadingIcon = styled(LoadingOutlined)`
+  font-size: 16rem;
+  color: #fff;
 `;
 
 export default CoverRoom;
