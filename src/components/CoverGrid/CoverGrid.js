@@ -30,17 +30,18 @@ const CoverGrid = (props) => {
       return (
         <InstrumentIcon
           key={`${idx}+${v.session}`}
-          src={sessionMatch(v.session)}
+          src={sessionMatch(v.position)}
         />
       );
     });
   };
 
-  const sessionMatch = (v) => {
-    if (v === 'guitar') return guitar;
-    else if (v === 'drum') return drum;
-    else if (v === 'piano') return piano;
-    else if (v === 'vocal') return vocal;
+  const sessionMatch = (position) => {
+    if (position === 'ACOUSTIC_GUITAR') return guitar;
+    else if (position === 'DRUM') return drum;
+    else if (position === 'PIANO') return piano;
+    else if (position === 'VOCAL') return vocal;
+    else return 'https://avatars.githubusercontent.com/u/51112542?s=64&v=4';
   };
 
   const randomTitle = [
@@ -140,12 +141,12 @@ const CoverGrid = (props) => {
   ];
 
   return (
-    <CustomLink to={`/lounge/cover/${idx}`}>
+    <CustomLink to={`/lounge/cover/${data.bandId}`}>
       <CoverContainer>
         <ImageContainer>
-          {data ? (
+          {data.backGroundURI ? (
             <>
-              <CoverImage src={img ? img : tempData[idx].img} />
+              <CoverImage src={data.backGroundURI} />
               <HeadPhoneImage src={HeadPhoneIcon} />
             </>
           ) : (
@@ -158,30 +159,23 @@ const CoverGrid = (props) => {
         <DataContainer>
           {data ? (
             <>
-              {' '}
               <CoverInform>
-                <CoverTitle>{img ? title : tempData[idx].cover}</CoverTitle>
-                <SongInform>
-                  {title
-                    ? `${title} - ${artist}`
-                    : `${tempData[idx].title} - ${tempData[idx].singer}`}
-                </SongInform>
+                <CoverTitle>{data.name}</CoverTitle>
+                <SongInform>{`${data.song.name} - ${data.song.artist}`}</SongInform>
               </CoverInform>
               <CoverMeta>
                 <CountContainer>
                   <LikeCount>
-                    <CustomIcon src={ViewIcon} />{' '}
-                    {parseInt(Math.random() * 300 + 200)}
+                    <CustomIcon src={ThumbIcon} /> {data.likeCount}
                   </LikeCount>
-                  <SpacingSpan />
+                  {/* <SpacingSpan />
                   <ViewCount>
-                    <CustomIcon src={ThumbIcon} />{' '}
-                    {parseInt(Math.random() * 500 + 600)}
-                  </ViewCount>
+                    <CustomIcon src={ThumbIcon} />
+                  </ViewCount> */}
                   <SpacingSpan />
                 </CountContainer>
                 <SessionInform>
-                  {img ? null : showSession(tempData[idx].sessions)}
+                  {img ? null : showSession(data.session)}
                 </SessionInform>
               </CoverMeta>
             </>
@@ -326,14 +320,15 @@ const CountContainer = styled.span`
 `;
 
 const LikeCount = styled.span`
-  font-size: 11px;
+  font-size: 10px;
   text-align: left;
   display: flex;
   flex-direction: row;
   align-items: center;
+  line-height: 1;
 `;
 const ViewCount = styled.span`
-  font-size: 11px;
+  font-size: 10px;
   text-align: left;
   display: flex;
   flex-direction: row;
