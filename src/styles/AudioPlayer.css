@@ -6,9 +6,16 @@
   font-family: inherit;
   width: 100%;
   padding: 30px 40px;
-  background-color: #f8f7ff;
+  background-color: rgba(250, 246, 254, 0.6);
   border-radius: 10px;
+  transition: background-color 0.3s ease-in-out;
+  cursor: pointer;
 }
+
+.rhap_container:hover {
+  background-color: rgba(250, 246, 254, 0.8);
+}
+
 .rhap_container:focus:not(:focus-visible) {
   outline: 0;
 }
@@ -75,10 +82,16 @@
   outline: 0;
 }
 
-.rhap_time {
-  color: #333;
+.dash {
   font-size: 14px;
-  font-weight: 700;
+  font-weight: 800;
+  padding-right: 1px;
+}
+
+.rhap_time {
+  color: #111;
+  font-size: 14px;
+  font-weight: 800;
   user-select: none;
   -webkit-user-select: none;
 }
@@ -97,7 +110,7 @@
   z-index: 0;
   width: 100%;
   height: 8px;
-  background-color: #dddddd;
+  background-color: #eee;
   border-radius: 3px;
 }
 
@@ -117,7 +130,7 @@
   height: 100%;
   position: absolute;
   z-index: 1;
-  background-color: #dddddd;
+  background-color: #eee;
   border-radius: 2px;
 }
 
