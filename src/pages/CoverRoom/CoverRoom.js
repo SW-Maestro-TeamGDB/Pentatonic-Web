@@ -5,6 +5,7 @@ import GridContainer from '../../components/GridContainer/GridContainer';
 import CoverRoomSession from '../../components/CoverRoomSession/CoverRoomSession';
 import LibraryDrawer from '../../components/LibraryDrawer/LibraryDrawer';
 import { Drawer } from 'antd';
+import NotFoundPage from '../NotFoundPage';
 
 import { changeSessionNameToKorean } from '../../lib/changeSessionNameToKorean';
 
@@ -59,7 +60,7 @@ const CoverRoom = ({ match }) => {
   const [session, setSession] = useState([]);
   const { data } = useQuery(GET_CURRENT_USER);
   const [coverData, setCoverData] = useState();
-  const getBand = useQuery(GET_BAND, {
+  const { loading, error, getBand } = useQuery(GET_BAND, {
     fetchPolicy: 'network-only',
     variables: {
       getBandBandId: bandId,
@@ -74,10 +75,6 @@ const CoverRoom = ({ match }) => {
   const onClose = () => {
     setVisibleDrawer(false);
   };
-
-  useEffect(() => {
-    console.log(session);
-  }, [session]);
 
   const randomTitle = [
     '멋진 밴드',
@@ -194,7 +191,7 @@ const CoverRoom = ({ match }) => {
 
   return (
     <PageContainer>
-      {coverData ? (
+      {!loading && coverData ? (
         <>
           {' '}
           <CoverBannerContainer>
@@ -214,7 +211,9 @@ const CoverRoom = ({ match }) => {
                 <SpacingSpan />
               </CoverMetaContainer>
             </BannerContents>
-            <SubmitButton>감상하기</SubmitButton>
+            <SubmitButton onClick={() => console.log(session)}>
+              감상하기
+            </SubmitButton>
           </CoverBannerContainer>
           <SessionContainer>
             <GridContainer>{showCoverRoomSession()}</GridContainer>
@@ -257,6 +256,8 @@ const CoverRoom = ({ match }) => {
             <LibraryDrawer visible={visibleDrawer} />
           </Drawer>
         </>
+      ) : error ? (
+        <NotFoundPage desc="올바르지 않은 커버 주소입니다" />
       ) : null}
     </PageContainer>
   );
