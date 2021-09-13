@@ -6,6 +6,8 @@ import CoverRoomSession from '../../components/CoverRoomSession/CoverRoomSession
 import LibraryDrawer from '../../components/LibraryDrawer/LibraryDrawer';
 import { Drawer } from 'antd';
 
+import { changeSessionNameToKorean } from '../../lib/changeSessionNameToKorean';
+
 import { gql, useQuery } from '@apollo/client';
 import {
   currentUserVar,
@@ -26,17 +28,56 @@ import ThumbIcon from '../../images/ThumbIcon.svg';
 import ViewIcon from '../../images/ViewIcon.svg';
 import UserAvatar from '../../images/UserAvatar.svg';
 
+const GET_BAND = gql`
+  query Query($getBandBandId: ObjectID!) {
+    getBand(bandId: $getBandBandId) {
+      backGroundURI
+      creator {
+        id
+      }
+      createDate
+      session {
+        position
+        maxMember
+        cover {
+          coverBy
+          coverURI
+        }
+      }
+      likeCount
+      introduce
+      name
+      song {
+        name
+      }
+    }
+  }
+`;
+
 const CoverRoom = ({ match }) => {
-  const idx = match.params.id;
-  // const { data } = useQuery(IS_LOGGED_IN);
+  const bandId = match.params.id;
   const [session, setSession] = useState([]);
   const { data } = useQuery(GET_CURRENT_USER);
+  const [coverData, setCoverData] = useState();
+  const getBand = useQuery(GET_BAND, {
+    fetchPolicy: 'network-only',
+    variables: {
+      getBandBandId: bandId,
+    },
+    onCompleted: (data) => {
+      setCoverData(data.getBand);
+    },
+  });
 
   // drawer
   const [visibleDrawer, setVisibleDrawer] = useState(false);
   const onClose = () => {
     setVisibleDrawer(false);
   };
+
+  useEffect(() => {
+    console.log(session);
+  }, [session]);
 
   const randomTitle = [
     '멋진 밴드',
@@ -53,18 +94,6 @@ const CoverRoom = ({ match }) => {
     '초보방',
   ];
   const titleSize = randomTitle.length;
-
-  const changeName = (name) => {
-    if (name === 'guitar') {
-      return '기타';
-    } else if (name === 'vocal') {
-      return '보컬';
-    } else if (name === 'drum') {
-      return '드럼';
-    } else if (name === 'piano') {
-      return '피아노';
-    }
-  };
 
   const tempData = [
     {
@@ -147,16 +176,17 @@ const CoverRoom = ({ match }) => {
   ];
 
   const showCoverRoomSession = () => {
-    return tempData[idx].sessions.map((v, i) => {
+    return coverData.session.map((v, i) => {
       return (
         <CoverRoomSession
-          key={`CoverRoom + ${v} + ${i}`}
-          sessionTitle={changeName(v.session)}
+          key={`CoverRoom + ${v.position} + ${i}`}
+          sessionTitle={changeSessionNameToKorean(v.position)}
           total={v.maxMember}
-          now={v.currentMember}
+          now={v.cover.length}
           session={session}
           setSession={setSession}
           setVisibleDrawer={setVisibleDrawer}
+          cover={v.cover}
         />
       );
     });
@@ -164,64 +194,70 @@ const CoverRoom = ({ match }) => {
 
   return (
     <PageContainer>
-      <CoverBannerContainer>
-        <CoverBackground url={tempData[idx].img} />
-        <BannerContents>
-          <CoverTitle>{tempData[idx].cover}</CoverTitle>
-          <CoverDesc>우리 밴드는 {tempData[idx].title}를 연주합니다</CoverDesc>
-          <CoverMetaContainer>
-            <LikeCount>
-              <CustomIcon src={ViewIcon} />{' '}
-              {parseInt(Math.random() * 300 + 200)}
-            </LikeCount>
-            <SpacingSpan />
-            <ViewCount>
-              <CustomIcon src={ThumbIcon} />{' '}
-              {parseInt(Math.random() * 500 + 600)}
-            </ViewCount>
-            <SpacingSpan />
-          </CoverMetaContainer>
-        </BannerContents>
-        <SubmitButton>감상하기</SubmitButton>
-      </CoverBannerContainer>
-      <SessionContainer>
-        <GridContainer>{showCoverRoomSession()}</GridContainer>
-      </SessionContainer>
-      <CommentContainer>
-        <CommentHeader>
-          댓글
-          <CurrentComment>{parseInt(Math.random() * 30)}</CurrentComment>
-        </CommentHeader>
-        <CommentForm>
-          {data.user ? (
-            <>
-              <MyProfileImg
-                src={data.user.profileURI ? data.user.profileURI : UserAvatar}
-              />
-              <CustomInput placeholder="게시물의 저작권 등 분쟁, 개인정보 노출로 인한 책임은 작성자 또는 게시자에게 있음을 유의해주세요" />
-              <CommentButton>등록</CommentButton>
-            </>
-          ) : (
-            <>
-              <MyProfileImg src={UserAvatar} />
-              <CustomInput
-                placeholder="댓글을 작성하시려면 로그인이 필요합니다"
-                disabled
-              />
-              <CommentButton disabled>등록</CommentButton>
-            </>
-          )}
-        </CommentForm>
-      </CommentContainer>
-      <Drawer
-        placement="right"
-        closable={true}
-        onClose={onClose}
-        visible={visibleDrawer}
-        width="35%"
-      >
-        <LibraryDrawer visible={visibleDrawer} />
-      </Drawer>
+      {coverData ? (
+        <>
+          {' '}
+          <CoverBannerContainer>
+            <CoverBackground url={coverData.backGroundURI} />
+            <BannerContents>
+              <CoverTitle>{coverData.name}</CoverTitle>
+              <CoverDesc>{coverData.introduce}</CoverDesc>
+              <CoverMetaContainer>
+                <LikeCount>
+                  <CustomIcon src={ViewIcon} />{' '}
+                  {parseInt(Math.random() * 300 + 200)}
+                </LikeCount>
+                <SpacingSpan />
+                <ViewCount>
+                  <CustomIcon src={ThumbIcon} /> {coverData.likeCount}
+                </ViewCount>
+                <SpacingSpan />
+              </CoverMetaContainer>
+            </BannerContents>
+            <SubmitButton>감상하기</SubmitButton>
+          </CoverBannerContainer>
+          <SessionContainer>
+            <GridContainer>{showCoverRoomSession()}</GridContainer>
+          </SessionContainer>
+          <CommentContainer>
+            <CommentHeader>
+              댓글
+              <CurrentComment>{parseInt(Math.random() * 30)}</CurrentComment>
+            </CommentHeader>
+            <CommentForm>
+              {data.user ? (
+                <>
+                  <MyProfileImg
+                    src={
+                      data.user.profileURI ? data.user.profileURI : UserAvatar
+                    }
+                  />
+                  <CustomInput placeholder="게시물의 저작권 등 분쟁, 개인정보 노출로 인한 책임은 작성자 또는 게시자에게 있음을 유의해주세요" />
+                  <CommentButton>등록</CommentButton>
+                </>
+              ) : (
+                <>
+                  <MyProfileImg src={UserAvatar} />
+                  <CustomInput
+                    placeholder="댓글을 작성하시려면 로그인이 필요합니다"
+                    disabled
+                  />
+                  <CommentButton disabled>등록</CommentButton>
+                </>
+              )}
+            </CommentForm>
+          </CommentContainer>
+          <Drawer
+            placement="right"
+            closable={true}
+            onClose={onClose}
+            visible={visibleDrawer}
+            width="35%"
+          >
+            <LibraryDrawer visible={visibleDrawer} />
+          </Drawer>
+        </>
+      ) : null}
     </PageContainer>
   );
 };
