@@ -4,13 +4,14 @@ import PageContainer from '../../components/PageContainer';
 import GridContainer from '../../components/GridContainer/GridContainer';
 import CoverRoomSession from '../../components/CoverRoomSession/CoverRoomSession';
 import LibraryDrawer from '../../components/LibraryDrawer/LibraryDrawer';
+import CommentList from '../../components/CommentList/CommentList';
 import { Drawer } from 'antd';
 import NotFoundPage from '../NotFoundPage';
 import AudioPlayer, { RHAP_UI } from 'react-h5-audio-player';
 import { LoadingOutlined, ReloadOutlined } from '@ant-design/icons';
 
 import { changeSessionNameToKorean } from '../../lib/changeSessionNameToKorean';
-import { gql, useQuery, useMutation } from '@apollo/client';
+import { gql, useQuery, useMutation, useLazyQuery } from '@apollo/client';
 import {
   currentUserVar,
   isLoggedInVar,
@@ -54,6 +55,41 @@ const GET_BAND = gql`
       song {
         name
       }
+      comment {
+        user {
+          username
+          profileURI
+          id
+        }
+        content
+        createdAt
+        commentId
+      }
+    }
+  }
+`;
+
+const GET_COMMENT = gql`
+  query Query($getBandBandId: ObjectID!) {
+    getBand(bandId: $getBandBandId) {
+      comment {
+        user {
+          username
+          profileURI
+          id
+        }
+        content
+        createdAt
+        commentId
+      }
+    }
+  }
+`;
+
+const CREATE_COMMENT = gql`
+  mutation CreateCommentMutation($createCommentInput: CreateCommentInput!) {
+    createComment(input: $createCommentInput) {
+      createdAt
     }
   }
 `;
@@ -71,9 +107,9 @@ const CoverRoom = ({ match }) => {
   const { data } = useQuery(GET_CURRENT_USER);
   const [coverData, setCoverData] = useState();
   const [mode, setMode] = useState(0); // 0: select , 1: audio
+  const [comment, setComment] = useState('');
 
   const { loading, error, getBand } = useQuery(GET_BAND, {
-    fetchPolicy: 'network-only',
     variables: {
       getBandBandId: bandId,
     },
@@ -82,6 +118,17 @@ const CoverRoom = ({ match }) => {
     },
   });
 
+  const [getComment, getCommentResult] = useLazyQuery(GET_COMMENT, {
+    onCompleted: (data) => {
+      console.log('comment 가져오기 완료');
+      setCoverData({ ...coverData, comment: data.getBand.comment });
+    },
+  });
+
+  useEffect(() => {
+    console.log(coverData);
+  }, [coverData]);
+
   const [mergeAudios, mergeAudiosResult] = useMutation(MERGE_AUDIOS, {
     onCompleted: (data) => {
       setAudio(data.mergeAudios);
@@ -89,6 +136,22 @@ const CoverRoom = ({ match }) => {
     onError: (error) => {
       alert('음원 병합에 실패하였습니다.');
       setMode(0);
+    },
+  });
+
+  const [createComment, createCommentResult] = useMutation(CREATE_COMMENT, {
+    fetchPolicy: 'no-cache',
+    onCompleted: (data) => {
+      getComment({
+        variables: {
+          getBandBandId: bandId,
+        },
+      });
+      setComment('');
+      console.log('댓글 작성 완료');
+    },
+    onError: (error) => {
+      alert(error);
     },
   });
 
@@ -120,6 +183,22 @@ const CoverRoom = ({ match }) => {
     });
   };
 
+  const showComment = () => {
+    if (coverData.comment.length === 0) {
+      return;
+    } else {
+      return coverData.comment.map((v, i) => {
+        return (
+          <CommentList
+            data={v}
+            key={`${bandId}+comment+${i}`}
+            edit={data.user.id && v.user.id === data.user.id}
+          />
+        );
+      });
+    }
+  };
+
   const onClickSubmit = () => {
     if (session.length === 0) {
       alert('하나 이상의 세션을 선택해주세요');
@@ -135,9 +214,20 @@ const CoverRoom = ({ match }) => {
     }
   };
 
-  useEffect(() => {
-    console.log(!audio);
-  }, [audio]);
+  const onClickCommentButton = () => {
+    if (comment.length > 0) {
+      createComment({
+        variables: {
+          createCommentInput: {
+            comment: {
+              content: comment,
+              bandId: bandId,
+            },
+          },
+        },
+      });
+    }
+  };
 
   return (
     <PageContainer>
@@ -201,7 +291,7 @@ const CoverRoom = ({ match }) => {
           <CommentContainer>
             <CommentHeader>
               댓글
-              <CurrentComment>{parseInt(Math.random() * 30)}</CurrentComment>
+              <CurrentComment>{coverData.comment.length}</CurrentComment>
             </CommentHeader>
             <CommentForm>
               {data.user ? (
@@ -211,8 +301,17 @@ const CoverRoom = ({ match }) => {
                       data.user.profileURI ? data.user.profileURI : UserAvatar
                     }
                   />
-                  <CustomInput placeholder="게시물의 저작권 등 분쟁, 개인정보 노출로 인한 책임은 작성자 또는 게시자에게 있음을 유의해주세요" />
-                  <CommentButton>등록</CommentButton>
+                  <CustomInput
+                    placeholder="게시물의 저작권 등 분쟁, 개인정보 노출로 인한 책임은 작성자 또는 게시자에게 있음을 유의해주세요"
+                    onChange={(e) => setComment(e.target.value)}
+                    value={comment}
+                  />
+                  <CommentButton
+                    onClick={() => onClickCommentButton()}
+                    disabled={comment.length === 0}
+                  >
+                    등록
+                  </CommentButton>
                 </>
               ) : (
                 <>
@@ -225,6 +324,7 @@ const CoverRoom = ({ match }) => {
                 </>
               )}
             </CommentForm>
+            <CommentWrapper>{showComment()}</CommentWrapper>
           </CommentContainer>
           <Drawer
             placement="right"
@@ -296,6 +396,14 @@ const CustomInput = styled.input`
   &:focus {
     border: 2px solid black;
   }
+`;
+
+const CommentWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-top: 2rem;
 `;
 
 const CommentForm = styled.div`

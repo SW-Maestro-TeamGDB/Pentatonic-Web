@@ -10,7 +10,7 @@ const SongList = (props) => {
 
   return (
     <SongInformLink to={link}>
-      {!data ? (
+      {data ? (
         <>
           <SongImg img={data.img} />
           <SongTitleContainer>
