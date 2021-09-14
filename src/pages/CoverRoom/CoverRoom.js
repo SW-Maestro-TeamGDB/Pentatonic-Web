@@ -104,10 +104,11 @@ const CoverRoom = ({ match }) => {
   const bandId = match.params.id;
   const [session, setSession] = useState([]);
   const [audio, setAudio] = useState(null);
-  const { data } = useQuery(GET_CURRENT_USER);
   const [coverData, setCoverData] = useState();
   const [mode, setMode] = useState(0); // 0: select , 1: audio
   const [comment, setComment] = useState('');
+
+  const { data } = useQuery(GET_CURRENT_USER);
 
   const { loading, error, getBand } = useQuery(GET_BAND, {
     variables: {
@@ -119,8 +120,11 @@ const CoverRoom = ({ match }) => {
   });
 
   const [getComment, getCommentResult] = useLazyQuery(GET_COMMENT, {
+    fetchPolicy: 'network-only',
+    variables: {
+      getBandBandId: bandId,
+    },
     onCompleted: (data) => {
-      console.log('comment 가져오기 완료');
       setCoverData({ ...coverData, comment: data.getBand.comment });
     },
   });
@@ -142,13 +146,9 @@ const CoverRoom = ({ match }) => {
   const [createComment, createCommentResult] = useMutation(CREATE_COMMENT, {
     fetchPolicy: 'no-cache',
     onCompleted: (data) => {
-      getComment({
-        variables: {
-          getBandBandId: bandId,
-        },
-      });
       setComment('');
       console.log('댓글 작성 완료');
+      getComment();
     },
     onError: (error) => {
       alert(error);
@@ -192,7 +192,8 @@ const CoverRoom = ({ match }) => {
           <CommentList
             data={v}
             key={`${bandId}+comment+${i}`}
-            edit={data.user.id && v.user.id === data.user.id}
+            edit={data?.user?.id && v.user.id === data.user.id}
+            getComment={getComment}
           />
         );
       });
@@ -586,8 +587,15 @@ const CommentButton = styled.button`
   font-size: 1rem;
   cursor: pointer;
   transition: all ease-in-out 0.3s;
+
   &:hover {
     background-color: rgb(50, 50, 50);
+  }
+
+  &:disabled {
+    background-color: #666;
+    color: #eee;
+    cursor: not-allowed;
   }
 `;
 
