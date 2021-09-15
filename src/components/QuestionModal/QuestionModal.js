@@ -5,8 +5,14 @@ import { Modal } from 'antd';
 import { QuestionCircleOutlined, LoadingOutlined } from '@ant-design/icons';
 
 const QuestionModal = (props) => {
-  const { modalToggle, setModalToggle, modalLoading, text, afterRequest } =
-    props;
+  const {
+    modalToggle,
+    setModalToggle,
+    modalLoading,
+    text,
+    afterRequest,
+    desc,
+  } = props;
 
   const closeModal = () => {
     setModalToggle(false);
@@ -24,6 +30,7 @@ const QuestionModal = (props) => {
       <ModalContainer>
         <CustomCheckIcon />
         <TextWrapper>{text ? text : null}</TextWrapper>
+        {desc ? <DescWrapper>{desc}</DescWrapper> : null}
         <ButtonContainer>
           <RefuseButton onClick={closeModal}>아니요</RefuseButton>
           <AcceptButton onClick={afterRequest}>네</AcceptButton>
@@ -68,6 +75,12 @@ const TextWrapper = styled.div`
   font-size: 1.4rem;
   font-weight: 700;
   margin-top: 2.5rem;
+`;
+
+const DescWrapper = styled.div`
+  font-size: 1rem;
+  margin-top: 3rem;
+  font-weight: 500;
 `;
 
 const ButtonContainer = styled.div`
