@@ -310,6 +310,7 @@ const RecordEdit = (props) => {
         setModalToggle={setModalToggle}
         modalToggle={modalToggle}
         modalLoading={modalLoading}
+        bandId={bandId}
       />
       {/* <button onClick={() => onClickStart()}>시작</button>
       <button onClick={() => onClickStop()}>중지</button>

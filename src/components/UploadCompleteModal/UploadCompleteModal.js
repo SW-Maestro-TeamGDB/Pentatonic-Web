@@ -5,7 +5,7 @@ import { Modal } from 'antd';
 import { CheckCircleOutlined, LoadingOutlined } from '@ant-design/icons';
 
 const UploadCompleteModal = (props) => {
-  const { modalToggle, setModalToggle, modalLoading } = props;
+  const { modalToggle, setModalToggle, modalLoading, bandId } = props;
 
   const closeModal = () => {
     setModalToggle(false);
@@ -30,7 +30,7 @@ const UploadCompleteModal = (props) => {
             <CustomCheckIcon />
             <TextWrapper>커버가 업로드 되었습니다.</TextWrapper>
             <ButtonContainer>
-              <CoverRoomButton to="/lounge/cover/0">
+              <CoverRoomButton to={`/lounge/cover/${bandId}`}>
                 커버룸 확인하기
               </CoverRoomButton>
               <LibraryButton to="/library">라이브러리 확인하기</LibraryButton>
