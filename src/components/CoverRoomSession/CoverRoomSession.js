@@ -18,6 +18,7 @@ const CoverRoomSession = (props) => {
     total,
     now,
     cover,
+    creator,
   } = props;
   const [selectedSession, setSelectedSession] = useState();
   const [modalToggle, setModalToggle] = useState(false);
@@ -48,6 +49,7 @@ const CoverRoomSession = (props) => {
           setSession={setSession}
           selectedSession={selectedSession}
           setSelectedSession={setSelectedSession}
+          creator={creator}
         />
       );
     });

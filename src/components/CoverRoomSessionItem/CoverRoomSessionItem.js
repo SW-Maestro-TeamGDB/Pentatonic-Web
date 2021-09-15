@@ -24,6 +24,7 @@ const CoverRoomSessionItem = (props) => {
     setSession,
     count,
     data,
+    creator,
   } = props;
   const selected = selectedSession === count;
   const [profileURI, setProfileURI] = useState();
@@ -63,7 +64,10 @@ const CoverRoomSessionItem = (props) => {
               selected={selected}
             />
           </ImgContainer>
-          <SessionId to={`/profile/${data.coverBy}`}>{data.coverBy}</SessionId>
+          <SessionId to={`/profile/${data.coverBy}`}>
+            {creator === data.coverBy ? <CreatorIcon>★</CreatorIcon> : null}
+            {data.coverBy}
+          </SessionId>
         </>
       ) : null}
     </SessionContentsContainer>
@@ -94,9 +98,31 @@ const SessionId = styled(Link)`
   font-weight: 700;
   color: black;
 
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+
   &:hover {
     color: black;
   }
+`;
+
+const CreatorIcon = styled.div`
+  border-radius: 100%;
+  background-color: #6236ff;
+  color: #fae100;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  width: 16px;
+  height: 16px;
+
+  font-size: 10px;
+  font-weight: 900;
+
+  margin-right: 5px;
 `;
 
 const SessionContentsContainer = styled.div`

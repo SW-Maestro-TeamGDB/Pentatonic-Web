@@ -47,6 +47,7 @@ const GET_BAND = gql`
         cover {
           coverBy
           coverURI
+          name
         }
       }
       likeCount
@@ -178,6 +179,7 @@ const CoverRoom = ({ match }) => {
           setSession={setSession}
           setVisibleDrawer={setVisibleDrawer}
           cover={v.cover}
+          creator={coverData.creator.id}
         />
       );
     });
