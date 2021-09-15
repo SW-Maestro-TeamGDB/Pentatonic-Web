@@ -3,8 +3,10 @@ import { Collapse } from 'antd';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import { Default } from '../../lib/Media';
-import { useQuery, gql, useLazyQuery } from '@apollo/client';
+import { useQuery, gql, useLazyQuery, useMutation } from '@apollo/client';
 import GridContainer from '../GridContainer/GridContainer';
+import { CloseOutlined } from '@ant-design/icons';
+import QuestionModal from '../QuestionModal';
 
 import UserAvatar from '../../images/UserAvatar.svg';
 
@@ -13,6 +15,12 @@ const GET_USER_INFORM = gql`
     getUserInfo(userId: $getUserInfoUserId) {
       profileURI
     }
+  }
+`;
+
+const LEAVE_BAND = gql`
+  mutation Mutation($leaveBandInput: LeaveBandInput!) {
+    leaveBand(input: $leaveBandInput)
   }
 `;
 
@@ -25,12 +33,24 @@ const CoverRoomSessionItem = (props) => {
     count,
     data,
     creator,
+    bandId,
+    edit,
+    getSession,
   } = props;
   const selected = selectedSession === count;
   const [profileURI, setProfileURI] = useState();
+  const [leaveModal, setLeaveModal] = useState(false);
   const [getUserProfile] = useLazyQuery(GET_USER_INFORM, {
     onCompleted: (data) => {
       setProfileURI(data.getUserInfo.profileURI);
+    },
+  });
+
+  const [leaveBand, leaveBandResult] = useMutation(LEAVE_BAND, {
+    onCompleted: (data) => {
+      console.log(data);
+      setLeaveModal(false);
+      getSession();
     },
   });
 
@@ -53,21 +73,56 @@ const CoverRoomSessionItem = (props) => {
     setSession(session.filter((uri) => uri !== data.coverURI));
   };
 
+  const onClickLeaveBand = () => {
+    leaveBand({
+      variables: {
+        leaveBandInput: {
+          band: {
+            bandId: bandId,
+          },
+          session: {
+            coverId: data.coverId,
+          },
+        },
+      },
+    });
+  };
+
   return (
     <SessionContentsContainer>
       {data && profileURI ? (
         <>
           <ImgContainer>
+            {edit ? (
+              <LeaveButton onClick={() => setLeaveModal(true)}>
+                <CloseOutlined />
+              </LeaveButton>
+            ) : null}
             <SessionImg
               onClick={() => onClickSession()}
               src={profileURI}
               selected={selected}
             />
           </ImgContainer>
-          <SessionId to={`/profile/${data.coverBy}`}>
+          <SessionIdContainer to={`/profile/${data.coverBy}`}>
             {creator === data.coverBy ? <CreatorIcon>★</CreatorIcon> : null}
-            {data.coverBy}
-          </SessionId>
+            <SessionId>{data.coverBy}</SessionId>
+          </SessionIdContainer>
+          <QuestionModal
+            modalToggle={leaveModal}
+            setModalToggle={setLeaveModal}
+            text={
+              edit === 'master'
+                ? '해당 세션을 추방하시겠습니까?'
+                : '밴드를 나가시겠습니까?'
+            }
+            desc={
+              edit === 'master'
+                ? '세션을 추방하게 되면 되돌릴 수 없습니다'
+                : '밴드를 나가게 되면 선택한 커버가 밴드에서 제외됩니다'
+            }
+            afterRequest={onClickLeaveBand}
+          />
         </>
       ) : null}
     </SessionContentsContainer>
@@ -91,7 +146,38 @@ const SessionImg = styled.img`
   object-fit: cover;
 `;
 
-const SessionId = styled(Link)`
+const LeaveButton = styled.div`
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  border-radius: 100%;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 12px;
+
+  opacity: 0.5;
+
+  left: 5.3rem;
+  cursor: pointer;
+  z-index: 2;
+
+  &:hover {
+    opacity: 0.8;
+  }
+`;
+
+const SessionId = styled.div`
+  width: 4rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+
+  text-align: center;
+`;
+
+const SessionIdContainer = styled(Link)`
   margin-top: 0.5rem;
   cursor: pointer;
   font-size: 14px;
@@ -101,6 +187,9 @@ const SessionId = styled(Link)`
   display: flex;
   flex-direction: row;
   align-items: center;
+  justify-content: center;
+
+  width: 7rem;
 
   &:hover {
     color: black;

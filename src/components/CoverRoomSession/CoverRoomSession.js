@@ -19,6 +19,9 @@ const CoverRoomSession = (props) => {
     now,
     cover,
     creator,
+    userId,
+    bandId,
+    getSession,
   } = props;
   const [selectedSession, setSelectedSession] = useState();
   const [modalToggle, setModalToggle] = useState(false);
@@ -50,6 +53,15 @@ const CoverRoomSession = (props) => {
           selectedSession={selectedSession}
           setSelectedSession={setSelectedSession}
           creator={creator}
+          bandId={bandId}
+          edit={
+            userId === v.coverBy
+              ? 'creator'
+              : userId === creator
+              ? 'master'
+              : null
+          }
+          getSession={getSession}
         />
       );
     });

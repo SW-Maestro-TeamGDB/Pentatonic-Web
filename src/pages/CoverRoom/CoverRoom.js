@@ -47,6 +47,7 @@ const GET_BAND = gql`
         cover {
           coverBy
           coverURI
+          coverId
           name
         }
       }
@@ -87,6 +88,22 @@ const GET_COMMENT = gql`
   }
 `;
 
+const GET_SESSION = gql`
+  query Query($getBandBandId: ObjectID!) {
+    getBand(bandId: $getBandBandId) {
+      session {
+        position
+        maxMember
+        cover {
+          coverBy
+          coverURI
+          name
+        }
+      }
+    }
+  }
+`;
+
 const CREATE_COMMENT = gql`
   mutation CreateCommentMutation($createCommentInput: CreateCommentInput!) {
     createComment(input: $createCommentInput) {
@@ -120,6 +137,16 @@ const CoverRoom = ({ match }) => {
     },
   });
 
+  const [getSession, getSessionResult] = useLazyQuery(GET_SESSION, {
+    fetchPolicy: 'network-only',
+    variables: {
+      getBandBandId: bandId,
+    },
+    onCompleted: (data) => {
+      setCoverData({ ...coverData, session: data.getBand.session });
+    },
+  });
+
   const [getComment, getCommentResult] = useLazyQuery(GET_COMMENT, {
     fetchPolicy: 'network-only',
     variables: {
@@ -129,10 +156,6 @@ const CoverRoom = ({ match }) => {
       setCoverData({ ...coverData, comment: data.getBand.comment });
     },
   });
-
-  useEffect(() => {
-    console.log(coverData);
-  }, [coverData]);
 
   const [mergeAudios, mergeAudiosResult] = useMutation(MERGE_AUDIOS, {
     onCompleted: (data) => {
@@ -180,10 +203,15 @@ const CoverRoom = ({ match }) => {
           setVisibleDrawer={setVisibleDrawer}
           cover={v.cover}
           creator={coverData.creator.id}
+          userId={data.user.id}
+          bandId={bandId}
+          getSession={getSession}
         />
       );
     });
   };
+
+  console.log(coverData);
 
   const showComment = () => {
     if (coverData.comment.length === 0) {
