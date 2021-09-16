@@ -10,14 +10,6 @@ import QuestionModal from '../QuestionModal';
 
 import UserAvatar from '../../images/UserAvatar.svg';
 
-const GET_USER_INFORM = gql`
-  query Query($getUserInfoUserId: Id!) {
-    getUserInfo(userId: $getUserInfoUserId) {
-      profileURI
-    }
-  }
-`;
-
 const LEAVE_BAND = gql`
   mutation Mutation($leaveBandInput: LeaveBandInput!) {
     leaveBand(input: $leaveBandInput)
@@ -40,11 +32,6 @@ const CoverRoomSessionItem = (props) => {
   const selected = selectedSession === count;
   const [profileURI, setProfileURI] = useState();
   const [leaveModal, setLeaveModal] = useState(false);
-  const [getUserProfile] = useLazyQuery(GET_USER_INFORM, {
-    onCompleted: (data) => {
-      setProfileURI(data.getUserInfo.profileURI);
-    },
-  });
 
   const [leaveBand, leaveBandResult] = useMutation(LEAVE_BAND, {
     onCompleted: (data) => {
@@ -53,12 +40,6 @@ const CoverRoomSessionItem = (props) => {
       getSession();
     },
   });
-
-  useEffect(() => {
-    if (data.coverBy) {
-      getUserProfile({ variables: { getUserInfoUserId: data.coverBy } });
-    }
-  }, [data]);
 
   const onClickSession = () => {
     if (selected) {
@@ -90,7 +71,7 @@ const CoverRoomSessionItem = (props) => {
 
   return (
     <SessionContentsContainer>
-      {data && profileURI ? (
+      {data ? (
         <>
           <ImgContainer>
             {edit ? (
@@ -100,13 +81,13 @@ const CoverRoomSessionItem = (props) => {
             ) : null}
             <SessionImg
               onClick={() => onClickSession()}
-              src={profileURI}
+              src={data.coverBy.profileURI}
               selected={selected}
             />
           </ImgContainer>
-          <SessionIdContainer to={`/profile/${data.coverBy}`}>
-            {creator === data.coverBy ? <CreatorIcon>★</CreatorIcon> : null}
-            <SessionId>{data.coverBy}</SessionId>
+          <SessionIdContainer to={`/profile/${data.coverBy.id}`}>
+            {creator === data.coverBy.id ? <CreatorIcon>★</CreatorIcon> : null}
+            <SessionId>{data.coverBy.username}</SessionId>
           </SessionIdContainer>
           <QuestionModal
             modalToggle={leaveModal}
@@ -169,12 +150,11 @@ const LeaveButton = styled.div`
 `;
 
 const SessionId = styled.div`
-  width: 4rem;
+  max-width: 7rem;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-
-  text-align: center;
+  text-align: left;
 `;
 
 const SessionIdContainer = styled(Link)`
@@ -189,7 +169,7 @@ const SessionIdContainer = styled(Link)`
   align-items: center;
   justify-content: center;
 
-  width: 7rem;
+  max-width: 9rem;
 
   &:hover {
     color: black;
@@ -211,7 +191,7 @@ const CreatorIcon = styled.div`
   font-size: 10px;
   font-weight: 900;
 
-  margin-right: 5px;
+  margin-right: 8px;
 `;
 
 const SessionContentsContainer = styled.div`

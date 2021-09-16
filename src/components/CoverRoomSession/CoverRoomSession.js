@@ -55,7 +55,7 @@ const CoverRoomSession = (props) => {
           creator={creator}
           bandId={bandId}
           edit={
-            userId === v.coverBy
+            userId === v.coverBy.id
               ? 'creator'
               : userId === creator
               ? 'master'

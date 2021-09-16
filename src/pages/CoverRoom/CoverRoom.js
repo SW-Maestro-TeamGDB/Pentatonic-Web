@@ -45,7 +45,11 @@ const GET_BAND = gql`
         position
         maxMember
         cover {
-          coverBy
+          coverBy {
+            id
+            username
+            profileURI
+          }
           coverURI
           coverId
           name
