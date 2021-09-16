@@ -27,17 +27,6 @@ const QUERY_BAND = gql`
 `;
 
 const LoungeHome = () => {
-  // const tempCover = () =>
-  //   [0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map((v) => {
-  //     return (
-  //       <CoverGrid
-  //         id={parseInt(Math.random() * 7)}
-  //         key={v}
-  //         idx={parseInt(Math.random() * 7)}
-  //       />
-  //     );
-  //   });
-
   const tempCover = () => {
     if (data) {
       return data.queryBand.map((v, i) => {
@@ -47,6 +36,7 @@ const LoungeHome = () => {
   };
 
   const { data } = useQuery(QUERY_BAND, {
+    fetchPolicy: 'network-only',
     variables: {
       queryBandFilter: {
         type: 'NAME',

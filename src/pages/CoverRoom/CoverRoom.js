@@ -5,10 +5,15 @@ import GridContainer from '../../components/GridContainer/GridContainer';
 import CoverRoomSession from '../../components/CoverRoomSession/CoverRoomSession';
 import LibraryDrawer from '../../components/LibraryDrawer/LibraryDrawer';
 import CommentList from '../../components/CommentList/CommentList';
-import { Drawer } from 'antd';
+import { Drawer, notification } from 'antd';
 import NotFoundPage from '../NotFoundPage';
 import AudioPlayer, { RHAP_UI } from 'react-h5-audio-player';
-import { LoadingOutlined, ReloadOutlined } from '@ant-design/icons';
+import {
+  LoadingOutlined,
+  ReloadOutlined,
+  DeleteOutlined,
+} from '@ant-design/icons';
+import QuestionModal from '../../components/QuestionModal';
 
 import { changeSessionNameToKorean } from '../../lib/changeSessionNameToKorean';
 import { gql, useQuery, useMutation, useLazyQuery } from '@apollo/client';
@@ -99,8 +104,13 @@ const GET_SESSION = gql`
         position
         maxMember
         cover {
-          coverBy
+          coverBy {
+            id
+            username
+            profileURI
+          }
           coverURI
+          coverId
           name
         }
       }
@@ -113,6 +123,12 @@ const CREATE_COMMENT = gql`
     createComment(input: $createCommentInput) {
       createdAt
     }
+  }
+`;
+
+const DELETE_BAND = gql`
+  mutation DeleteBandMutation($deleteBandInput: DeleteBandInput!) {
+    deleteBand(input: $deleteBandInput)
   }
 `;
 
@@ -129,6 +145,7 @@ const CoverRoom = ({ match }) => {
   const [coverData, setCoverData] = useState();
   const [mode, setMode] = useState(0); // 0: select , 1: audio
   const [comment, setComment] = useState('');
+  const [deleteModal, setDeleteModal] = useState(false);
 
   const { data } = useQuery(GET_CURRENT_USER);
 
@@ -180,6 +197,26 @@ const CoverRoom = ({ match }) => {
     },
     onError: (error) => {
       alert(error);
+    },
+  });
+
+  const [deleteBand, deleteBandResult] = useMutation(DELETE_BAND, {
+    variables: {
+      deleteBandInput: {
+        band: {
+          bandId: bandId,
+        },
+      },
+    },
+    onCompleted: (data) => {
+      window.history.back();
+      notification['success']({
+        key: 'successEditTitle',
+        message: '',
+        description: '밴드를 삭제했습니다',
+        placement: 'bottomRight',
+        duration: 3,
+      });
     },
   });
 
@@ -270,6 +307,12 @@ const CoverRoom = ({ match }) => {
         <>
           <CoverBannerContainer mode={mode}>
             <CoverBackground url={coverData.backGroundURI} />
+            {coverData.creator.id === data.user.id ? (
+              <DeleteButton mode={mode} onClick={() => setDeleteModal(true)}>
+                <CustomDeleteIcon />
+                밴드 삭제하기
+              </DeleteButton>
+            ) : null}
             <BackwardButton onClick={() => onClickToSelect()} mode={mode}>
               <CustomReloadIcon />
               다시 조합하기
@@ -374,6 +417,13 @@ const CoverRoom = ({ match }) => {
       ) : error ? (
         <NotFoundPage desc="올바르지 않은 커버 주소입니다" />
       ) : null}
+      <QuestionModal
+        modalToggle={deleteModal}
+        setModalToggle={setDeleteModal}
+        text="밴드를 삭제하시겠습니까?"
+        desc="참여한 모든 세션이 삭제되며 삭제 이후에는 되돌릴 수 없습니다"
+        afterRequest={deleteBand}
+      />
     </PageContainer>
   );
 };
@@ -392,10 +442,29 @@ const MyProfileImg = styled.img`
   border-radius: 10rem;
 `;
 
+const DeleteButton = styled.div`
+  cursor: pointer;
+  position: absolute;
+  top: 40px;
+  left: 3%;
+  color: #fff;
+
+  font-size: 18px;
+  font-weight: 700;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  visibility: ${(props) => (props.mode === 0 ? 'visible' : 'hidden')};
+  filter: ${(props) => (props.mode === 0 ? 'opacity(100%)' : 'opacity(0%)')};
+  transition: filter 0.5s ease-in-out;
+`;
+
 const BackwardButton = styled.div`
   cursor: pointer;
   position: absolute;
-  top: 8%;
+  top: 40px;
   left: 3%;
   color: #fff;
 
@@ -457,6 +526,11 @@ const CommentContainer = styled.div`
   flex-direction: column;
   margin-top: 2rem;
   padding: 1rem 0;
+`;
+
+const CustomDeleteIcon = styled(DeleteOutlined)`
+  padding-right: 8px;
+  line-height: 1;
 `;
 
 const CustomReloadIcon = styled(ReloadOutlined)`
@@ -524,7 +598,7 @@ const CoverBannerContainer = styled.div`
 
 const BannerContents = styled.div`
   position: absolute;
-  top: ${(props) => (props.mode === 1 ? '5%' : '30%')};
+  top: ${(props) => (props.mode === 1 ? '30px' : '30%')};
   display: flex;
   flex-direction: column;
   right: 3%;
