@@ -242,16 +242,17 @@ const CoverRoom = ({ match }) => {
           sessionTitle={changeSessionNameToKorean(v.position)}
           total={v.maxMember}
           now={v.cover.length}
-          session={v}
+          session={session}
           setSession={setSession}
           setVisibleDrawer={setVisibleDrawer}
           cover={v.cover}
           creator={coverData.creator.id}
-          userId={data.user.id}
+          userId={data?.user?.id}
           bandId={bandId}
           songId={coverData.song.songId}
           getSession={getSession}
           setLibraryFilter={setLibraryFilter}
+          sessionData={v}
         />
       );
     });
@@ -314,7 +315,7 @@ const CoverRoom = ({ match }) => {
         <>
           <CoverBannerContainer mode={mode}>
             <CoverBackground url={coverData.backGroundURI} />
-            {coverData.creator.id === data.user.id ? (
+            {coverData && data.user && coverData.creator.id === data.user.id ? (
               <DeleteButton mode={mode} onClick={() => setDeleteModal(true)}>
                 <CustomDeleteIcon />
                 밴드 삭제하기
@@ -418,7 +419,14 @@ const CoverRoom = ({ match }) => {
             visible={visibleDrawer}
             width="35%"
           >
-            <LibraryDrawer visible={visibleDrawer} filter={libraryFilter} />
+            <LibraryDrawer
+              visible={visibleDrawer}
+              filter={libraryFilter}
+              setFilter={setLibraryFilter}
+              onClose={onClose}
+              getSession={getSession}
+              bandId={bandId}
+            />
           </Drawer>
         </>
       ) : error ? (

@@ -1,5 +1,6 @@
 import react, { useEffect, useState } from 'react';
-import { useQuery, gql, useLazyQuery } from '@apollo/client';
+import { useQuery, gql, useLazyQuery, useMutation } from '@apollo/client';
+import { notification } from 'antd';
 import { GET_CURRENT_USER } from '../../apollo/cache';
 import styled from 'styled-components';
 import LibraryList from '../LibraryList/LibraryList';
@@ -18,15 +19,46 @@ const GET_USER_INFO = gql`
   }
 `;
 
+const JOIN_BAND = gql`
+  mutation JoinBandMutation($joinBandInput: JoinBandInput!) {
+    joinBand(input: $joinBandInput)
+  }
+`;
+
 const LibraryDrawer = (props) => {
-  const { visible, filter } = props;
+  const { visible, filter, setFilter, onClose, getSession, bandId } = props;
   const [filteredData, setFilteredData] = useState([]);
   const [libraryData, setLibraryData] = useState([]);
+  const [selectedCover, setSelectedCover] = useState();
   const userData = useQuery(GET_CURRENT_USER);
   const [getUserInfo] = useLazyQuery(GET_USER_INFO, {
     filter: 'no-cahce',
     onCompleted: (data) => {
       setLibraryData(data.getUserInfo.library);
+    },
+  });
+
+  const [joinBand, joinBandResult] = useMutation(JOIN_BAND, {
+    onCompleted: (data) => {
+      onClose();
+      setFilter();
+      getSession();
+      notification['success']({
+        key: 'successEditTitle',
+        message: '',
+        description: '밴드에 참여했습니다',
+        placement: 'bottomRight',
+        duration: 3,
+      });
+    },
+    onError: (error) => {
+      notification['error']({
+        key: 'errorEditTitle',
+        message: '',
+        description: `${error.message}`,
+        placement: 'bottomRight',
+        duration: 3,
+      });
     },
   });
 
@@ -53,10 +85,40 @@ const LibraryDrawer = (props) => {
     }
   }, [userData.data.user]);
 
+  useEffect(() => {
+    setSelectedCover();
+  }, [visible]);
+
   const loadLibrary = () =>
     filteredData.map((v, i) => {
-      return <LibraryList data={v} key={v.coverId} visible={visible} />;
+      return (
+        <LibraryList
+          data={v}
+          key={v.coverId}
+          visible={visible}
+          selectedCover={selectedCover}
+          setSelectedCover={setSelectedCover}
+        />
+      );
     });
+
+  const onClickSubmit = () => {
+    if (selectedCover) {
+      joinBand({
+        variables: {
+          joinBandInput: {
+            band: {
+              bandId: bandId,
+            },
+            session: {
+              coverId: selectedCover,
+              position: filter.position,
+            },
+          },
+        },
+      });
+    }
+  };
 
   return (
     <DrawerContainer>
@@ -69,7 +131,9 @@ const LibraryDrawer = (props) => {
         )}
       </LibaryContainer>
       <SubmitButtonConatiner>
-        <SubmitButton>참여하기</SubmitButton>
+        <SubmitButton onClick={() => onClickSubmit()} disabled={!selectedCover}>
+          참여하기
+        </SubmitButton>
       </SubmitButtonConatiner>
     </DrawerContainer>
   );
@@ -134,6 +198,7 @@ const SubmitButton = styled.button`
   cursor: pointer;
   background-image: linear-gradient(to right, #6236ff, #9b66ff);
   background-size: 500%;
+
   &:hover {
     animation: gradient 3s ease infinite;
   }
@@ -148,6 +213,12 @@ const SubmitButton = styled.button`
     100% {
       background-position: 0% 50%;
     }
+  }
+
+  &:disabled {
+    background-image: linear-gradient(to right, #666, #777);
+    color: #eee;
+    cursor: not-allowed;
   }
 `;
 

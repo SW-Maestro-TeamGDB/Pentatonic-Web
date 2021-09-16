@@ -55,7 +55,15 @@ const DELETE_COVER = gql`
 `;
 
 const LibraryList = (props) => {
-  const { data, edit, visible, libraryData, setLibraryData } = props;
+  const {
+    data,
+    edit,
+    visible,
+    libraryData,
+    setLibraryData,
+    selectedCover,
+    setSelectedCover,
+  } = props;
   const [songData, setSongData] = useState();
   const [coverTitle, setCoverTitle] = useState();
   const [audioState, setAudioState] = useState(0); // 0:정지 , 1:재생 , 2:일시정지
@@ -66,6 +74,9 @@ const LibraryList = (props) => {
   const [editTitle, setEditTitle] = useState();
   const [editTitleError, setEditTitleError] = useState();
   const instRef = useRef();
+  const buttonRef = useRef();
+
+  const selected = !edit && data.coverId === selectedCover;
 
   const getSong = useQuery(GET_SONG, {
     variables: { getSongSongId: data.songId },
@@ -176,6 +187,16 @@ const LibraryList = (props) => {
     }
   };
 
+  const selectedCoverToggle = (e) => {
+    if (buttonRef.current && !buttonRef.current.contains(e.target)) {
+      if (selectedCover === data.coverId) {
+        setSelectedCover();
+      } else {
+        setSelectedCover(data.coverId);
+      }
+    }
+  };
+
   useEffect(() => {
     getCover();
   }, []);
@@ -204,7 +225,11 @@ const LibraryList = (props) => {
   }, [visible]);
 
   return (
-    <CoverContainer>
+    <CoverContainer
+      edit={edit}
+      selected={selected}
+      onClick={edit ? null : (e) => selectedCoverToggle(e)}
+    >
       {songData && coverTitle ? (
         <>
           <ImageContainer>
@@ -225,8 +250,8 @@ const LibraryList = (props) => {
               </>
             ) : (
               <>
-                <CoverTitle>{coverTitle}</CoverTitle>
-                <SongInform>
+                <CoverTitle selected={selected}>{coverTitle}</CoverTitle>
+                <SongInform selected={selected}>
                   {songData.name} - {songData.artist}
                 </SongInform>
               </>
@@ -275,7 +300,12 @@ const LibraryList = (props) => {
               )}
             </AudioButtonContainer>
           ) : (
-            <IconContainer onClick={onClickIcon}>
+            <IconContainer
+              onClick={onClickIcon}
+              ref={buttonRef}
+              audioState={audioState}
+              selected={selected}
+            >
               {audioState === 1 ? (
                 <CustomPauseIcon src={PauseIcon} />
               ) : (
@@ -321,12 +351,23 @@ const CoverContainer = styled.div`
   margin-bottom: 1vw;
   color: black;
   border-radius: 1rem;
-  padding: 0 1rem;
+  padding: 0.5rem 1rem;
   position: relative;
 
+  transition: background-color 0.3s ease-in-out;
+
   &:hover {
-    background-color: rgba(200, 200, 200, 0.1);
+    background-color: ${(props) =>
+      props.edit
+        ? 'rgba(200, 200, 200, 0.1)'
+        : props.selected
+        ? 'rgba(98, 54, 255, 0.7)'
+        : 'rgba(98, 54, 255, 0.12)'};
   }
+
+  cursor: ${(props) => (props.edit ? '' : 'pointer')};
+  background-color: ${(props) =>
+    props.selected ? 'rgba(98, 54, 255, 0.7)' : 'transparent'};
 `;
 
 const LibararyPagePauseIcon = styled.img`
@@ -363,7 +404,8 @@ const CustomPauseIcon = styled.img`
 const IconContainer = styled.div`
   width: 4vw;
   height: 3vw;
-  background-color: white;
+  background-color: ${(props) =>
+    props.audioState === 1 ? '#6236ff' : 'white'};
 
   -ms-user-select: none;
   -moz-user-select: -moz-none;
@@ -377,18 +419,19 @@ const IconContainer = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  border: 1px solid #6236ff;
+  border: 1px solid
+    ${(props) => (props.selected ? 'rgba(98, 54, 255, 0.75)' : '#6236ff')};
   border-radius: 0.8vw;
   color: #6236ff;
+
+  ${CustomPauseIcon} {
+    filter: ${(props) => (props.audioState === 1 ? 'invert(100%)' : null)};
+  }
 
   &:hover {
     background-color: #6236ff;
 
     ${CustomPlayIcon} {
-      filter: invert(100%);
-    }
-
-    ${CustomPauseIcon} {
       filter: invert(100%);
     }
   }
@@ -513,16 +556,18 @@ const CustomIcon = styled.img`
 
 const CoverTitle = styled.div`
   font-size: 1.3vw;
-  font-weight: bold;
+  font-weight: 800;
 
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+
+  color: ${(props) => (props.selected ? '#fff' : '000')};
 `;
 
 const SongInform = styled.div`
   font-size: 0.9vw;
-  color: rgb(100, 100, 100);
+  color: ${(props) => (props.selected ? '#ddd' : 'rgb(100, 100, 100)')};
 
   white-space: nowrap;
   overflow: hidden;

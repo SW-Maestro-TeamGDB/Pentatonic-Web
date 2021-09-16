@@ -25,6 +25,7 @@ const CoverRoomSession = (props) => {
     songId,
     getSession,
     setLibraryFilter,
+    sessionData,
   } = props;
   const [selectedSession, setSelectedSession] = useState();
   const [modalToggle, setModalToggle] = useState(false);
@@ -35,7 +36,7 @@ const CoverRoomSession = (props) => {
   const onClickParticipate = () => {
     if (data.isLoggedIn) {
       setVisibleDrawer(true);
-      setLibraryFilter({ songId: songId, position: session.position });
+      setLibraryFilter({ songId: songId, position: sessionData.position });
     } else {
       setModalToggle(true);
     }
