@@ -39,6 +39,7 @@ const CoverRoomSession = (props) => {
       setLibraryFilter({ songId: songId, position: sessionData.position });
     } else {
       setModalToggle(true);
+      setLibraryFilter({ songId: songId, position: sessionData.position });
     }
   };
 

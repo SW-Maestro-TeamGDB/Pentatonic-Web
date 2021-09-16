@@ -69,11 +69,7 @@ const LibraryDrawer = (props) => {
       );
       setFilteredData(temp);
     }
-  }, [filter]);
-
-  useEffect(() => {
-    console.log(filteredData);
-  }, [filteredData]);
+  }, [filter, libraryData]);
 
   useEffect(() => {
     if (userData.data.user) {
