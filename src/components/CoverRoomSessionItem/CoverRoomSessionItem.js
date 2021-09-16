@@ -1,5 +1,5 @@
 import react, { useEffect, useState } from 'react';
-import { Collapse } from 'antd';
+import { Collapse, notification } from 'antd';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import { Default } from '../../lib/Media';
@@ -35,9 +35,19 @@ const CoverRoomSessionItem = (props) => {
 
   const [leaveBand, leaveBandResult] = useMutation(LEAVE_BAND, {
     onCompleted: (data) => {
-      console.log(data);
       setLeaveModal(false);
       getSession();
+      notification['success']({
+        key: 'successEditTitle',
+        message: '',
+        description: `${
+          edit === 'master'
+            ? '세션을 추방시켰습니다'
+            : '밴드에서 제외되었습니다'
+        }`,
+        placement: 'bottomRight',
+        duration: 3,
+      });
     },
   });
 
