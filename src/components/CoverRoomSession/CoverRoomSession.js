@@ -1,11 +1,12 @@
 import react, { useEffect, useState, useCallback } from 'react';
-import { Collapse } from 'antd';
+import { Collapse, Drawer } from 'antd';
 import { gql, useQuery } from '@apollo/client';
 import { IS_LOGGED_IN } from '../../apollo/cache';
 import styled from 'styled-components';
 import { Default } from '../../lib/Media';
 import GridContainer from '../GridContainer/GridContainer';
 import CoverRoomSessionItem from '../CoverRoomSessionItem';
+import LibraryDrawer from '../LibraryDrawer/LibraryDrawer';
 
 import AuthModal from '../../components/AuthModal';
 
@@ -21,7 +22,9 @@ const CoverRoomSession = (props) => {
     creator,
     userId,
     bandId,
+    songId,
     getSession,
+    setLibraryFilter,
   } = props;
   const [selectedSession, setSelectedSession] = useState();
   const [modalToggle, setModalToggle] = useState(false);
@@ -30,8 +33,12 @@ const CoverRoomSession = (props) => {
   });
 
   const onClickParticipate = () => {
-    if (data.isLoggedIn) setVisibleDrawer(true);
-    else setModalToggle(true);
+    if (data.isLoggedIn) {
+      setVisibleDrawer(true);
+      setLibraryFilter({ songId: songId, position: session.position });
+    } else {
+      setModalToggle(true);
+    }
   };
 
   useEffect(() => {
@@ -62,6 +69,7 @@ const CoverRoomSession = (props) => {
               : null
           }
           getSession={getSession}
+          setLibraryFilter={setLibraryFilter}
         />
       );
     });

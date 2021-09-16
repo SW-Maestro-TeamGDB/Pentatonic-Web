@@ -65,6 +65,7 @@ const GET_BAND = gql`
       name
       song {
         name
+        songId
       }
       comment {
         user {
@@ -146,6 +147,19 @@ const CoverRoom = ({ match }) => {
   const [mode, setMode] = useState(0); // 0: select , 1: audio
   const [comment, setComment] = useState('');
   const [deleteModal, setDeleteModal] = useState(false);
+  const [libraryFilter, setLibraryFilter] = useState();
+
+  // drawer
+  const [visibleDrawer, setVisibleDrawer] = useState(false);
+  const onClose = () => {
+    setVisibleDrawer(false);
+    setLibraryFilter();
+  };
+
+  const onClickToSelect = () => {
+    setSession([]);
+    setMode(0);
+  };
 
   const { data } = useQuery(GET_CURRENT_USER);
 
@@ -220,17 +234,6 @@ const CoverRoom = ({ match }) => {
     },
   });
 
-  // drawer
-  const [visibleDrawer, setVisibleDrawer] = useState(false);
-  const onClose = () => {
-    setVisibleDrawer(false);
-  };
-
-  const onClickToSelect = () => {
-    setSession([]);
-    setMode(0);
-  };
-
   const showCoverRoomSession = () => {
     return coverData.session.map((v, i) => {
       return (
@@ -239,20 +242,24 @@ const CoverRoom = ({ match }) => {
           sessionTitle={changeSessionNameToKorean(v.position)}
           total={v.maxMember}
           now={v.cover.length}
-          session={session}
+          session={v}
           setSession={setSession}
           setVisibleDrawer={setVisibleDrawer}
           cover={v.cover}
           creator={coverData.creator.id}
           userId={data.user.id}
           bandId={bandId}
+          songId={coverData.song.songId}
           getSession={getSession}
+          setLibraryFilter={setLibraryFilter}
         />
       );
     });
   };
 
-  console.log(coverData);
+  // useEffect(() => {
+  //   console.log(libraryFilter);
+  // }, [libraryFilter]);
 
   const showComment = () => {
     if (coverData.comment.length === 0) {
@@ -411,7 +418,7 @@ const CoverRoom = ({ match }) => {
             visible={visibleDrawer}
             width="35%"
           >
-            <LibraryDrawer visible={visibleDrawer} />
+            <LibraryDrawer visible={visibleDrawer} filter={libraryFilter} />
           </Drawer>
         </>
       ) : error ? (

@@ -19,14 +19,29 @@ const GET_USER_INFO = gql`
 `;
 
 const LibraryDrawer = (props) => {
-  const { visible } = props;
+  const { visible, filter } = props;
+  const [filteredData, setFilteredData] = useState([]);
   const [libraryData, setLibraryData] = useState([]);
   const userData = useQuery(GET_CURRENT_USER);
   const [getUserInfo] = useLazyQuery(GET_USER_INFO, {
+    filter: 'no-cahce',
     onCompleted: (data) => {
-      setLibraryData(...libraryData, data.getUserInfo.library);
+      setLibraryData(data.getUserInfo.library);
     },
   });
+
+  useEffect(() => {
+    if (libraryData.length > 0 && filter) {
+      const temp = libraryData.filter(
+        (v) => v.songId === filter.songId && v.position === filter.position,
+      );
+      setFilteredData(temp);
+    }
+  }, [filter]);
+
+  useEffect(() => {
+    console.log(filteredData);
+  }, [filteredData]);
 
   useEffect(() => {
     if (userData.data.user) {
@@ -39,7 +54,7 @@ const LibraryDrawer = (props) => {
   }, [userData.data.user]);
 
   const loadLibrary = () =>
-    libraryData.map((v, i) => {
+    filteredData.map((v, i) => {
       return <LibraryList data={v} key={v.coverId} visible={visible} />;
     });
 
@@ -47,7 +62,7 @@ const LibraryDrawer = (props) => {
     <DrawerContainer>
       <Title>라이브러리</Title>
       <LibaryContainer>
-        {libraryData ? (
+        {filteredData.length > 0 ? (
           loadLibrary()
         ) : (
           <NoLibraryText>참여 할 수 있는 라이브러리가 없습니다</NoLibraryText>
@@ -88,7 +103,7 @@ const NoLibraryText = styled.div`
   color: #666666;
   font-size: 1.2rem;
   font-weight: 700;
-  margin-top: 1rem;
+  margin-top: 1.5rem;
 `;
 
 const LibaryContainer = styled.div`
