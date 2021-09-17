@@ -5,6 +5,7 @@ import GridContainer from '../../components/GridContainer/GridContainer';
 import CoverRoomSession from '../../components/CoverRoomSession/CoverRoomSession';
 import LibraryDrawer from '../../components/LibraryDrawer/LibraryDrawer';
 import CommentList from '../../components/CommentList/CommentList';
+import SessionSelectModal from '../../components/SessionSelectModal';
 import { Drawer, notification } from 'antd';
 import NotFoundPage from '../NotFoundPage';
 import AuthModal from '../../components/AuthModal';
@@ -163,6 +164,9 @@ const CoverRoom = ({ match }) => {
   const [comment, setComment] = useState('');
   const [deleteModal, setDeleteModal] = useState(false);
   const [libraryFilter, setLibraryFilter] = useState();
+
+  // session select guide modal
+  const [sessionModal, setSessionModal] = useState(false);
 
   // authmodal for cover like
   const [modalToggle, setModalToggle] = useState(false);
@@ -332,7 +336,7 @@ const CoverRoom = ({ match }) => {
 
   const onClickSubmit = () => {
     if (session.length === 0) {
-      alert('하나 이상의 세션을 선택해주세요');
+      setSessionModal(true);
     } else {
       setMode(1);
       mergeAudios({
@@ -530,6 +534,10 @@ const CoverRoom = ({ match }) => {
         modalToggle={modalToggle}
         setModalToggle={setModalToggle}
         action={() => likeCover()}
+      />
+      <SessionSelectModal
+        modalToggle={sessionModal}
+        setModalToggle={setSessionModal}
       />
     </PageContainer>
   );
