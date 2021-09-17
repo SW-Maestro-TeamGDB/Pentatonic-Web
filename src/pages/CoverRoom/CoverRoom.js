@@ -7,6 +7,7 @@ import LibraryDrawer from '../../components/LibraryDrawer/LibraryDrawer';
 import CommentList from '../../components/CommentList/CommentList';
 import { Drawer, notification } from 'antd';
 import NotFoundPage from '../NotFoundPage';
+import AuthModal from '../../components/AuthModal';
 import AudioPlayer, { RHAP_UI } from 'react-h5-audio-player';
 import {
   LoadingOutlined,
@@ -119,6 +120,14 @@ const GET_SESSION = gql`
   }
 `;
 
+const GET_LIKE = gql`
+  query Query($getBandBandId: ObjectID!) {
+    getBand(bandId: $getBandBandId) {
+      likeCount
+    }
+  }
+`;
+
 const CREATE_COMMENT = gql`
   mutation CreateCommentMutation($createCommentInput: CreateCommentInput!) {
     createComment(input: $createCommentInput) {
@@ -155,6 +164,9 @@ const CoverRoom = ({ match }) => {
   const [deleteModal, setDeleteModal] = useState(false);
   const [libraryFilter, setLibraryFilter] = useState();
 
+  // authmodal for cover like
+  const [modalToggle, setModalToggle] = useState(false);
+
   // drawer
   const [visibleDrawer, setVisibleDrawer] = useState(false);
   const onClose = () => {
@@ -167,7 +179,7 @@ const CoverRoom = ({ match }) => {
     setMode(0);
   };
 
-  const { data } = useQuery(GET_CURRENT_USER);
+  const { data } = useQuery(GET_CURRENT_USER, { fetchPolicy: 'network-only' });
 
   const { loading, error, getBand } = useQuery(GET_BAND, {
     variables: {
@@ -195,6 +207,16 @@ const CoverRoom = ({ match }) => {
     },
     onCompleted: (data) => {
       setCoverData({ ...coverData, comment: data.getBand.comment });
+    },
+  });
+
+  const [getLike, getLikeResult] = useLazyQuery(GET_LIKE, {
+    fetchPolicy: 'network-only',
+    variables: {
+      getBandBandId: bandId,
+    },
+    onCompleted: (data) => {
+      setCoverData({ ...coverData, likeCount: data.getBand.likeCount });
     },
   });
 
@@ -241,8 +263,22 @@ const CoverRoom = ({ match }) => {
   });
 
   const [likeCover, likeCoverResult] = useMutation(LIKE_COVER, {
+    variables: {
+      likeInput: {
+        band: {
+          bandId: bandId,
+        },
+      },
+    },
     onCompleted: (data) => {
-      alert(data);
+      notification['success']({
+        key: 'successEditTitle',
+        message: '',
+        description: '커버에 좋아요를 눌렀습니다',
+        placement: 'bottomRight',
+        duration: 3,
+      });
+      getLike();
     },
     onError: (error) => {
       alert(error);
@@ -324,6 +360,15 @@ const CoverRoom = ({ match }) => {
     }
   };
 
+  const onClickLike = () => {
+    console.log(data.user);
+    if (data.user) {
+      likeCover();
+    } else {
+      setModalToggle(true);
+    }
+  };
+
   const onClickShareButton = () => {
     let dummy = document.createElement('input');
     let text = window.location.href;
@@ -378,7 +423,7 @@ const CoverRoom = ({ match }) => {
               audio ? (
                 <AudioPlayerContainer>
                   <ButtonContainer>
-                    <LikeButton>
+                    <LikeButton onClick={onClickLike}>
                       <CustomLikeFilledIcon />
                     </LikeButton>
                     <CopyButton>
@@ -480,6 +525,11 @@ const CoverRoom = ({ match }) => {
         text="밴드를 삭제하시겠습니까?"
         desc="참여한 모든 세션이 삭제되며 삭제 이후에는 되돌릴 수 없습니다"
         afterRequest={deleteBand}
+      />
+      <AuthModal
+        modalToggle={modalToggle}
+        setModalToggle={setModalToggle}
+        action={() => likeCover()}
       />
     </PageContainer>
   );
