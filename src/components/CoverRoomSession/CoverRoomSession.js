@@ -123,6 +123,8 @@ const SessionContainer = styled.div`
   min-height: 5rem;
   display: flex;
   flex-direction: row;
+
+  margin: 1.2rem 0 0.5rem;
 `;
 
 const NoSession = styled.div`

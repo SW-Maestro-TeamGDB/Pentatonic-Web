@@ -14,7 +14,7 @@ import {
   DeleteOutlined,
 } from '@ant-design/icons';
 import QuestionModal from '../../components/QuestionModal';
-
+import { LikeFilled, ShareAltOutlined } from '@ant-design/icons';
 import { changeSessionNameToKorean } from '../../lib/changeSessionNameToKorean';
 import { gql, useQuery, useMutation, useLazyQuery } from '@apollo/client';
 import {
@@ -139,6 +139,12 @@ const MERGE_AUDIOS = gql`
   }
 `;
 
+const LIKE_COVER = gql`
+  mutation JoinBandMutation($likeInput: LikeInput!) {
+    like(input: $likeInput)
+  }
+`;
+
 const CoverRoom = ({ match }) => {
   const bandId = match.params.id;
   const [session, setSession] = useState([]);
@@ -234,6 +240,15 @@ const CoverRoom = ({ match }) => {
     },
   });
 
+  const [likeCover, likeCoverResult] = useMutation(LIKE_COVER, {
+    onCompleted: (data) => {
+      alert(data);
+    },
+    onError: (error) => {
+      alert(error);
+    },
+  });
+
   const showCoverRoomSession = () => {
     return coverData.session.map((v, i) => {
       return (
@@ -309,6 +324,25 @@ const CoverRoom = ({ match }) => {
     }
   };
 
+  const onClickShareButton = () => {
+    let dummy = document.createElement('input');
+    let text = window.location.href;
+
+    document.body.appendChild(dummy);
+    dummy.value = text;
+    dummy.select();
+    document.execCommand('copy');
+    document.body.removeChild(dummy);
+
+    notification['success']({
+      key: 'successEditTitle',
+      message: '',
+      description: '밴드 URL을 복사했습니다',
+      placement: 'bottomRight',
+      duration: 3,
+    });
+  };
+
   return (
     <PageContainer>
       {!loading && coverData ? (
@@ -343,6 +377,14 @@ const CoverRoom = ({ match }) => {
             {mode === 1 ? (
               audio ? (
                 <AudioPlayerContainer>
+                  <ButtonContainer>
+                    <LikeButton>
+                      <CustomLikeFilledIcon />
+                    </LikeButton>
+                    <CopyButton>
+                      <CustomShareIcon onClick={onClickShareButton} />
+                    </CopyButton>
+                  </ButtonContainer>
                   <AudioPlayerWrapper>
                     <AudioPlayer
                       src={audio ? audio : null}
@@ -449,6 +491,71 @@ const SessionContainer = styled.div`
   margin-top: 2rem;
   padding-bottom: 3rem;
   border-bottom: 1px solid #eee;
+`;
+
+const CustomLikeFilledIcon = styled(LikeFilled)`
+  color: #fff;
+  font-size: 24px;
+`;
+
+const CustomShareIcon = styled(ShareAltOutlined)`
+  color: #ddd;
+  font-size: 24px;
+`;
+
+const LikeButton = styled.div`
+  width: 50px;
+  height: 50px;
+  background-color: rgba(255, 255, 255, 0.2);
+  border-radius: 10px;
+
+  margin-right: 10px;
+  cursor: pointer;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  transition: background-color 0.3s ease-in-out;
+
+  &:hover {
+    background-color: rgba(255, 255, 255, 0.3);
+  }
+`;
+
+const CopyButton = styled.div`
+  width: 50px;
+  height: 50px;
+  border-radius: 10px;
+
+  background-color: rgba(255, 255, 255, 0.2);
+
+  cursor: pointer;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  transition: background-color 0.3s ease-in-out;
+
+  &:hover {
+    background-color: rgba(255, 255, 255, 0.3);
+  }
+`;
+
+const ButtonContainer = styled.div`
+  position: absolute;
+  right: 10%;
+  top: -60px;
+  width: auto;
+  color: white;
+
+  cursor: pointer;
+
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
 `;
 
 const MyProfileImg = styled.img`
@@ -560,6 +667,7 @@ const AudioPlayerContainer = styled.div`
   z-index: 2;
 
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
 `;
@@ -670,7 +778,7 @@ const ViewCount = styled.span`
 `;
 
 const SpacingSpan = styled.span`
-  margin: 0 5px;
+  margin: 0 7px;
 `;
 
 const CustomIcon = styled.img`
