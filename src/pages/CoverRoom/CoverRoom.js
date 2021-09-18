@@ -16,7 +16,7 @@ import {
   DeleteOutlined,
 } from '@ant-design/icons';
 import QuestionModal from '../../components/QuestionModal';
-import { LikeFilled, ShareAltOutlined } from '@ant-design/icons';
+import { LikeFilled, ShareAltOutlined, LikeOutlined } from '@ant-design/icons';
 import { changeSessionNameToKorean } from '../../lib/changeSessionNameToKorean';
 import { gql, useQuery, useMutation, useLazyQuery } from '@apollo/client';
 import {
@@ -63,6 +63,7 @@ const GET_BAND = gql`
         }
       }
       likeCount
+      likeStatus
       introduce
       name
       song {
@@ -125,6 +126,7 @@ const GET_LIKE = gql`
   query Query($getBandBandId: ObjectID!) {
     getBand(bandId: $getBandBandId) {
       likeCount
+      likeStatus
     }
   }
 `;
@@ -220,7 +222,11 @@ const CoverRoom = ({ match }) => {
       getBandBandId: bandId,
     },
     onCompleted: (data) => {
-      setCoverData({ ...coverData, likeCount: data.getBand.likeCount });
+      setCoverData({
+        ...coverData,
+        likeCount: data.getBand.likeCount,
+        likeStatus: data.getBand.likeStatus,
+      });
     },
   });
 
@@ -275,10 +281,14 @@ const CoverRoom = ({ match }) => {
       },
     },
     onCompleted: (data) => {
-      notification['success']({
+      notification[`${coverData.likeStatus ? 'warning' : 'success'}`]({
         key: 'successEditTitle',
         message: '',
-        description: '커버에 좋아요를 눌렀습니다',
+        description: `${
+          coverData.likeStatus
+            ? '좋아요를 취소했습니다'
+            : '커버에 좋아요를 눌렀습니다'
+        }`,
         placement: 'bottomRight',
         duration: 3,
       });
@@ -316,6 +326,10 @@ const CoverRoom = ({ match }) => {
   // useEffect(() => {
   //   console.log(libraryFilter);
   // }, [libraryFilter]);
+
+  useEffect(() => {
+    console.log(coverData);
+  }, [coverData]);
 
   const showComment = () => {
     if (coverData.comment.length === 0) {
@@ -365,7 +379,6 @@ const CoverRoom = ({ match }) => {
   };
 
   const onClickLike = () => {
-    console.log(data.user);
     if (data.user) {
       likeCover();
     } else {
@@ -428,7 +441,11 @@ const CoverRoom = ({ match }) => {
                 <AudioPlayerContainer>
                   <ButtonContainer>
                     <LikeButton onClick={onClickLike}>
-                      <CustomLikeFilledIcon />
+                      {coverData.likeStatus ? (
+                        <CustomLikeFilledIcon />
+                      ) : (
+                        <CustomLikeOutlinedIcon />
+                      )}
                     </LikeButton>
                     <CopyButton>
                       <CustomShareIcon onClick={onClickShareButton} />
@@ -551,8 +568,13 @@ const SessionContainer = styled.div`
   border-bottom: 1px solid #eee;
 `;
 
+const CustomLikeOutlinedIcon = styled(LikeOutlined)`
+  color: #ffffff;
+  font-size: 24px;
+`;
+
 const CustomLikeFilledIcon = styled(LikeFilled)`
-  color: #fff;
+  color: #ffffff;
   font-size: 24px;
 `;
 
