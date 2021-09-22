@@ -52,6 +52,7 @@ const RecordEdit = (props) => {
     setBandId,
     selectedSession,
     session,
+    cover,
   } = props;
   // 업로드 모달
   const [modalToggle, setModalToggle] = useState(false);
@@ -97,11 +98,15 @@ const RecordEdit = (props) => {
     onCompleted: (data) => {
       setCoverURI(data.uploadCover.coverURI);
       setCoverId(data.uploadCover.coverId);
-      createBand({
-        variables: {
-          createBandInput: { sessionConfig: session, band: bandData },
-        },
-      });
+      if (cover) {
+        createBand({
+          variables: {
+            createBandInput: { sessionConfig: session, band: bandData },
+          },
+        });
+      } else {
+        setModalLoading(false);
+      }
     },
   });
 
@@ -311,6 +316,7 @@ const RecordEdit = (props) => {
         modalToggle={modalToggle}
         modalLoading={modalLoading}
         bandId={bandId}
+        cover={cover}
       />
       {/* <button onClick={() => onClickStart()}>시작</button>
       <button onClick={() => onClickStop()}>중지</button>

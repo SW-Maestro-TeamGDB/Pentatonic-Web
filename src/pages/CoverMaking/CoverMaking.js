@@ -81,6 +81,7 @@ const CoverMaking = ({ match }) => {
           setBandId={setBandId}
           selectedSession={selectedSession}
           session={session}
+          cover={true}
         />
       ),
     },
