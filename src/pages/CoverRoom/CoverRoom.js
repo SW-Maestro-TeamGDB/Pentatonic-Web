@@ -6,6 +6,7 @@ import CoverRoomSession from '../../components/CoverRoomSession/CoverRoomSession
 import LibraryDrawer from '../../components/LibraryDrawer/LibraryDrawer';
 import CommentList from '../../components/CommentList/CommentList';
 import SessionSelectModal from '../../components/SessionSelectModal';
+import { useHistory } from 'react-router-dom';
 import { Drawer, notification } from 'antd';
 import NotFoundPage from '../NotFoundPage';
 import AuthModal from '../../components/AuthModal';
@@ -159,6 +160,7 @@ const LIKE_COVER = gql`
 
 const CoverRoom = ({ match }) => {
   const bandId = match.params.id;
+  const history = useHistory();
   const [session, setSession] = useState([]);
   const [audio, setAudio] = useState(null);
   const [coverData, setCoverData] = useState();
@@ -260,7 +262,11 @@ const CoverRoom = ({ match }) => {
       },
     },
     onCompleted: (data) => {
-      window.history.back();
+      if (window.history.length > 1) {
+        window.history.back();
+      } else {
+        history.push('/');
+      }
       notification['success']({
         key: 'successEditTitle',
         message: '',
