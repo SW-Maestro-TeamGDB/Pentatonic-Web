@@ -53,7 +53,7 @@ const StudioSoloCover = () => {
           />
         </ButtonContainer>
         <MakingCoverButton
-          link={`/studio/solo/0/cover`}
+          link={`/studio/solo/free/cover`}
           title="자유곡 커버 만들기"
         />
       </SubContainer>
