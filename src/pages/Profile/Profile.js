@@ -445,8 +445,8 @@ const CustomUnvisiblePictureIcon = styled(PictureOutlined)`
 `;
 
 const EditProfile = styled.img`
-  width: 100%;
-  height: 100%;
+  width: 9rem;
+  height: 9rem;
   border-radius: 10px;
   transition: all 0.3s ease-in-out;
 
