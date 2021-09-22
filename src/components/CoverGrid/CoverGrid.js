@@ -26,10 +26,10 @@ const CoverGrid = (props) => {
   const randomImg = `https://placeimg.com/300/300/${category[idx]}`;
 
   const showSession = (session) => {
-    return session.map((v) => {
+    return session.map((v, idx) => {
       return (
         <InstrumentIcon
-          key={`${idx}+${v.session}`}
+          key={`${idx}+${v.position}`}
           src={sessionMatch(v.position)}
         />
       );
@@ -43,8 +43,6 @@ const CoverGrid = (props) => {
     else if (position === 'VOCAL') return vocal;
     else return 'https://avatars.githubusercontent.com/u/51112542?s=64&v=4';
   };
-
-  console.log(data);
 
   const randomTitle = [
     '멋진 밴드',
