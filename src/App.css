@@ -14,6 +14,35 @@ body {
   width: 0.8rem;
 }
 
+.ant-select-selector {
+  border: 2px solid #ddd;
+  border-radius: 10px !important;
+  height: 3em !important;
+}
+
+.ant-select-selection-item {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.ant-select-selector:hover {
+  border: 2px solid #ccc !important;
+}
+
+.ant-select-focused:not(.ant-select-disabled).ant-select:not(.ant-select-customize-input)
+  .ant-select-selector {
+  border: 2px solid #ccc !important;
+}
+
+.ant-select-focused:not(.ant-select-disabled).ant-select:not(.ant-select-customize-input)
+  .ant-select-selector {
+  border-color: #ccc !important;
+  border-right-width: 1px !important;
+  outline: 0;
+  box-shadow: 0 0 0 0px rgba(98, 54, 255, 0.12);
+}
+
 .ant-radio-checked .ant-radio-inner {
   border-color: #6236ff !important;
 }
