@@ -7,25 +7,30 @@ import RecordEdit from '../RecordEdit';
 import SessionAddPanel from '../../components/SessionAddPanel';
 import SessionContents from '../../components/SessionContents';
 import InstSelect from '../../components/InstSelect';
-import { Upload } from 'antd';
+import { Upload, Collapse, Select } from 'antd';
 import { LeftOutlined, PictureOutlined } from '@ant-design/icons';
+import { changeSessionNameToKorean } from '../../lib/changeSessionNameToKorean';
 
 import tempData from '../../data/songs/tempData.json';
+import sessionType from '../../data/sessionType.json';
 
 const { Dragger } = Upload;
+const { Panel } = Collapse;
+const { Option } = Select;
 
 const RecordForm = (props) => {
-  const { setPage, audioDuration, pageUrl } = props;
-  const [bandData, setBandData] = useState({
-    name: null,
-    introduce: null,
-    backgroundURI: null,
-    songId: null,
-  });
+  const {
+    setPage,
+    audioDuration,
+    pageUrl,
+    bandData,
+    setBandData,
+    session,
+    setSession,
+  } = props;
   const [informError, setInformError] = useState(null);
   const [sessionError, setSessionError] = useState(null);
   const [instError, setInstError] = useState();
-  const [session, setSession] = useState([]); // 세션
   const [selectInst, setSelectInst] = useState([]); // 녹음 선택 인스트
   const history = useHistory();
 
@@ -35,15 +40,12 @@ const RecordForm = (props) => {
     let check = true;
 
     if (!bandData.name) {
-      setInformError('커버 제목을 입력해주세요');
-      check = false;
-    } else if (!bandData.introduce) {
-      setInformError('커버 소개를 입력해주세요');
+      setInformError('라이브러리 제목을 입력해주세요');
       check = false;
     }
 
     if (!session) {
-      setSessionError('커버를 구성할 세션을 선택해주세요');
+      setSessionError('녹음에 참여할 세션을 선택해주세요');
       check = false;
     }
 
@@ -70,6 +72,16 @@ const RecordForm = (props) => {
   const onClickSubmitButton = () => {
     if (formCheck()) setPage(1);
     else window.scrollTo(0, 0);
+  };
+
+  const showSessionType = () => {
+    return sessionType.map((v, i) => {
+      return (
+        <Option key={v.session}>
+          <Centered>{changeSessionNameToKorean(v.session)}</Centered>
+        </Option>
+      );
+    });
   };
 
   return (
@@ -101,7 +113,18 @@ const RecordForm = (props) => {
           <CustomDescription>
             커버 녹음을 진행 할 세션을 선택합니다
           </CustomDescription>
-          {/* 세션 선택 컴포넌트 추가 */}
+          <SessionContainer>
+            <SessionSelect
+              defaultValue="세션 선택"
+              value={session}
+              dropdownMatchSelectWidth="100%"
+              onChange={(value) => {
+                setSession(value);
+              }}
+            >
+              {showSessionType()}
+            </SessionSelect>
+          </SessionContainer>
           <ErrorContainer>
             {sessionError ? <ErrorMessage>{sessionError}</ErrorMessage> : null}
           </ErrorContainer>
@@ -141,13 +164,21 @@ const Container = styled.div`
   margin-top: 4%;
 `;
 
+const SessionSelect = styled(Select)`
+  width: 80%;
+`;
+
 const InputContainer = styled.div`
   width: 100%;
   margin: 2rem 0 1rem;
 `;
 
 const SessionContainer = styled.div`
-  margin: 2.5rem 0 2rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  margin: 3rem 0;
 `;
 
 const SessionAddButtonContainer = styled.div`
@@ -276,7 +307,7 @@ const CustomDescription = styled.div`
 const CustomInput = styled.input`
   width: 100%;
   color: black;
-  border: 2px solid lightgray;
+  border: 2px solid #ddd;
   transition: all ease 0.3s;
   outline: none;
   height: 4rem;
@@ -319,6 +350,11 @@ const ErrorContainer = styled.div`
 const ErrorMessage = styled.span`
   text-align: center;
   color: #cb0000;
+`;
+
+const Centered = styled.span`
+  display: flex;
+  justify-content: center;
 `;
 
 export default RecordForm;

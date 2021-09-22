@@ -18,6 +18,15 @@ const RecordMaking = ({ match }) => {
   const [inst, setInst] = useState();
   const pageUrl = match.url;
 
+  const [bandId, setBandId] = useState();
+  const [bandData, setBandData] = useState({
+    name: null,
+    introduce: null,
+    backGroundURI: null,
+    songId: '611824fd287e5b0012e18160',
+  });
+  const [selectedSession, setSelectedSession] = useState(); // 세션 데이터
+
   // 샘플 오디오
   const audio = new Audio();
   audio.src = instrument;
@@ -38,6 +47,10 @@ const RecordMaking = ({ match }) => {
           setPage={setPage}
           audioDuration={audioDuration}
           pageUrl={pageUrl}
+          bandData={bandData}
+          setBandData={setBandData}
+          session={selectedSession}
+          setSession={setSelectedSession}
         />
       ),
     },
@@ -49,6 +62,7 @@ const RecordMaking = ({ match }) => {
           setAudioFile={setAudioFile}
           audioDuration={audioDuration}
           inst={inst}
+          bandData={bandData}
         />
       ),
     },
@@ -58,8 +72,11 @@ const RecordMaking = ({ match }) => {
         <RecordEdit
           setPage={setPage}
           audioFile={audioFile}
-          setAudioFile={setAudioFile}
           inst={inst}
+          bandData={bandData}
+          bandId={bandId}
+          setBandId={setBandId}
+          selectedSession={selectedSession}
         />
       ),
     },
