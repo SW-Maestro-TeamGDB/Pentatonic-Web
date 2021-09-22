@@ -164,7 +164,7 @@ const CustomForm = styled.form`
 const CustomInput = styled.input`
   width: 100%;
   color: black;
-  border: 2px solid lightgray;
+  border: 2px solid #ddd;
   transition: all ease 0.3s;
   outline: none;
   height: 4rem;

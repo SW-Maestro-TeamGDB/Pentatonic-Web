@@ -577,7 +577,7 @@ const SongInform = styled.div`
 const CustomInput = styled.input`
   width: 90%;
   color: black;
-  border: 2px solid lightgray;
+  border: 2px solid #ddd;
   transition: all ease 0.3s;
   outline: none;
   height: 2.8rem;

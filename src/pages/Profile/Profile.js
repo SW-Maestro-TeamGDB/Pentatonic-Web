@@ -519,7 +519,7 @@ const NoCoverText = styled.div`
 const CustomInput = styled.input`
   width: 100%;
   color: #222;
-  border: 2px solid lightgray;
+  border: 2px solid #ddd;
   transition: all ease 0.3s;
   outline: none;
   height: 2.8rem;
