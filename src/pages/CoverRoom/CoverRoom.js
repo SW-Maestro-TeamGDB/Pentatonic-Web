@@ -244,7 +244,6 @@ const CoverRoom = ({ match }) => {
     fetchPolicy: 'no-cache',
     onCompleted: (data) => {
       setComment('');
-      console.log('댓글 작성 완료');
       getComment();
     },
     onError: (error) => {
@@ -323,14 +322,6 @@ const CoverRoom = ({ match }) => {
     });
   };
 
-  // useEffect(() => {
-  //   console.log(libraryFilter);
-  // }, [libraryFilter]);
-
-  useEffect(() => {
-    console.log(coverData);
-  }, [coverData]);
-
   const showComment = () => {
     if (coverData.comment.length === 0) {
       return;
@@ -379,7 +370,7 @@ const CoverRoom = ({ match }) => {
   };
 
   const onClickLike = () => {
-    if (data.user) {
+    if (data?.user) {
       likeCover();
     } else {
       setModalToggle(true);
@@ -411,7 +402,9 @@ const CoverRoom = ({ match }) => {
         <>
           <CoverBannerContainer mode={mode}>
             <CoverBackground url={coverData.backGroundURI} />
-            {coverData && data.user && coverData.creator.id === data.user.id ? (
+            {coverData &&
+            data?.user &&
+            coverData.creator.id === data.user.id ? (
               <DeleteButton mode={mode} onClick={() => setDeleteModal(true)}>
                 <CustomDeleteIcon />
                 밴드 삭제하기
@@ -488,7 +481,7 @@ const CoverRoom = ({ match }) => {
               <CurrentComment>{coverData.comment.length}</CurrentComment>
             </CommentHeader>
             <CommentForm>
-              {data.user ? (
+              {data?.user ? (
                 <>
                   <MyProfileImg
                     src={
@@ -685,7 +678,7 @@ const BackwardButton = styled.div`
 const CustomInput = styled.input`
   width: 80%;
   color: black;
-  border: 2px solid lightgray;
+  border: 2px solid #ddd;
   transition: all ease 0.3s;
   outline: none;
   height: 100%;
