@@ -17,12 +17,14 @@ import Liked from './pages/Liked';
 import Login from './pages/Login/Login';
 import FindAccount from './pages/FindAccount';
 import NotFoundPage from './pages/NotFoundPage';
+import PageTracker from './lib/PageTracker';
 
 function App() {
   return (
     <ApolloProvider client={client}>
       <Router>
         <ScrollToTop />
+        <PageTracker />
         <Header />
         <Centered>
           <Switch>
