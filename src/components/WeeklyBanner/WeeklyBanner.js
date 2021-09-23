@@ -1,19 +1,41 @@
 import react from 'react';
 import styled from 'styled-components';
+import { useQuery, gql } from '@apollo/client';
 import { Default } from '../../lib/Media';
 import { Link } from 'react-router-dom';
 
+const QUERY_SONG = gql`
+  query Query($querySongFilter: QuerySongInput!) {
+    querySong(filter: $querySongFilter) {
+      name
+      artist
+      songImg
+    }
+  }
+`;
+
 const WeeklyBanner = () => {
+  const { data } = useQuery(QUERY_SONG, {
+    variables: {
+      querySongFilter: {
+        weeklyChallenge: true,
+        type: 'ALL',
+      },
+    },
+  });
+
+  const songData = data?.querySong[0];
+
   return (
     <BannerContainer>
       <Link to="/lounge/weekly">
-        <Background />
+        <Background url={songData ? songData.songImg : null} />
         <BannerContents>
           <WeeklyChallengeTitleContainer>
             <WeeklyChallengeTitle>Weekly Challenge</WeeklyChallengeTitle>
           </WeeklyChallengeTitleContainer>
-          <SongTitle>Fix You</SongTitle>
-          <Singer>Coldplay</Singer>
+          <SongTitle>{songData ? songData.name : null}</SongTitle>
+          <Singer>{songData ? songData.artist : null}</Singer>
         </BannerContents>
       </Link>
     </BannerContainer>
@@ -24,7 +46,7 @@ const Background = styled.div`
   width: 100%;
   height: 100%;
   position: absolute;
-  background-image: url('https://media.pitchfork.com/photos/608a33343bbb6032f540a222/2:1/w_2912,h_1456,c_limit/coldplay.jpg');
+  background-image: ${(props) => (props.url ? `url(${props.url})` : null)};
   background-repeat: no-repeat;
   background-position: top center;
   background-size: cover;
