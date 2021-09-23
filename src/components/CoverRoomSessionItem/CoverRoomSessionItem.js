@@ -215,6 +215,8 @@ const SessionContentsContainer = styled.div`
   flex-direction: column;
   transition: all 0.3s ease-in-out;
 
+  position: relative;
+
   /* &:hover {
     background-color: ${(props) => (props.selected ? 'gray' : '#f0f0f0')};
   } */

@@ -54,7 +54,7 @@ const CoverRoomSession = (props) => {
     return cover.map((v, i) => {
       return (
         <CoverRoomSessionItem
-          key={`${sessionTitle}+${i}`}
+          key={`${sessionTitle}+${v.coverId}`}
           data={v}
           count={i}
           session={session}

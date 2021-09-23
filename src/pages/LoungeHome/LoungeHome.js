@@ -30,7 +30,7 @@ const LoungeHome = () => {
   const tempCover = () => {
     if (data) {
       return data.queryBand.map((v, i) => {
-        return <CoverGrid key={`bandData+${i}`} data={v} />;
+        return <CoverGrid key={`bandData+${v.bandId}`} data={v} />;
       });
     }
   };
@@ -39,7 +39,7 @@ const LoungeHome = () => {
     fetchPolicy: 'network-only',
     variables: {
       queryBandFilter: {
-        type: 'NAME',
+        type: 'ALL',
       },
     },
   });
