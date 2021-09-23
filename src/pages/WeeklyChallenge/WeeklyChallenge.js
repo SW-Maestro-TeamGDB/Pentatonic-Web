@@ -11,46 +11,60 @@ import MakingIcon from '../../images/MakingIcon.svg';
 import PageImage from '../../components/PageImage';
 import GridContainer from '../../components/GridContainer/GridContainer';
 
-const QUERY_BAND = gql`
-  query Query($queryBandFilter: QueryBandInput!) {
-    queryBand(filter: $queryBandFilter) {
-      backGroundURI
-      song {
-        artist
-        name
-      }
+const QUERY_SONG = gql`
+  query Query($querySongFilter: QuerySongInput!) {
+    querySong(filter: $querySongFilter) {
       name
-      session {
-        position
+      artist
+      songImg
+      band {
+        bandId
+        name
+        backGroundURI
+        likeCount
+        session {
+          position
+        }
       }
-      likeCount
-      bandId
     }
   }
 `;
 
 const WeeklyChallenge = () => {
-  const tempCover = () => {
-    if (data) {
-      return data.queryBand.map((v, i) => {
-        return <CoverGrid key={`bandData+${i}`} data={v} />;
+  const loadCover = () => {
+    if (data?.querySong.length > 0) {
+      const title = songData.name;
+      const artist = songData.artist;
+
+      return songData.band.map((v, i) => {
+        return (
+          <CoverGrid
+            key={`bandData+${i}`}
+            data={v}
+            title={title}
+            artist={artist}
+          />
+        );
       });
     }
   };
 
-  const { data } = useQuery(QUERY_BAND, {
+  const { data } = useQuery(QUERY_SONG, {
     variables: {
-      queryBandFilter: {
-        type: 'NAME',
+      querySongFilter: {
+        weeklyChallenge: true,
+        type: 'ALL',
       },
     },
   });
 
+  const songData = data?.querySong[0];
+
   return (
     <PageContainer>
       <PageImage
-        imgUrl="https://media.pitchfork.com/photos/608a33343bbb6032f540a222/2:1/w_2912,h_1456,c_limit/coldplay.jpg"
-        title="Fix You - Coldplay"
+        imgUrl={songData ? songData.songImg : null}
+        title={songData ? `${songData.name} - ${songData.artist}` : null}
         position="top"
       />
       <PageDesc>
@@ -67,7 +81,7 @@ const WeeklyChallenge = () => {
         />
       </SubContainer>
       <GridContainer width="95%" templateColumn="250px">
-        {tempCover()}
+        {loadCover()}
       </GridContainer>
     </PageContainer>
   );
