@@ -45,12 +45,14 @@ const LoginModal = (props) => {
     fetchPolicy: 'no-cache',
     // 여기에 variables 넣으면 id값 바뀔때마다 query 실행됨
     onCompleted: (data) => {
-      localStorage.setItem('userInfo', JSON.stringify(data.getUserInfo));
-      currentUserVar(data.getUserInfo);
-      setID('');
-      setPassword('');
-      setModalToggle(false);
-      isLoggedInVar(true);
+      if (data.getUserInfo) {
+        localStorage.setItem('userInfo', JSON.stringify(data.getUserInfo));
+        currentUserVar(data.getUserInfo);
+        setID('');
+        setPassword('');
+        setModalToggle(false);
+        isLoggedInVar(true);
+      }
     },
     onError: (err) => {
       console.log(err);
