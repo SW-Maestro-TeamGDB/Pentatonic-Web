@@ -1,6 +1,7 @@
 import react, { useState } from 'react';
 import { Space, Dropdown, Menu, Button } from 'antd';
 import { Link } from 'react-router-dom';
+import { useQuery, gql, useLazyQuery } from '@apollo/client';
 import styled from 'styled-components';
 import SongList from '../../components/SongList';
 import MakingCoverButton from '../../components/MakingCoverButton';
@@ -16,25 +17,56 @@ import GridContainer from '../../components/GridContainer/GridContainer';
 
 import tempData from '../../data/songs/tempData.json';
 
+const QUERY_SONG = gql`
+  query Query($querySongFilter: QuerySongInput!) {
+    querySong(filter: $querySongFilter) {
+      songId
+      name
+      songImg
+      genre
+      artist
+      weeklyChallenge
+      level
+      instrument {
+        position
+      }
+    }
+  }
+`;
+
 const StudioBandCover = () => {
   const [genre, setGenre] = useState('전체');
   const [difficulty, setDifficulty] = useState('전체');
+  const [songData, setSongData] = useState();
 
-  const showTempCover = () =>
-    [0, 1, 2, 3]
-      .filter(
-        (v) => difficulty === tempData[v].difficulty || difficulty === '전체',
-      )
-      .map((v) => {
-        return (
-          <SongList
-            link={`/studio/band/${v}`}
-            id={v}
-            key={`SongList + ${v}`}
-            data={tempData[v]}
-          />
-        );
-      });
+  const { data } = useQuery(QUERY_SONG, {
+    variables: {
+      querySongFilter: {
+        type: 'ALL',
+      },
+    },
+    onCompleted: (data) => {
+      setSongData(data.querySong);
+    },
+  });
+
+  const showCover = () => {
+    if (songData) {
+      return songData
+        .filter((v) => difficulty === v.level || difficulty === '전체')
+        .map((v) => {
+          console.log(v);
+          return (
+            <SongList
+              link={`/studio/band/${v.songId}`}
+              id={v.songId}
+              key={`SongList + ${v.songId}`}
+              data={v}
+            />
+          );
+        });
+    }
+  };
 
   return (
     <PageContainer>
@@ -57,7 +89,7 @@ const StudioBandCover = () => {
           title="자유곡 커버 만들기"
         />
       </SubContainer>
-      <SongContainer>{showTempCover()}</SongContainer>
+      <SongContainer>{showCover()}</SongContainer>
     </PageContainer>
   );
 };

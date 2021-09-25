@@ -4,25 +4,32 @@ import { media } from '../../lib/Media';
 import { Link } from 'react-router-dom';
 import { Skeleton } from 'antd';
 import DifficultyIcon from '../DifficultyIcon';
+import { changeSessionNameToKorean } from '../../lib/changeSessionNameToKorean';
 
 const SongList = (props) => {
   const { link, data } = props;
+
+  const showSession = () => {
+    return data.instrument
+      .map((v) => changeSessionNameToKorean(v.position))
+      .join(',');
+  };
 
   return (
     <SongInformLink to={link}>
       {data ? (
         <>
-          <SongImg img={data.img} />
+          <SongImg img={data.songImg} />
           <SongTitleContainer>
-            {data.title}
-            {data.weekly ? <WeeklyBanner>Weekly</WeeklyBanner> : null}
+            {data.name}
+            {data.weeklyChallenge ? <WeeklyBanner>Weekly</WeeklyBanner> : null}
           </SongTitleContainer>
           <ArtistContainer>{data.artist}</ArtistContainer>
-          <SessionContainer>보컬,기타,드럼,베이스</SessionContainer>
+          <SessionContainer>{showSession()}</SessionContainer>
           <DifficultyContainer>
             난이도
             <IconContainer>
-              <DifficultyIcon value={data.difficulty} />
+              <DifficultyIcon value={data.level} />
             </IconContainer>
           </DifficultyContainer>
         </>
@@ -136,7 +143,7 @@ const SessionContainer = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
 `;
 
 const DifficultyContainer = styled.div`
