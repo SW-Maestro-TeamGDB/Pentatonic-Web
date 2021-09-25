@@ -10,11 +10,11 @@ const DifficultyIcon = (props) => {
   const showFilledIcons = () => {
     return [...Array(value)].map((v, i) => {
       return (
-        <>
+        <div key={`Filled+${i}`}>
           <IconWrapper>
             <FilledIcon>ㅤ</FilledIcon>
           </IconWrapper>
-        </>
+        </div>
       );
     });
   };
@@ -22,11 +22,11 @@ const DifficultyIcon = (props) => {
   const showEmptyIcons = () => {
     return [...Array(last)].map((v, i) => {
       return (
-        <>
+        <div key={`Empty+${i}`}>
           <IconWrapper>
             <EmptyIcon>ㅤ</EmptyIcon>
           </IconWrapper>
-        </>
+        </div>
       );
     });
   };
