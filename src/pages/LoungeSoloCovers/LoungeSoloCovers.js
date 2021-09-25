@@ -68,7 +68,7 @@ const LoungeSoloCovers = () => {
         title="솔로 커버"
       />
       <PageDesc>유저들의 솔로 커버를 감상해보세요</PageDesc>
-      <SearchBar placeholder="커버 제목을 입력해주세요" />
+      <SearchBar placeholder="커버 제목, 아티스트, 곡을 입력해주세요" />
       <SubContainer>
         <GenreButton genre={genre} setGenre={setGenre} />
         <MakingCoverButton link={`/studio/solo`} title="새로운 커버 만들기" />
