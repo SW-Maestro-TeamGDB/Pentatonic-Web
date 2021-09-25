@@ -8,13 +8,13 @@ import SearchBar from '../../components/SearchBar';
 import CoverGrid from '../../components/CoverGrid/CoverGrid';
 import GridContainer from '../../components/GridContainer/GridContainer';
 
-const QUERY_BAND = gql`
-  query Query($queryBandFilter: QueryBandInput!) {
-    queryBand(filter: $queryBandFilter) {
+const GET_TREND_BANDS = gql`
+  query Query {
+    getTrendBands {
       backGroundURI
       song {
-        artist
         name
+        artist
       }
       name
       session {
@@ -29,13 +29,13 @@ const QUERY_BAND = gql`
 const LoungeHome = () => {
   const tempCover = () => {
     if (data) {
-      return data.queryBand.map((v, i) => {
+      return data.getTrendBands.map((v, i) => {
         return <CoverGrid key={`bandData+${v.bandId}`} data={v} />;
       });
     }
   };
 
-  const { data } = useQuery(QUERY_BAND, {
+  const { data } = useQuery(GET_TREND_BANDS, {
     fetchPolicy: 'network-only',
     variables: {
       queryBandFilter: {
