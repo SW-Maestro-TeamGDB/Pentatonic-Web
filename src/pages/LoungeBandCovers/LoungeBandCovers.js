@@ -96,7 +96,7 @@ const LoungeBandCovers = () => {
         <GenreButton genre={genre} setGenre={setGenre} />
         <MakingCoverButton link={`/studio/band`} title="새로운 커버 만들기" />
       </SubContainer>
-      <GridContainer width="95%" templateColumn="250px">
+      <GridContainer width="95%" templateColumn="250px" autoFill>
         {tempCover()}
       </GridContainer>
     </PageContainer>

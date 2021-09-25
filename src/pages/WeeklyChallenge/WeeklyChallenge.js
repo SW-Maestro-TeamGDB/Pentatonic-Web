@@ -80,7 +80,7 @@ const WeeklyChallenge = () => {
           title="새로운 커버 만들기"
         />
       </SubContainer>
-      <GridContainer width="95%" templateColumn="250px">
+      <GridContainer width="95%" templateColumn="250px" autoFill>
         {loadCover()}
       </GridContainer>
     </PageContainer>
