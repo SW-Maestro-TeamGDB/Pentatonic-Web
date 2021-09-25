@@ -1,94 +1,160 @@
 import react, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { useQuery, gql, useLazyQuery } from '@apollo/client';
 import styled from 'styled-components';
 import CoverGrid from '../../components/CoverGrid/CoverGrid';
 import PageContainer from '../../components/PageContainer';
 import GridContainer from '../../components/GridContainer';
 import DifficultyIcon from '../../components/DifficultyIcon';
+import { changeGenreToKorean } from '../../lib/changeGenreToKorean';
 
 import tempData from '../../data/songs/tempData.json';
 
+const GET_SONG = gql`
+  query Query($getSongSongId: ObjectID!) {
+    getSong(songId: $getSongSongId) {
+      name
+      songImg
+      genre
+      artist
+      album
+      weeklyChallenge
+      duration
+      level
+      instrument {
+        position
+      }
+      releaseDate
+      band {
+        bandId
+        backGroundURI
+        name
+        session {
+          position
+        }
+        likeCount
+      }
+    }
+  }
+`;
+
 const MusicInformation = ({ match }) => {
-  const type = match.params.sort;
-  const id = match.params.id;
+  const type = match.path.indexOf('band') === -1 ? 'solo' : 'band';
+  const songId = match.params.id;
   const typeName = type === 'band' ? '밴드' : '솔로';
-  const tempCover = () =>
-    [0, 1, 2, 3].map((v) => {
-      return (
-        <CoverGrid
-          id={tempData[id].weekly ? 0 : parseInt(Math.random() * 6 + 1)}
-          key={v}
-          idx={tempData[id].weekly ? 0 : parseInt(Math.random() * 6 + 1)}
-          title={tempData[id].title}
-          artist={tempData[id].artist}
-        />
-      );
-    });
+  const [musicData, setMusicData] = useState();
+
+  const { data } = useQuery(GET_SONG, {
+    variables: {
+      getSongSongId: songId,
+    },
+    onCompleted: (data) => {
+      setMusicData(data.getSong);
+    },
+  });
+
+  const durationToKorean = () => {
+    const time = musicData.duration;
+
+    var min = parseInt((time % 3600) / 60);
+    var sec = parseInt(time % 60);
+
+    if (min > 0) return `${min}분 ${sec}초`;
+    else return `00분 ${sec}초`;
+  };
+
+  const showCover = () => {
+    if (musicData) {
+      if (musicData.band.length > 0)
+        return musicData.band.map((v) => {
+          return <CoverGrid key={v.bandId} data={v} />;
+        });
+      else {
+        return <NoCover>등록된 커버가 없습니다</NoCover>;
+      }
+    }
+  };
 
   return (
     <PageContainer>
-      <MusicInformContainer>
-        <MusicInformImg img={tempData[id].img} />
-        <MusicMetaContainer>
-          <MusicTitle>{tempData[id].title}</MusicTitle>
-          <MusicMetaWrapper>
-            <GridContainer>
-              <MusicMeta>
-                <MetaTitle>아티스트</MetaTitle>
-                <MetaContents>{tempData[id].artist}</MetaContents>
-              </MusicMeta>
-              <MusicMeta>
-                <MetaTitle>작곡</MetaTitle>
-                <MetaContents>{tempData[id].composer}</MetaContents>
-              </MusicMeta>
-              <MusicMeta>
-                <MetaTitle>앨범</MetaTitle>
-                <MetaContents>{tempData[id].album}</MetaContents>
-              </MusicMeta>
-              <MusicMeta>
-                <MetaTitle>작사</MetaTitle>
-                <MetaContents>{tempData[id].lyricist}</MetaContents>
-              </MusicMeta>
-              <MusicMeta>
-                <MetaTitle>발매</MetaTitle>
-                <MetaContents>{tempData[id].release}</MetaContents>
-              </MusicMeta>
-              <MusicMeta>
-                <MetaTitle>편곡</MetaTitle>
-                <MetaContents>{tempData[id].arrangement}</MetaContents>
-              </MusicMeta>
-              <MusicMeta>
-                <MetaTitle>장르</MetaTitle>
-                <MetaContents>{tempData[id].genre}</MetaContents>
-              </MusicMeta>
-              <MusicMeta>
-                <MetaTitle>난이도</MetaTitle>
-                <DifficultyContents>
-                  <DifficultyIcon value={tempData[id].difficulty} />
-                </DifficultyContents>
-              </MusicMeta>
+      {musicData ? (
+        <>
+          <MusicInformContainer>
+            <MusicInformImg img={musicData.songImg} />
+            <MusicMetaContainer>
+              <MusicTitle>{musicData.name}</MusicTitle>
+              <MusicMetaWrapper>
+                <GridContainer>
+                  <MusicMeta>
+                    <MetaTitle>아티스트</MetaTitle>
+                    <MetaContents>{musicData.artist}</MetaContents>
+                  </MusicMeta>
+                  {/* <MusicMeta>
+                    <MetaTitle>작곡</MetaTitle>
+                    <MetaContents>없음</MetaContents>
+                  </MusicMeta> */}
+                  <MusicMeta>
+                    <MetaTitle>앨범</MetaTitle>
+                    <MetaContents>{musicData.album}</MetaContents>
+                  </MusicMeta>
+                  {/* <MusicMeta>
+                    <MetaTitle>작사</MetaTitle>
+                    <MetaContents>없음</MetaContents>
+                  </MusicMeta> */}
+                  <MusicMeta>
+                    <MetaTitle>발매</MetaTitle>
+                    <MetaContents>{musicData.releaseDate}</MetaContents>
+                  </MusicMeta>
+                  {/* <MusicMeta>
+                    <MetaTitle>편곡</MetaTitle>
+                    <MetaContents>없음</MetaContents>
+                  </MusicMeta> */}
+                  <MusicMeta>
+                    <MetaTitle>장르</MetaTitle>
+                    <MetaContents>
+                      {changeGenreToKorean(musicData.genre)}
+                    </MetaContents>
+                  </MusicMeta>
+                  <MusicMeta>
+                    <MetaTitle>길이</MetaTitle>
+                    <MetaContents>{durationToKorean()}</MetaContents>
+                  </MusicMeta>
+                  <MusicMeta>
+                    <MetaTitle>난이도</MetaTitle>
+                    <DifficultyContents>
+                      <DifficultyIcon value={musicData.level} />
+                    </DifficultyContents>
+                  </MusicMeta>
+                </GridContainer>
+              </MusicMetaWrapper>
+              <ButtonContainer>
+                <RecordButton to={match.url + '/record'}>녹음하기</RecordButton>
+                <MakingCoverButton to={match.url + '/cover'}>
+                  커버룸 만들기
+                </MakingCoverButton>
+              </ButtonContainer>
+            </MusicMetaContainer>
+          </MusicInformContainer>
+          <Divider />
+          <BoardContainer>
+            <BoardHeader>
+              <BoardTitle>이 곡의 {typeName}커버</BoardTitle>
+              <BoardLink
+                to={
+                  musicData.weeklyChallenge
+                    ? '/lounge/weekly'
+                    : `/lounge/${type}`
+                }
+              >
+                더보기
+              </BoardLink>
+            </BoardHeader>
+            <GridContainer templateColumn="250px" autoFill>
+              {showCover()}
             </GridContainer>
-          </MusicMetaWrapper>
-          <ButtonContainer>
-            <RecordButton to={match.url + '/record'}>녹음하기</RecordButton>
-            <MakingCoverButton to={match.url + '/cover'}>
-              커버룸 만들기
-            </MakingCoverButton>
-          </ButtonContainer>
-        </MusicMetaContainer>
-      </MusicInformContainer>
-      <Divider />
-      <BoardContainer>
-        <BoardHeader>
-          <BoardTitle>이 곡의 {typeName}커버</BoardTitle>
-          <BoardLink
-            to={tempData[id].weekly ? '/lounge/weekly' : `/lounge/${type}`}
-          >
-            더보기
-          </BoardLink>
-        </BoardHeader>
-        <GridContainer templateColumn="250px">{tempCover()}</GridContainer>
-      </BoardContainer>
+          </BoardContainer>
+        </>
+      ) : null}
     </PageContainer>
   );
 };
@@ -117,7 +183,7 @@ const MusicInformImg = styled.div`
 `;
 
 const MusicMetaWrapper = styled.div`
-  height: 45%;
+  height: 35%;
 `;
 
 const MusicMetaContainer = styled.div`
@@ -130,7 +196,7 @@ const MusicMetaContainer = styled.div`
 const MusicTitle = styled.div`
   font-size: 4.5vh;
   font-weight: 800;
-  height: 25%;
+  height: 33%;
 
   color: #222222;
   margin-bottom: 0.5rem;
@@ -141,6 +207,9 @@ const MusicMeta = styled.div`
   flex-direction: row;
   height: 1.6vh;
   font-size: 1.6vh;
+
+  display: flex;
+  align-items: center;
 `;
 
 const MetaTitle = styled.div`
@@ -268,6 +337,18 @@ const BoardLink = styled(Link)`
   &:hover {
     color: rgb(150, 150, 150);
   }
+`;
+
+const NoCover = styled.div`
+  font-size: 1.4rem;
+  color: #9b94b3;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  height: 8rem;
+  letter-spacing: -0.5px;
+  font-weight: 800;
 `;
 
 export default MusicInformation;

@@ -57,7 +57,7 @@ const StudioSoloCover = () => {
           console.log(v);
           return (
             <SongList
-              link={`/studio/band/${v.songId}`}
+              link={`/studio/solo/${v.songId}`}
               id={v.songId}
               key={`SongList + ${v.songId}`}
               data={v}
