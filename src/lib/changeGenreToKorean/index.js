@@ -1,0 +1,1 @@
+export { changeGenreToKorean } from './changeGenreToKorean';
