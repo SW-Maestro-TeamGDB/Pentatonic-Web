@@ -1,6 +1,7 @@
 import react, { useState } from 'react';
 import { Space, Dropdown, Menu, Button } from 'antd';
 import { Link } from 'react-router-dom';
+import { useQuery, gql, useLazyQuery } from '@apollo/client';
 import styled from 'styled-components';
 import SongList from '../../components/SongList';
 import MakingCoverButton from '../../components/MakingCoverButton';
@@ -14,27 +15,63 @@ import PageImage from '../../components/PageImage/PageImage';
 import GenreButton from '../../components/GenreButton/GenreButton';
 import GridContainer from '../../components/GridContainer/GridContainer';
 
-import tempData from '../../data/songs/tempData.json';
+const QUERY_SONG = gql`
+  query Query($querySongFilter: QuerySongInput!) {
+    querySong(filter: $querySongFilter) {
+      songId
+      name
+      songImg
+      genre
+      artist
+      weeklyChallenge
+      level
+      instrument {
+        position
+      }
+    }
+  }
+`;
 
 const StudioSoloCover = () => {
   const [genre, setGenre] = useState('전체');
   const [difficulty, setDifficulty] = useState('전체');
+  const [songData, setSongData] = useState();
 
-  const showTempCover = () =>
-    [0, 1, 2, 3]
-      .filter(
-        (v) => difficulty === tempData[v].difficulty || difficulty === '전체',
-      )
-      .map((v) => {
-        return (
-          <SongList
-            link={`/studio/solo/${v}`}
-            id={v}
-            key={`SongList + ${v}`}
-            data={tempData[v]}
-          />
-        );
-      });
+  const { data } = useQuery(QUERY_SONG, {
+    variables: {
+      querySongFilter: {
+        type: 'ALL',
+      },
+    },
+    onCompleted: (data) => {
+      setSongData(data.querySong);
+    },
+  });
+
+  const showCover = () => {
+    if (songData) {
+      const temp = songData
+        .filter((v) => difficulty === v.level || difficulty === '전체')
+        .filter((v) => genre === v.genre || genre === '전체')
+        .map((v) => {
+          console.log(v);
+          return (
+            <SongList
+              link={`/studio/band/${v.songId}`}
+              id={v.songId}
+              key={`SongList + ${v.songId}`}
+              data={v}
+            />
+          );
+        });
+
+      if (temp.length > 0) {
+        return temp;
+      } else {
+        return <NoSong>조건에 맞는 곡이 없습니다</NoSong>;
+      }
+    }
+  };
 
   return (
     <PageContainer>
@@ -55,7 +92,7 @@ const StudioSoloCover = () => {
           title="자유곡 커버 만들기"
         />
       </SubContainer>
-      <SongContainer>{showTempCover()}</SongContainer>
+      <SongContainer>{showCover()}</SongContainer>
     </PageContainer>
   );
 };
@@ -122,6 +159,18 @@ const CustomButton = styled.span`
 const CustomMenu = styled(Menu)`
   min-width: 7rem;
   text-align: center;
+`;
+
+const NoSong = styled.div`
+  font-size: 1.4rem;
+  color: #9b94b3;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  height: 8rem;
+  letter-spacing: -0.5px;
+  font-weight: 800;
 `;
 
 export default StudioSoloCover;
