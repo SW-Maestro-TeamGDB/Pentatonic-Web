@@ -31,6 +31,7 @@ const Menu = () => {
       <SubMenuLink to="/lounge/weekly">위클리 챌린지</SubMenuLink>
       <SubMenuLink to="/lounge/band">밴드 커버</SubMenuLink>
       <SubMenuLink to="/lounge/solo">솔로 커버</SubMenuLink>
+      <SubMenuLink to="/lounge/free">자유곡 커버</SubMenuLink>
       <SubMenuSpacing />
     </SubMenuContainer>
   );
