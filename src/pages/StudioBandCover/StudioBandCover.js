@@ -52,8 +52,9 @@ const StudioBandCover = () => {
 
   const showCover = () => {
     if (songData) {
-      return songData
+      const temp = songData
         .filter((v) => difficulty === v.level || difficulty === '전체')
+        .filter((v) => genre === v.genre || genre === '전체')
         .map((v) => {
           console.log(v);
           return (
@@ -65,6 +66,12 @@ const StudioBandCover = () => {
             />
           );
         });
+
+      if (temp.length > 0) {
+        return temp;
+      } else {
+        return <NoSong>조건에 맞는 곡이 없습니다</NoSong>;
+      }
     }
   };
 
@@ -153,9 +160,22 @@ const CustomButton = styled.span`
   cursor: pointer;
   font-size: 1rem;
 `;
+
 const CustomMenu = styled(Menu)`
   min-width: 7rem;
   text-align: center;
+`;
+
+const NoSong = styled.div`
+  font-size: 1.4rem;
+  color: #9b94b3;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  height: 8rem;
+  letter-spacing: -0.5px;
+  font-weight: 800;
 `;
 
 export default StudioBandCover;

@@ -1,6 +1,7 @@
 import react from 'react';
 import styled from 'styled-components';
 import { Space, Dropdown, Menu, Button, Select } from 'antd';
+import { changeGenreToKorean } from '../../lib/changeGenreToKorean';
 import { Default } from '../../lib/Media';
 
 const GenreButton = (props) => {
@@ -10,20 +11,35 @@ const GenreButton = (props) => {
       <Menu.Item key={0} onClick={() => setGenre('전체')}>
         전체
       </Menu.Item>
-      <Menu.Item key={1} onClick={() => setGenre('락')}>
-        락
+      <Menu.Item key={1} onClick={() => setGenre('POP')}>
+        {changeGenreToKorean('POP')}
       </Menu.Item>
-      <Menu.Item key={2} onClick={() => setGenre('R&B')}>
-        R&B
+      <Menu.Item key={2} onClick={() => setGenre('ROCK')}>
+        {changeGenreToKorean('ROCK')}
       </Menu.Item>
-      <Menu.Item key={3} onClick={() => setGenre('발라드')}>
-        발라드
+      <Menu.Item key={3} onClick={() => setGenre('K_POP')}>
+        {changeGenreToKorean('K_POP')}
       </Menu.Item>
-      <Menu.Item key={4} onClick={() => setGenre('댄스')}>
-        댄스
+      <Menu.Item key={4} onClick={() => setGenre('DANCE')}>
+        {changeGenreToKorean('DANCE')}
       </Menu.Item>
-      <Menu.Item key={5} onClick={() => setGenre('POP')}>
-        POP
+      <Menu.Item key={5} onClick={() => setGenre('HIP_HOP')}>
+        {changeGenreToKorean('HIP_HOP')}
+      </Menu.Item>
+      <Menu.Item key={6} onClick={() => setGenre('BALLAD')}>
+        {changeGenreToKorean('BALLAD')}
+      </Menu.Item>
+      <Menu.Item key={7} onClick={() => setGenre('ELECTRONIC')}>
+        {changeGenreToKorean('ELECTRONIC')}
+      </Menu.Item>
+      <Menu.Item key={8} onClick={() => setGenre('JAZZ')}>
+        {changeGenreToKorean('JAZZ')}
+      </Menu.Item>
+      <Menu.Item key={9} onClick={() => setGenre('CLASSICAL')}>
+        {changeGenreToKorean('CLASSICAL')}
+      </Menu.Item>
+      <Menu.Item key={10} onClick={() => setGenre('BLUES')}>
+        {changeGenreToKorean('BLUES')}
       </Menu.Item>
     </CustomMenu>
   );

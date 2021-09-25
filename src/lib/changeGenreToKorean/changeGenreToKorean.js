@@ -1,5 +1,5 @@
 const changeGenreToKorean = (name) => {
-  if (name === 'HIP_HIP') {
+  if (name === 'HIP_HOP') {
     return '힙합';
   } else if (name === 'ELECTRONIC') {
     return '일렉트로닉';
@@ -9,7 +9,7 @@ const changeGenreToKorean = (name) => {
     return '팝';
   } else if (name === 'JAZZ') {
     return '재즈';
-  } else if (name === 'CALLSICAL') {
+  } else if (name === 'CLASSICAL') {
     return '클래식';
   } else if (name === 'ROCK') {
     return '락';
