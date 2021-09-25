@@ -65,9 +65,9 @@ const LoungeSoloCovers = () => {
     <PageContainer>
       <PageImage
         imgUrl="https://images.unsplash.com/photo-1510915361894-db8b60106cb1?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1050&q=80"
-        title="떠오르는 솔로커버"
+        title="솔로 커버"
       />
-      <PageDesc>새롭게 떠오르는 솔로 커버를 감상해보세요</PageDesc>
+      <PageDesc>유저들의 솔로 커버를 감상해보세요</PageDesc>
       <SearchBar placeholder="커버 제목을 입력해주세요" />
       <SubContainer>
         <GenreButton genre={genre} setGenre={setGenre} />

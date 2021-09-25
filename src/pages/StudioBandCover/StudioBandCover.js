@@ -38,9 +38,9 @@ const StudioBandCover = () => {
 
   return (
     <PageContainer>
-      <PageTitle>밴드 커버</PageTitle>
+      <PageTitle>밴드 커버녹음</PageTitle>
       <PageDesc>
-        펜타토닉에서 제공하는 반주에 맞춰 밴드 음악을 커버해보세요
+        펜타토닉에서 제공하는 반주에 맞춰 밴드 음악을 녹음 해보세요
       </PageDesc>
       <SearchBar placeholder="아티스트나 곡을 입력해주세요" />
       <SubContainer>

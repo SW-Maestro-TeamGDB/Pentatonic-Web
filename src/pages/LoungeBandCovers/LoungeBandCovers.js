@@ -87,10 +87,10 @@ const LoungeBandCovers = () => {
     <PageContainer>
       <PageImage
         imgUrl="https://images.pexels.com/photos/167636/pexels-photo-167636.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260"
-        title="떠오르는 밴드커버"
+        title="밴드 커버"
         position="top"
       />
-      <PageDesc>새롭게 떠오르는 밴드 커버를 감상하고 참여해보세요</PageDesc>
+      <PageDesc>유저들의 밴드 커버를 감상하고 참여해보세요</PageDesc>
       <SearchBar placeholder="커버 제목, 아티스트, 곡을 입력해주세요" />
       <SubContainer>
         <GenreButton genre={genre} setGenre={setGenre} />

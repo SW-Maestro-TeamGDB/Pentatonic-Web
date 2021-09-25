@@ -29,8 +29,8 @@ const Menu = () => {
     <SubMenuContainer>
       <SubMenuSpacing />
       <SubMenuLink to="/lounge/weekly">위클리 챌린지</SubMenuLink>
-      <SubMenuLink to="/lounge/band">떠오르는 밴드커버</SubMenuLink>
-      <SubMenuLink to="/lounge/solo">떠오르는 솔로커버</SubMenuLink>
+      <SubMenuLink to="/lounge/band">밴드 커버</SubMenuLink>
+      <SubMenuLink to="/lounge/solo">솔로 커버</SubMenuLink>
       <SubMenuSpacing />
     </SubMenuContainer>
   );
@@ -38,8 +38,8 @@ const Menu = () => {
   const StudioMenu = (
     <SubMenuContainer>
       <SubMenuSpacing />
-      <SubMenuLink to="/studio/band">밴드 커버</SubMenuLink>
-      <SubMenuLink to="/studio/solo">솔로 커버</SubMenuLink>
+      <SubMenuLink to="/studio/band">밴드 커버녹음</SubMenuLink>
+      <SubMenuLink to="/studio/solo">솔로 커버녹음</SubMenuLink>
       <SubMenuSpacing />
     </SubMenuContainer>
   );

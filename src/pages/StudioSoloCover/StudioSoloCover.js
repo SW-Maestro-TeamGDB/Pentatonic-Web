@@ -38,10 +38,8 @@ const StudioSoloCover = () => {
 
   return (
     <PageContainer>
-      <PageTitle>솔로 커버</PageTitle>
-      <PageDesc>
-        펜타토닉에서 제공하는 반주에 맞춰 혼자서 음악을 커버해보세요
-      </PageDesc>
+      <PageTitle>솔로 커버녹음</PageTitle>
+      <PageDesc>펜타토닉에서 제공하는 반주에 맞춰 음악을 녹음해보세요</PageDesc>
       <SearchBar placeholder="아티스트나 곡을 입력해주세요" />
       <SubContainer>
         <ButtonContainer>
