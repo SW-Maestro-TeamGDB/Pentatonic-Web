@@ -8,13 +8,19 @@ import RecordEdit from '../RecordEdit';
 import SessionAddPanel from '../../components/SessionAddPanel';
 import SessionContents from '../../components/SessionContents';
 import InstSelect from '../../components/InstSelect';
+import LoadingModal from '../../components/LoadingModal';
 import { Upload, notification } from 'antd';
 import { LeftOutlined, PictureOutlined } from '@ant-design/icons';
-import tempData from '../../data/songs/tempData.json';
 
 const UPLOAD_IMAGE_FILE = gql`
   mutation Mutation($uploadImageFileInput: UploadImageInput!) {
     uploadImageFile(input: $uploadImageFileInput)
+  }
+`;
+
+const MERGE_AUDIOS = gql`
+  mutation MergeAudiosMutation($mergeAudiosInput: MergeAudiosInput!) {
+    mergeAudios(input: $mergeAudiosInput)
   }
 `;
 
@@ -33,15 +39,37 @@ const CoverForm = (props) => {
     setSelectedSession,
     setSession,
     session,
+    setInst,
+    songData,
+    sessionData,
+    initBandData,
   } = props;
   const [informError, setInformError] = useState(null);
   const [sessionError, setSessionError] = useState(null);
   const [instError, setInstError] = useState();
   const [sessionSet, setSessionSet] = useState(new Set([])); // 세션 종류 저장
   const [sessionAddToggle, setSessionAddToggle] = useState(1); // 세션 추가 토글
+  const [modalToggle, setModalToggle] = useState(false);
 
   const [selectInst, setSelectInst] = useState([]); // 녹음 선택 인스트
+  const [selectInstURI, setSelectInstURI] = useState([]);
   const history = useHistory();
+
+  // 반주 병합
+  const [mergeAudios, mergeAudiosResult] = useMutation(MERGE_AUDIOS, {
+    onCompleted: (data) => {
+      const audio = new Audio();
+      audio.src = data.mergeAudios;
+
+      setInst(audio);
+      setModalToggle(false);
+      setPage(1);
+    },
+    onError: (error) => {
+      alert('음원 병합에 실패하였습니다.');
+      console.log(error);
+    },
+  });
 
   const [uploadImage, uploadImageResult] = useMutation(UPLOAD_IMAGE_FILE, {
     fetchPolicy: 'no-cache',
@@ -52,8 +80,6 @@ const CoverForm = (props) => {
       setBandData({ ...bandData, backGroundURI: data.uploadImageFile });
     },
   });
-
-  const tempInst = ['기타', '보컬', '베이스', '드럼', '키보드'];
 
   const formCheck = () => {
     let check = true;
@@ -99,11 +125,17 @@ const CoverForm = (props) => {
       if (bandData.backGroundURI === null) {
         setBandData({
           ...bandData,
-          backGroundURI:
-            'https://media.pitchfork.com/photos/608a33343bbb6032f540a222/2:1/w_2912,h_1456,c_limit/coldplay.jpg',
+          backGroundURI: songData.songImg,
         });
       }
-      setPage(1);
+      mergeAudios({
+        variables: {
+          mergeAudiosInput: {
+            audios: selectInstURI,
+          },
+        },
+      });
+      setModalToggle(true);
     } else window.scrollTo(0, 0);
   };
 
@@ -136,14 +168,25 @@ const CoverForm = (props) => {
     }
   };
 
+  // 페이지 렌더마다 데이터 초기화
+  useEffect(() => {
+    initBandData();
+    setSession([]);
+    setSelectInstURI([]);
+    setSessionSet(new Set([]));
+    setSelectedSession(null);
+  }, []);
+
   return (
     <Container>
       <SongMetaContainer>
-        <BannerBackground />
+        <BannerBackground url={songData?.songImg} />
         <BackwardButton onClick={() => history.goBack()}>
           <LeftOutlined />
         </BackwardButton>
-        <SongTitle>Fix You - Coldplay</SongTitle>
+        <SongTitle>
+          {songData ? `${songData.name} - ${songData.artist}` : null}
+        </SongTitle>
       </SongMetaContainer>
       <FormContainer>
         <InputContainer>
@@ -229,9 +272,11 @@ const CoverForm = (props) => {
           <CustomDescription>녹음에 사용될 반주를 조합합니다</CustomDescription>
           <InstContainer>
             <InstSelect
-              inst={tempInst}
+              sessionData={sessionData}
               setSelectInst={setSelectInst}
               selectInst={selectInst}
+              selectInstURI={selectInstURI}
+              setSelectInstURI={setSelectInstURI}
             />
           </InstContainer>
           <ErrorContainer>
@@ -242,6 +287,11 @@ const CoverForm = (props) => {
           다음으로
         </SubmitButton>
       </FormContainer>
+      <LoadingModal
+        setModalToggle={setModalToggle}
+        modalToggle={modalToggle}
+        text="반주를 불러오는 중입니다"
+      />
     </Container>
   );
 };
@@ -370,7 +420,8 @@ const BannerBackground = styled.div`
       rgba(255, 255, 255, 0.75) 85%,
       rgba(255, 255, 255, 1) 100%
     ),
-    url('https://media.pitchfork.com/photos/608a33343bbb6032f540a222/2:1/w_2912,h_1456,c_limit/coldplay.jpg');
+    url(${(props) => (props.url ? props.url : null)});
+
   background-repeat: no-repeat;
   background-position: top center;
   background-size: 100%;
