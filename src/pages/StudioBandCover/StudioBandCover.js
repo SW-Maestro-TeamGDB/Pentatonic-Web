@@ -15,7 +15,6 @@ import PageImage from '../../components/PageImage/PageImage';
 import GenreButton from '../../components/GenreButton/GenreButton';
 import GridContainer from '../../components/GridContainer/GridContainer';
 
-import tempData from '../../data/songs/tempData.json';
 
 const QUERY_SONG = gql`
   query Query($querySongFilter: QuerySongInput!) {

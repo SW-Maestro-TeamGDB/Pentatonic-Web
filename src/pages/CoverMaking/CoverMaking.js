@@ -1,4 +1,5 @@
 import react, { useState, useEffect } from 'react';
+import { useQuery, gql, useLazyQuery } from '@apollo/client';
 import styled from 'styled-components';
 import { Steps } from 'antd';
 import PageContainer from '../../components/PageContainer';
@@ -9,6 +10,21 @@ import instrument from './inst.mp3';
 
 import LoginAuth from '../../lib/LoginAuth';
 
+const GET_SONG = gql`
+  query Query($getSongSongId: ObjectID!) {
+    getSong(songId: $getSongSongId) {
+      name
+      songImg
+      duration
+      artist
+      instrument {
+        position
+        instURI
+      }
+    }
+  }
+`;
+
 const { Step } = Steps;
 
 const CoverMaking = ({ match }) => {
@@ -16,29 +32,49 @@ const CoverMaking = ({ match }) => {
   const [audioFile, setAudioFile] = useState();
   const [audioDuration, setAudioDuration] = useState();
   const [inst, setInst] = useState();
+  const [sessionData, setSessionData] = useState();
   const pageUrl = match.url;
+  const songId = match.params.id;
 
   const [bandId, setBandId] = useState();
   const [bandData, setBandData] = useState({
     name: null,
     introduce: null,
     backGroundURI: null,
-    songId: '611824fd287e5b0012e18160',
+    songId: songId,
   });
+  const [songData, setSongData] = useState();
+
   const [session, setSession] = useState([]); // 세션 데이터
   const [selectedSession, setSelectedSession] = useState(null); // 녹음 참여 세션
 
-  // 샘플 오디오
-  const audio = new Audio();
-  audio.src = instrument;
+  const { data } = useQuery(GET_SONG, {
+    variables: {
+      getSongSongId: songId,
+    },
+    onCompleted: (data) => {
+      setSongData({
+        name: data.getSong.name,
+        artist: data.getSong.artist,
+        songImg: data.getSong.songImg,
+      });
+      setAudioDuration(parseInt(data.getSong.duration));
+      setSessionData(data.getSong.instrument);
+    },
+    onError: (error) => {
+      alert('에러');
+      console.log(error);
+    },
+  });
 
-  useEffect(() => {
-    setInst(audio);
-  }, []);
-
-  useEffect(() => {
-    setAudioDuration(115);
-  }, []);
+  const initBandData = () => {
+    setBandData({
+      name: null,
+      introduce: null,
+      backGroundURI: null,
+      songId: songId,
+    });
+  };
 
   const pages = [
     {
@@ -54,6 +90,10 @@ const CoverMaking = ({ match }) => {
           setSelectedSession={setSelectedSession}
           session={session}
           setSession={setSession}
+          setInst={setInst}
+          songData={songData}
+          sessionData={sessionData}
+          initBandData={initBandData}
         />
       ),
     },
