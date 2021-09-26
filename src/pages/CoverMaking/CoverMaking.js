@@ -35,6 +35,7 @@ const CoverMaking = ({ match }) => {
   const [sessionData, setSessionData] = useState();
   const pageUrl = match.url;
   const songId = match.params.id;
+  const isSolo = match.path.indexOf('band') === -1;
 
   const [bandId, setBandId] = useState();
   const [bandData, setBandData] = useState({
@@ -42,6 +43,7 @@ const CoverMaking = ({ match }) => {
     introduce: null,
     backGroundURI: null,
     songId: songId,
+    isSoloBand: isSolo,
   });
   const [songData, setSongData] = useState();
 
@@ -54,6 +56,7 @@ const CoverMaking = ({ match }) => {
     },
     onCompleted: (data) => {
       setSongData({
+        ...songData,
         name: data.getSong.name,
         artist: data.getSong.artist,
         songImg: data.getSong.songImg,
@@ -73,6 +76,7 @@ const CoverMaking = ({ match }) => {
       introduce: null,
       backGroundURI: null,
       songId: songId,
+      isSoloBand: isSolo,
     });
   };
 
@@ -106,6 +110,7 @@ const CoverMaking = ({ match }) => {
           audioDuration={audioDuration}
           inst={inst}
           bandData={bandData}
+          songData={songData}
         />
       ),
     },
@@ -134,8 +139,8 @@ const CoverMaking = ({ match }) => {
           {pages.map((item) => (
             <Step
               progressDot
-              key={item.title}
-              title={item.title}
+              key={item.description}
+              title={item.description}
               description={item.description}
             />
           ))}
