@@ -2,15 +2,26 @@ import react, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { media } from '../../lib/Media';
 import SearchIcon from '../../images/SearchIcon.svg';
+import { changeSessionNameToKorean } from '../../lib/changeSessionNameToKorean';
 
 const InstButton = (props) => {
-  const { session, setSelectInst, selectInst, selected } = props;
+  const {
+    session,
+    instURI,
+    setSelectInst,
+    selectInst,
+    selected,
+    selectInstURI,
+    setSelectInstURI,
+  } = props;
 
   const onClickSessionItem = () => {
     if (selected) {
       setSelectInst([...selectInst.filter((v) => v !== session)]);
+      setSelectInstURI([...selectInstURI.filter((v) => v !== instURI)]);
     } else {
       setSelectInst([...selectInst, session]);
+      setSelectInstURI([...selectInstURI, instURI]);
     }
   };
 
@@ -21,7 +32,7 @@ const InstButton = (props) => {
       }}
       selected={selected}
     >
-      {session}
+      {changeSessionNameToKorean(session)}
     </InstButtonContainer>
   );
 };
