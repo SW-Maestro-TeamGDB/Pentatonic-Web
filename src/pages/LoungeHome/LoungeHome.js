@@ -12,26 +12,38 @@ const GET_TREND_BANDS = gql`
   query Query {
     getTrendBands {
       backGroundURI
-      song {
-        name
-        artist
-      }
+      songId
       name
       session {
         position
       }
       likeCount
       bandId
+      isSoloBand
     }
   }
 `;
 
+// songId 대신 song 정보로 수정해야 함 (0927)
+
 const LoungeHome = () => {
-  const tempCover = () => {
+  const loadBandCover = () => {
     if (data) {
-      return data.getTrendBands.map((v, i) => {
-        return <CoverGrid key={`bandData+${v.bandId}`} data={v} />;
-      });
+      return data.getTrendBands
+        .filter((v) => !v.isSoloBand)
+        .map((v, i) => {
+          return <CoverGrid key={`bandData+${v.bandId}`} data={v} auto />;
+        });
+    }
+  };
+
+  const loadSoloCover = () => {
+    if (data) {
+      return data.getTrendBands
+        .filter((v) => v.isSoloBand)
+        .map((v, i) => {
+          return <CoverGrid key={`bandData+${v.bandId}`} data={v} />;
+        });
     }
   };
 
@@ -54,14 +66,18 @@ const LoungeHome = () => {
             <BoardTitle>떠오르는 솔로커버</BoardTitle>
             <BoardLink to="/lounge/solo">더보기</BoardLink>
           </BoardHeader>
-          <GridContainer templateColumn="250px">{tempCover()}</GridContainer>
+          <GridContainer templateColumn="250px" autoFill>
+            {loadSoloCover()}
+          </GridContainer>
         </BoardWrapper>
         <BoardWrapper>
           <BoardHeader>
             <BoardTitle>떠오르는 밴드커버</BoardTitle>
             <BoardLink to="/lounge/band">더보기</BoardLink>
           </BoardHeader>
-          <GridContainer templateColumn="250px">{tempCover()}</GridContainer>
+          <GridContainer templateColumn="250px" autoFill>
+            {loadBandCover()}
+          </GridContainer>
         </BoardWrapper>
       </BoardContainer>
     </PageContainer>
