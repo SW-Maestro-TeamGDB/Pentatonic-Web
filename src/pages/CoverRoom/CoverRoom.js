@@ -42,7 +42,7 @@ import UserAvatar from '../../images/UserAvatar.svg';
 import '../../styles/AudioPlayer.css';
 
 const GET_BAND = gql`
-  query Query($getBandBandId: ObjectID!) {
+  query Query($getBandBandId: ObjectID!, $commentFirst: Int!) {
     getBand(bandId: $getBandBandId) {
       backGroundURI
       creator {
@@ -71,24 +71,26 @@ const GET_BAND = gql`
         name
         songId
       }
-      comment {
-        user {
-          username
-          profileURI
-          id
+      comment(first: $commentFirst) {
+        comments {
+          user {
+            username
+            profileURI
+            id
+          }
+          content
+          createdAt
+          commentId
         }
-        content
-        createdAt
-        commentId
       }
     }
   }
 `;
 
-const GET_COMMENT = gql`
-  query Query($getBandBandId: ObjectID!) {
-    getBand(bandId: $getBandBandId) {
-      comment {
+const QUERY_COMMENTS = gql`
+  query Query($queryCommentsBandId: ObjectID!, $queryCommentsFirst: Int!) {
+    queryComments(bandId: $queryCommentsBandId, first: $queryCommentsFirst) {
+      comments {
         user {
           username
           profileURI
@@ -192,6 +194,7 @@ const CoverRoom = ({ match }) => {
   const { loading, error, getBand } = useQuery(GET_BAND, {
     variables: {
       getBandBandId: bandId,
+      commentFirst: 10,
     },
     onCompleted: (data) => {
       setCoverData(data.getBand);
@@ -208,13 +211,19 @@ const CoverRoom = ({ match }) => {
     },
   });
 
-  const [getComment, getCommentResult] = useLazyQuery(GET_COMMENT, {
+  const [queryComments, queryCommentsResult] = useLazyQuery(QUERY_COMMENTS, {
     fetchPolicy: 'network-only',
     variables: {
-      getBandBandId: bandId,
+      queryCommentsBandId: bandId,
+      queryCommentsFirst: 10,
     },
     onCompleted: (data) => {
-      setCoverData({ ...coverData, comment: data.getBand.comment });
+      setCoverData({
+        ...coverData,
+        comment: {
+          comments: data.queryComments.comments,
+        },
+      });
     },
   });
 
@@ -246,7 +255,7 @@ const CoverRoom = ({ match }) => {
     fetchPolicy: 'no-cache',
     onCompleted: (data) => {
       setComment('');
-      getComment();
+      queryComments();
     },
     onError: (error) => {
       alert(error);
@@ -329,16 +338,16 @@ const CoverRoom = ({ match }) => {
   };
 
   const showComment = () => {
-    if (coverData.comment.length === 0) {
+    if (coverData.comment.comments.length === 0) {
       return;
     } else {
-      return coverData.comment.map((v, i) => {
+      return coverData.comment.comments.map((v, i) => {
         return (
           <CommentList
             data={v}
             key={`${bandId}+comment+${i}`}
             edit={data?.user?.id && v.user.id === data.user.id}
-            getComment={getComment}
+            queryComments={queryComments}
           />
         );
       });

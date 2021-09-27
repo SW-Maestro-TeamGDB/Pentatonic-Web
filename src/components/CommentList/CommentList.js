@@ -31,7 +31,7 @@ const UPDATE_COMMENT = gql`
 `;
 
 const CommentList = (props) => {
-  const { data, edit, getComment } = props;
+  const { data, edit, queryComments } = props;
   const [deleteModal, setDeleteModal] = useState(false);
   const [editModal, setEditModal] = useState(false);
   const [editToggle, setEditToggle] = useState(false);
@@ -43,7 +43,7 @@ const CommentList = (props) => {
       setComment('');
       setEditToggle(false);
       setEditModal(false);
-      getComment();
+      queryComments();
     },
     onError: (error) => {
       console.log(error);
@@ -63,7 +63,7 @@ const CommentList = (props) => {
     },
     onCompleted: (data) => {
       setDeleteModal(false);
-      getComment();
+      queryComments();
     },
     onError: (error) => {
       console.log(error);
