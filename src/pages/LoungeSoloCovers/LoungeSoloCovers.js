@@ -14,19 +14,22 @@ import GenreButton from '../../components/GenreButton/GenreButton';
 import GridContainer from '../../components/GridContainer/GridContainer';
 
 const QUERY_BAND = gql`
-  query Query($queryBandFilter: QueryBandInput!) {
-    queryBand(filter: $queryBandFilter) {
-      backGroundURI
-      song {
-        artist
+  query Query($queryBandsFilter: QueryBandInput!) {
+    queryBands(filter: $queryBandsFilter) {
+      bands {
+        backGroundURI
+        song {
+          artist
+          name
+        }
         name
+        isSoloBand
+        likeCount
+        bandId
+        session {
+          position
+        }
       }
-      name
-      session {
-        position
-      }
-      likeCount
-      bandId
     }
   }
 `;
@@ -34,30 +37,24 @@ const QUERY_BAND = gql`
 const LoungeSoloCovers = () => {
   const [genre, setGenre] = useState('전체');
 
-  // const tempCover = () =>
-  //   Array.from({ length: 30 }, () => 0).map((v, i) => {
-  //     return (
-  //       <CoverGrid
-  //         id={parseInt(Math.random() * 6 + 1)}
-  //         key={i}
-  //         idx={parseInt(Math.random() * 6 + 1)}
-  //       />
-  //     );
-  //   });
-
-  const tempCover = () => {
+  const loadSoloCover = () => {
     if (data) {
-      return data.queryBand.map((v, i) => {
-        return <CoverGrid key={`bandData+${i}`} data={v} />;
-      });
+      return data.queryBands.bands
+        .filter((v) => v.isSoloBand)
+        .map((v, i) => {
+          return <CoverGrid key={`bandData+${i}`} data={v} />;
+        });
     }
   };
 
   const { data } = useQuery(QUERY_BAND, {
     variables: {
-      queryBandFilter: {
-        type: 'NAME',
+      queryBandsFilter: {
+        type: 'ALL',
       },
+    },
+    onCompleted: (data) => {
+      console.log(data);
     },
   });
 
@@ -74,7 +71,7 @@ const LoungeSoloCovers = () => {
         <MakingCoverButton link={`/studio/solo`} title="새로운 커버 만들기" />
       </SubContainer>
       <GridContainer width="95%" templateColumn="250px" autoFill>
-        {tempCover()}
+        {loadSoloCover()}
       </GridContainer>
     </PageContainer>
   );
