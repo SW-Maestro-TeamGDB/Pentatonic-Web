@@ -51,7 +51,6 @@ const LoungeHome = () => {
   };
 
   const { data } = useQuery(GET_TREND_BANDS, {
-    fetchPolicy: 'network-only',
     variables: {
       queryBandFilter: {
         type: 'ALL',
