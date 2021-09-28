@@ -1,5 +1,6 @@
 import react, { useState, useEffect } from 'react';
 import styled from 'styled-components';
+import { useQuery, gql, useLazyQuery } from '@apollo/client';
 import { Steps } from 'antd';
 import PageContainer from '../../components/PageContainer';
 import RecordPage from '../RecordPage';
@@ -11,33 +12,68 @@ import LoginAuth from '../../lib/LoginAuth';
 
 const { Step } = Steps;
 
+const GET_SONG = gql`
+  query Query($getSongSongId: ObjectID!) {
+    getSong(songId: $getSongSongId) {
+      name
+      songImg
+      duration
+      artist
+      instrument {
+        position
+        instURI
+      }
+    }
+  }
+`;
+
 const RecordMaking = ({ match }) => {
   const [page, setPage] = useState(0);
   const [audioFile, setAudioFile] = useState();
   const [audioDuration, setAudioDuration] = useState();
   const [inst, setInst] = useState();
+  const [sessionData, setSessionData] = useState();
   const pageUrl = match.url;
+  const songId = match.params.id;
 
   const [bandId, setBandId] = useState();
   const [bandData, setBandData] = useState({
     name: null,
     introduce: null,
     backGroundURI: null,
-    songId: '611824fd287e5b0012e18160',
+    songId: songId,
   });
-  const [selectedSession, setSelectedSession] = useState(); // 세션 데이터
+  const [songData, setSongData] = useState();
+  const [selectedSession, setSelectedSession] = useState(); // 녹음 참여 세션
 
-  // 샘플 오디오
-  const audio = new Audio();
-  audio.src = instrument;
+  const { data } = useQuery(GET_SONG, {
+    variables: {
+      getSongSongId: songId,
+    },
+    onCompleted: (data) => {
+      setSongData({
+        ...songData,
+        name: data.getSong.name,
+        artist: data.getSong.artist,
+        songImg: data.getSong.songImg,
+      });
+      setAudioDuration(parseInt(data.getSong.duration));
+      setSessionData(data.getSong.instrument);
+    },
+    onError: (error) => {
+      alert('에러');
+      console.log(error);
+    },
+  });
 
-  useEffect(() => {
-    setInst(audio);
-  }, []);
-
-  useEffect(() => {
-    setAudioDuration(115);
-  }, []);
+  const initBandData = () => {
+    setBandData({
+      name: null,
+      introduce: null,
+      backGroundURI: null,
+      songId: songId,
+    });
+  };
 
   const pages = [
     {
@@ -49,8 +85,12 @@ const RecordMaking = ({ match }) => {
           pageUrl={pageUrl}
           bandData={bandData}
           setBandData={setBandData}
-          session={selectedSession}
-          setSession={setSelectedSession}
+          selectedSession={selectedSession}
+          setSelectedSession={setSelectedSession}
+          setInst={setInst}
+          songData={songData}
+          sessionData={sessionData}
+          initBandData={initBandData}
         />
       ),
     },
@@ -63,6 +103,7 @@ const RecordMaking = ({ match }) => {
           audioDuration={audioDuration}
           inst={inst}
           bandData={bandData}
+          songData={songData}
         />
       ),
     },

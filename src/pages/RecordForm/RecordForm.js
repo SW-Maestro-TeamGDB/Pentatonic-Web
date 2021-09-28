@@ -1,5 +1,6 @@
 import react, { useEffect, useState } from 'react';
 import { Link, useHistory } from 'react-router-dom';
+import { gql, useMutation } from '@apollo/client';
 import styled from 'styled-components';
 import PageContainer from '../../components/PageContainer';
 import RecordPage from '../RecordPage';
@@ -7,6 +8,7 @@ import RecordEdit from '../RecordEdit';
 import SessionAddPanel from '../../components/SessionAddPanel';
 import SessionContents from '../../components/SessionContents';
 import InstSelect from '../../components/InstSelect';
+import LoadingModal from '../../components/LoadingModal';
 import { Upload, Collapse, Select } from 'antd';
 import { LeftOutlined, PictureOutlined } from '@ant-design/icons';
 import { changeSessionNameToKorean } from '../../lib/changeSessionNameToKorean';
@@ -18,6 +20,12 @@ const { Dragger } = Upload;
 const { Panel } = Collapse;
 const { Option } = Select;
 
+const MERGE_AUDIOS = gql`
+  mutation MergeAudiosMutation($mergeAudiosInput: MergeAudiosInput!) {
+    mergeAudios(input: $mergeAudiosInput)
+  }
+`;
+
 const RecordForm = (props) => {
   const {
     setPage,
@@ -25,16 +33,40 @@ const RecordForm = (props) => {
     pageUrl,
     bandData,
     setBandData,
-    session,
-    setSession,
+    bandId,
+    setBandId,
+    selectedSession,
+    setSelectedSession,
+    setInst,
+    songData,
+    sessionData,
+    initBandData,
   } = props;
+
   const [informError, setInformError] = useState(null);
   const [sessionError, setSessionError] = useState(null);
   const [instError, setInstError] = useState();
+  const [modalToggle, setModalToggle] = useState(false);
+
   const [selectInst, setSelectInst] = useState([]); // 녹음 선택 인스트
+  const [selectInstURI, setSelectInstURI] = useState([]);
   const history = useHistory();
 
-  const tempInst = ['기타', '보컬', '베이스', '드럼', '키보드'];
+  // 반주 병합
+  const [mergeAudios, mergeAudiosResult] = useMutation(MERGE_AUDIOS, {
+    onCompleted: (data) => {
+      const audio = new Audio();
+      audio.src = data.mergeAudios;
+
+      setInst(audio);
+      setModalToggle(false);
+      setPage(1);
+    },
+    onError: (error) => {
+      alert('음원 병합에 실패하였습니다.');
+      console.log(error);
+    },
+  });
 
   const formCheck = () => {
     let check = true;
@@ -44,7 +76,7 @@ const RecordForm = (props) => {
       check = false;
     }
 
-    if (!session) {
+    if (!selectedSession) {
       setSessionError('녹음에 참여할 세션을 선택해주세요');
       check = false;
     }
@@ -67,11 +99,19 @@ const RecordForm = (props) => {
 
   useEffect(() => {
     setSessionError(null);
-  }, [session]);
+  }, [selectedSession]);
 
   const onClickSubmitButton = () => {
-    if (formCheck()) setPage(1);
-    else window.scrollTo(0, 0);
+    if (formCheck()) {
+      mergeAudios({
+        variables: {
+          mergeAudiosInput: {
+            audios: selectInstURI,
+          },
+        },
+      });
+      setModalToggle(true);
+    } else window.scrollTo(0, 0);
   };
 
   const showSessionType = () => {
@@ -87,11 +127,13 @@ const RecordForm = (props) => {
   return (
     <Container>
       <SongMetaContainer>
-        <BannerBackground />
+        <BannerBackground url={songData?.songImg} />
         <BackwardButton onClick={() => history.goBack()}>
           <LeftOutlined />
         </BackwardButton>
-        <SongTitle>Fix You - Coldplay</SongTitle>
+        <SongTitle>
+          {songData ? `${songData.name} - ${songData.artist}` : null}
+        </SongTitle>
       </SongMetaContainer>
       <FormContainer>
         <InputContainer>
@@ -102,7 +144,7 @@ const RecordForm = (props) => {
           <CustomInput
             onChange={(e) => setBandData({ ...bandData, name: e.target.value })}
             maxLength="14"
-            placeholder="커버 제목을 입력해주세요"
+            placeholder="라이브러리 제목을 입력해주세요"
           />
           <ErrorContainer>
             {informError ? <ErrorMessage>{informError}</ErrorMessage> : null}
@@ -116,10 +158,10 @@ const RecordForm = (props) => {
           <SessionContainer>
             <SessionSelect
               defaultValue="세션 선택"
-              value={session}
+              value={selectedSession}
               dropdownMatchSelectWidth="100%"
               onChange={(value) => {
-                setSession(value);
+                setSelectedSession(value);
               }}
             >
               {showSessionType()}
@@ -134,9 +176,11 @@ const RecordForm = (props) => {
           <CustomDescription>녹음에 사용될 반주를 조합합니다</CustomDescription>
           <InstContainer>
             <InstSelect
-              inst={tempInst}
+              sessionData={sessionData}
               setSelectInst={setSelectInst}
               selectInst={selectInst}
+              selectInstURI={selectInstURI}
+              setSelectInstURI={setSelectInstURI}
             />
           </InstContainer>
           <ErrorContainer>
@@ -147,6 +191,11 @@ const RecordForm = (props) => {
           다음으로
         </SubmitButton>
       </FormContainer>
+      <LoadingModal
+        setModalToggle={setModalToggle}
+        modalToggle={modalToggle}
+        text="반주를 불러오는 중입니다"
+      />
     </Container>
   );
 };
@@ -254,7 +303,7 @@ const BannerBackground = styled.div`
       rgba(255, 255, 255, 0.75) 85%,
       rgba(255, 255, 255, 1) 100%
     ),
-    url('https://media.pitchfork.com/photos/608a33343bbb6032f540a222/2:1/w_2912,h_1456,c_limit/coldplay.jpg');
+    url(${(props) => (props.url ? props.url : null)});
   background-repeat: no-repeat;
   background-position: top center;
   background-size: 100%;
