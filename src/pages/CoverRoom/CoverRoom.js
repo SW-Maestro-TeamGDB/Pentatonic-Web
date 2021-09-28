@@ -545,7 +545,7 @@ const CoverRoom = ({ match }) => {
             />
           </Drawer>
         </>
-      ) : error ? (
+      ) : error || coverData === null ? (
         <NotFoundPage desc="올바르지 않은 커버 주소입니다" />
       ) : null}
       <QuestionModal
