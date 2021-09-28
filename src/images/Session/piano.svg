@@ -1,15 +1,15 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32">
+<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20">
     <defs>
-        <filter id="mlnd0u95la" color-interpolation-filters="auto">
-            <feColorMatrix in="SourceGraphic" values="0 0 0 0 0.600000 0 0 0 0 0.600000 0 0 0 0 0.600000 0 0 0 1.000000 0"/>
+        <filter id="0wz8pcbrxa" color-interpolation-filters="auto">
+            <feColorMatrix in="SourceGraphic" values="0 0 0 0 0.066667 0 0 0 0 0.066667 0 0 0 0 0.066667 0 0 0 1.000000 0"/>
         </filter>
     </defs>
     <g fill="none" fill-rule="evenodd">
         <g>
-            <g filter="url(#mlnd0u95la)" transform="translate(-308.000000, -694.000000) translate(0.000000, 670.000000)">
+            <g filter="url(#0wz8pcbrxa)" transform="translate(-40.000000, -310.000000) translate(20.000000, 290.000000)">
                 <g>
-                    <path d="M0 0H32V32H0z" transform="translate(308.000000, 24.000000)"/>
-                    <path fill="#000" fill-rule="nonzero" d="M25.333 4H6.667C5.2 4 4 5.2 4 6.667v18.666C4 26.8 5.2 28 6.667 28h18.666C26.8 28 28 26.8 28 25.333V6.667C28 5.2 26.8 4 25.333 4zm-6.666 15.333H19v6h-6v-6h.333c.734 0 1.334-.6 1.334-1.333V6.667h2.666V18c0 .733.6 1.333 1.334 1.333zm-12-12.666h2.666V18c0 .733.6 1.333 1.334 1.333H11v6H6.667V6.667zm18.666 18.666H21v-6h.333c.734 0 1.334-.6 1.334-1.333V6.667h2.666v18.666z" transform="translate(308.000000, 24.000000)"/>
+                    <path d="M0 0H20V20H0z" transform="translate(20.000000, 20.000000)"/>
+                    <path fill="#000" fill-rule="nonzero" d="M15.833 2.5H4.167C3.25 2.5 2.5 3.25 2.5 4.167v11.666c0 .917.75 1.667 1.667 1.667h11.666c.917 0 1.667-.75 1.667-1.667V4.167c0-.917-.75-1.667-1.667-1.667zm-4.166 9.583h.208v3.75h-3.75v-3.75h.208c.459 0 .834-.375.834-.833V4.167h1.666v7.083c0 .458.375.833.834.833zm-7.5-7.916h1.666v7.083c0 .458.375.833.834.833h.208v3.75H4.167V4.167zm11.666 11.666h-2.708v-3.75h.208c.459 0 .834-.375.834-.833V4.167h1.666v11.666z" transform="translate(20.000000, 20.000000)"/>
                 </g>
             </g>
         </g>

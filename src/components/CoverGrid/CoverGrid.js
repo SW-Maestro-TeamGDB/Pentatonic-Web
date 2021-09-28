@@ -170,6 +170,7 @@ const InstrumentIcon = styled.img`
   width: 12px;
   height: 12px;
   margin-right: 0.2vw;
+  opacity: 0.3;
 `;
 
 const CustomIcon = styled.img`

@@ -383,6 +383,7 @@ const SessionIconContainer = styled.div`
 const SessionIcon = styled.img`
   width: 30px;
   height: 30px;
+  opacity: 0.3;
 `;
 
 const LibararyPagePauseIcon = styled.img`

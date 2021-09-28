@@ -87,6 +87,8 @@ const SessionMeta = styled.div`
 const SessionIcon = styled.img`
   width: 3.5rem;
   margin-top: 0.5rem;
+  opacity: 0.3;
+  opacity: 0.3;
 `;
 
 const SessionTitle = styled.div`

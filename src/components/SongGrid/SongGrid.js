@@ -17,11 +17,7 @@ import NoSurprises from '../../images/TempData/NoSurprises.jpeg';
 import TheVolunteers from '../../images/TempData/TheVolunteers.jpeg';
 import FixYou from '../../images/TempData/FixYou.png';
 
-import drum from '../../images/Session/drum.svg';
-import guitar from '../../images/Session/guitar.svg';
-import piano from '../../images/Session/piano.svg';
 import vocal from '../../images/Session/vocal.svg';
-
 import tempData from '../../data/songs/tempData.json';
 
 const SongGrid = (props) => {
@@ -101,7 +97,7 @@ const RecordIcon = styled.img`
   transform: translate(-50%, -50%);
   opacity: 0;
 
-  filter: brightness(300%);
+  filter: invert();
 `;
 
 const CoverImage = styled.img`
@@ -182,6 +178,7 @@ const InstrumentIcon = styled.img`
   width: 1em;
   height: 1rem;
   margin-right: 0.2vw;
+  opacity: 0.3;
 `;
 
 const CoverTitle = styled.div`
