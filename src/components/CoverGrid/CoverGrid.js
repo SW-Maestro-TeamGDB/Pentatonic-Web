@@ -3,22 +3,10 @@ import styled from 'styled-components';
 import { Default } from '../../lib/Media';
 import { Link } from 'react-router-dom';
 import { Skeleton } from 'antd';
+import { sessionIconMatch } from '../../lib/sessionIconMatch';
 import ThumbIcon from '../../images/ThumbIcon.svg';
 import ViewIcon from '../../images/ViewIcon.svg';
 import HeadPhoneIcon from '../../images/HeadPhoneIcon.svg';
-
-import TameImpala from '../../images/TempData/TameImpala.jpeg';
-import Hyukoh from '../../images/TempData/Hyukoh.jpeg';
-import Beatles from '../../images/TempData/Beatles.jpeg';
-import MenITrust from '../../images/TempData/MenITrust.jpeg';
-import NoSurprises from '../../images/TempData/NoSurprises.jpeg';
-import TheVolunteers from '../../images/TempData/TheVolunteers.jpeg';
-import FixYou from '../../images/TempData/FixYou.png';
-
-import drum from '../../images/Session/drum.svg';
-import guitar from '../../images/Session/guitar.svg';
-import piano from '../../images/Session/piano.svg';
-import vocal from '../../images/Session/vocal.svg';
 
 const CoverGrid = (props) => {
   const { idx, title, artist, img, data } = props;
@@ -30,18 +18,10 @@ const CoverGrid = (props) => {
       return (
         <InstrumentIcon
           key={`${idx}+${v.position}`}
-          src={sessionMatch(v.position)}
+          src={sessionIconMatch(v.position)}
         />
       );
     });
-  };
-
-  const sessionMatch = (position) => {
-    if (position === 'ACOUSTIC_GUITAR') return guitar;
-    else if (position === 'DRUM') return drum;
-    else if (position === 'PIANO') return piano;
-    else if (position === 'VOCAL') return vocal;
-    else return 'https://avatars.githubusercontent.com/u/51112542?s=64&v=4';
   };
 
   return (

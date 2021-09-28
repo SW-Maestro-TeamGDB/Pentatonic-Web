@@ -140,7 +140,6 @@ const CoverMaking = ({ match }) => {
             <Step
               progressDot
               key={item.description}
-              title={item.description}
               description={item.description}
             />
           ))}

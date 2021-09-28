@@ -4,6 +4,7 @@ import { Default } from '../../lib/Media';
 import { Link } from 'react-router-dom';
 import { Skeleton } from 'antd';
 import DifficultyIcon from '../DifficultyIcon';
+import { sessionIconMatch } from '../../lib/sessionIconMatch';
 
 import ThumbIcon from '../../images/ThumbIcon.svg';
 import ViewIcon from '../../images/ViewIcon.svg';
@@ -32,18 +33,10 @@ const SongGrid = (props) => {
       return (
         <InstrumentIcon
           key={`${idx}+${v.position}`}
-          src={sessionMatch(v.position)}
+          src={sessionIconMatch(v.position)}
         />
       );
     });
-  };
-
-  const sessionMatch = (position) => {
-    if (position === 'ACOUSTIC_GUITAR') return guitar;
-    else if (position === 'DRUM') return drum;
-    else if (position === 'PIANO') return piano;
-    else if (position === 'VOCAL') return vocal;
-    else return 'https://avatars.githubusercontent.com/u/51112542?s=64&v=4';
   };
 
   return (
