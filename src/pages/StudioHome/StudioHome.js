@@ -1,6 +1,7 @@
 import react, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
+import { useQuery, gql, useLazyQuery } from '@apollo/client';
 
 import PageContainer from '../../components/PageContainer';
 import StudioBanner from '../../components/StudioBanner/StudioBanner';
@@ -9,12 +10,45 @@ import SongGrid from '../../components/SongGrid';
 
 import GroupIcon from '../../images/GroupIcon.svg';
 import SoloIcon from '../../images/SoloIcon.svg';
+import StudioBandImage from '../../images/StudioBandCover.jpeg';
+import StudioSoloImage from '../../images/StudioSoloCover.jpeg';
+
+const QUERY_SONG = gql`
+  query Query($querySongFilter: QuerySongInput!) {
+    querySong(filter: $querySongFilter) {
+      songId
+      name
+      songImg
+      genre
+      artist
+      weeklyChallenge
+      level
+      instrument {
+        position
+      }
+    }
+  }
+`;
 
 const StudioHome = () => {
+  const [songData, setSongData] = useState();
+
+  const { data } = useQuery(QUERY_SONG, {
+    variables: {
+      querySongFilter: {
+        type: 'ALL',
+      },
+    },
+    onCompleted: (data) => {
+      setSongData(data.querySong);
+    },
+  });
+
   const showSongGrid = () => {
-    return Array.from({ length: 4 }, () => 0).map((v, i) => {
-      return <SongGrid key={'SongGrid' + i} idx={i} />;
-    });
+    if (songData)
+      return songData.map((v, i) => {
+        return <SongGrid key={'SongGrid' + i} data={v} />;
+      });
   };
 
   return (
@@ -27,18 +61,12 @@ const StudioHome = () => {
           </BoardHeader>
           <GridContainer>
             <CoverLinkContainer to="/studio/band">
-              <Background
-                url="https://s.wsj.net/public/resources/images/B3-BY031_TRUCKE_IM_20181002114854.jpg"
-                position="top"
-              />
+              <Background url={StudioBandImage} position="top" />
               <BandIconContainer src={GroupIcon} />
               <LinkText>밴드 커버</LinkText>
             </CoverLinkContainer>
             <CoverLinkContainer to="/studio/solo">
-              <Background
-                url="https://i.pinimg.com/originals/25/71/3f/25713fdfa829a9513536661f3eaad441.jpg"
-                position="center"
-              />
+              <Background url={StudioSoloImage} position="center" />
               <SoloIconContainer src={SoloIcon} />
               <LinkText>솔로 커버</LinkText>
             </CoverLinkContainer>
@@ -48,7 +76,7 @@ const StudioHome = () => {
           <BoardHeader>
             <BoardTitle>이런 곡 어때요?</BoardTitle>
           </BoardHeader>
-          <GridContainer templateColumn={'200px'}>
+          <GridContainer templateColumn={'220px'} autoFill>
             {showSongGrid()}
           </GridContainer>
         </BoardWrapper>

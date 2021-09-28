@@ -27,30 +27,32 @@ const SongGrid = (props) => {
   const { idx, data } = props;
 
   const showSession = (session) => {
+    console.log(session);
     return session.map((v) => {
       return (
         <InstrumentIcon
-          key={`${idx}+${v.session}`}
-          src={sessionMatch(v.session)}
+          key={`${idx}+${v.position}`}
+          src={sessionMatch(v.position)}
         />
       );
     });
   };
 
-  const sessionMatch = (v) => {
-    if (v === 'guitar') return guitar;
-    else if (v === 'drum') return drum;
-    else if (v === 'piano') return piano;
-    else if (v === 'vocal') return vocal;
+  const sessionMatch = (position) => {
+    if (position === 'ACOUSTIC_GUITAR') return guitar;
+    else if (position === 'DRUM') return drum;
+    else if (position === 'PIANO') return piano;
+    else if (position === 'VOCAL') return vocal;
+    else return 'https://avatars.githubusercontent.com/u/51112542?s=64&v=4';
   };
 
   return (
-    <CustomLink to={`/studio/band/${idx}`}>
+    <CustomLink to={`/studio/band/${data.songId}`}>
       <CoverContainer>
         <ImageContainer>
           {data ? (
             <>
-              <CoverImage src={tempData[idx].img} />
+              <CoverImage src={data.songImg} />
               <RecordIcon src={vocal} />
             </>
           ) : (
@@ -66,16 +68,14 @@ const SongGrid = (props) => {
           {data ? (
             <>
               <CoverInform>
-                <CoverTitle>{tempData[idx].title}</CoverTitle>
-                <CoverArtist>{tempData[idx].artist}</CoverArtist>
+                <CoverTitle>{data.name}</CoverTitle>
+                <CoverArtist>{data.artist}</CoverArtist>
               </CoverInform>
               <CoverMeta>
                 <DifficultyContainer>
-                  <DifficultyIcon value={tempData[idx].difficulty} />
+                  <DifficultyIcon value={data.level} />
                 </DifficultyContainer>
-                <SessionInform>
-                  {showSession(tempData[idx].sessions)}
-                </SessionInform>
+                <SessionInform>{showSession(data.instrument)}</SessionInform>
               </CoverMeta>
             </>
           ) : (
