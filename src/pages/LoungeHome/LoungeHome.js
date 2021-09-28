@@ -12,7 +12,10 @@ const GET_TREND_BANDS = gql`
   query Query {
     getTrendBands {
       backGroundURI
-      songId
+      song {
+        name
+        artist
+      }
       name
       session {
         position
