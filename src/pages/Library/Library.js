@@ -12,10 +12,17 @@ const GET_USER_INFO = gql`
   query Query($getUserInfoUserId: Id!) {
     getUserInfo(userId: $getUserInfoUserId) {
       library {
-        coverId
-        songId
+        position
         coverURI
+        coverId
         date
+        name
+        song {
+          songId
+          songImg
+          name
+          artist
+        }
       }
     }
   }
@@ -26,7 +33,8 @@ const Library = () => {
   const userData = useQuery(GET_CURRENT_USER);
   const [getUserInfo] = useLazyQuery(GET_USER_INFO, {
     onCompleted: (data) => {
-      setLibraryData(...libraryData, data.getUserInfo.library);
+      console.log(data);
+      setLibraryData(data.getUserInfo.library);
     },
     onError: (error) => {
       console.log(error);
@@ -54,8 +62,9 @@ const Library = () => {
               data={v}
               key={v.coverId}
               edit={true}
-              libraryData={libraryData}
               setLibraryData={setLibraryData}
+              getUserInfo={getUserInfo}
+              userId={userData.data.user.id}
             />
           );
         });
@@ -76,7 +85,7 @@ const Library = () => {
 
   return (
     <LoginAuth>
-      <PageContainer width="52%">
+      <PageContainer width="55%">
         <PageTitle>라이브러리</PageTitle>
         <Spacing />
         <LibraryContainer>

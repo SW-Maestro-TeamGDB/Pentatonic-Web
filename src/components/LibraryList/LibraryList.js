@@ -5,6 +5,7 @@ import { Default } from '../../lib/Media';
 import { DeleteFilled, EditOutlined, LoadingOutlined } from '@ant-design/icons';
 import { Skeleton, notification } from 'antd';
 import QuestionModal from '../QuestionModal';
+import { sessionIconMatch } from '../../lib/sessionIconMatch';
 import ThumbIcon from '../../images/ThumbIcon.svg';
 import ViewIcon from '../../images/ViewIcon.svg';
 
@@ -20,16 +21,6 @@ import PlayIcon from '../../images/PlayIcon.svg';
 import PauseIcon from '../../images/PauseIcon.png';
 import SkeletonImage from 'antd/lib/skeleton/Image';
 import SkeletonAvatar from 'antd/lib/skeleton/Avatar';
-
-const GET_SONG = gql`
-  query Query($getSongSongId: ObjectID!) {
-    getSong(songId: $getSongSongId) {
-      name
-      songImg
-      artist
-    }
-  }
-`;
 
 const GET_COVER = gql`
   query Query($getCoverCoverId: ObjectID!) {
@@ -63,8 +54,10 @@ const LibraryList = (props) => {
     setLibraryData,
     selectedCover,
     setSelectedCover,
+    getUserInfo,
+    userId,
   } = props;
-  const [songData, setSongData] = useState();
+  // const [songData, setSongData] = useState();
   const [coverTitle, setCoverTitle] = useState();
   const [audioState, setAudioState] = useState(0); // 0:정지 , 1:재생 , 2:일시정지
   const [inst, setInst] = useState();
@@ -78,12 +71,12 @@ const LibraryList = (props) => {
 
   const selected = !edit && data.coverId === selectedCover;
 
-  const getSong = useQuery(GET_SONG, {
-    variables: { getSongSongId: data.songId },
-    onCompleted: (data) => {
-      setSongData(data.getSong);
-    },
-  });
+  // const getSong = useQuery(GET_SONG, {
+  //   variables: { getSongSongId: data.songId },
+  //   onCompleted: (data) => {
+  //     setSongData(data.getSong);
+  //   },
+  // });
 
   const [getCover] = useLazyQuery(GET_COVER, {
     fetchPolicy: 'network-only',
@@ -98,6 +91,7 @@ const LibraryList = (props) => {
       setEditModal(false);
       setEditToggle(!editToggle);
       getCover();
+
       notification['success']({
         key: 'successEditTitle',
         message: '',
@@ -112,6 +106,8 @@ const LibraryList = (props) => {
     onCompleted: () => {
       setDeleteModal(false);
       setLibraryData(libraryData.filter((v) => v.coverId != data.coverId));
+      getCover();
+
       notification['success']({
         key: 'successEditTitle',
         message: '',
@@ -230,13 +226,13 @@ const LibraryList = (props) => {
       selected={selected}
       onClick={edit ? null : (e) => selectedCoverToggle(e)}
     >
-      {songData && coverTitle ? (
+      {data ? (
         <>
           <ImageContainer>
-            <CoverImage src={songData.songImg} />
+            <CoverImage src={data.song.songImg} />
           </ImageContainer>
           <Spacing width={'2%'} />
-          <CoverInform>
+          <CoverInform edit={edit}>
             {editToggle ? (
               <>
                 <CustomInput
@@ -250,15 +246,22 @@ const LibraryList = (props) => {
               </>
             ) : (
               <>
-                <CoverTitle selected={selected}>{coverTitle}</CoverTitle>
+                <CoverTitle selected={selected}>
+                  {coverTitle ? coverTitle : data.name}
+                </CoverTitle>
                 <SongInform selected={selected}>
-                  {songData.name} - {songData.artist}
+                  {data.song.name} - {data.song.artist}
                 </SongInform>
               </>
             )}
           </CoverInform>
           {edit && data.date ? (
-            <CoverTime>{data.date.substr(0, 10)}</CoverTime>
+            <>
+              <SessionIconContainer>
+                <SessionIcon src={sessionIconMatch(data.position)} />
+              </SessionIconContainer>
+              <CoverTime>{data.date.substr(0, 10)}</CoverTime>
+            </>
           ) : null}
           <Spacing width={'3%'} />
           {edit ? (
@@ -370,6 +373,18 @@ const CoverContainer = styled.div`
     props.selected ? 'rgba(98, 54, 255, 0.7)' : 'transparent'};
 `;
 
+const SessionIconContainer = styled.div`
+  width: 10%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
+const SessionIcon = styled.img`
+  width: 30px;
+  height: 30px;
+`;
+
 const LibararyPagePauseIcon = styled.img`
   width: 0.9vw;
   height: 0.9vw;
@@ -444,10 +459,11 @@ const Spacing = styled.div`
 const CoverTime = styled.div`
   font-size: 0.8vw;
   width: 20%;
+  text-align: center;
 `;
 
 const EditButtonContainer = styled.div`
-  width: 23%;
+  width: 20%;
   font-weight: 700;
 
   display: flex;
@@ -523,13 +539,13 @@ const ImageContainer = styled.div`
 
 const CoverImage = styled.img`
   width: 100%;
-  border-radius: 1rem;
+  border-radius: 0.5vw;
   object-fit: cover;
   height: 100%;
 `;
 
 const CoverInform = styled.div`
-  width: 50%;
+  width: ${(props) => (props.edit ? '30%' : '50%')};
   color: black;
   padding-left: 0.5vw;
 

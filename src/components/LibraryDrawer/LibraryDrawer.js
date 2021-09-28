@@ -9,11 +9,17 @@ const GET_USER_INFO = gql`
   query Query($getUserInfoUserId: Id!) {
     getUserInfo(userId: $getUserInfoUserId) {
       library {
-        coverId
-        coverURI
-        songId
-        name
         position
+        coverURI
+        coverId
+        date
+        name
+        song {
+          songId
+          songImg
+          name
+          artist
+        }
       }
     }
   }
@@ -65,7 +71,8 @@ const LibraryDrawer = (props) => {
   useEffect(() => {
     if (libraryData.length > 0 && filter) {
       const temp = libraryData.filter(
-        (v) => v.songId === filter.songId && v.position === filter.position,
+        (v) =>
+          v.song.songId === filter.songId && v.position === filter.position,
       );
       setFilteredData(temp);
     }
