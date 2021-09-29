@@ -13,7 +13,6 @@ import { Upload, Collapse, Select } from 'antd';
 import { LeftOutlined, PictureOutlined } from '@ant-design/icons';
 import { changeSessionNameToKorean } from '../../lib/changeSessionNameToKorean';
 
-import tempData from '../../data/songs/tempData.json';
 import sessionType from '../../data/sessionType.json';
 
 const { Dragger } = Upload;

@@ -51,7 +51,7 @@ const CoverMaking = ({ match }) => {
   const [songData, setSongData] = useState();
 
   const [session, setSession] = useState([]); // 세션 데이터
-  const [selectedSession, setSelectedSession] = useState(null); // 녹음 참여 세션
+  const [selectedSession, setSelectedSession] = useState(); // 녹음 참여 세션
 
   const { data } = useQuery(GET_CURRENT_USER, {
     fetchPolicy: 'network-only',
@@ -116,6 +116,7 @@ const CoverMaking = ({ match }) => {
           sessionData={sessionData}
           initBandData={initBandData}
           isFreeCover={isFreeCover}
+          isSolo={isSolo}
         />
       ),
     },

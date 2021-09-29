@@ -9,8 +9,11 @@ import SessionAddPanel from '../../components/SessionAddPanel';
 import SessionContents from '../../components/SessionContents';
 import InstSelect from '../../components/InstSelect';
 import LoadingModal from '../../components/LoadingModal';
-import { Upload, notification } from 'antd';
+import { Upload, notification, Collapse, Select } from 'antd';
 import { LeftOutlined, PictureOutlined } from '@ant-design/icons';
+import { changeSessionNameToKorean } from '../../lib/changeSessionNameToKorean';
+
+import sessionType from '../../data/sessionType.json';
 
 const UPLOAD_IMAGE_FILE = gql`
   mutation Mutation($uploadImageFileInput: UploadImageInput!) {
@@ -24,6 +27,8 @@ const MERGE_AUDIOS = gql`
   }
 `;
 
+const { Panel } = Collapse;
+const { Option } = Select;
 const { Dragger } = Upload;
 
 const CoverForm = (props) => {
@@ -44,6 +49,7 @@ const CoverForm = (props) => {
     sessionData,
     initBandData,
     isFreeCover,
+    isSolo,
   } = props;
   const [informError, setInformError] = useState(null);
   const [sessionError, setSessionError] = useState(null);
@@ -93,7 +99,7 @@ const CoverForm = (props) => {
       check = false;
     }
 
-    if (session.length === 0) {
+    if (!isSolo && session.length === 0) {
       setSessionError('커버를 구성할 세션을 하나 이상 추가해주세요');
       check = false;
     } else if (!selectedSession) {
@@ -181,13 +187,23 @@ const CoverForm = (props) => {
     }
   };
 
+  const showSessionType = () => {
+    return sessionType.map((v, i) => {
+      return (
+        <Option key={v.session}>
+          <Centered>{changeSessionNameToKorean(v.session)}</Centered>
+        </Option>
+      );
+    });
+  };
+
   // 페이지 렌더마다 데이터 초기화
   useEffect(() => {
     initBandData();
     setSession([]);
     setSelectInstURI([]);
     setSessionSet(new Set([]));
-    setSelectedSession(null);
+    setSelectedSession();
   }, []);
 
   return (
@@ -259,37 +275,67 @@ const CoverForm = (props) => {
             </UploadText>
           ) : null}
         </InputContainer>
-        <InputContainer>
-          <CustomTitle>세션 프리셋</CustomTitle>
-          <CustomDescription>
-            커버에 필요한 세션을 추가하고 녹음에 참여할 세션을 고릅니다
-          </CustomDescription>
-          <SessionContainer>
-            {session.length > 0 ? (
-              <SessionContents
+        {isSolo ? (
+          <InputContainer>
+            <CustomTitle>세션 선택</CustomTitle>
+            <CustomDescription>
+              커버 녹음을 진행 할 세션을 선택합니다
+            </CustomDescription>
+            <SessionContainer>
+              <SessionSelect
+                defaultValue="세션 선택"
+                value={selectedSession}
+                dropdownMatchSelectWidth="100%"
+                onChange={(value) => {
+                  setSession({ session: value, maxMember: 1 });
+                  setSelectedSession(value);
+                }}
+              >
+                {showSessionType()}
+              </SessionSelect>
+            </SessionContainer>
+            <ErrorContainer>
+              {sessionError ? (
+                <ErrorMessage>{sessionError}</ErrorMessage>
+              ) : null}
+            </ErrorContainer>
+          </InputContainer>
+        ) : (
+          <InputContainer>
+            <CustomTitle>세션 프리셋</CustomTitle>
+            <CustomDescription>
+              커버에 필요한 세션을 추가하고 녹음에 참여할 세션을 고릅니다
+            </CustomDescription>
+            <SessionContainer>
+              {session.length > 0 ? (
+                <SessionContents
+                  session={session}
+                  setSession={setSession}
+                  sessionSet={sessionSet}
+                  setSessionSet={setSessionSet}
+                  selectedSession={selectedSession}
+                  setSelectedSession={setSelectedSession}
+                />
+              ) : (
+                <NoSession>등록된 세션이 없습니다</NoSession>
+              )}
+            </SessionContainer>
+            <SessionAddButtonContainer>
+              <SessionAddPanel
                 session={session}
                 setSession={setSession}
                 sessionSet={sessionSet}
                 setSessionSet={setSessionSet}
-                selectedSession={selectedSession}
-                setSelectedSession={setSelectedSession}
               />
-            ) : (
-              <NoSession>등록된 세션이 없습니다</NoSession>
-            )}
-          </SessionContainer>
-          <SessionAddButtonContainer>
-            <SessionAddPanel
-              session={session}
-              setSession={setSession}
-              sessionSet={sessionSet}
-              setSessionSet={setSessionSet}
-            />
-          </SessionAddButtonContainer>
-          <ErrorContainer>
-            {sessionError ? <ErrorMessage>{sessionError}</ErrorMessage> : null}
-          </ErrorContainer>
-        </InputContainer>
+            </SessionAddButtonContainer>
+            <ErrorContainer>
+              {sessionError ? (
+                <ErrorMessage>{sessionError}</ErrorMessage>
+              ) : null}
+            </ErrorContainer>
+          </InputContainer>
+        )}
+
         {isFreeCover ? null : (
           <InputContainer>
             <CustomTitle>제공 반주</CustomTitle>
@@ -336,6 +382,10 @@ const Container = styled.div`
   margin-top: 4%;
 `;
 
+const SessionSelect = styled(Select)`
+  width: 80%;
+`;
+
 const CustomPictureIcon = styled(PictureOutlined)`
   font-size: 4rem;
   margin-top: 0.5rem;
@@ -376,7 +426,11 @@ const InputContainer = styled.div`
 `;
 
 const SessionContainer = styled.div`
-  margin: 2.5rem 0 2rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  margin: 3rem 0;
 `;
 
 const SessionAddButtonContainer = styled.div`
@@ -544,6 +598,11 @@ const ErrorContainer = styled.div`
 const ErrorMessage = styled.span`
   text-align: center;
   color: #cb0000;
+`;
+
+const Centered = styled.span`
+  display: flex;
+  justify-content: center;
 `;
 
 export default CoverForm;
