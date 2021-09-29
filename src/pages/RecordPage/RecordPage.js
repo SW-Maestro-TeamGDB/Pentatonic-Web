@@ -15,8 +15,15 @@ import { LeftOutlined, PauseOutlined } from '@ant-design/icons';
 import hihat from './hihat.mp3';
 
 const RecordPage = (props) => {
-  const { setPage, setAudioFile, audioDuration, inst, bandData, songData } =
-    props;
+  const {
+    setPage,
+    setAudioFile,
+    audioDuration,
+    inst,
+    bandData,
+    songData,
+    isFreeCover,
+  } = props;
   const [countdown, setCountDown] = useState(4);
   const [audioCtx, setAudioCtx] = useState();
   const [stream, setStream] = useState();
@@ -222,8 +229,10 @@ const RecordPage = (props) => {
       offRecAudio();
     }
     // 배경음악 중지 및 초기화
-    inst.pause();
-    inst.currentTime = 0;
+    if (inst) {
+      inst.pause();
+      inst.currentTime = 0;
+    }
     setEndTime(lyrics[0].end);
     setLyricsIndex(0);
   };
@@ -241,7 +250,7 @@ const RecordPage = (props) => {
   };
 
   const onClickPause = () => {
-    inst.pause();
+    if (inst) inst.pause();
     audioCtx.suspend();
     if (media && media.state === 'recording') {
       media.pause();
@@ -253,7 +262,7 @@ const RecordPage = (props) => {
     navigator.mediaDevices
       .getUserMedia({ audio: true })
       .then((stream) => {
-        inst.play();
+        if (inst) inst.play();
         audioCtx.resume();
         if (media.state === 'paused') {
           media.resume();
@@ -290,7 +299,7 @@ const RecordPage = (props) => {
     navigator.mediaDevices.getUserMedia({ audio: true }).then((stream) => {
       const mediaRecorder = new MediaRecorder(stream);
       init();
-      inst.play();
+      if (inst) inst.play();
       mediaRecorder.start();
 
       setStream(stream);
@@ -427,7 +436,6 @@ const RecordPage = (props) => {
     if (parseInt(count) < 60) {
       return notification['warning']({
         key: 'audioNotification',
-        message: '',
         description: '1분 이상의 녹음만 저장 가능합니다',
         placement: 'bottomRight',
         duration: 3,
@@ -479,7 +487,7 @@ const RecordPage = (props) => {
         modalToggle={micAuthModalToggle}
         setModalToggle={setMicAuthModalToggle}
       />
-      <Background url={songData.songImg}>
+      <Background url={isFreeCover ? bandData.backGroundURI : songData.songImg}>
         <BackwardButton onClick={() => onClickStop()}>
           <LeftOutlined />
           <BackwardText>커버 정보 입력</BackwardText>
@@ -494,14 +502,16 @@ const RecordPage = (props) => {
               />
             ) : null}
           </IconContainer>
-          <LyricsContainer>
-            <CurrentLyrics>{lyrics[lyricsIndex].text}</CurrentLyrics>
-            <NextLyrics>
-              {lyricsIndex < lyricsLength - 1
-                ? lyrics[lyricsIndex + 1].text
-                : 'ㅤ'}
-            </NextLyrics>
-          </LyricsContainer>
+          {isFreeCover ? null : (
+            <LyricsContainer>
+              <CurrentLyrics>{lyrics[lyricsIndex].text}</CurrentLyrics>
+              <NextLyrics>
+                {lyricsIndex < lyricsLength - 1
+                  ? lyrics[lyricsIndex + 1].text
+                  : 'ㅤ'}
+              </NextLyrics>
+            </LyricsContainer>
+          )}
           {isMobile ? null : (
             <VisualizerContainer onRec={onRec}>
               <AudioVisualizer
@@ -514,38 +524,29 @@ const RecordPage = (props) => {
           )}
         </BackgroundBlur>
       </Background>
-      <ProgressContainer>
-        {/* audioDuration의 길이를 알기 떄문에 animation 형식으로 바꾸는것 고려 */}
-        <CustomProgress
-          percent={(count / audioDuration) * 100}
-          showInfo={false}
-          strokeColor="black"
-        />
-        <TimeContainer>
-          <CurrentTimeContainer>
-            {minute}
-            {':'}
-            {second < 10 ? '0' + second : second}
-          </CurrentTimeContainer>
-          <RemainTimeContainer>
-            {'- '}
-            {audioMinute}
-            {':'}
-            {audioSecond < 10 ? '0' + audioSecond : audioSecond}
-          </RemainTimeContainer>
-        </TimeContainer>
-      </ProgressContainer>
-      {/* {((onRec === 0 && audioUrl) || onRec === 2) && countdown === 4 ? (
-        <SubmitContainer>
-          <SubmitButton
-            onClick={() => onSubmitAudioFile()}
-            disabled={count < 60}
-          >
-            저장하기
-            <SaveIconImg src={SaveIcon} />
-          </SubmitButton>
-        </SubmitContainer>
-      ) : null} */}
+      {isFreeCover ? null : (
+        <ProgressContainer>
+          {/* audioDuration의 길이를 알기 떄문에 animation 형식으로 바꾸는것 고려 */}
+          <CustomProgress
+            percent={(count / audioDuration) * 100}
+            showInfo={false}
+            strokeColor="black"
+          />
+          <TimeContainer>
+            <CurrentTimeContainer>
+              {minute}
+              {':'}
+              {second < 10 ? '0' + second : second}
+            </CurrentTimeContainer>
+            <RemainTimeContainer>
+              {'- '}
+              {audioMinute}
+              {':'}
+              {audioSecond < 10 ? '0' + audioSecond : audioSecond}
+            </RemainTimeContainer>
+          </TimeContainer>
+        </ProgressContainer>
+      )}
     </Container>
   );
 };

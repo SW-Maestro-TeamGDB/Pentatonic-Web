@@ -3,10 +3,11 @@ import { useQuery, gql, useLazyQuery } from '@apollo/client';
 import styled from 'styled-components';
 import { Steps } from 'antd';
 import PageContainer from '../../components/PageContainer';
+import { GET_CURRENT_USER } from '../../apollo/cache';
+
 import CoverForm from '../CoverForm';
 import RecordPage from '../RecordPage';
 import RecordEdit from '../RecordEdit';
-import instrument from './inst.mp3';
 
 import LoginAuth from '../../lib/LoginAuth';
 
@@ -33,8 +34,10 @@ const CoverMaking = ({ match }) => {
   const [audioDuration, setAudioDuration] = useState();
   const [inst, setInst] = useState();
   const [sessionData, setSessionData] = useState();
+  const [userId, setUserId] = useState();
   const pageUrl = match.url;
   const songId = match.params.id;
+  const isFreeCover = match.params.id === 'free';
   const isSolo = match.path.indexOf('band') === -1;
 
   const [bandId, setBandId] = useState();
@@ -50,7 +53,17 @@ const CoverMaking = ({ match }) => {
   const [session, setSession] = useState([]); // 세션 데이터
   const [selectedSession, setSelectedSession] = useState(null); // 녹음 참여 세션
 
-  const { data } = useQuery(GET_SONG, {
+  const { data } = useQuery(GET_CURRENT_USER, {
+    fetchPolicy: 'network-only',
+  });
+
+  useEffect(() => {
+    if (data?.user) {
+      setUserId(data.user.id);
+    }
+  }, [data]);
+
+  const [getSong] = useLazyQuery(GET_SONG, {
     variables: {
       getSongSongId: songId,
     },
@@ -69,6 +82,10 @@ const CoverMaking = ({ match }) => {
       console.log(error);
     },
   });
+
+  useEffect(() => {
+    if (songId !== 'free') getSong();
+  }, [songId]);
 
   const initBandData = () => {
     setBandData({
@@ -98,6 +115,7 @@ const CoverMaking = ({ match }) => {
           songData={songData}
           sessionData={sessionData}
           initBandData={initBandData}
+          isFreeCover={isFreeCover}
         />
       ),
     },
@@ -111,6 +129,7 @@ const CoverMaking = ({ match }) => {
           inst={inst}
           bandData={bandData}
           songData={songData}
+          isFreeCover={isFreeCover}
         />
       ),
     },
@@ -122,11 +141,14 @@ const CoverMaking = ({ match }) => {
           audioFile={audioFile}
           inst={inst}
           bandData={bandData}
+          setBandData={setBandData}
           bandId={bandId}
           setBandId={setBandId}
           selectedSession={selectedSession}
           session={session}
           cover={true}
+          isFreeCover={isFreeCover}
+          userId={userId}
         />
       ),
     },

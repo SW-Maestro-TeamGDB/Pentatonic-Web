@@ -13,6 +13,12 @@ import { Slider } from 'antd';
 
 import '../../styles/AudioPlayer.css';
 
+const UPLOAD_FREE_SONG = gql`
+  mutation UploadFreeSongMutation($uploadFreeSongInput: UploadFreeSongInput!) {
+    uploadFreeSong(input: $uploadFreeSongInput)
+  }
+`;
+
 const CREATE_BAND = gql`
   mutation Mutation($createBandInput: CreateBandInput!) {
     createBand(input: $createBandInput) {
@@ -48,11 +54,14 @@ const RecordEdit = (props) => {
     audioFile,
     inst,
     bandData,
+    setBandData,
     bandId,
     setBandId,
     selectedSession,
     session,
     cover,
+    isFreeCover,
+    userId,
   } = props;
   // 업로드 모달
   const [modalToggle, setModalToggle] = useState(false);
@@ -74,21 +83,59 @@ const RecordEdit = (props) => {
         console.log(error);
       },
       onCompleted: (data) => {
-        uploadCover({
-          variables: {
-            uploadCoverInput: {
-              cover: {
-                name: bandData.name,
-                coverURI: data.uploadCoverFile,
-                songId: bandData.songId,
-                position: selectedSession,
+        setCoverURI(data.uploadCoverFile);
+        if (isFreeCover) {
+          uploadFreeSong({
+            variables: {
+              uploadFreeSongInput: {
+                song: {
+                  name: bandData.name,
+                  songURI: data.uploadCoverFile,
+                  artist: userId,
+                },
               },
             },
-          },
-        });
+          });
+        } else {
+          uploadCover({
+            variables: {
+              uploadCoverInput: {
+                cover: {
+                  name: bandData.name,
+                  coverURI: data.uploadCoverFile,
+                  songId: bandData.songId,
+                  position: selectedSession,
+                },
+              },
+            },
+          });
+        }
       },
     },
   );
+
+  const [uploadFreeSong, uploadFreeSongResult] = useMutation(UPLOAD_FREE_SONG, {
+    fetchPolicy: 'no-cache',
+    onError: (error) => {
+      alert('Error');
+      console.log(error);
+    },
+    onCompleted: (data) => {
+      setBandData({ ...bandData, songId: data.uploadFreeSong });
+      uploadCover({
+        variables: {
+          uploadCoverInput: {
+            cover: {
+              name: bandData.name,
+              coverURI: coverURI,
+              songId: data.uploadFreeSong,
+              position: selectedSession,
+            },
+          },
+        },
+      });
+    },
+  });
 
   const [uploadCover, uploadCoverResult] = useMutation(UPLOAD_COVER, {
     fetchPolicy: 'no-cache',
@@ -96,7 +143,6 @@ const RecordEdit = (props) => {
       console.log(error);
     },
     onCompleted: (data) => {
-      setCoverURI(data.uploadCover.coverURI);
       setCoverId(data.uploadCover.coverId);
       if (cover) {
         createBand({
@@ -215,19 +261,19 @@ const RecordEdit = (props) => {
   };
 
   const onClickStart = (e) => {
-    inst.play();
+    if (inst) inst.play();
   };
 
   const onClickPause = () => {
-    inst.pause();
+    if (inst) inst.pause();
   };
 
   const onClickSeeked = (e) => {
-    inst.currentTime = e.target.currentTime;
+    if (inst) inst.currentTime = e.target.currentTime;
   };
 
   const onClickSeeking = () => {
-    inst.pause();
+    if (inst) inst.pause();
   };
 
   const submitRecord = () => {
@@ -242,8 +288,10 @@ const RecordEdit = (props) => {
   // 언마운트시 반주 정지
   useEffect(() => {
     return () => {
-      inst.pause();
-      inst.currentTime = 0;
+      if (inst) {
+        inst.pause();
+        inst.currentTime = 0;
+      }
     };
   }, []);
 

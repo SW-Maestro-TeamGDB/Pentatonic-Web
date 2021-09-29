@@ -43,6 +43,7 @@ const CoverForm = (props) => {
     songData,
     sessionData,
     initBandData,
+    isFreeCover,
   } = props;
   const [informError, setInformError] = useState(null);
   const [sessionError, setSessionError] = useState(null);
@@ -100,7 +101,7 @@ const CoverForm = (props) => {
       check = false;
     }
 
-    if (selectInst.length === 0) {
+    if (!isFreeCover && selectInst.length === 0) {
       setInstError('녹음에 사용될 반주를 하나 이상 골라주세요');
       check = false;
     }
@@ -122,20 +123,32 @@ const CoverForm = (props) => {
 
   const onClickSubmitButton = () => {
     if (formCheck()) {
-      if (bandData.backGroundURI === null) {
-        setBandData({
-          ...bandData,
-          backGroundURI: songData.songImg,
-        });
-      }
-      mergeAudios({
-        variables: {
-          mergeAudiosInput: {
-            audios: selectInstURI,
+      if (isFreeCover) {
+        if (bandData.backGroundURI === null) {
+          setBandData({
+            ...bandData,
+            backGroundURI:
+              'https://images.unsplash.com/photo-1499364615650-ec38552f4f34?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1072&q=80',
+          });
+        }
+        setPage(1);
+      } else {
+        // 배경사진 등록하지 않은 경우
+        if (bandData.backGroundURI === null) {
+          setBandData({
+            ...bandData,
+            backGroundURI: songData.songImg,
+          });
+        }
+        mergeAudios({
+          variables: {
+            mergeAudiosInput: {
+              audios: selectInstURI,
+            },
           },
-        },
-      });
-      setModalToggle(true);
+        });
+        setModalToggle(true);
+      }
     } else window.scrollTo(0, 0);
   };
 
@@ -180,12 +193,22 @@ const CoverForm = (props) => {
   return (
     <Container>
       <SongMetaContainer>
-        <BannerBackground url={songData?.songImg} />
+        <BannerBackground
+          url={
+            isFreeCover
+              ? 'https://images.unsplash.com/photo-1499364615650-ec38552f4f34?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1072&q=80'
+              : songData?.songImg
+          }
+        />
         <BackwardButton onClick={() => history.goBack()}>
           <LeftOutlined />
         </BackwardButton>
         <SongTitle>
-          {songData ? `${songData.name} - ${songData.artist}` : null}
+          {isFreeCover
+            ? '자유곡 커버'
+            : songData
+            ? `${songData.name} - ${songData.artist}`
+            : null}
         </SongTitle>
       </SongMetaContainer>
       <FormContainer>
@@ -267,22 +290,26 @@ const CoverForm = (props) => {
             {sessionError ? <ErrorMessage>{sessionError}</ErrorMessage> : null}
           </ErrorContainer>
         </InputContainer>
-        <InputContainer>
-          <CustomTitle>제공 반주</CustomTitle>
-          <CustomDescription>녹음에 사용될 반주를 조합합니다</CustomDescription>
-          <InstContainer>
-            <InstSelect
-              sessionData={sessionData}
-              setSelectInst={setSelectInst}
-              selectInst={selectInst}
-              selectInstURI={selectInstURI}
-              setSelectInstURI={setSelectInstURI}
-            />
-          </InstContainer>
-          <ErrorContainer>
-            {instError ? <ErrorMessage>{instError}</ErrorMessage> : null}
-          </ErrorContainer>
-        </InputContainer>
+        {isFreeCover ? null : (
+          <InputContainer>
+            <CustomTitle>제공 반주</CustomTitle>
+            <CustomDescription>
+              녹음에 사용될 반주를 조합합니다
+            </CustomDescription>
+            <InstContainer>
+              <InstSelect
+                sessionData={sessionData}
+                setSelectInst={setSelectInst}
+                selectInst={selectInst}
+                selectInstURI={selectInstURI}
+                setSelectInstURI={setSelectInstURI}
+              />
+            </InstContainer>
+            <ErrorContainer>
+              {instError ? <ErrorMessage>{instError}</ErrorMessage> : null}
+            </ErrorContainer>
+          </InputContainer>
+        )}
         <SubmitButton onClick={() => onClickSubmitButton()}>
           다음으로
         </SubmitButton>
