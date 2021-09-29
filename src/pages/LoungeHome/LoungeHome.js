@@ -35,7 +35,7 @@ const LoungeHome = () => {
       return data.getTrendBands
         .filter((v) => !v.isSoloBand)
         .map((v, i) => {
-          return <CoverGrid key={`bandData+${v.bandId}`} data={v} auto />;
+          return <CoverGrid key={`bandData+${v.bandId}`} data={v} autoFill />;
         });
     }
   };
@@ -45,7 +45,7 @@ const LoungeHome = () => {
       return data.getTrendBands
         .filter((v) => v.isSoloBand)
         .map((v, i) => {
-          return <CoverGrid key={`bandData+${v.bandId}`} data={v} />;
+          return <CoverGrid key={`bandData+${v.bandId}`} data={v} autoFill />;
         });
     }
   };
@@ -94,6 +94,7 @@ const BoardContainer = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+  align-items: flex-start;
   width: 100%;
 `;
 
