@@ -15,7 +15,8 @@ import { LeftOutlined, PauseOutlined } from '@ant-design/icons';
 import hihat from './hihat.mp3';
 
 const RecordPage = (props) => {
-  const { setPage, setAudioFile, audioDuration, inst, bandData } = props;
+  const { setPage, setAudioFile, audioDuration, inst, bandData, songData } =
+    props;
   const [countdown, setCountDown] = useState(4);
   const [audioCtx, setAudioCtx] = useState();
   const [stream, setStream] = useState();
@@ -478,7 +479,7 @@ const RecordPage = (props) => {
         modalToggle={micAuthModalToggle}
         setModalToggle={setMicAuthModalToggle}
       />
-      <Background>
+      <Background url={songData.songImg}>
         <BackwardButton onClick={() => onClickStop()}>
           <LeftOutlined />
           <BackwardText>커버 정보 입력</BackwardText>
@@ -595,7 +596,7 @@ const VisualizerContainer = styled.div`
 `;
 
 const Background = styled.div`
-  background: url('https://media.pitchfork.com/photos/608a33343bbb6032f540a222/2:1/w_2912,h_1456,c_limit/coldplay.jpg');
+  background: url(${(props) => (props.url ? props.url : null)});
   background-size: cover;
   margin-top: 5vh;
   height: 60vh;
