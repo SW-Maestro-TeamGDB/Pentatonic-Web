@@ -128,7 +128,9 @@ const MusicInformation = ({ match }) => {
                 </GridContainer>
               </MusicMetaWrapper>
               <ButtonContainer>
-                <RecordButton to={match.url + '/record'}>녹음하기</RecordButton>
+                <RecordButton to={match.url + '/record'}>
+                  라이브러리 녹음하기
+                </RecordButton>
                 <MakingCoverButton to={match.url + '/cover'}>
                   커버룸 만들기
                 </MakingCoverButton>
