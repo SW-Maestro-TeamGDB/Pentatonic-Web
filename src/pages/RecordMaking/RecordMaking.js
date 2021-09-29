@@ -130,8 +130,7 @@ const RecordMaking = ({ match }) => {
           {pages.map((item) => (
             <Step
               progressDot
-              key={item.title}
-              title={item.title}
+              key={item.description}
               description={item.description}
             />
           ))}
