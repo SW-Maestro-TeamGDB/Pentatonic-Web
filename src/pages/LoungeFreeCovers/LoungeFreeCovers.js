@@ -13,75 +13,50 @@ import PageImage from '../../components/PageImage/PageImage';
 import GenreButton from '../../components/GenreButton/GenreButton';
 import GridContainer from '../../components/GridContainer/GridContainer';
 
-const QUERY_BAND = gql`
-  query Query($queryBandFilter: QueryBandInput!) {
-    queryBand(filter: $queryBandFilter) {
-      backGroundURI
-      song {
-        artist
+const QUERY_BANDS = gql`
+  query Query($queryBandsFilter: QueryBandInput!, $queryBandsFirst: Int!) {
+    queryBands(filter: $queryBandsFilter, first: $queryBandsFirst) {
+      bands {
+        isFreeBand
+        song {
+          name
+          artist
+        }
+        backGroundURI
         name
+        session {
+          position
+        }
+        likeCount
+        bandId
       }
-      name
-      session {
-        position
-      }
-      likeCount
-      bandId
     }
   }
 `;
 
 const LoungeBandCovers = () => {
   const [genre, setGenre] = useState('전체');
-  const genreMenu = (
-    <CustomMenu>
-      <Menu.Item key={0} onClick={() => setGenre('전체')}>
-        전체
-      </Menu.Item>
-      <Menu.Item key={1} onClick={() => setGenre('락')}>
-        락
-      </Menu.Item>
-      <Menu.Item key={2} onClick={() => setGenre('R&B')}>
-        R&B
-      </Menu.Item>
-      <Menu.Item key={3} onClick={() => setGenre('발라드')}>
-        발라드
-      </Menu.Item>
-      <Menu.Item key={4} onClick={() => setGenre('댄스')}>
-        댄스
-      </Menu.Item>
-      <Menu.Item key={5} onClick={() => setGenre('POP')}>
-        POP
-      </Menu.Item>
-    </CustomMenu>
-  );
-
-  // const tempCover = () =>
-  //   Array.from({ length: 30 }, () => 0).map((v, i) => {
-  //     return (
-  //       <CoverGrid
-  //         id={parseInt(Math.random() * 100)}
-  //         key={i}
-  //         idx={parseInt(Math.random() * 6 + 1)}
-  //       />
-  //     );
-  //   });
 
   const tempCover = () => {
     if (data) {
-      return data.queryBand.map((v, i) => {
-        return <CoverGrid key={`bandData+${i}`} data={v} />;
-      });
+      return data.queryBands.bands
+        .filter((v) => v.isFreeBand)
+        .map((v, i) => {
+          return <CoverGrid key={`bandData+${i}`} data={v} />;
+        });
     }
   };
 
-  const { data } = useQuery(QUERY_BAND, {
+  const { data } = useQuery(QUERY_BANDS, {
     variables: {
-      queryBandFilter: {
-        type: 'NAME',
+      queryBandsFilter: {
+        type: 'ALL',
       },
+      queryBandsFirst: 10,
     },
   });
+
+  console.log(data);
 
   return (
     <PageContainer>
