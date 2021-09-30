@@ -36,16 +36,22 @@ const WeeklyChallenge = () => {
       const title = songData.name;
       const artist = songData.artist;
 
-      return songData.band.map((v, i) => {
-        return (
-          <CoverGrid
-            key={`bandData+${i}`}
-            data={v}
-            title={title}
-            artist={artist}
-          />
-        );
-      });
+      return (
+        <GridContainer width="95%" templateColumn="250px" autoFill>
+          {songData.band.map((v, i) => {
+            return (
+              <CoverGrid
+                key={`bandData+${i}`}
+                data={v}
+                title={title}
+                artist={artist}
+              />
+            );
+          })}
+        </GridContainer>
+      );
+    } else {
+      return <NoCover>등록된 커버가 없습니다</NoCover>;
     }
   };
 
@@ -80,9 +86,7 @@ const WeeklyChallenge = () => {
           title="새로운 커버 만들기"
         />
       </SubContainer>
-      <GridContainer width="95%" templateColumn="250px" autoFill>
-        {loadCover()}
-      </GridContainer>
+      {loadCover()}
     </PageContainer>
   );
 };
@@ -121,6 +125,18 @@ const MakingCoverLink = styled(Link)`
 const CustomButton = styled.span`
   cursor: pointer;
   font-size: 1rem;
+`;
+
+const NoCover = styled.div`
+  font-size: 1.4rem;
+  color: #9b94b3;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  height: 12rem;
+  letter-spacing: -0.5px;
+  font-weight: 800;
 `;
 
 export default WeeklyChallenge;

@@ -23,6 +23,7 @@ const GET_TREND_BANDS = gql`
       likeCount
       bandId
       isSoloBand
+      isFreeBand
     }
   }
 `;
@@ -33,7 +34,7 @@ const LoungeHome = () => {
   const loadBandCover = () => {
     if (data) {
       return data.getTrendBands
-        .filter((v) => !v.isSoloBand)
+        .filter((v) => !v.isSoloBand && !v.isFreBand)
         .map((v, i) => {
           return <CoverGrid key={`bandData+${v.bandId}`} data={v} autoFill />;
         });

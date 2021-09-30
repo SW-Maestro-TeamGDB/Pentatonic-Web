@@ -21,9 +21,11 @@ const QUERY_BAND = gql`
         song {
           artist
           name
+          weeklyChallenge
         }
         name
         isSoloBand
+        isFreeBand
         likeCount
         bandId
         session {
@@ -39,11 +41,21 @@ const LoungeSoloCovers = () => {
 
   const loadSoloCover = () => {
     if (data) {
-      return data.queryBands.bands
-        .filter((v) => v.isSoloBand)
-        .map((v, i) => {
-          return <CoverGrid key={`bandData+${i}`} data={v} />;
-        });
+      const filtered = data.queryBands.bands.filter(
+        (v) => v.isSoloBand && !v.isFreeBand && !v.song.weeklyChallenge,
+      );
+
+      if (filtered.length > 0)
+        return (
+          <GridContainer width="95%" templateColumn="250px" autoFill>
+            {filtered.map((v, i) => {
+              return <CoverGrid key={`bandData+${i}`} data={v} />;
+            })}
+          </GridContainer>
+        );
+      else {
+        return <NoCover>등록된 커버가 없습니다</NoCover>;
+      }
     }
   };
 
@@ -70,9 +82,7 @@ const LoungeSoloCovers = () => {
         <GenreButton genre={genre} setGenre={setGenre} />
         <MakingCoverButton link={`/studio/solo`} title="새로운 커버 만들기" />
       </SubContainer>
-      <GridContainer width="95%" templateColumn="250px" autoFill>
-        {loadSoloCover()}
-      </GridContainer>
+      {loadSoloCover()}
     </PageContainer>
   );
 };
@@ -92,6 +102,18 @@ const SubContainer = styled.div`
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
+`;
+
+const NoCover = styled.div`
+  font-size: 1.4rem;
+  color: #9b94b3;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  height: 12rem;
+  letter-spacing: -0.5px;
+  font-weight: 800;
 `;
 
 export default LoungeSoloCovers;

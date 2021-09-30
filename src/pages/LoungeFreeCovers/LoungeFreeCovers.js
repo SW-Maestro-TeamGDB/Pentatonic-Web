@@ -37,13 +37,21 @@ const QUERY_BANDS = gql`
 const LoungeBandCovers = () => {
   const [genre, setGenre] = useState('전체');
 
-  const tempCover = () => {
+  const loadFreeCover = () => {
     if (data) {
-      return data.queryBands.bands
-        .filter((v) => v.isFreeBand)
-        .map((v, i) => {
-          return <CoverGrid key={`bandData+${i}`} data={v} />;
-        });
+      const filtered = data.queryBands.bands.filter((v) => v.isFreeBand);
+
+      if (filtered.length > 0)
+        return (
+          <GridContainer width="95%" templateColumn="250px" autoFill>
+            {filtered.map((v, i) => {
+              return <CoverGrid key={`bandData+${i}`} data={v} />;
+            })}
+          </GridContainer>
+        );
+      else {
+        return <NoCover>등록된 커버가 없습니다</NoCover>;
+      }
     }
   };
 
@@ -71,9 +79,7 @@ const LoungeBandCovers = () => {
         <GenreButton genre={genre} setGenre={setGenre} />
         <MakingCoverButton link={`/studio/band`} title="새로운 커버 만들기" />
       </SubContainer>
-      <GridContainer width="95%" templateColumn="250px" autoFill>
-        {tempCover()}
-      </GridContainer>
+      {loadFreeCover()}
     </PageContainer>
   );
 };
@@ -113,9 +119,22 @@ const CustomButton = styled.span`
   cursor: pointer;
   font-size: 1rem;
 `;
+
 const CustomMenu = styled(Menu)`
   min-width: 7rem;
   text-align: center;
+`;
+
+const NoCover = styled.div`
+  font-size: 1.4rem;
+  color: #9b94b3;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  height: 12rem;
+  letter-spacing: -0.5px;
+  font-weight: 800;
 `;
 
 export default LoungeBandCovers;
