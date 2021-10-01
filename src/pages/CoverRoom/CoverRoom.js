@@ -62,6 +62,7 @@ const GET_BAND = gql`
           coverURI
           coverId
           name
+          position
         }
       }
       isSoloBand
@@ -69,6 +70,7 @@ const GET_BAND = gql`
       likeCount
       likeStatus
       introduce
+
       name
       song {
         name
@@ -462,7 +464,7 @@ const CoverRoom = ({ match }) => {
                 <AudioPlayerContainer>
                   <ButtonContainer>
                     <LikeButton onClick={onClickLike}>
-                      {coverData.likeStatus ? (
+                      {data?.user && coverData.likeStatus ? (
                         <CustomLikeFilledIcon />
                       ) : (
                         <CustomLikeOutlinedIcon />
