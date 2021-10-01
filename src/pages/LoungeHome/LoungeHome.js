@@ -28,13 +28,11 @@ const GET_TREND_BANDS = gql`
   }
 `;
 
-// songId 대신 song 정보로 수정해야 함 (0927)
-
 const LoungeHome = () => {
   const loadBandCover = () => {
     if (data) {
       return data.getTrendBands
-        .filter((v) => !v.isSoloBand && !v.isFreBand)
+        .filter((v) => !v.isSoloBand)
         .map((v, i) => {
           return <CoverGrid key={`bandData+${v.bandId}`} data={v} autoFill />;
         });
@@ -58,6 +56,8 @@ const LoungeHome = () => {
       },
     },
   });
+
+  console.log(data);
 
   return (
     <PageContainer>
