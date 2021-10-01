@@ -10,7 +10,7 @@ import piano from '../../images/Session/piano.svg';
 import vocal from '../../images/Session/vocal.svg';
 
 const PositionGrid = (props) => {
-  const { id } = props;
+  const { id, width } = props;
 
   const tempData = [
     {
@@ -40,7 +40,7 @@ const PositionGrid = (props) => {
   ];
 
   return (
-    <Container>
+    <Container width={width}>
       <SessionIcon src={tempData[id].icon} />
       <SessionTitle>
         {changeSessionNameToKorean(tempData[id].name)}
@@ -58,6 +58,7 @@ const PositionGrid = (props) => {
 const Container = styled.div`
   background-color: white;
   height: 10rem;
+  width: ${(props) => (props.width ? props.width : 'auto')};
 
   display: flex;
   flex-direction: column;
