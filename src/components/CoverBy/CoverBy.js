@@ -14,9 +14,34 @@ import { sessionIconMatch } from '../../lib/sessionIconMatch';
 
 import AuthModal from '../../components/AuthModal';
 
+const GET_USER_INFO = gql`
+  query Query($getUserInfoUserId: Id!) {
+    getUserInfo(userId: $getUserInfoUserId) {
+      position {
+        position
+        likeCount
+      }
+    }
+  }
+`;
+
 const CoverBy = (props) => {
   const { data } = props;
   const coverData = data.cover[0];
+  const [positionData, setPositionData] = useState();
+
+  const { getUserPosition } = useQuery(GET_USER_INFO, {
+    fetchPolicy: 'network-only',
+    variables: {
+      getUserInfoUserId: coverData.coverBy.id,
+    },
+    onCompleted: (data) => {
+      const filtered = data.getUserInfo.position.filter(
+        (v) => v.position === coverData.position,
+      );
+      if (filtered.length > 0) setPositionData(filtered[0]);
+    },
+  });
 
   return (
     <CoverRoomSessionContainer>
@@ -40,7 +65,11 @@ const CoverBy = (props) => {
           </SessionIdContainer>
         </SessionWrapper>
         <PositionWrapper>
-          <PositionGrid id={1} key={1} width="20rem" />
+          <PositionGrid
+            position={coverData.position}
+            like={positionData?.likeCount}
+            width="20rem"
+          />
         </PositionWrapper>
       </SessionContainer>
     </CoverRoomSessionContainer>
