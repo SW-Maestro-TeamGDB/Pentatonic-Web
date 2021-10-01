@@ -6,6 +6,7 @@ import CoverRoomSession from '../../components/CoverRoomSession/CoverRoomSession
 import LibraryDrawer from '../../components/LibraryDrawer/LibraryDrawer';
 import CommentList from '../../components/CommentList/CommentList';
 import SessionSelectModal from '../../components/SessionSelectModal';
+import CoverBy from '../../components/CoverBy';
 import { useHistory } from 'react-router-dom';
 import { Drawer, notification } from 'antd';
 import NotFoundPage from '../NotFoundPage';
@@ -63,6 +64,8 @@ const GET_BAND = gql`
           name
         }
       }
+      isSoloBand
+      isFreeBand
       likeCount
       likeStatus
       introduce
@@ -70,6 +73,10 @@ const GET_BAND = gql`
       song {
         name
         songId
+        instrument {
+          instURI
+          position
+        }
       }
       comment(first: $commentFirst) {
         comments {
@@ -185,7 +192,7 @@ const CoverRoom = ({ match }) => {
   };
 
   const onClickToSelect = () => {
-    setSession([]);
+    if (!coverData.isSoloBand) setSession([]);
     setMode(0);
   };
 
@@ -411,6 +418,12 @@ const CoverRoom = ({ match }) => {
     });
   };
 
+  useEffect(() => {
+    if (coverData && coverData.isSoloBand) {
+      setSession([coverData.session[0].cover[0].coverURI]);
+    }
+  }, [coverData]);
+
   return (
     <PageContainer>
       {!loading && coverData ? (
@@ -485,7 +498,13 @@ const CoverRoom = ({ match }) => {
               </SubmitButton>
             )}
           </CoverBannerContainer>
-          {mode === 1 ? null : (
+          {mode === 1 ? null : coverData.isSoloBand ? (
+            <SessionContainer>
+              <GridContainer>
+                <CoverBy data={coverData.session[0]} width="20rem" />
+              </GridContainer>
+            </SessionContainer>
+          ) : (
             <SessionContainer>
               <GridContainer>{showCoverRoomSession()}</GridContainer>
             </SessionContainer>
@@ -493,7 +512,9 @@ const CoverRoom = ({ match }) => {
           <CommentContainer>
             <CommentHeader>
               댓글
-              <CurrentComment>{coverData.comment.length}</CurrentComment>
+              <CurrentComment>
+                {coverData.comment.comments.length}
+              </CurrentComment>
             </CommentHeader>
             <CommentForm>
               {data?.user ? (
