@@ -3,53 +3,25 @@ import styled from 'styled-components';
 import { Default } from '../../lib/Media';
 import DifficultyIcon from '../DifficultyIcon';
 import { changeSessionNameToKorean } from '../../lib/changeSessionNameToKorean';
+import { sessionIconMatch } from '../../lib/sessionIconMatch';
 
-import drum from '../../images/Session/drum.svg';
-import guitar from '../../images/Session/guitar.svg';
-import piano from '../../images/Session/piano.svg';
-import vocal from '../../images/Session/vocal.svg';
+import ThumbIcon from '../../images/ThumbIcon.svg';
 
 const PositionGrid = (props) => {
-  const { id, width } = props;
-
-  const tempData = [
-    {
-      icon: vocal,
-      name: 'VOCAL',
-      level: 4,
-      rank: parseInt(Math.random() * 10 + 1),
-    },
-    {
-      icon: guitar,
-      name: 'ACOUSTIC_GUITAR',
-      level: 3,
-      rank: parseInt(Math.random() * 50 + 10),
-    },
-    {
-      icon: drum,
-      name: 'DRUM',
-      level: 2,
-      rank: parseInt(Math.random() * 100 + 100),
-    },
-    {
-      icon: piano,
-      name: 'KEYBOARD',
-      level: 1,
-      rank: parseInt(Math.random() * 1000 + 100),
-    },
-  ];
+  const { position, like, width } = props;
 
   return (
     <Container width={width}>
-      <SessionIcon src={tempData[id].icon} />
-      <SessionTitle>
-        {changeSessionNameToKorean(tempData[id].name)}
-      </SessionTitle>
+      <SessionIcon src={sessionIconMatch(position)} />
+      <SessionTitle>{changeSessionNameToKorean(position)}</SessionTitle>
       <SessionMeta>
         <SessionLevel>
-          <DifficultyIcon value={tempData[id].level} />
+          <DifficultyIcon value={1} />
         </SessionLevel>
-        <SessionRank>{tempData[id].rank}위</SessionRank>
+        <SessionRank>
+          <CustomIcon src={ThumbIcon} />
+          {like ? like : 0}
+        </SessionRank>
       </SessionMeta>
     </Container>
   );
@@ -105,6 +77,14 @@ const SessionRank = styled.div`
 
 const SessionLevel = styled.div`
   width: 50%;
+`;
+
+const CustomIcon = styled.img`
+  width: 12px;
+  height: 12px;
+  filter: invert(80%) sepia(0%) saturate(468%) hue-rotate(238deg)
+    brightness(96%) contrast(86%);
+  margin-right: 10px;
 `;
 
 export default PositionGrid;
