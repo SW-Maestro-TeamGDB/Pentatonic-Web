@@ -26,6 +26,7 @@ const Container = styled.div`
 
   ${media.small} {
     width: 90%;
+    min-width: 0px;
     margin-top: 0;
   }
 `;
