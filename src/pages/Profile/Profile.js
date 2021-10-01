@@ -31,6 +31,10 @@ const GET_USER_INFO = gql`
         likeCount
         bandId
       }
+      position {
+        position
+        likeCount
+      }
     }
   }
 `;
@@ -213,8 +217,14 @@ const Profile = ({ match }) => {
 
   // 임시데이터
   const showPosition = () => {
-    return Array.from({ length: 3 }, () => 0).map((v, i) => {
-      return <PositionGrid id={i % 4} key={i} />;
+    return userData.position.map((v, i) => {
+      return (
+        <PositionGrid
+          position={v.position}
+          like={v.likeCount}
+          key={`${ID}+${i}`}
+        />
+      );
     });
   };
 
