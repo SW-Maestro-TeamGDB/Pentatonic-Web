@@ -199,7 +199,14 @@ const RecordEdit = (props) => {
 
   const onClickStart = (e) => {
     if (inst) inst.play();
-    if (recordSound) recordSound.play();
+    if (recordSound) {
+      const tempTime = inst.currentTime - sync * 0.001;
+
+      recordSound.play(
+        tempTime < 0 ? -tempTime : 0,
+        tempTime >= 0 ? tempTime : 0,
+      );
+    }
     setAudioState(1);
   };
 
@@ -218,7 +225,13 @@ const RecordEdit = (props) => {
     }
     if (recordSound) {
       recordSound.stop();
-      recordSound.play(0, e.target.currentTime + sync * 0.05);
+
+      const tempTime = inst.currentTime - sync * 0.001;
+
+      recordSound.play(
+        tempTime < 0 ? -tempTime : 0,
+        tempTime >= 0 ? tempTime : 0,
+      );
 
       if (audioState !== 1) {
         recordSound.pause();
@@ -288,19 +301,28 @@ const RecordEdit = (props) => {
     }
   }, [volume]);
 
-  useEffect(() => {
-    if (recordSound && reverbEffect) {
-      // recordSound.addEffect(reverbEffect);
-      // console.log(reverbEffect);
+  const changeSync = (sync) => {
+    if (recordSound) {
+      recordSound.stop();
+      const tempTime = inst.currentTime - sync * 0.001;
+
+      recordSound.play(
+        tempTime < 0 ? -tempTime : 0,
+        tempTime >= 0 ? tempTime : 0,
+      );
+
+      if (audioState !== 1) {
+        recordSound.pause();
+      }
     }
-  }, [reverbEffect]);
+  };
 
   const addReverbEffect = (value) => {
     if (recordSound && reverbEffect) {
       recordSound.removeEffect(reverbEffect);
       const tempReverb = new Pizzicato.Effects.Reverb({
-        time: value / 50,
-        decay: value / 50,
+        time: value / 30,
+        decay: value / 30,
         reverse: false,
         mix: 0.5,
       });
@@ -349,9 +371,10 @@ const RecordEdit = (props) => {
             setValue={setSync}
             title="싱크 조절"
             desc={`${sync}ms`}
-            max={200}
+            max={500}
             min={-500}
-            unit={5}
+            unit={50}
+            onAfterChange={() => changeSync(sync)}
           />
           <RecordEditSlider
             value={reverb}
