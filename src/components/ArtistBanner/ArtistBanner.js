@@ -1,6 +1,5 @@
-import react from 'react';
 import styled from 'styled-components';
-import { Carousel, Card } from 'antd';
+import { Carousel } from 'antd';
 import { Default } from '../../lib/Media';
 import { Link } from 'react-router-dom';
 import ArtistBannerContents from '../ArtistBannerContents/ArtistBannerContents';

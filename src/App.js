@@ -5,7 +5,6 @@ import { client } from './apollo/client';
 import ScrollToTop from './lib/ScrollToTop';
 import styled from 'styled-components';
 import Header from './components/Header';
-import Menu from './components/Menu';
 import LoungeHome from './pages/LoungeHome';
 import Register from './pages/Register';
 import Artist from './pages/Artist';

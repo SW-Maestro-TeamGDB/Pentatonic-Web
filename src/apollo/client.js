@@ -1,7 +1,7 @@
-import { ApolloClient, createHttpLink } from '@apollo/client';
+import { ApolloClient } from '@apollo/client';
 import { createUploadLink } from 'apollo-upload-client';
 import { setContext } from '@apollo/client/link/context';
-import { currentUserVar, cache } from './cache';
+import { cache } from './cache';
 import dotenv from 'dotenv';
 dotenv.config();
 
