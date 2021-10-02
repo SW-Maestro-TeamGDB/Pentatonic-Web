@@ -1,4 +1,4 @@
-import react, { useState, useEffect, useCallback } from 'react';
+import react, { useState, useEffect, useRef } from 'react';
 import styled from 'styled-components';
 import { useQuery, gql, useLazyQuery, useMutation } from '@apollo/client';
 import GridContainer from '../../components/GridContainer/GridContainer';
@@ -71,7 +71,6 @@ const RecordEdit = (props) => {
   const [modalLoading, setModalLoading] = useState(true);
 
   const [audioState, setAudioState] = useState(0); // 0: 정지 , 1:재생, 2:일시정지
-
   const [reverbEffect, setReverbEffect] = useState();
 
   // slider value
@@ -80,9 +79,10 @@ const RecordEdit = (props) => {
   const [reverb, setReverb] = useState(0);
   const [gain, setGain] = useState(0);
 
+  // 녹음 사운드
   const [recordSound, setRecordSound] = useState();
-
-  // inst.volume = 0;
+  // 언마운트를 위한 녹음 사운드 ref
+  const recordSoundRef = useRef();
 
   const [uploadCoverFile, uploadCoverFileResult] = useMutation(
     UPLOAD_COVER_FILE,
@@ -242,7 +242,6 @@ const RecordEdit = (props) => {
     });
   };
 
-  // 언마운트시 반주 정지
   useEffect(() => {
     const temp = new Pizzicato.Sound(audioFile?.url);
     setRecordSound(temp);
@@ -255,15 +254,15 @@ const RecordEdit = (props) => {
     });
     setReverbEffect(tempReverb);
 
+    // 언마운트시 반주 및 녹음파일 정지
     return () => {
       if (inst) {
         inst.pause();
         inst.currentTime = 0;
       }
 
-      // useRef로 recordSound 표시
-      if (recordSound) {
-        recordSound.stop();
+      if (recordSoundRef) {
+        recordSoundRef.current.stop();
       }
     };
   }, []);
@@ -279,6 +278,7 @@ const RecordEdit = (props) => {
       });
       setReverbEffect(tempReverb);
       recordSound.addEffect(tempReverb);
+      recordSoundRef.current = recordSound;
     }
   }, [recordSound]);
 
