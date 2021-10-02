@@ -21,15 +21,11 @@ const RecordEditSlider = (props) => {
   };
 
   const onClickPlus = () => {
-    if (value + 1 <= max) {
-      setValue((value) => value + unit);
-    }
+    setValue((value) => (value + unit <= max ? value + unit : max));
   };
 
   const onClickMinus = () => {
-    if (value - 1 >= min) {
-      setValue((value) => value - unit);
-    }
+    setValue((value) => (value - unit >= min ? value - unit : 0));
   };
 
   return (
