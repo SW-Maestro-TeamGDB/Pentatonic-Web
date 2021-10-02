@@ -5,6 +5,7 @@ import GridContainer from '../../components/GridContainer/GridContainer';
 import UploadCompleteModal from '../../components/UploadCompleteModal';
 import AudioPlayer, { RHAP_UI } from 'react-h5-audio-player';
 import RecordEditSlider from '../../components/RecordEditSlider';
+import Pizzicato from 'pizzicato';
 
 import PlayIcon from '../../images/PlayIcon.svg';
 import StopIcon from '../../images/StopIcon.svg';
@@ -69,11 +70,19 @@ const RecordEdit = (props) => {
   const [coverId, setCoverId] = useState();
   const [modalLoading, setModalLoading] = useState(true);
 
+  const [audioState, setAudioState] = useState(0); // 0: 정지 , 1:재생, 2:일시정지
+
+  const [reverbEffect, setReverbEffect] = useState();
+
   // slider value
   const [volume, setVolume] = useState(50);
-  const [sync, setSync] = useState(-20);
+  const [sync, setSync] = useState(0);
   const [reverb, setReverb] = useState(0);
   const [gain, setGain] = useState(0);
+
+  const [recordSound, setRecordSound] = useState();
+
+  // inst.volume = 0;
 
   const [uploadCoverFile, uploadCoverFileResult] = useMutation(
     UPLOAD_COVER_FILE,
@@ -188,92 +197,40 @@ const RecordEdit = (props) => {
     },
   });
 
-  const audio = new Audio(audioFile);
-  const audioContext = new AudioContext();
-  const audioSource = audioContext.createMediaElementSource(audio);
-  const gainNode = audioContext.createGain();
-  gainNode.gain.value = 0.5;
-  const gainConnected = audioSource.connect(gainNode);
-  gainConnected.connect(audioContext.destination);
-
-  // 리버브
-  const mix = 0.5;
-  const [time, setTime] = useState(0.001);
-  const [decay, setDecay] = useState(0.001);
-
-  const generateImpulseResponse = () => {
-    const sampleRate = audioContext.sampleRate;
-    const length = sampleRate * time;
-    const impulse = audioContext.createBuffer(2, length, sampleRate);
-
-    const leftImpulse = impulse.getChannelData(0);
-    const rightImpulse = impulse.getChannelData(1);
-
-    for (let i = 0; i < length; i++) {
-      leftImpulse[i] =
-        (Math.random() * 2 - 1) * Math.pow(1 - i / length, decay);
-      rightImpulse[i] =
-        (Math.random() * 2 - 1) * Math.pow(1 - i / length, decay);
-    }
-
-    return impulse;
-  };
-
-  const inputNode = audioContext.createGain();
-  const wetGainNode = audioContext.createGain();
-  const dryGainNode = audioContext.createGain();
-  const reverbNode = audioContext.createConvolver();
-  const outputNode = audioContext.createGain();
-
-  audioSource.connect(inputNode);
-
-  // Dry 소스 노드 연결
-  inputNode.connect(dryGainNode);
-  dryGainNode.connect(outputNode);
-  dryGainNode.gain.value = 1 - mix;
-
-  // IR을 생성하여 Convolver의 오디오 버퍼에 입력해준다.
-  reverbNode.buffer = generateImpulseResponse();
-
-  // Wet 소스 노드 연결
-  inputNode.connect(reverbNode);
-  reverbNode.connect(wetGainNode);
-  wetGainNode.connect(outputNode);
-  wetGainNode.gain.vaule = mix;
-
-  outputNode.connect(audioContext.destination);
-  //리버브 끝
-
-  const volumeUp = () => {
-    if (gainNode.gain.value > 2) {
-      gainNode.gain.value = 2;
-    } else {
-      gainNode.gain.value += 0.2;
-    }
-  };
-
-  const volumeDown = () => {
-    if (gainNode.gain.value < 0) {
-      gainNode.gain.value = 0;
-    } else {
-      gainNode.gain.value -= 0.2;
-    }
-  };
-
   const onClickStart = (e) => {
     if (inst) inst.play();
+    if (recordSound) recordSound.play();
+    setAudioState(1);
   };
 
   const onClickPause = () => {
     if (inst) inst.pause();
+    if (recordSound) recordSound.pause();
+    setAudioState(2);
   };
 
   const onClickSeeked = (e) => {
-    if (inst) inst.currentTime = e.target.currentTime;
+    if (inst) {
+      inst.currentTime = e.target.currentTime;
+      if (audioState === 1) {
+        inst.play();
+      }
+    }
+    if (recordSound) {
+      recordSound.stop();
+      recordSound.play(0, e.target.currentTime + sync * 0.05);
+
+      if (audioState !== 1) {
+        recordSound.pause();
+      }
+    }
   };
 
-  const onClickSeeking = () => {
+  const onClickSeeking = (e) => {
     if (inst) inst.pause();
+    if (recordSound) {
+      recordSound.stop();
+    }
   };
 
   const submitRecord = () => {
@@ -287,13 +244,70 @@ const RecordEdit = (props) => {
 
   // 언마운트시 반주 정지
   useEffect(() => {
+    const temp = new Pizzicato.Sound(audioFile?.url);
+    setRecordSound(temp);
+
+    const tempReverb = new Pizzicato.Effects.Reverb({
+      time: 0.1,
+      decay: 0.1,
+      reverse: false,
+      mix: 0.5,
+    });
+    setReverbEffect(tempReverb);
+
     return () => {
       if (inst) {
         inst.pause();
         inst.currentTime = 0;
       }
+
+      // useRef로 recordSound 표시
+      if (recordSound) {
+        recordSound.stop();
+      }
     };
   }, []);
+
+  useEffect(() => {
+    if (recordSound) {
+      recordSound.volume = volume * 0.01;
+      const tempReverb = new Pizzicato.Effects.Reverb({
+        time: 0.01,
+        decay: 0.01,
+        reverse: false,
+        mix: 0.5,
+      });
+      setReverbEffect(tempReverb);
+      recordSound.addEffect(tempReverb);
+    }
+  }, [recordSound]);
+
+  useEffect(() => {
+    if (recordSound) {
+      recordSound.volume = volume * 0.01;
+    }
+  }, [volume]);
+
+  useEffect(() => {
+    if (recordSound && reverbEffect) {
+      // recordSound.addEffect(reverbEffect);
+      // console.log(reverbEffect);
+    }
+  }, [reverbEffect]);
+
+  const addReverbEffect = (value) => {
+    if (recordSound && reverbEffect) {
+      recordSound.removeEffect(reverbEffect);
+      const tempReverb = new Pizzicato.Effects.Reverb({
+        time: value / 50,
+        decay: value / 50,
+        reverse: false,
+        mix: 0.5,
+      });
+      setReverbEffect(tempReverb);
+      recordSound.addEffect(tempReverb);
+    }
+  };
 
   return (
     <Container>
@@ -305,6 +319,9 @@ const RecordEdit = (props) => {
           onSeeked={(e) => {
             onClickSeeked(e);
           }}
+          onSeeking={(e) => {
+            onClickSeeking(e);
+          }}
           customAdditionalControls={[]}
           customVolumeControls={[]}
           autoPlay={false}
@@ -314,6 +331,7 @@ const RecordEdit = (props) => {
             <span className="dash">-</span>,
             RHAP_UI.CURRENT_LEFT_TIME,
           ]}
+          volume={0}
         />
       </AudioPlayerContainer>
       <EditConatiner>
@@ -339,17 +357,20 @@ const RecordEdit = (props) => {
             value={reverb}
             setValue={setReverb}
             title="리버브"
-            desc={`${reverb}%`}
+            desc={`${reverb}db`}
             max={100}
             min={0}
+            unit={5}
+            onAfterChange={() => addReverbEffect(reverb)}
           />
           <RecordEditSlider
             value={gain}
             setValue={setGain}
             title="게인"
-            desc={`${gain}%`}
+            desc={`${gain}db`}
             max={100}
             min={0}
+            unit={5}
           />
         </GridContainer>
       </EditConatiner>

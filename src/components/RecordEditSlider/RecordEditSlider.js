@@ -5,7 +5,16 @@ import { PlusOutlined, MinusOutlined } from '@ant-design/icons';
 import { Slider } from 'antd';
 
 const RecordEditSlider = (props) => {
-  const { value, setValue, title, desc, max, min, unit = 1 } = props;
+  const {
+    value,
+    setValue,
+    title,
+    desc,
+    max,
+    min,
+    onAfterChange,
+    unit = 1,
+  } = props;
 
   const onChangeValue = (value) => {
     setValue(value);
@@ -38,6 +47,7 @@ const RecordEditSlider = (props) => {
             max={max}
             min={min}
             tipFormatter={(value) => `${desc}`}
+            onAfterChange={onAfterChange}
           />
           <SliderPlusIcon onClick={onClickPlus} />
         </SliderWrapper>
