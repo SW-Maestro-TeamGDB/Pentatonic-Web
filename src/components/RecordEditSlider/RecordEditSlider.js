@@ -22,10 +22,12 @@ const RecordEditSlider = (props) => {
 
   const onClickPlus = () => {
     setValue((value) => (value + unit <= max ? value + unit : max));
+    onAfterChange(value);
   };
 
   const onClickMinus = () => {
     setValue((value) => (value - unit >= min ? value - unit : 0));
+    onAfterChange(value);
   };
 
   return (
