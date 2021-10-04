@@ -37,10 +37,6 @@ const Register = ({ history }) => {
     setUserInform(userInit);
   };
 
-  useEffect(() => {
-    console.log(userInform);
-  }, userInform);
-
   const pages = [
     {
       description: '펜타토닉 이용약관 동의',

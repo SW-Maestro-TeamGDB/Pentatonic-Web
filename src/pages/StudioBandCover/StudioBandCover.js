@@ -54,7 +54,6 @@ const StudioBandCover = () => {
         .filter((v) => difficulty === v.level || difficulty === '전체')
         .filter((v) => genre === v.genre || genre === '전체')
         .map((v) => {
-          console.log(v);
           return (
             <SongList
               link={`/studio/band/${v.songId}`}

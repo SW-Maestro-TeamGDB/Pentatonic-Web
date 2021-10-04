@@ -242,10 +242,6 @@ const Profile = ({ match }) => {
   }, [userData]);
 
   useEffect(() => {
-    console.log(editUserData);
-  }, [editUserData]);
-
-  useEffect(() => {
     setNameError();
   }, [editUserData.username]);
 
