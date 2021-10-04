@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { media } from '../../lib/Media';
 import SearchIcon from '../../images/SearchIcon.svg';
 import { changeSessionNameToKorean } from '../../lib/changeSessionNameToKorean';
+import { sessionIconMatch } from '../../lib/sessionIconMatch';
 
 const InstButton = (props) => {
   const {
@@ -13,6 +14,7 @@ const InstButton = (props) => {
     selected,
     selectInstURI,
     setSelectInstURI,
+    icon,
   } = props;
 
   const onClickSessionItem = () => {
@@ -31,8 +33,14 @@ const InstButton = (props) => {
         onClickSessionItem();
       }}
       selected={selected}
+      icon={icon}
     >
-      {changeSessionNameToKorean(session)}
+      {icon ? (
+        <SessionIcon src={sessionIconMatch(session)} selected={selected} />
+      ) : null}
+      <SessionText selected={selected} icon={icon}>
+        {changeSessionNameToKorean(session)}
+      </SessionText>
     </InstButtonContainer>
   );
 };
@@ -40,24 +48,37 @@ const InstButton = (props) => {
 const InstButtonContainer = styled.div`
   display: flex;
   width: 100%;
-  font-size: 1.2rem;
-  font-weight: 700;
-  padding: 0.5rem 0;
+
+  padding: ${(props) => (props.icon ? '0.7rem 0' : '0.5rem 0')};
   border-radius: 0.5rem;
   align-items: center;
+  justify-content: center;
   box-sizing: border-box;
   cursor: pointer;
   transition: all 0.3s ease-in-out;
-  justify-content: center;
-  color: ${(props) => (props.selected ? 'white' : 'gray')};
+
   background-color: ${(props) =>
-    props.selected ? 'rgba(98, 54, 255, 0.7)' : 'white'};
+    props.selected ? 'rgba(98, 54, 255, 0.65)' : 'white'};
   transition: all 0.3s ease-in-out;
 
   &:hover {
     background-color: ${(props) =>
-      props.selected ? 'rgba(98, 54, 255, 0.7)' : 'rgba(98, 54, 255, 0.12)'};
+      props.selected ? 'rgba(98, 54, 255, 0.65)' : 'rgba(98, 54, 255, 0.12)'};
   }
+`;
+
+const SessionText = styled.div`
+  font-size: 1.2rem;
+  font-weight: 700;
+  margin-left: ${(props) => (props.icon ? '1rem' : null)};
+  color: ${(props) => (props.selected ? 'white' : 'gray')};
+`;
+
+const SessionIcon = styled.img`
+  width: 2rem;
+
+  opacity: ${(props) => (props.selected ? '1' : '0.5')};
+  filter: ${(props) => (props.selected ? 'invert(100%)' : null)};
 `;
 
 export default InstButton;

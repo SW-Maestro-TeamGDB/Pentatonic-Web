@@ -11,6 +11,7 @@ import { useHistory } from 'react-router-dom';
 import { Drawer, notification } from 'antd';
 import NotFoundPage from '../NotFoundPage';
 import AuthModal from '../../components/AuthModal';
+import InstSelect from '../../components/InstSelect';
 import AudioPlayer, { RHAP_UI } from 'react-h5-audio-player';
 import {
   LoadingOutlined,
@@ -27,14 +28,6 @@ import {
   IS_LOGGED_IN,
   GET_CURRENT_USER,
 } from '../../apollo/cache';
-
-import TameImpala from '../../images/TempData//TameImpala.jpeg';
-import Hyukoh from '../../images/TempData//Hyukoh.jpeg';
-import Beatles from '../../images/TempData//Beatles.jpeg';
-import MenITrust from '../../images/TempData//MenITrust.jpeg';
-import NoSurprises from '../../images/TempData//NoSurprises.jpeg';
-import TheVolunteers from '../../images/TempData//TheVolunteers.jpeg';
-import FixYou from '../../images/TempData/FixYou.png';
 
 import ThumbIcon from '../../images/ThumbIcon.svg';
 import ViewIcon from '../../images/ViewIcon.svg';
@@ -173,6 +166,7 @@ const CoverRoom = ({ match }) => {
   const bandId = match.params.id;
   const history = useHistory();
   const [session, setSession] = useState([]);
+  const [selectInst, setSelectInst] = useState([]);
   const [audio, setAudio] = useState(null);
   const [coverData, setCoverData] = useState();
   const [mode, setMode] = useState(0); // 0: select , 1: audio
@@ -194,7 +188,8 @@ const CoverRoom = ({ match }) => {
   };
 
   const onClickToSelect = () => {
-    if (!coverData.isSoloBand) setSession([]);
+    setSession([]);
+    setSelectInst([]);
     setMode(0);
   };
 
@@ -251,6 +246,7 @@ const CoverRoom = ({ match }) => {
   });
 
   const [mergeAudios, mergeAudiosResult] = useMutation(MERGE_AUDIOS, {
+    fetchPolicy: 'no-cache',
     onCompleted: (data) => {
       setAudio(data.mergeAudios);
     },
@@ -364,14 +360,16 @@ const CoverRoom = ({ match }) => {
   };
 
   const onClickSubmit = () => {
-    if (session.length === 0) {
+    if (session.length === 0 && !coverData.isSoloBand) {
       setSessionModal(true);
     } else {
       setMode(1);
       mergeAudios({
         variables: {
           mergeAudiosInput: {
-            audios: session,
+            audios: coverData.isSoloBand
+              ? [...session, coverData.session[0].cover[0].coverURI]
+              : session,
           },
         },
       });
@@ -419,12 +417,6 @@ const CoverRoom = ({ match }) => {
       duration: 3,
     });
   };
-
-  useEffect(() => {
-    if (coverData && coverData.isSoloBand) {
-      setSession([coverData.session[0].cover[0].coverURI]);
-    }
-  }, [coverData]);
 
   return (
     <PageContainer>
@@ -504,6 +496,25 @@ const CoverRoom = ({ match }) => {
             <SessionContainer>
               <GridContainer>
                 <CoverBy data={coverData.session[0]} width="20rem" />
+                <CoverRoomSessionContainer>
+                  <Header>
+                    <BoardTitle>
+                      <SessionTitle>제공 반주</SessionTitle>
+                    </BoardTitle>
+                  </Header>
+                  <InstContainer>
+                    <InstSelect
+                      sessionData={coverData.song.instrument.filter(
+                        (v) => v.position !== coverData.session[0].position,
+                      )}
+                      setSelectInst={setSelectInst}
+                      selectInst={selectInst}
+                      selectInstURI={session}
+                      setSelectInstURI={setSession}
+                      icon
+                    />
+                  </InstContainer>
+                </CoverRoomSessionContainer>
               </GridContainer>
             </SessionContainer>
           ) : (
@@ -598,6 +609,43 @@ const SessionContainer = styled.div`
   padding-bottom: 3rem;
   border-bottom: 1px solid #eee;
 `;
+
+const CoverRoomSessionContainer = styled.div`
+  width: 100%;
+  position: relative;
+`;
+
+const Header = styled.div`
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 10px;
+  width: 90%;
+`;
+
+const SessionTitle = styled.div`
+  font-size: 24px;
+  color: black;
+  flex-direction: row;
+  letter-spacing: -2px;
+
+  font-weight: 900;
+  padding-left: 5px;
+`;
+
+const BoardTitle = styled.div`
+  font-size: 20px;
+  font-weight: 600;
+  width: 100%;
+  color: black;
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+`;
+
+const InstContainer = styled.div``;
 
 const CustomLikeOutlinedIcon = styled(LikeOutlined)`
   color: #ffffff;

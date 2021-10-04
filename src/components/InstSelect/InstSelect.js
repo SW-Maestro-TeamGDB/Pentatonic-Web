@@ -10,6 +10,7 @@ const InstSelect = (props) => {
     selectInst,
     selectInstURI,
     setSelectInstURI,
+    icon = false,
   } = props;
 
   const showInst = useCallback(() => {
@@ -25,19 +26,24 @@ const InstSelect = (props) => {
             setSelectInstURI={setSelectInstURI}
             key={'selectInst' + i}
             selected={selectInst.indexOf(v.position) === -1 ? false : true}
+            icon={icon}
           />
         );
       });
   }, [selectInst, sessionData]);
 
-  return <InstConatiner>{showInst()}</InstConatiner>;
+  return <InstConatiner icon={icon}>{showInst()}</InstConatiner>;
 };
 
 const InstConatiner = styled.div`
   width: 100%;
   height: auto;
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+
+  grid-template-columns: repeat(
+    auto-fill,
+    minmax(${(props) => (props.icon ? '130px' : '120px')}, 1fr)
+  );
   margin-top: 2.5rem;
   grid-column-gap: 1rem;
   grid-row-gap: 1rem;
