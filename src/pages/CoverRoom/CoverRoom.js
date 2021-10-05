@@ -425,6 +425,10 @@ const CoverRoom = ({ match }) => {
         <>
           <CoverBannerContainer mode={mode}>
             <CoverBackground url={coverData.backGroundURI} />
+            <SongData mode={mode}>
+              <SongArtist>{coverData.song.artist}</SongArtist>
+              <SongName>{coverData.song.name}</SongName>
+            </SongData>
             {coverData &&
             data?.user &&
             coverData.creator.id === data.user.id ? (
@@ -615,6 +619,62 @@ const SessionContainer = styled.div`
   border-bottom: 1px solid #eee;
 `;
 
+const SongArtist = styled.div`
+  width: 125px; // 250/2 px
+  height: 100%;
+  color: white;
+  position: relative;
+
+  background-color: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+`;
+
+const SongName = styled.div`
+  width: 125px; // 250/2 px
+  height: 100%;
+  color: black;
+  position: relative;
+
+  background-color: rgba(255, 255, 255, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+`;
+
+const SongData = styled.div`
+  position: absolute;
+  top: 40px;
+  right: 3%;
+  width: 250px;
+  height: 35px;
+  color: black;
+  border-radius: 12px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  overflow: hidden;
+
+  font-size: 16px;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+
+  visibility: ${(props) => (props.mode === 0 ? 'visible' : 'hidden')};
+  filter: ${(props) => (props.mode === 0 ? 'opacity(100%)' : 'opacity(0%)')};
+  transition: filter 0.5s ease-in-out;
+`;
+
 const CoverRoomSessionContainer = styled.div`
   width: 100%;
   position: relative;
@@ -679,8 +739,6 @@ const LikeButton = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-
-  transition: background-color 0.3s ease-in-out;
 
   &:hover {
     background-color: rgba(255, 255, 255, 0.3);

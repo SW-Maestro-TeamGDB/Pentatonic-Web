@@ -4,7 +4,6 @@ import { gql, useQuery } from '@apollo/client';
 import { IS_LOGGED_IN } from '../../apollo/cache';
 import styled from 'styled-components';
 import { Default } from '../../lib/Media';
-import GridContainer from '../GridContainer/GridContainer';
 import CoverRoomSessionItem from '../CoverRoomSessionItem';
 import LibraryDrawer from '../LibraryDrawer/LibraryDrawer';
 
