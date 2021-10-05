@@ -28,6 +28,7 @@ const QUERY_BANDS = gql`
           position
         }
         likeCount
+        viewCount
         bandId
       }
     }
@@ -63,8 +64,6 @@ const LoungeBandCovers = () => {
       queryBandsFirst: 10,
     },
   });
-
-  console.log(data);
 
   return (
     <PageContainer>

@@ -63,11 +63,12 @@ const GET_BAND = gql`
       likeCount
       likeStatus
       introduce
-
+      viewCount
       name
       song {
         name
         songId
+        artist
         instrument {
           instURI
           position
@@ -440,14 +441,14 @@ const CoverRoom = ({ match }) => {
               <CoverTitle>{coverData.name}</CoverTitle>
               <CoverDesc>{coverData.introduce}</CoverDesc>
               <CoverMetaContainer>
-                <LikeCount>
-                  <CustomIcon src={ViewIcon} />{' '}
-                  {parseInt(Math.random() * 300 + 200)}
-                </LikeCount>
-                <SpacingSpan />
                 <ViewCount>
                   <CustomIcon src={ThumbIcon} /> {coverData.likeCount}
                 </ViewCount>
+                <SpacingSpan />
+                <LikeCount>
+                  <CustomIcon src={ViewIcon} />
+                  {coverData.viewCount}
+                </LikeCount>
                 <SpacingSpan />
               </CoverMetaContainer>
             </BannerContents>
@@ -503,16 +504,20 @@ const CoverRoom = ({ match }) => {
                     </BoardTitle>
                   </Header>
                   <InstContainer>
-                    <InstSelect
-                      sessionData={coverData.song.instrument.filter(
-                        (v) => v.position !== coverData.session[0].position,
-                      )}
-                      setSelectInst={setSelectInst}
-                      selectInst={selectInst}
-                      selectInstURI={session}
-                      setSelectInstURI={setSession}
-                      icon
-                    />
+                    {coverData.isFreeBand ? (
+                      <NoInst>자유곡 커버는 반주가 제공되지 않습니다</NoInst>
+                    ) : (
+                      <InstSelect
+                        sessionData={coverData.song.instrument.filter(
+                          (v) => v.position !== coverData.session[0].position,
+                        )}
+                        setSelectInst={setSelectInst}
+                        selectInst={selectInst}
+                        selectInstURI={session}
+                        setSelectInstURI={setSession}
+                        icon
+                      />
+                    )}
                   </InstContainer>
                 </CoverRoomSessionContainer>
               </GridContainer>
@@ -999,6 +1004,18 @@ const LoadingIconContainer = styled.div`
 const CustomLoadingIcon = styled(LoadingOutlined)`
   font-size: 16rem;
   color: #fff;
+`;
+
+const NoInst = styled.div`
+  font-size: 1.2rem;
+  color: #9b94b3;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  height: 10rem;
+  letter-spacing: -0.5px;
+  font-weight: 800;
 `;
 
 export default CoverRoom;

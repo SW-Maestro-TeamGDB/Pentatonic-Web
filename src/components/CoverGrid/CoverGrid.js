@@ -60,7 +60,7 @@ const CoverGrid = (props) => {
                   </LikeCount>
                   <SpacingSpan />
                   <ViewCount>
-                    <CustomIcon src={ViewIcon} /> {0}
+                    <CustomIcon src={ViewIcon} /> {data.viewCount}
                   </ViewCount>
                   <SpacingSpan />
                 </CountContainer>
@@ -224,6 +224,7 @@ const ViewCount = styled.span`
   display: flex;
   flex-direction: row;
   align-items: center;
+  line-height: 1;
 `;
 
 const SpacingSpan = styled.span`

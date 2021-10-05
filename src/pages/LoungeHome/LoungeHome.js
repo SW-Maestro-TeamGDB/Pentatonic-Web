@@ -21,6 +21,7 @@ const GET_TREND_BANDS = gql`
         position
       }
       likeCount
+      viewCount
       bandId
       isSoloBand
       isFreeBand

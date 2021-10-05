@@ -27,6 +27,7 @@ const QUERY_BAND = gql`
         isSoloBand
         isFreeBand
         likeCount
+        viewCount
         bandId
         session {
           position
