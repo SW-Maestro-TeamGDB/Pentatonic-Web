@@ -512,9 +512,7 @@ const CoverRoom = ({ match }) => {
                       <NoInst>자유곡 커버는 반주가 제공되지 않습니다</NoInst>
                     ) : (
                       <InstSelect
-                        sessionData={coverData.song.instrument.filter(
-                          (v) => v.position !== coverData.session[0].position,
-                        )}
+                        sessionData={coverData.song.instrument}
                         setSelectInst={setSelectInst}
                         selectInst={selectInst}
                         selectInstURI={session}
