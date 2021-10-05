@@ -26,9 +26,14 @@ const GET_USER_INFO = gql`
       followingCount
       followingStatus
       band {
+        song {
+          name
+          artist
+        }
         name
         backGroundURI
         likeCount
+        viewCount
         bandId
       }
       position {
