@@ -17,6 +17,7 @@ const QUERY_SONG = gql`
       name
       artist
       songImg
+      songId
       band {
         bandId
         name
@@ -82,7 +83,7 @@ const WeeklyChallenge = () => {
       <SearchBar placeholder="커버 제목, 아티스트, 곡을 입력해주세요" />
       <SubContainer>
         <MakingCoverButton
-          link={`/studio/band/weekly/cover`}
+          link={songData ? `/studio/band/${songData.songId}/cover` : ``}
           title="새로운 커버 만들기"
         />
       </SubContainer>

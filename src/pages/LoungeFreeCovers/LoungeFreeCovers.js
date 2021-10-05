@@ -77,7 +77,10 @@ const LoungeBandCovers = () => {
       <SearchBar placeholder="커버 제목, 아티스트, 곡을 입력해주세요" />
       <SubContainer>
         <GenreButton genre={genre} setGenre={setGenre} />
-        <MakingCoverButton link={`/studio/band`} title="새로운 커버 만들기" />
+        <MakingCoverButton
+          link={`/studio/band/free/cover`}
+          title="새로운 커버 만들기"
+        />
       </SubContainer>
       {loadFreeCover()}
     </PageContainer>

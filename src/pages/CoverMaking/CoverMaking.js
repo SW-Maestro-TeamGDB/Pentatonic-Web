@@ -64,6 +64,7 @@ const CoverMaking = ({ match }) => {
   }, [data]);
 
   const [getSong] = useLazyQuery(GET_SONG, {
+    fetchPolicy: 'network-only',
     variables: {
       getSongSongId: songId,
     },
