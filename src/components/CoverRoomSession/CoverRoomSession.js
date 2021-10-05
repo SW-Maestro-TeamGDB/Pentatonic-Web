@@ -147,7 +147,7 @@ const Header = styled.div`
 `;
 
 const SessionTitle = styled.div`
-  font-size: 24px;
+  font-size: 20px;
   color: black;
   display: flex;
   align-items: center;

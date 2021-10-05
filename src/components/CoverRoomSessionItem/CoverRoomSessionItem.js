@@ -122,8 +122,8 @@ const CoverRoomSessionItem = (props) => {
 
 const ImgContainer = styled.div`
   overflow: hidden;
-  width: 4rem;
-  height: 4rem;
+  width: 4.5rem;
+  height: 4.5rem;
   border-radius: 100%;
 `;
 
@@ -160,7 +160,7 @@ const LeaveButton = styled.div`
 `;
 
 const SessionId = styled.div`
-  max-width: 7rem;
+  max-width: 8rem;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -207,7 +207,7 @@ const CreatorIcon = styled.div`
 const SessionContentsContainer = styled.div`
   display: flex;
   width: 100px;
-  padding: 0.5rem 0;
+  padding: 0.8rem 0;
   border-radius: 0.5rem;
   align-items: center;
   box-sizing: border-box;
