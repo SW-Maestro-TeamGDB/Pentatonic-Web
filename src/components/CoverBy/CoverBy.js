@@ -20,6 +20,7 @@ const GET_USER_INFO = gql`
       position {
         position
         likeCount
+        viewCount
       }
     }
   }

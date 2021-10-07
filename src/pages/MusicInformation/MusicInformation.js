@@ -33,6 +33,7 @@ const GET_SONG = gql`
           position
         }
         likeCount
+        viewCount
       }
     }
   }

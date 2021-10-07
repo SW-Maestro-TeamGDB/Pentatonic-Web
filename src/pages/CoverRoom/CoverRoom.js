@@ -132,6 +132,7 @@ const GET_LIKE = gql`
   query Query($getBandBandId: ObjectID!) {
     getBand(bandId: $getBandBandId) {
       likeCount
+      viewCount
       likeStatus
     }
   }

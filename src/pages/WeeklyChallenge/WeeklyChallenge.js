@@ -23,6 +23,7 @@ const QUERY_SONG = gql`
         name
         backGroundURI
         likeCount
+        viewCount
         session {
           position
         }
