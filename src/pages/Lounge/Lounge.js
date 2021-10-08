@@ -13,9 +13,29 @@ const Lounge = ({ match }) => {
   return (
     <Switch>
       <Route exact path={match.path} component={LoungeHome} />
+      <Route
+        path={`${match.path}/weekly/search/:content`}
+        component={WeeklyChallenge}
+        exact
+      />
       <Route path={`${match.path}/weekly`} component={WeeklyChallenge} />
+      <Route
+        path={`${match.path}/band/search/:content`}
+        component={LoungeBandCovers}
+        exact
+      />
       <Route path={`${match.path}/band`} component={LoungeBandCovers} />
+      <Route
+        path={`${match.path}/solo/search/:content`}
+        component={LoungeSoloCovers}
+        exact
+      />
       <Route path={`${match.path}/solo`} component={LoungeSoloCovers} />
+      <Route
+        path={`${match.path}/free/search/:content`}
+        component={LoungeFreeCovers}
+        exact
+      />
       <Route path={`${match.path}/free`} component={LoungeFreeCovers} />
       <Route path={`${match.path}/cover/:id`} component={CoverRoom} exact />
       <Route path="*" component={NotFoundPage} exact />

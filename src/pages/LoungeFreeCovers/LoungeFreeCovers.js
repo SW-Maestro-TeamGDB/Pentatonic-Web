@@ -35,9 +35,9 @@ const QUERY_BANDS = gql`
   }
 `;
 
-const LoungeBandCovers = () => {
+const LoungeBandCovers = ({ match }) => {
   const [genre, setGenre] = useState('전체');
-
+  const content = match.params?.content;
   const loadFreeCover = () => {
     if (data) {
       const filtered = data.queryBands.bands.filter((v) => v.isFreeBand);
@@ -60,6 +60,7 @@ const LoungeBandCovers = () => {
     variables: {
       queryBandsFilter: {
         type: 'ALL',
+        content: content,
       },
       queryBandsFirst: 10,
     },
@@ -72,8 +73,20 @@ const LoungeBandCovers = () => {
         title="자유곡 커버"
         position="top"
       />
-      <PageDesc>유저들이 자유롭게 녹음한 커버를 감상하고 참여해보세요</PageDesc>
-      <SearchBar placeholder="커버 제목, 아티스트, 곡을 입력해주세요" />
+      <PageDesc>
+        {content ? (
+          <SearchResult>
+            <SearchContent>'{content}'</SearchContent>검색 결과입니다
+          </SearchResult>
+        ) : (
+          '유저들이 자유롭게 녹음한 커버를 감상하고 참여해보세요'
+        )}
+      </PageDesc>
+      <SearchBar
+        placeholder="커버 제목, 커버 소개를 입력해주세요"
+        sort="free"
+        searching={content}
+      />
       <SubContainer>
         <GenreButton genre={genre} setGenre={setGenre} />
         <MakingCoverButton
@@ -91,6 +104,23 @@ const PageDesc = styled.div`
   margin: 3rem 0;
   width: 80%;
   text-align: center;
+`;
+
+const SearchContent = styled.span`
+  color: #6236ff;
+  font-size: 24px;
+  font-weight: 800;
+  padding: 0 0.5rem;
+`;
+
+const SearchResult = styled.div`
+  font-size: 18px;
+  font-weight: 500;
+  letter-spacing: -1px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;
 
 const SubContainer = styled.div`

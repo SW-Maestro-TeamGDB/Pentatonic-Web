@@ -1,14 +1,36 @@
-import react from 'react';
+import react, { useState, useEffect } from 'react';
+import { useHistory } from 'react-router';
 import styled from 'styled-components';
 import { Default } from '../../lib/Media';
 import SearchIcon from '../../images/SearchIcon.svg';
 
 const SearchBar = (props) => {
-  const { placeholder } = props;
+  const { placeholder, afterRequest, sort, searching } = props;
+  const [inputText, setInputText] = useState();
+  const history = useHistory();
+
+  const handleSubmit = () => {
+    if (inputText) {
+      if (searching) history.push(`${inputText}`);
+      else history.push(`${sort}/search/${inputText}`);
+    }
+  };
+
+  const handleKeyPress = (event) => {
+    if (event.key === 'Enter' && inputText) {
+      event.preventDefault();
+      handleSubmit();
+    }
+  };
+
   return (
     <SearchBarContainer>
-      <CustomInput placeholder={placeholder ? placeholder : null} />
-      <CustomIcon src={SearchIcon} />
+      <CustomInput
+        placeholder={placeholder ? placeholder : null}
+        onChange={(v) => setInputText(v.target.value)}
+        onKeyPress={handleKeyPress}
+      />
+      <CustomIcon src={SearchIcon} onClick={handleSubmit} />
     </SearchBarContainer>
   );
 };

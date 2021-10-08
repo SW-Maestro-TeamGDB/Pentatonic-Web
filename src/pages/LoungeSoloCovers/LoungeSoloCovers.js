@@ -37,8 +37,10 @@ const QUERY_BAND = gql`
   }
 `;
 
-const LoungeSoloCovers = () => {
+const LoungeSoloCovers = ({ match }) => {
   const [genre, setGenre] = useState('전체');
+
+  const content = match.params?.content;
 
   const loadSoloCover = () => {
     if (data) {
@@ -64,10 +66,8 @@ const LoungeSoloCovers = () => {
     variables: {
       queryBandsFilter: {
         type: 'ALL',
+        content: content,
       },
-    },
-    onCompleted: (data) => {
-      console.log(data);
     },
   });
 
@@ -77,8 +77,20 @@ const LoungeSoloCovers = () => {
         imgUrl="https://images.unsplash.com/photo-1510915361894-db8b60106cb1?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1050&q=80"
         title="솔로 커버"
       />
-      <PageDesc>유저들의 솔로 커버를 감상해보세요</PageDesc>
-      <SearchBar placeholder="커버 제목, 아티스트, 곡을 입력해주세요" />
+      <PageDesc>
+        {content ? (
+          <SearchResult>
+            <SearchContent>'{content}'</SearchContent>검색 결과입니다
+          </SearchResult>
+        ) : (
+          '유저들의 솔로 커버를 감상 해보세요'
+        )}
+      </PageDesc>
+      <SearchBar
+        placeholder="커버 제목, 커버 소개를 입력해주세요"
+        sort="solo"
+        searching={content}
+      />
       <SubContainer>
         <GenreButton genre={genre} setGenre={setGenre} />
         <MakingCoverButton link={`/studio/solo`} title="새로운 커버 만들기" />
@@ -103,6 +115,23 @@ const SubContainer = styled.div`
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
+`;
+
+const SearchContent = styled.span`
+  color: #6236ff;
+  font-size: 24px;
+  font-weight: 800;
+  padding: 0 0.5rem;
+`;
+
+const SearchResult = styled.div`
+  font-size: 18px;
+  font-weight: 500;
+  letter-spacing: -1px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;
 
 const NoCover = styled.div`
