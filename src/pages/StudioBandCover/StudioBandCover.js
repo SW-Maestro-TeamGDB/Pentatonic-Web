@@ -32,15 +32,17 @@ const QUERY_SONG = gql`
   }
 `;
 
-const StudioBandCover = () => {
+const StudioBandCover = ({ match }) => {
   const [genre, setGenre] = useState('전체');
   const [difficulty, setDifficulty] = useState('전체');
   const [songData, setSongData] = useState();
+  const content = match.params?.content;
 
   const { data } = useQuery(QUERY_SONG, {
     variables: {
       querySongFilter: {
-        type: 'ALL',
+        type: 'NAME',
+        content: content,
       },
     },
     onCompleted: (data) => {
@@ -76,9 +78,19 @@ const StudioBandCover = () => {
     <PageContainer>
       <PageTitle>밴드 커버녹음</PageTitle>
       <PageDesc>
-        펜타토닉에서 제공하는 반주에 맞춰 밴드 음악을 녹음 해보세요
+        {content ? (
+          <SearchResult>
+            <SearchContent>'{content}'</SearchContent>검색 결과입니다
+          </SearchResult>
+        ) : (
+          ' 펜타토닉에서 제공하는 반주에 맞춰 밴드 음악을 녹음 해보세요'
+        )}
       </PageDesc>
-      <SearchBar placeholder="아티스트나 곡을 입력해주세요" />
+      <SearchBar
+        placeholder="아티스트나 곡을 입력해주세요"
+        sort="band"
+        searching={content}
+      />
       <SubContainer>
         <ButtonContainer>
           <GenreButton genre={genre} setGenre={setGenre} />
@@ -100,9 +112,26 @@ const StudioBandCover = () => {
 
 const PageDesc = styled.div`
   font-size: 1rem;
-  margin: 0.5em 0 3rem;
+  margin: 2rem 0 3rem;
   width: 80%;
   text-align: center;
+`;
+
+const SearchContent = styled.span`
+  color: #6236ff;
+  font-size: 24px;
+  font-weight: 800;
+  padding: 0 0.5rem;
+`;
+
+const SearchResult = styled.div`
+  font-size: 18px;
+  font-weight: 500;
+  letter-spacing: -1px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;
 
 const Spacing = styled.div`

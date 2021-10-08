@@ -13,7 +13,17 @@ const Studio = ({ match }) => {
   return (
     <Switch>
       <Route exact path={match.path} component={StudioHome} />
+      <Route
+        path={`${match.path}/band/search/:content`}
+        component={StudioBandCover}
+        exact
+      />
       <Route path={`${match.path}/band`} component={StudioBandCover} exact />
+      <Route
+        path={`${match.path}/solo/search/:content`}
+        component={StudioSoloCover}
+        exact
+      />
       <Route path={`${match.path}/solo`} component={StudioSoloCover} exact />
       <Route
         path={`${match.path}/band/:id`}
