@@ -50,7 +50,9 @@ const CoverForm = (props) => {
     initBandData,
     isFreeCover,
     isSolo,
+    setSongData,
   } = props;
+  const [songError, setSongError] = useState();
   const [informError, setInformError] = useState(null);
   const [sessionError, setSessionError] = useState(null);
   const [instError, setInstError] = useState();
@@ -109,6 +111,11 @@ const CoverForm = (props) => {
 
     if (!isFreeCover && selectInst.length === 0) {
       setInstError('녹음에 사용될 반주를 하나 이상 골라주세요');
+      check = false;
+    }
+
+    if (isFreeCover && (!songData.name || !songData.artist)) {
+      setSongError('곡 정보를 입력해주세요');
       check = false;
     }
 
@@ -228,8 +235,32 @@ const CoverForm = (props) => {
         </SongTitle>
       </SongMetaContainer>
       <FormContainer>
+        {isFreeCover ? (
+          <InputContainer>
+            <CustomTitle>자유곡 정보</CustomTitle>
+            <CustomDescription>
+              자유곡의 제목과 아티스트를 입력해주세요
+            </CustomDescription>
+            <CustomInput
+              onChange={(e) =>
+                setSongData({ ...songData, name: e.target.value })
+              }
+              maxLength="14"
+              placeholder="제목을 입력해주세요"
+            />
+            <CustomInput
+              onChange={(e) =>
+                setSongData({ ...songData, artist: e.target.value })
+              }
+              placeholder="아티스트를 입력해주세요"
+            />
+            <ErrorContainer>
+              {songError ? <ErrorMessage>{songError}</ErrorMessage> : null}
+            </ErrorContainer>
+          </InputContainer>
+        ) : null}
         <InputContainer>
-          <CustomTitle>제목/소개</CustomTitle>
+          <CustomTitle>커버 제목/소개</CustomTitle>
           <CustomDescription>
             커버의 제목과 소개를 입력해주세요
           </CustomDescription>

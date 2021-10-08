@@ -118,6 +118,7 @@ const CoverMaking = ({ match }) => {
           initBandData={initBandData}
           isFreeCover={isFreeCover}
           isSolo={isSolo}
+          setSongData={setSongData}
         />
       ),
     },
