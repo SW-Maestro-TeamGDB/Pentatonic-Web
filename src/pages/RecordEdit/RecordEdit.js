@@ -63,6 +63,7 @@ const RecordEdit = (props) => {
     cover,
     isFreeCover,
     userId,
+    songData,
   } = props;
   // 업로드 모달
   const [modalToggle, setModalToggle] = useState(false);
@@ -98,9 +99,9 @@ const RecordEdit = (props) => {
             variables: {
               uploadFreeSongInput: {
                 song: {
-                  name: bandData.name,
+                  name: songData.name,
                   songURI: data.uploadCoverFile,
-                  artist: userId,
+                  artist: songData.artist,
                 },
               },
             },
