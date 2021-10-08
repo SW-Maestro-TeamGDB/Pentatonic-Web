@@ -2,8 +2,12 @@ import react from 'react';
 import styled from 'styled-components';
 import { media } from '../../lib/Media';
 
-const PageContainer = ({ children, width }) => {
-  return <Container width={width}>{children}</Container>;
+const PageContainer = ({ children, width, minWidth }) => {
+  return (
+    <Container width={width} minWidth={minWidth}>
+      {children}
+    </Container>
+  );
 };
 
 const Container = styled.div`
@@ -13,11 +17,16 @@ const Container = styled.div`
   background-color: white;
   align-items: center;
   /* box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3); */
-  padding: 1.5vh 1vw;
+  padding: 1rem;
   height: auto;
   width: ${(props) => (props.width ? `${props.width}` : '60%')};
-  min-width: ${(props) => (props.width ? `${props.width}` : '1000px')};
-  margin-top: 3vh;
+  min-width: ${(props) =>
+    props.minWidth
+      ? `${props.minWidth}`
+      : props.width
+      ? props.width
+      : '1000px'};
+  margin-top: 1.5rem;
 
   ${media.medium} {
     width: 90%;
@@ -27,7 +36,7 @@ const Container = styled.div`
   ${media.small} {
     width: 90%;
     min-width: 0px;
-    margin-top: 0;
+    margin-top: 1rem;
   }
 `;
 
