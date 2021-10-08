@@ -195,7 +195,7 @@ const HeaderContainer = styled.div`
     background-color: white;
     text-align: right;
     display: flex;
-    height: 8vh;
+
     justify-content: center;
     align-items: center;
     color: black;
@@ -232,7 +232,6 @@ const MobileMenuButton = styled.div`
 `;
 
 const LogoContainer = styled.div`
-  margin-left: 1.5vw;
   display: flex;
   align-items: center; ;
 `;

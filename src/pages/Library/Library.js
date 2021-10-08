@@ -85,7 +85,7 @@ const Library = () => {
 
   return (
     <LoginAuth>
-      <PageContainer width="55%">
+      <PageContainer width="55%" minWidth="900px">
         <PageTitle>라이브러리</PageTitle>
         <Spacing />
         <LibraryContainer>

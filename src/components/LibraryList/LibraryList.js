@@ -381,20 +381,20 @@ const SessionIconContainer = styled.div`
 `;
 
 const SessionIcon = styled.img`
-  width: 30px;
-  height: 30px;
+  width: 40px;
+  height: 40px;
   opacity: 0.3;
 `;
 
 const LibararyPagePauseIcon = styled.img`
-  width: 0.9vw;
-  height: 0.9vw;
+  width: 1rem;
+  height: 1rem;
   filter: invert(100%);
 `;
 
 const LibararyPagePlayIcon = styled.img`
-  width: 0.9vw;
-  height: 0.9vw;
+  width: 1rem;
+  height: 1rem;
   filter: invert(100%);
 `;
 
@@ -404,22 +404,22 @@ const ErrorMessage = styled.div`
 `;
 
 const CustomPlayIcon = styled.img`
-  width: 1.2vw;
-  height: 1.2vw;
+  width: 1.2rem;
+  height: 1.2rem;
   filter: invert(27%) sepia(32%) saturate(5932%) hue-rotate(244deg)
     brightness(93%) contrast(120%);
 `;
 
 const CustomPauseIcon = styled.img`
-  width: 1.5vw;
-  height: 1.5vw;
+  width: 1.5rem;
+  height: 1.5rem;
   filter: invert(27%) sepia(32%) saturate(5932%) hue-rotate(244deg)
     brightness(93%) contrast(120%);
 `;
 
 const IconContainer = styled.div`
-  width: 4vw;
-  height: 3vw;
+  width: 5rem;
+  height: 3.5rem;
   background-color: ${(props) =>
     props.audioState === 1 ? '#6236ff' : 'white'};
 
@@ -458,7 +458,8 @@ const Spacing = styled.div`
 `;
 
 const CoverTime = styled.div`
-  font-size: 0.8vw;
+  font-size: 0.8rem;
+  letter-spacing: -0.5px;
   width: 20%;
   text-align: center;
 `;
@@ -469,7 +470,7 @@ const EditButtonContainer = styled.div`
 
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
 
   -ms-user-select: none;
@@ -504,9 +505,9 @@ const EditButton = styled.div`
   border-radius: 8px;
   border: solid 1px #9561ff;
   color: #9561ff;
-  width: 4.5rem;
+  width: 4rem;
   height: 2.5rem;
-  font-size: 0.7vw;
+  font-size: 0.8rem;
   cursor: pointer;
   background-color: white;
 
@@ -519,11 +520,13 @@ const DeleteButton = styled.div`
   border-radius: 8px;
   border: solid 1px #222;
   color: #222;
-  width: 4.5rem;
+  width: 4rem;
   height: 2.5rem;
-  font-size: 0.7vw;
+  font-size: 0.8rem;
   cursor: pointer;
   background-color: white;
+
+  margin: 0 1rem;
 
   display: flex;
   justify-content: center;
@@ -531,11 +534,11 @@ const DeleteButton = styled.div`
 `;
 
 const ImageContainer = styled.div`
-  margin: 1vh 1vw;
+  margin: 0.5rem;
   display: flex;
   align-items: center;
-  width: 6vw;
-  height: 4vw;
+  width: 6.5rem;
+  height: 4.5rem;
 `;
 
 const CoverImage = styled.img`
@@ -546,16 +549,16 @@ const CoverImage = styled.img`
 `;
 
 const CoverInform = styled.div`
-  width: ${(props) => (props.edit ? '30%' : '50%')};
+  width: ${(props) => (props.edit ? '35%' : '50%')};
   color: black;
-  padding-left: 0.5vw;
+  padding-left: 0.5rem;
 
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
   box-sizing: border-box;
 
-  padding-right: 2vw;
+  padding-right: 1rem;
 `;
 
 const CoverMeta = styled.div`
@@ -572,7 +575,7 @@ const CustomIcon = styled.img`
 `;
 
 const CoverTitle = styled.div`
-  font-size: 1.3vw;
+  font-size: 1.5rem;
   font-weight: 800;
 
   white-space: nowrap;
@@ -583,7 +586,7 @@ const CoverTitle = styled.div`
 `;
 
 const SongInform = styled.div`
-  font-size: 0.9vw;
+  font-size: 1rem;
   color: ${(props) => (props.selected ? '#ddd' : 'rgb(100, 100, 100)')};
 
   white-space: nowrap;

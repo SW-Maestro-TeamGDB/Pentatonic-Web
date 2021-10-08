@@ -2,7 +2,6 @@ import react from 'react';
 import styled from 'styled-components';
 import { Space, Dropdown, Menu, Button } from 'antd';
 import { media } from '../../lib/Media';
-import SearchIcon from '../../images/SearchIcon.svg';
 
 const GridContainer = (props) => {
   const {
