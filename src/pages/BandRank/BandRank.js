@@ -1,65 +1,40 @@
-import react, { useState } from 'react';
+import react, { useEffect, useState } from 'react';
+import { useQuery, gql, useLazyQuery } from '@apollo/client';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import PageContainer from '../../components/PageContainer';
 import RankList from '../../components/RankList';
 
-// tempData
-import TameImpala from '../../images/TempData/TameImpala.jpeg';
-import Hyukoh from '../../images/TempData/Hyukoh.jpeg';
-import Beatles from '../../images/TempData/Beatles.jpeg';
-import MenITrust from '../../images/TempData/MenITrust.jpeg';
-import NoSurprises from '../../images/TempData/NoSurprises.jpeg';
-import TheVolunteers from '../../images/TempData/TheVolunteers.jpeg';
+const GET_RANKED_BANDS = gql`
+  query Query {
+    getRankedBands {
+      bandId
+      name
+      backGroundURI
+      likeCount
+    }
+  }
+`;
 
 const BandRank = () => {
-  const tempBand = [
-    {
-      backgroundURI: Hyukoh,
-      name: '3인 혁오',
-      likeCount: '730',
-      bandId: 2,
+  const [rankList, setRankList] = useState();
+  const { data } = useQuery(GET_RANKED_BANDS, {
+    onCompleted: (data) => {
+      setRankList(data.getRankedBands);
     },
-    {
-      backgroundURI: NoSurprises,
-      name: '코리아 톰 요크',
-      likeCount: '530',
-      bandId: 5,
-    },
-    {
-      backgroundURI: TheVolunteers,
-      name: '실력은 필요없어',
-      likeCount: '340',
-      bandId: 6,
-    },
-    {
-      backgroundURI: TameImpala,
-      name: '사이키델릭',
-      likeCount: '130',
-      bandId: 1,
-    },
-  ];
-
-  const repeatArr = (arr, num) => {
-    let temp = [];
-
-    for (let i = 0; i < num; i++) {
-      temp = temp.concat(arr);
-    }
-
-    return temp;
-  };
+  });
 
   const showBandRank = () => {
-    return repeatArr(tempBand, 5).map((v, i) => {
-      return (
-        <RankList key={`tempBand+${i}`} data={v} type={'band'} rank={i + 1} />
-      );
-    });
+    if (rankList)
+      return rankList.map((v, i) => {
+        return (
+          <RankList key={`tempBand+${i}`} data={v} type={'band'} rank={i + 1} />
+        );
+      });
   };
 
   return (
-    <PageContainer width="40%">
+    <PageContainer width="40%" minWidth="700px">
       <PageTitle>밴드 랭킹</PageTitle>
       <PageDesc>좋아요를 가장 많이 받은 밴드는 누굴까요?</PageDesc>
       <RankItem>{showBandRank()}</RankItem>

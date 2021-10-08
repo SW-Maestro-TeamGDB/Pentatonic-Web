@@ -1,4 +1,5 @@
-import react from 'react';
+import react, { useEffect, useState } from 'react';
+import { useQuery, gql, useLazyQuery } from '@apollo/client';
 import styled from 'styled-components';
 import { media } from '../../lib/Media';
 import { Link } from 'react-router-dom';
@@ -30,7 +31,7 @@ const RankList = (props) => {
         <RankIcon color={rankColor(rank)}>{rank}</RankIcon>
       </RankContainer>
       <CustomLink to={link}>
-        <RankListImg img={bandType ? data.backgroundURI : data.profileURI} />
+        <RankListImg img={bandType ? data.backGroundURI : data.profileURI} />
       </CustomLink>
       <ListTitle>
         <CustomLink to={link}>
