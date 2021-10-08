@@ -46,7 +46,7 @@ const GenreButton = (props) => {
 
   return (
     <Dropdown overlay={genreMenu} trigger={['click']} placement="bottomLeft">
-      <CustomButton>장르: {genre}</CustomButton>
+      <CustomButton>장르: {changeGenreToKorean(genre)}</CustomButton>
     </Dropdown>
   );
 };

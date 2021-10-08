@@ -1,5 +1,7 @@
 const changeGenreToKorean = (name) => {
-  if (name === 'HIP_HOP') {
+  if (name === '전체') {
+    return '전체';
+  } else if (name === 'HIP_HOP') {
     return '힙합';
   } else if (name === 'ELECTRONIC') {
     return '일렉트로닉';
