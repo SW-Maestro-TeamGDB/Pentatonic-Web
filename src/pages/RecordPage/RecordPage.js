@@ -281,6 +281,7 @@ const RecordPage = (props) => {
     navigator.mediaDevices.getUserMedia({ audio: true }).then((stream) => {
       const mediaRecorder = new MediaRecorder(stream);
       init();
+
       if (inst) inst.play();
       mediaRecorder.start();
 
@@ -290,56 +291,45 @@ const RecordPage = (props) => {
       setOnRec(1);
 
       analyser.onaudioprocess = function (e) {
+        let left = e.inputBuffer.getChannelData(0);
+        let right = e.inputBuffer.getChannelData(1);
+
         if (mediaRecorder.state === 'recording') {
           setCount(parseInt(e.playbackTime));
+
+          // wav 파일 저장
+          setLeftChannel((prev) => [...prev, new Float32Array(left)]);
+          setRightChannel((prev) => [...prev, new Float32Array(right)]);
+          setRecordingLength((recordingLength) => recordingLength + bufferSize);
+        }
+
+        if (mediaRecorder.state === 'paused') {
+          setOnRec(2);
+          mediaRecorder.pause();
+        }
+        // 곡 길이만큼 시간 지나면 자동으로 음성 저장 및 녹음 중지
+        if (e.playbackTime > audioDuration) {
+          stream.getAudioTracks().forEach(function (track) {
+            track.stop();
+          });
+          init();
+
+          // 녹음 중지
+          if (mediaRecorder.state === 'recording') {
+            mediaRecorder.stop();
+          }
+          setOnRec(0);
+
+          // 메서드가 호출 된 노드 연결 해제
+          analyser.disconnect();
+          audioCtx.createMediaStreamSource(stream).disconnect();
+
+          mediaRecorder.ondataavailable = function (e) {
+            setAudioUrl(e.data);
+          };
         }
       };
-
-      // analyser.onaudioprocess = function (e) {
-      //   let left = e.inputBuffer.getChannelData(0);
-      //   let right = e.inputBuffer.getChannelData(1);
-
-      //   if (mediaRecorder.state === 'recording') {
-      //     setCount(parseInt(e.playbackTime));
-
-      //     // wav 파일 저장
-      //     setLeftChannel((prev) => [...prev, new Float32Array(left)]);
-      //     setRightChannel((prev) => [...prev, new Float32Array(right)]);
-      //     setRecordingLength((recordingLength) => recordingLength + bufferSize);
-      //   }
-
-      //   if (mediaRecorder.state === 'paused') {
-      //     setOnRec(2);
-      //     mediaRecorder.pause();
-      //   }
-      //   // 곡 길이만큼 시간 지나면 자동으로 음성 저장 및 녹음 중지
-      //   if (e.playbackTime > audioDuration) {
-      //     stream.getAudioTracks().forEach(function (track) {
-      //       track.stop();
-      //     });
-      //     init();
-
-      //     // 녹음 중지
-      //     if (mediaRecorder.state === 'recording') {
-      //       mediaRecorder.stop();
-      //     }
-      //     setOnRec(0);
-
-      //     // 메서드가 호출 된 노드 연결 해제
-      //     analyser.disconnect();
-      //     audioCtx.createMediaStreamSource(stream).disconnect();
-
-      //     mediaRecorder.ondataavailable = function (e) {
-      //       setAudioUrl(e.data);
-
-      //       // setOnRec(0);
-      //     };
-      //   }
-      // };
     });
-    // .catch(() => {
-    //   setMicAuthModalToggle(true);
-    // });
   };
 
   // 사용자가 음성 녹음을 중지했을 때
@@ -363,66 +353,63 @@ const RecordPage = (props) => {
   };
 
   const makeAudioFile = () => {
-    // setAudioFile(window.URL.createObjectURL(e.data));
-    // let leftBuffer = mergeBuffers(leftChannel, recordingLength);
-    // let rightBuffer = mergeBuffers(rightChannel, recordingLength);
-    // let interleaved = interleave(leftBuffer, rightBuffer);
-    // let buffer = new ArrayBuffer(44 + interleaved.length * 2);
-    // let view = new DataView(buffer);
-    // // RIFF chunk descriptor
-    // writeUTFBytes(view, 0, 'RIFF');
-    // view.setUint32(4, 44 + interleaved.length * 2, true);
-    // writeUTFBytes(view, 8, 'WAVE');
-    // // FMT sub-chunk
-    // writeUTFBytes(view, 12, 'fmt ');
-    // view.setUint32(16, 16, true);
-    // view.setUint16(20, 1, true);
-    // // stereo (2 channels)
-    // view.setUint16(22, 2, true);
-    // view.setUint32(24, sampleRate, true);
-    // view.setUint32(28, sampleRate * 4, true);
-    // view.setUint16(32, 4, true);
-    // view.setUint16(34, 16, true);
-    // // data sub-chunk
-    // writeUTFBytes(view, 36, 'data');
-    // view.setUint32(40, interleaved.length * 2, true);
-    // // write the PCM samples
-    // let lng = interleaved.length;
-    // let index = 44;
-    // let volume = 1;
-    // for (let i = 0; i < lng; i++) {
-    //   view.setInt16(index, interleaved[i] * (0x7fff * volume), true);
-    //   index += 2;
-    // }
-    // const type = 'audio/mp3';
-    // // our final binary blob
-    // const blob = new Blob([view], { type: type });
-    // // 파일 이름 cover.mp3
-    // const file = new File([blob], 'cover.mp3', {
-    //   lastModified: new Date().getTime(),
-    //   type: type,
-    // });
-    // const audioUrl = URL.createObjectURL(blob);
-    // setAudioUrl(audioUrl);
-    // setAudioFile({
-    //   blob: blob,
-    //   url: audioUrl,
-    //   file: file,
-    //   type,
-    // });
-
-    alert('test for recording in mobile env');
+    let leftBuffer = mergeBuffers(leftChannel, recordingLength);
+    let rightBuffer = mergeBuffers(rightChannel, recordingLength);
+    let interleaved = interleave(leftBuffer, rightBuffer);
+    let buffer = new ArrayBuffer(44 + interleaved.length * 2);
+    let view = new DataView(buffer);
+    // RIFF chunk descriptor
+    writeUTFBytes(view, 0, 'RIFF');
+    view.setUint32(4, 44 + interleaved.length * 2, true);
+    writeUTFBytes(view, 8, 'WAVE');
+    // FMT sub-chunk
+    writeUTFBytes(view, 12, 'fmt ');
+    view.setUint32(16, 16, true);
+    view.setUint16(20, 1, true);
+    // stereo (2 channels)
+    view.setUint16(22, 2, true);
+    view.setUint32(24, sampleRate, true);
+    view.setUint32(28, sampleRate * 4, true);
+    view.setUint16(32, 4, true);
+    view.setUint16(34, 16, true);
+    // data sub-chunk
+    writeUTFBytes(view, 36, 'data');
+    view.setUint32(40, interleaved.length * 2, true);
+    // write the PCM samples
+    let lng = interleaved.length;
+    let index = 44;
+    let volume = 1;
+    for (let i = 0; i < lng; i++) {
+      view.setInt16(index, interleaved[i] * (0x7fff * volume), true);
+      index += 2;
+    }
+    const type = 'audio/mp3';
+    // our final binary blob
+    const blob = new Blob([view], { type: type });
+    // 파일 이름 cover.mp3
+    const file = new File([blob], 'cover.mp3', {
+      lastModified: new Date().getTime(),
+      type: type,
+    });
+    const audioUrl = URL.createObjectURL(blob);
+    setAudioUrl(audioUrl);
+    setAudioFile({
+      blob: blob,
+      url: audioUrl,
+      file: file,
+      type,
+    });
   };
 
   const onSubmitAudioFile = () => {
-    // if (parseInt(count) < 60) {
-    //   return notification['warning']({
-    //     key: 'audioNotification',
-    //     description: '1분 이상의 녹음만 저장 가능합니다',
-    //     placement: 'bottomRight',
-    //     duration: 3,
-    //   });
-    // }
+    if (parseInt(count) < 60) {
+      return notification['warning']({
+        key: 'audioNotification',
+        description: '1분 이상의 녹음만 저장 가능합니다',
+        placement: 'bottomRight',
+        duration: 3,
+      });
+    }
 
     makeAudioFile();
 
