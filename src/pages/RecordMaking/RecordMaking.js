@@ -104,6 +104,7 @@ const RecordMaking = ({ match }) => {
           inst={inst}
           bandData={bandData}
           songData={songData}
+          setInst={setInst}
         />
       ),
     },

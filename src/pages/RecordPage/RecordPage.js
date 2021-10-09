@@ -10,6 +10,7 @@ import RecordModal from '../../components/RecordModal/RecordModal';
 import MicAuthModal from '../../components/MicAuthModal';
 import AudioVisualizer from '../../components/AudioVisualizer';
 import { useMediaQuery } from 'react-responsive';
+import { createSilentAudio } from 'create-silent-audio';
 import styled from 'styled-components';
 import PlayIcon from '../../images/PlayIcon.svg';
 import StopIcon from '../../images/StopIcon.svg';
@@ -29,6 +30,7 @@ const RecordPage = (props) => {
     bandData,
     songData,
     isFreeCover,
+    setInst,
   } = props;
   const [countdown, setCountDown] = useState(4);
   const [audioCtx, setAudioCtx] = useState();
@@ -401,6 +403,12 @@ const RecordPage = (props) => {
     });
   };
 
+  const makeInstFile = () => {
+    const audio = new Audio();
+    audio.src = createSilentAudio(count);
+    setInst(audio);
+  };
+
   const onSubmitAudioFile = () => {
     if (parseInt(count) < 60) {
       return notification['warning']({
@@ -412,6 +420,10 @@ const RecordPage = (props) => {
     }
 
     makeAudioFile();
+
+    if (isFreeCover) {
+      makeInstFile();
+    }
 
     if (onRec === 2) {
       stream.getAudioTracks().forEach(function (track) {

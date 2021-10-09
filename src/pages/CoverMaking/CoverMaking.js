@@ -130,6 +130,7 @@ const CoverMaking = ({ match }) => {
           setAudioFile={setAudioFile}
           audioDuration={audioDuration}
           inst={inst}
+          setInst={setInst}
           bandData={bandData}
           songData={songData}
           isFreeCover={isFreeCover}
