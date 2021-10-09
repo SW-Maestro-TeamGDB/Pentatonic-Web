@@ -1,4 +1,10 @@
-import react, { useState, useEffect, useCallback, useRef } from 'react';
+import react, {
+  useState,
+  useEffect,
+  useCallback,
+  useRef,
+  useMemo,
+} from 'react';
 import { Progress, Modal, notification } from 'antd';
 import RecordModal from '../../components/RecordModal/RecordModal';
 import MicAuthModal from '../../components/MicAuthModal';
@@ -171,30 +177,6 @@ const RecordPage = (props) => {
     return () => clearInterval(interval);
   }, [countdown]);
 
-  const showRecordingState = () => {
-    if (countdown !== 4) {
-      return <CountDownText>{countdown}</CountDownText>;
-    }
-
-    if (onRec === 0) {
-      return (
-        <CustomPlayIcon
-          src={audioCtx ? RetryIcon : PlayIcon}
-          onClick={onClickStart}
-        />
-      );
-    } else if (onRec === 1) {
-      // return <CustomPauseIcon onClick={onClickPause} />;
-      return (
-        <PauseIconContainer>
-          <CustomPauseIcon src={PauseIcon} onClick={onClickPause} />
-        </PauseIconContainer>
-      );
-    } else if (onRec === 2) {
-      return <CustomPlayIcon src={PlayIcon} onClick={onClickResume} />;
-    }
-  };
-
   // 모달
   const [modalToggle, setModalToggle] = useState(false);
 
@@ -251,7 +233,7 @@ const RecordPage = (props) => {
 
   const onClickPause = () => {
     if (inst) inst.pause();
-    audioCtx.suspend();
+    if (audioCtx) audioCtx.suspend();
     if (media && media.state === 'recording') {
       media.pause();
     }
@@ -480,13 +462,79 @@ const RecordPage = (props) => {
     };
   }, []);
 
-  return (
-    <Container>
-      <RecordModal modalToggle={modalToggle} setModalToggle={setModalToggle} />
-      <MicAuthModal
-        modalToggle={micAuthModalToggle}
-        setModalToggle={setMicAuthModalToggle}
-      />
+  const showRecordingState = useMemo(() => {
+    if (countdown !== 4) {
+      return <CountDownText>{countdown}</CountDownText>;
+    }
+
+    if (onRec === 0) {
+      return (
+        <CustomPlayIcon
+          src={audioCtx ? RetryIcon : PlayIcon}
+          onClick={onClickStart}
+        />
+      );
+    } else if (onRec === 1) {
+      // return <CustomPauseIcon onClick={onClickPause} />;
+      return (
+        <PauseIconContainer>
+          <CustomPauseIcon src={PauseIcon} onClick={onClickPause} />
+        </PauseIconContainer>
+      );
+    } else if (onRec === 2) {
+      return <CustomPlayIcon src={PlayIcon} onClick={onClickResume} />;
+    }
+  }, [onRec, countdown]);
+
+  const showAudioDuration = useMemo(() => {
+    return (
+      <ProgressContainer>
+        <CustomProgress
+          percent={(count / audioDuration) * 100}
+          showInfo={false}
+          strokeColor="black"
+        />
+        <TimeContainer>
+          <CurrentTimeContainer>
+            {minute}
+            {':'}
+            {second < 10 ? '0' + second : second}
+          </CurrentTimeContainer>
+          <RemainTimeContainer>
+            {'- '}
+            {audioMinute}
+            {':'}
+            {audioSecond < 10 ? '0' + audioSecond : audioSecond}
+          </RemainTimeContainer>
+        </TimeContainer>
+      </ProgressContainer>
+    );
+  }, [audioDuration, count, minute, second, audioMinute, audioSecond]);
+
+  const showVisualizer = useMemo(() => {
+    return (
+      <AudioVisualizer
+        audioCtx={audioCtx}
+        source={sourceRef.current}
+        width={'500rem'}
+        height={'180rem'}
+      ></AudioVisualizer>
+    );
+  }, [audioCtx, sourceRef.current]);
+
+  const showLyrics = useMemo(() => {
+    return (
+      <LyricsContainer>
+        <CurrentLyrics>{lyrics[lyricsIndex].text}</CurrentLyrics>
+        <NextLyrics>
+          {lyricsIndex < lyricsLength - 1 ? lyrics[lyricsIndex + 1].text : 'ㅤ'}
+        </NextLyrics>
+      </LyricsContainer>
+    );
+  }, [lyrics, lyricsIndex]);
+
+  const showBackground = useMemo(() => {
+    return (
       <Background url={isFreeCover ? bandData.backGroundURI : songData.songImg}>
         <BackwardButton onClick={() => onClickStop()}>
           <LeftOutlined />
@@ -494,7 +542,7 @@ const RecordPage = (props) => {
         </BackwardButton>
         <BackgroundBlur>
           <IconContainer canSave={canSave}>
-            {showRecordingState()}
+            {showRecordingState}
             {canSave ? (
               <CustomPlayIcon
                 src={SaveIcon}
@@ -502,51 +550,49 @@ const RecordPage = (props) => {
               />
             ) : null}
           </IconContainer>
-          {isFreeCover ? null : (
-            <LyricsContainer>
-              <CurrentLyrics>{lyrics[lyricsIndex].text}</CurrentLyrics>
-              <NextLyrics>
-                {lyricsIndex < lyricsLength - 1
-                  ? lyrics[lyricsIndex + 1].text
-                  : 'ㅤ'}
-              </NextLyrics>
-            </LyricsContainer>
-          )}
+          {isFreeCover ? null : showLyrics}
           {isMobile ? null : (
             <VisualizerContainer onRec={onRec}>
-              <AudioVisualizer
-                audioCtx={audioCtx}
-                source={sourceRef.current}
-                width={'500rem'}
-                height={'180rem'}
-              ></AudioVisualizer>
+              {showVisualizer}
             </VisualizerContainer>
           )}
         </BackgroundBlur>
       </Background>
-      {isFreeCover ? null : (
-        <ProgressContainer>
-          {/* audioDuration의 길이를 알기 떄문에 animation 형식으로 바꾸는것 고려 */}
-          <CustomProgress
-            percent={(count / audioDuration) * 100}
-            showInfo={false}
-            strokeColor="black"
-          />
-          <TimeContainer>
-            <CurrentTimeContainer>
-              {minute}
-              {':'}
-              {second < 10 ? '0' + second : second}
-            </CurrentTimeContainer>
-            <RemainTimeContainer>
-              {'- '}
-              {audioMinute}
-              {':'}
-              {audioSecond < 10 ? '0' + audioSecond : audioSecond}
-            </RemainTimeContainer>
-          </TimeContainer>
-        </ProgressContainer>
-      )}
+    );
+  }, [onRec, audioCtx, countdown, lyrics, lyricsIndex, sourceRef.current]);
+
+  return (
+    <Container>
+      <RecordModal modalToggle={modalToggle} setModalToggle={setModalToggle} />
+      <MicAuthModal
+        modalToggle={micAuthModalToggle}
+        setModalToggle={setMicAuthModalToggle}
+      />
+      {showBackground}
+      {/* <Background url={isFreeCover ? bandData.backGroundURI : songData.songImg}>
+        <BackwardButton onClick={() => onClickStop()}>
+          <LeftOutlined />
+          <BackwardText>커버 정보 입력</BackwardText>
+        </BackwardButton>
+        <BackgroundBlur>
+          <IconContainer canSave={canSave}>
+            {showRecordingState}
+            {canSave ? (
+              <CustomPlayIcon
+                src={SaveIcon}
+                onClick={() => onSubmitAudioFile()}
+              />
+            ) : null}
+          </IconContainer>
+          {isFreeCover ? null : showLyrics}
+          {isMobile ? null : (
+            <VisualizerContainer onRec={onRec}>
+              {showVisualizer}
+            </VisualizerContainer>
+          )}
+        </BackgroundBlur>
+      </Background> */}
+      {isFreeCover ? null : showAudioDuration}
     </Container>
   );
 };
@@ -772,20 +818,5 @@ const PauseIconContainer = styled.div`
     }
   }
 `;
-
-// const CustomPauseIcon = styled(PauseOutlined)`
-//   filter: invert(100%);
-//   transition: all ease-in-out 0.3s;
-//   cursor: pointer;
-//   font-size: 4.5rem;
-//   color: black;
-//   width: 4.5rem;
-//   text-align: center;
-
-//   &:hover {
-//     /* color: black; */
-//     transform: scale(1.05);
-//   }
-// `;
 
 export default RecordPage;
