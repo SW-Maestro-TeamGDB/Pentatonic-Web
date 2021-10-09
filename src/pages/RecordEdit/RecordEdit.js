@@ -1,4 +1,4 @@
-import react, { useState, useEffect, useRef } from 'react';
+import react, { useState, useEffect, useRef, useMemo } from 'react';
 import styled from 'styled-components';
 import { useQuery, gql, useLazyQuery, useMutation } from '@apollo/client';
 import GridContainer from '../../components/GridContainer/GridContainer';
@@ -332,8 +332,8 @@ const RecordEdit = (props) => {
     }
   };
 
-  return (
-    <Container>
+  const showAudioPlayer = useMemo(() => {
+    return (
       <AudioPlayerContainer>
         <AudioPlayer
           src={audioFile ? audioFile.url : null}
@@ -357,45 +357,94 @@ const RecordEdit = (props) => {
           volume={0}
         />
       </AudioPlayerContainer>
+    );
+  }, [
+    audioFile,
+    recordSound,
+    onClickSeeked,
+    onClickSeeking,
+    onClickStart,
+    onClickPause,
+  ]);
+
+  const showVolumeSlider = useMemo(() => {
+    return (
+      <RecordEditSlider
+        value={volume}
+        setValue={setVolume}
+        title="볼륨 조절"
+        desc={`${volume}%`}
+        max={100}
+        min={0}
+      />
+    );
+  }, [volume]);
+
+  const showSyncSlider = useMemo(() => {
+    return (
+      <RecordEditSlider
+        value={sync}
+        setValue={setSync}
+        title="싱크 조절"
+        desc={`${sync}ms`}
+        max={500}
+        min={-500}
+        unit={50}
+        onAfterChange={() => changeSync(sync)}
+      />
+    );
+  }, [sync]);
+
+  const showReverbSlider = useMemo(() => {
+    return (
+      <RecordEditSlider
+        value={reverb}
+        setValue={setReverb}
+        title="리버브"
+        desc={`${reverb}db`}
+        max={100}
+        min={0}
+        unit={5}
+        onAfterChange={() => addReverbEffect(reverb)}
+      />
+    );
+  }, [reverb]);
+
+  const showGainSlider = useMemo(() => {
+    return (
+      <RecordEditSlider
+        value={gain}
+        setValue={setGain}
+        title="게인"
+        desc={`${gain}db`}
+        max={100}
+        min={0}
+        unit={5}
+      />
+    );
+  }, [gain]);
+
+  const showUploadCompleteModal = useMemo(() => {
+    return (
+      <UploadCompleteModal
+        setModalToggle={setModalToggle}
+        modalToggle={modalToggle}
+        modalLoading={modalLoading}
+        bandId={bandId}
+        cover={cover}
+      />
+    );
+  }, [modalToggle, modalLoading]);
+
+  return (
+    <Container>
+      {showAudioPlayer}
       <EditConatiner>
         <GridContainer>
-          <RecordEditSlider
-            value={volume}
-            setValue={setVolume}
-            title="볼륨 조절"
-            desc={`${volume}%`}
-            max={100}
-            min={0}
-          />
-          <RecordEditSlider
-            value={sync}
-            setValue={setSync}
-            title="싱크 조절"
-            desc={`${sync}ms`}
-            max={500}
-            min={-500}
-            unit={50}
-            onAfterChange={() => changeSync(sync)}
-          />
-          <RecordEditSlider
-            value={reverb}
-            setValue={setReverb}
-            title="리버브"
-            desc={`${reverb}db`}
-            max={100}
-            min={0}
-            unit={5}
-            onAfterChange={() => addReverbEffect(reverb)}
-          />
-          <RecordEditSlider
-            value={gain}
-            setValue={setGain}
-            title="게인"
-            desc={`${gain}db`}
-            max={100}
-            min={0}
-            unit={5}
-          />
+          {showVolumeSlider}
+          {showSyncSlider}
+          {showReverbSlider}
+          {showGainSlider}
         </GridContainer>
       </EditConatiner>
       <ButtonConatiner>
@@ -404,39 +453,7 @@ const RecordEdit = (props) => {
         </BackwardButton>
         <SubmitButton onClick={submitRecord}>업로드</SubmitButton>
       </ButtonConatiner>
-      <UploadCompleteModal
-        setModalToggle={setModalToggle}
-        modalToggle={modalToggle}
-        modalLoading={modalLoading}
-        bandId={bandId}
-        cover={cover}
-      />
-      {/* <button onClick={() => onClickStart()}>시작</button>
-      <button onClick={() => onClickStop()}>중지</button>
-
-      <br />
-      <br />
-      <button onClick={() => volumeUp()}>볼륨 업</button>
-      <button onClick={() => volumeDown()}>볼륨 다운</button>
-      <br />
-      <br />
-      <h2>리버브: {time} </h2>
-      <button
-        onClick={() => {
-          setTime(time + 0.1);
-          setDecay(decay + 0.1);
-        }}
-      >
-        리버브 +
-      </button>
-      <button
-        onClick={() => {
-          setTime(time - 0.1);
-          setDecay(decay - 0.1);
-        }}
-      >
-        리버브 -
-      </button> */}
+      {showUploadCompleteModal}
     </Container>
   );
 };
