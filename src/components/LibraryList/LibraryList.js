@@ -71,13 +71,6 @@ const LibraryList = (props) => {
 
   const selected = !edit && data.coverId === selectedCover;
 
-  // const getSong = useQuery(GET_SONG, {
-  //   variables: { getSongSongId: data.songId },
-  //   onCompleted: (data) => {
-  //     setSongData(data.getSong);
-  //   },
-  // });
-
   const [getCover] = useLazyQuery(GET_COVER, {
     fetchPolicy: 'network-only',
     variables: { getCoverCoverId: data.coverId },
@@ -123,7 +116,7 @@ const LibraryList = (props) => {
   }, [inst]);
 
   useEffect(() => {
-    setEditTitle();
+    if (coverTitle) setEditTitle(coverTitle);
   }, [editToggle]);
 
   const onClickStart = () => {
@@ -237,6 +230,7 @@ const LibraryList = (props) => {
               <>
                 <CustomInput
                   placeholder="변경 할 제목을 입력해주세요"
+                  value={editTitle}
                   onChange={(e) => setEditTitle(e.target.value)}
                   maxLength="14"
                 />
