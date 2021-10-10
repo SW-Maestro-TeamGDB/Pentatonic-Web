@@ -43,7 +43,8 @@ const GET_RANKED_BANDS = gql`
   }
 `;
 
-const ArtistHome = () => {
+const ArtistHome = ({ match }) => {
+  const content = match.params?.content;
   const [bandRankList, setBandRankList] = useState();
   const [artistRankList, setArtistRankList] = useState();
 
@@ -91,7 +92,11 @@ const ArtistHome = () => {
     <PageContainer>
       <ArtistBanner />
       <Spacing />
-      <SearchBar placeholder="검색어를 입력하세요" />
+      <SearchBar
+        placeholder="닉네임을 입력하세요"
+        sort="artist"
+        searching={content}
+      />
       <BoardContainer>
         <BoardWrapper>
           <BoardHeader>
