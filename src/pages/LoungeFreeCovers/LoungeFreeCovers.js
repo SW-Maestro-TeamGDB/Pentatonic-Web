@@ -14,8 +14,8 @@ import GenreButton from '../../components/GenreButton/GenreButton';
 import GridContainer from '../../components/GridContainer/GridContainer';
 
 const QUERY_BANDS = gql`
-  query Query($queryBandsFilter: QueryBandInput!, $queryBandsFirst: Int!) {
-    queryBands(filter: $queryBandsFilter, first: $queryBandsFirst) {
+  query Query($queryBandFilter: QueryBandInput!, $queryBandFirst: Int!) {
+    queryBand(filter: $queryBandFilter, first: $queryBandFirst) {
       bands {
         isFreeBand
         song {
@@ -40,7 +40,7 @@ const LoungeBandCovers = ({ match }) => {
   const content = match.params?.content;
   const loadFreeCover = () => {
     if (data) {
-      const filtered = data.queryBands.bands.filter((v) => v.isFreeBand);
+      const filtered = data.queryBand.bands.filter((v) => v.isFreeBand);
 
       if (filtered.length > 0)
         return (
@@ -58,11 +58,11 @@ const LoungeBandCovers = ({ match }) => {
 
   const { data } = useQuery(QUERY_BANDS, {
     variables: {
-      queryBandsFilter: {
+      queryBandFilter: {
         type: 'ALL',
         content: content,
       },
-      queryBandsFirst: 10,
+      queryBandFirst: 10,
     },
   });
 

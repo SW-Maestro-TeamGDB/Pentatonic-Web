@@ -14,8 +14,8 @@ import GenreButton from '../../components/GenreButton/GenreButton';
 import GridContainer from '../../components/GridContainer/GridContainer';
 
 const QUERY_BAND = gql`
-  query Query($queryBandsFilter: QueryBandInput!) {
-    queryBands(filter: $queryBandsFilter) {
+  query Query($queryBandFilter: QueryBandInput!) {
+    queryBand(filter: $queryBandFilter) {
       bands {
         backGroundURI
         song {
@@ -42,7 +42,7 @@ const LoungeBandCovers = ({ match }) => {
   const content = match.params?.content;
   const loadBandCover = () => {
     if (data) {
-      const filtered = data.queryBands.bands.filter(
+      const filtered = data.queryBand.bands.filter(
         (v) => !v.isSoloBand && !v.isFreeBand && !v.song.weeklyChallenge,
       );
 
@@ -62,10 +62,13 @@ const LoungeBandCovers = ({ match }) => {
 
   const { data } = useQuery(QUERY_BAND, {
     variables: {
-      queryBandsFilter: {
+      queryBandFilter: {
         type: 'ALL',
         content: content,
       },
+    },
+    onCompleted: (data) => {
+      console.log(data);
     },
   });
 
