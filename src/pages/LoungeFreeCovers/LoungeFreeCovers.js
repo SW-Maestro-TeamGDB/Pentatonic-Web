@@ -1,4 +1,4 @@
-import react, { useState } from 'react';
+import react, { useState, useEffect } from 'react';
 import { Space, Dropdown, Menu, Button } from 'antd';
 import { useQuery, gql, useLazyQuery } from '@apollo/client';
 import { Link } from 'react-router-dom';
@@ -36,8 +36,13 @@ const QUERY_BANDS = gql`
 `;
 
 const LoungeBandCovers = ({ match }) => {
-  const [genre, setGenre] = useState('전체');
   const content = match.params?.content;
+  const [genre, setGenre] = useState('전체');
+  const [bandFilter, setBandFilter] = useState({
+    type: 'ALL',
+    content: match.params?.content,
+  });
+
   const loadFreeCover = () => {
     if (data) {
       const filtered = data.queryBand.bands.filter((v) => v.isFreeBand);
@@ -58,13 +63,23 @@ const LoungeBandCovers = ({ match }) => {
 
   const { data } = useQuery(QUERY_BANDS, {
     variables: {
-      queryBandFilter: {
-        type: 'ALL',
-        content: content,
-      },
+      queryBandFilter: bandFilter,
       queryBandFirst: 10,
     },
+    onCompleted: (data) => {
+      console.log(data);
+    },
   });
+
+  useEffect(() => {
+    if (genre !== '전체') {
+      setBandFilter({ ...bandFilter, genre: genre });
+    }
+  }, [genre]);
+
+  useEffect(() => {
+    setBandFilter({ ...bandFilter, content: content });
+  }, [content]);
 
   return (
     <PageContainer>

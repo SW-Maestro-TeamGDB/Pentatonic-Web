@@ -1,4 +1,4 @@
-import react, { useState } from 'react';
+import react, { useState, useEffect } from 'react';
 import { Space, Dropdown, Menu, Button } from 'antd';
 import { useQuery, gql, useLazyQuery } from '@apollo/client';
 import { Link } from 'react-router-dom';
@@ -11,6 +11,7 @@ import CoverGrid from '../../components/CoverGrid/CoverGrid';
 import MakingIcon from '../../images/MakingIcon.svg';
 import PageImage from '../../components/PageImage';
 import GenreButton from '../../components/GenreButton/GenreButton';
+import DifficultyButton from '../../components/DifficultyButton/DifficultyButton';
 import GridContainer from '../../components/GridContainer/GridContainer';
 
 const QUERY_BAND = gql`
@@ -38,14 +39,19 @@ const QUERY_BAND = gql`
 `;
 
 const LoungeSoloCovers = ({ match }) => {
-  const [genre, setGenre] = useState('전체');
-
   const content = match.params?.content;
+  const [genre, setGenre] = useState('전체');
+  const [difficulty, setDifficulty] = useState('전체');
+  const [bandFilter, setBandFilter] = useState({
+    type: 'ALL',
+    content: match.params?.content,
+    isSoloBand: true,
+  });
 
   const loadSoloCover = () => {
     if (data) {
       const filtered = data.queryBand.bands.filter(
-        (v) => v.isSoloBand && !v.isFreeBand && !v.song.weeklyChallenge,
+        (v) => !v.isFreeBand && !v.song.weeklyChallenge,
       );
 
       if (filtered.length > 0)
@@ -64,12 +70,25 @@ const LoungeSoloCovers = ({ match }) => {
 
   const { data } = useQuery(QUERY_BAND, {
     variables: {
-      queryBandFilter: {
-        type: 'ALL',
-        content: content,
-      },
+      queryBandFilter: bandFilter,
     },
   });
+
+  useEffect(() => {
+    if (genre !== '전체') {
+      setBandFilter({ ...bandFilter, genre: genre });
+    }
+  }, [genre]);
+
+  useEffect(() => {
+    if (difficulty !== '전체') {
+      setBandFilter({ ...bandFilter, level: difficulty });
+    }
+  }, [difficulty]);
+
+  useEffect(() => {
+    setBandFilter({ ...bandFilter, content: content });
+  }, [content]);
 
   return (
     <PageContainer>
@@ -92,13 +111,28 @@ const LoungeSoloCovers = ({ match }) => {
         searching={content}
       />
       <SubContainer>
-        <GenreButton genre={genre} setGenre={setGenre} />
+        <ButtonContainer>
+          <GenreButton genre={genre} setGenre={setGenre} />
+          <Spacing />
+          <DifficultyButton
+            difficulty={difficulty}
+            setDifficulty={setDifficulty}
+          />
+        </ButtonContainer>
         <MakingCoverButton link={`/studio/solo`} title="새로운 커버 만들기" />
       </SubContainer>
       {loadSoloCover()}
     </PageContainer>
   );
 };
+
+const ButtonContainer = styled.div`
+  display: flex;
+`;
+
+const Spacing = styled.div`
+  width: 1rem;
+`;
 
 const PageDesc = styled.div`
   font-size: 1rem;
