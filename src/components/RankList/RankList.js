@@ -27,9 +27,13 @@ const RankList = (props) => {
 
   return (
     <RankListContainer>
-      <RankContainer>
-        <RankIcon color={rankColor(rank)}>{rank}</RankIcon>
-      </RankContainer>
+      {rank ? (
+        <RankContainer>
+          <RankIcon color={rankColor(rank)}>{rank}</RankIcon>
+        </RankContainer>
+      ) : (
+        <RankContainer> </RankContainer>
+      )}
       <CustomLink to={link}>
         <RankListImg img={bandType ? data.backGroundURI : data.profileURI} />
       </CustomLink>
@@ -52,6 +56,7 @@ const RankListContainer = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
+  justify-content: center;
   height: 4rem;
   position: relative;
 
@@ -97,7 +102,7 @@ const RankIcon = styled.div`
 `;
 
 const ListTitle = styled.div`
-  width: 45%;
+  width: 40%;
   height: 100%;
   text-align: left;
   font-size: 16px;
@@ -110,38 +115,13 @@ const ListTitle = styled.div`
   overflow: hidden;
 `;
 
-const ArtistContainer = styled.div`
-  width: 20%;
-  text-align: left;
-  font-size: 1.1rem;
-  color: #222222;
-  font-weight: 600;
-  padding-left: 2.5rem;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-`;
-
-const SessionContainer = styled.div`
-  width: 25%;
-  font-size: 0.9rem;
-  color: #222222;
-  font-weight: 500;
-  padding-left: 2.5rem;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
-`;
-
 const CountText = styled.div`
   width: 2rem;
-  text-align: right;
+  text-align: center;
 `;
 
 const CustomIcon = styled.img`
   width: 14px;
-  margin-right: 10%;
   filter: invert(25%) sepia(39%) saturate(0%) hue-rotate(199deg) brightness(93%)
     contrast(92%);
 `;
@@ -155,7 +135,7 @@ const CountContainer = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
-  justify-content: flex-end;
+  justify-content: flex-start;
   padding-right: 1rem;
 `;
 
