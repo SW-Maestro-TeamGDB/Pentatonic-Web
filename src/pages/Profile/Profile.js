@@ -623,7 +623,7 @@ const FollowingButton = styled.div`
 
 const FollowButton = styled.div`
   cursor: pointer;
-  min-width: 6rem;
+  min-width: 100px;
   height: 2.5rem;
 
   padding: 0 1rem;
@@ -636,7 +636,7 @@ const FollowButton = styled.div`
   justify-content: center;
   align-items: center;
 
-  font-size: 1rem;
+  font-size: 14px;
   font-weight: 700;
 
   transition: all 0.3s ease-in-out;
