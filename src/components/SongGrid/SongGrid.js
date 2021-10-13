@@ -24,7 +24,6 @@ const SongGrid = (props) => {
   const { idx, data } = props;
 
   const showSession = (session) => {
-    console.log(session);
     return session.map((v) => {
       return (
         <InstrumentIcon

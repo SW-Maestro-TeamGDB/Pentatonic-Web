@@ -47,8 +47,6 @@ const RecordPage = (props) => {
     query: '(max-width:1024px)',
   });
 
-  const canSave = ((onRec === 0 && audioUrl) || onRec === 2) && countdown === 4;
-
   // wav 파일 저장
   const [sampleRate, setSampleRate] = useState();
   const [leftChannel, setLeftChannel] = useState([]);
@@ -121,8 +119,6 @@ const RecordPage = (props) => {
   useEffect(() => {
     sourceRef.current = source;
   }, [source]);
-
-  //
 
   const hihatSound = new Audio();
   hihatSound.src = hihat;
@@ -217,8 +213,91 @@ const RecordPage = (props) => {
       inst.pause();
       inst.currentTime = 0;
     }
+
+    setRightChannel([]);
+    setLeftChannel([]);
+    setRecordingLength(0);
+    setAudioUrl();
+
     setEndTime(lyrics[0].end);
     setLyricsIndex(0);
+  };
+
+  const onRecAudio = () => {
+    // 음원정보를 담은 노드를 생성하거나 음원을 실행또는 디코딩 시키는 일을 한다
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    setAudioCtx(audioCtx);
+
+    // wav 파일 저장
+    setSampleRate(audioCtx.sampleRate);
+
+    let bufferSize = 2048;
+
+    // 자바스크립트를 통해 음원의 진행상태에 직접접근에 사용된다.
+    // const analyser = audioCtx.createScriptProcessor(0, 1, 1);
+    const analyser = audioCtx.createScriptProcessor(bufferSize, 2, 2); // 테스트
+    setAnalyser(analyser);
+
+    function makeSound(stream) {
+      // 내 컴퓨터의 마이크나 다른 소스를 통해 발생한 오디오 스트림의 정보를 보여준다.
+      const source = audioCtx.createMediaStreamSource(stream);
+      setSource(source);
+      source.connect(analyser);
+      analyser.connect(audioCtx.destination);
+    }
+
+    // 마이크 사용 권한 획득
+    navigator.mediaDevices.getUserMedia({ audio: true }).then((stream) => {
+      init();
+      const mediaRecorder = new MediaRecorder(stream);
+
+      if (inst) inst.play();
+      mediaRecorder.start();
+
+      setStream(stream);
+      setMedia(mediaRecorder);
+      makeSound(stream);
+      setOnRec(1);
+
+      analyser.onaudioprocess = function (e) {
+        let left = e.inputBuffer.getChannelData(0);
+        let right = e.inputBuffer.getChannelData(1);
+
+        if (mediaRecorder.state === 'recording') {
+          setCount(parseInt(e.playbackTime));
+
+          // wav 파일 저장
+          setLeftChannel((prev) => [...prev, new Float32Array(left)]);
+          setRightChannel((prev) => [...prev, new Float32Array(right)]);
+          setRecordingLength((recordingLength) => recordingLength + bufferSize);
+        }
+
+        if (mediaRecorder.state === 'paused') {
+          setOnRec(2);
+          mediaRecorder.pause();
+        }
+        // 곡 길이만큼 시간 지나면 자동으로 음성 저장 및 녹음 중지
+        if (e.playbackTime > audioDuration) {
+          stream.getAudioTracks().forEach(function (track) {
+            track.stop();
+          });
+
+          // 녹음 중지
+          if (mediaRecorder.state === 'recording') {
+            mediaRecorder.stop();
+          }
+          setOnRec(0);
+
+          // 메서드가 호출 된 노드 연결 해제
+          analyser.disconnect();
+          audioCtx.createMediaStreamSource(stream).disconnect();
+
+          mediaRecorder.ondataavailable = function (e) {
+            setAudioUrl(e.data);
+          };
+        }
+      };
+    });
   };
 
   const onClickStart = () => {
@@ -254,84 +333,6 @@ const RecordPage = (props) => {
         setOnRec(1);
       })
       .catch(() => setMicAuthModalToggle(true));
-  };
-
-  const onRecAudio = () => {
-    // 음원정보를 담은 노드를 생성하거나 음원을 실행또는 디코딩 시키는 일을 한다
-    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-    setAudioCtx(audioCtx);
-
-    // wav 파일 저장
-    setSampleRate(audioCtx.sampleRate);
-
-    let bufferSize = 2048;
-
-    // 자바스크립트를 통해 음원의 진행상태에 직접접근에 사용된다.
-    // const analyser = audioCtx.createScriptProcessor(0, 1, 1);
-    const analyser = audioCtx.createScriptProcessor(bufferSize, 2, 2); // 테스트
-    setAnalyser(analyser);
-
-    function makeSound(stream) {
-      // 내 컴퓨터의 마이크나 다른 소스를 통해 발생한 오디오 스트림의 정보를 보여준다.
-      const source = audioCtx.createMediaStreamSource(stream);
-      setSource(source);
-      source.connect(analyser);
-      analyser.connect(audioCtx.destination);
-    }
-
-    // 마이크 사용 권한 획득
-    navigator.mediaDevices.getUserMedia({ audio: true }).then((stream) => {
-      const mediaRecorder = new MediaRecorder(stream);
-      init();
-
-      if (inst) inst.play();
-      mediaRecorder.start();
-
-      setStream(stream);
-      setMedia(mediaRecorder);
-      makeSound(stream);
-      setOnRec(1);
-
-      analyser.onaudioprocess = function (e) {
-        let left = e.inputBuffer.getChannelData(0);
-        let right = e.inputBuffer.getChannelData(1);
-
-        if (mediaRecorder.state === 'recording') {
-          setCount(parseInt(e.playbackTime));
-
-          // wav 파일 저장
-          setLeftChannel((prev) => [...prev, new Float32Array(left)]);
-          setRightChannel((prev) => [...prev, new Float32Array(right)]);
-          setRecordingLength((recordingLength) => recordingLength + bufferSize);
-        }
-
-        if (mediaRecorder.state === 'paused') {
-          setOnRec(2);
-          mediaRecorder.pause();
-        }
-        // 곡 길이만큼 시간 지나면 자동으로 음성 저장 및 녹음 중지
-        if (e.playbackTime > audioDuration) {
-          stream.getAudioTracks().forEach(function (track) {
-            track.stop();
-          });
-          init();
-
-          // 녹음 중지
-          if (mediaRecorder.state === 'recording') {
-            mediaRecorder.stop();
-          }
-          setOnRec(0);
-
-          // 메서드가 호출 된 노드 연결 해제
-          analyser.disconnect();
-          audioCtx.createMediaStreamSource(stream).disconnect();
-
-          mediaRecorder.ondataavailable = function (e) {
-            setAudioUrl(e.data);
-          };
-        }
-      };
-    });
   };
 
   // 사용자가 음성 녹음을 중지했을 때
@@ -483,7 +484,7 @@ const RecordPage = (props) => {
     } else if (onRec === 2) {
       return <CustomPlayIcon src={PlayIcon} onClick={onClickResume} />;
     }
-  }, [onRec, countdown]);
+  }, [onRec, countdown, media, audioCtx]);
 
   const showAudioDuration = useMemo(() => {
     return (
@@ -540,9 +541,13 @@ const RecordPage = (props) => {
           <BackwardText>커버 정보 입력</BackwardText>
         </BackwardButton>
         <BackgroundBlur>
-          <IconContainer canSave={canSave}>
+          <IconContainer
+            canSave={
+              ((onRec === 0 && audioUrl) || onRec === 2) && countdown === 4
+            }
+          >
             {showRecordingState}
-            {canSave ? (
+            {((onRec === 0 && audioUrl) || onRec === 2) && countdown === 4 ? (
               <CustomPlayIcon
                 src={SaveIcon}
                 onClick={() => onSubmitAudioFile()}
@@ -556,7 +561,16 @@ const RecordPage = (props) => {
         </BackgroundBlur>
       </Background>
     );
-  }, [onRec, audioCtx, countdown, lyrics, lyricsIndex, sourceRef.current]);
+  }, [
+    onRec,
+    audioCtx,
+    countdown,
+    lyrics,
+    lyricsIndex,
+    sourceRef.current,
+    media,
+    audioUrl,
+  ]);
 
   const showRecordModal = useMemo(() => {
     <RecordModal modalToggle={modalToggle} setModalToggle={setModalToggle} />;
@@ -571,13 +585,13 @@ const RecordPage = (props) => {
 
   return (
     <Container>
-      {/* <RecordModal modalToggle={modalToggle} setModalToggle={setModalToggle} /> */}
-      {/* <MicAuthModal
+      <RecordModal modalToggle={modalToggle} setModalToggle={setModalToggle} />
+      <MicAuthModal
         modalToggle={micAuthModalToggle}
         setModalToggle={setMicAuthModalToggle}
-      /> */}
-      {showRecordModal}
-      {showMicAuthModal}
+      />
+      {/* {showRecordModal}
+      {showMicAuthModal} */}
       {showBackground}
       {/* <Background url={isFreeCover ? bandData.backGroundURI : songData.songImg}>
         <BackwardButton onClick={() => onClickStop()}>
