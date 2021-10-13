@@ -29,6 +29,43 @@ const GET_SONG = gql`
   }
 `;
 
+const GET_BAND = gql`
+  query Query($getBandBandId: ObjectID!) {
+    getBand(bandId: $getBandBandId) {
+      backGroundURI
+      creator {
+        id
+      }
+      session {
+        position
+        maxMember
+        cover {
+          coverBy {
+            id
+            username
+            profileURI
+          }
+          coverURI
+          coverId
+          name
+          position
+        }
+      }
+      name
+      song {
+        name
+        songId
+        artist
+        duration
+        instrument {
+          instURI
+          position
+        }
+      }
+    }
+  }
+`;
+
 const CoverRoomRecord = ({ match }) => {
   const location = useLocation();
   const [page, setPage] = useState(0);
@@ -37,44 +74,40 @@ const CoverRoomRecord = ({ match }) => {
   const [inst, setInst] = useState();
   const [sessionData, setSessionData] = useState();
   const pageUrl = match.url;
-  const songId = match.params.id;
+  const bandId = match.params.id;
+
   const selectedSession = location?.state?.selectedSession;
 
-  const [bandId, setBandId] = useState();
   const [bandData, setBandData] = useState({
     name: null,
     introduce: null,
     backGroundURI: null,
-    songId: songId,
+    songId: null,
   });
   const [songData, setSongData] = useState();
 
-  // const { data } = useQuery(GET_SONG, {
-  //   variables: {
-  //     getSongSongId: songId,
-  //   },
-  //   onCompleted: (data) => {
-  //     setSongData({
-  //       ...songData,
-  //       name: data.getSong.name,
-  //       artist: data.getSong.artist,
-  //       songImg: data.getSong.songImg,
-  //     });
-  //     setAudioDuration(parseInt(data.getSong.duration));
-  //     setSessionData(data.getSong.instrument);
-  //   },
-  //   onError: (error) => {
-  //     alert('에러');
-  //     console.log(error);
-  //   },
-  // });
+  const { data } = useQuery(GET_BAND, {
+    variables: {
+      getBandBandId: bandId,
+      commentFirst: 10,
+    },
+    onCompleted: (data) => {
+      setBandData(data.getBand);
+      setSongData(data.getBand.song);
+      setAudioDuration(parseInt(data.getBand.song.duration));
+    },
+  });
+
+  useEffect(() => {
+    console.log(bandData);
+  }, [bandData]);
 
   const initBandData = () => {
     setBandData({
       name: null,
       introduce: null,
       backGroundURI: null,
-      songId: songId,
+      songId: null,
     });
   };
 
@@ -93,6 +126,7 @@ const CoverRoomRecord = ({ match }) => {
           songData={songData}
           sessionData={sessionData}
           initBandData={initBandData}
+          formTitle={bandData.name}
         />
       ),
     },
@@ -119,7 +153,6 @@ const CoverRoomRecord = ({ match }) => {
           inst={inst}
           bandData={bandData}
           bandId={bandId}
-          setBandId={setBandId}
           selectedSession={selectedSession}
         />
       ),
