@@ -29,6 +29,7 @@ const CoverRoomSession = (props) => {
     sessionData,
     history,
     match,
+    participation,
   } = props;
   const [selectedSession, setSelectedSession] = useState();
   const [modalToggle, setModalToggle] = useState(false);
@@ -87,7 +88,7 @@ const CoverRoomSession = (props) => {
     });
   };
 
-  return (
+  return (participation && now) || !participation ? (
     <CoverRoomSessionContainer>
       <Header>
         <BoardTitle>
@@ -96,7 +97,7 @@ const CoverRoomSession = (props) => {
             {now}/{total}
           </SessionCount>
         </BoardTitle>
-        {now !== total ? (
+        {now !== total && !participation ? (
           <BoardLink
             onClick={() => {
               onClickParticipate();
@@ -113,24 +114,28 @@ const CoverRoomSession = (props) => {
           <NoSession>참여한 세션이 없습니다</NoSession>
         )}
       </SessionContainer>
-      <ParticipationModal
-        modalToggle={participationModal}
-        setModalToggle={setParticipationModal}
-        onClickLeftButton={() =>
-          history.push({
-            pathname: `/lounge/record/${match.params.id}`,
-            state: { selectedSession: sessionData.position },
-          })
-        }
-        onClickRightButton={() => onClickLibrary()}
-      />
-      <AuthModal
-        modalToggle={modalToggle}
-        setModalToggle={setModalToggle}
-        action={() => setParticipationModal(true)}
-      />
+      {!participation ? (
+        <>
+          <ParticipationModal
+            modalToggle={participationModal}
+            setModalToggle={setParticipationModal}
+            onClickLeftButton={() =>
+              history.push({
+                pathname: `/lounge/record/${match.params.id}`,
+                state: { selectedSession: sessionData.position },
+              })
+            }
+            onClickRightButton={() => onClickLibrary()}
+          />
+          <AuthModal
+            modalToggle={modalToggle}
+            setModalToggle={setModalToggle}
+            action={() => setParticipationModal(true)}
+          />
+        </>
+      ) : null}
     </CoverRoomSessionContainer>
-  );
+  ) : null;
 };
 
 const CoverRoomSessionContainer = styled.div`
