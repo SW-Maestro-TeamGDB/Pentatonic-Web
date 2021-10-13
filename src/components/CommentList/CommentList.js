@@ -240,13 +240,12 @@ const EditSubmitButton = styled.button`
 const CustomEditIcon = styled(EllipsisOutlined)`
   font-size: 20px;
   transform: rotate(90deg);
-  visibility: hidden;
+
   transition: all 0.3s ease-in-out;
-  opacity: 0;
+  opacity: 0.3;
 
   &:focus {
-    visibility: visible;
-    opacity: 100;
+    opacity: 1;
   }
 `;
 
