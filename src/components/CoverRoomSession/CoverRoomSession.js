@@ -6,6 +6,7 @@ import styled from 'styled-components';
 import { Default } from '../../lib/Media';
 import CoverRoomSessionItem from '../CoverRoomSessionItem';
 import LibraryDrawer from '../LibraryDrawer/LibraryDrawer';
+import ParticipationModal from '../ParticipationModal';
 
 import AuthModal from '../../components/AuthModal';
 
@@ -28,13 +29,20 @@ const CoverRoomSession = (props) => {
   } = props;
   const [selectedSession, setSelectedSession] = useState();
   const [modalToggle, setModalToggle] = useState(false);
+  const [participationModal, setParticipationModal] = useState(false);
   const { data } = useQuery(IS_LOGGED_IN, {
     fetchPolicy: 'network-only',
   });
 
+  const onClickLibrary = () => {
+    setParticipationModal(false);
+    setVisibleDrawer(true);
+  };
+
   const onClickParticipate = () => {
     if (data.isLoggedIn) {
-      setVisibleDrawer(true);
+      setParticipationModal(true);
+      // setVisibleDrawer(true);
       setLibraryFilter({ songId: songId, position: sessionData.position });
     } else {
       setModalToggle(true);
@@ -102,10 +110,15 @@ const CoverRoomSession = (props) => {
           <NoSession>참여한 세션이 없습니다</NoSession>
         )}
       </SessionContainer>
+      <ParticipationModal
+        modalToggle={participationModal}
+        setModalToggle={setParticipationModal}
+        afterRequest={() => onClickLibrary()}
+      />
       <AuthModal
         modalToggle={modalToggle}
         setModalToggle={setModalToggle}
-        action={() => setVisibleDrawer(true)}
+        action={() => setParticipationModal(true)}
       />
     </CoverRoomSessionContainer>
   );
