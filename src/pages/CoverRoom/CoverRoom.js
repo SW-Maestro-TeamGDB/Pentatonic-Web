@@ -339,6 +339,8 @@ const CoverRoom = ({ match }) => {
           getSession={getSession}
           setLibraryFilter={setLibraryFilter}
           sessionData={v}
+          history={history}
+          match={match}
         />
       );
     });

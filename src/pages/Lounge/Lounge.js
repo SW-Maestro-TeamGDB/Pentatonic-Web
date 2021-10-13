@@ -8,6 +8,7 @@ import LoungeSoloCovers from '../LoungeSoloCovers';
 import CoverRoom from '../CoverRoom/CoverRoom';
 import NotFoundPage from '../NotFoundPage';
 import LoungeFreeCovers from '../LoungeFreeCovers';
+import CoverRoomRecord from '../CoverRoomRecord/CoverRoomRecord';
 
 const Lounge = ({ match }) => {
   return (
@@ -38,6 +39,11 @@ const Lounge = ({ match }) => {
       />
       <Route path={`${match.path}/free`} component={LoungeFreeCovers} />
       <Route path={`${match.path}/cover/:id`} component={CoverRoom} exact />
+      <Route
+        path={`${match.path}/record/:id`}
+        component={CoverRoomRecord}
+        exact
+      />
       <Route path="*" component={NotFoundPage} exact />
     </Switch>
   );

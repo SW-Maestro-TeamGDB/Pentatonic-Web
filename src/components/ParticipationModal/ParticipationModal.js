@@ -5,14 +5,8 @@ import { Modal } from 'antd';
 import { ExclamationCircleOutlined } from '@ant-design/icons';
 
 const ParticipationModal = (props) => {
-  const {
-    modalToggle,
-    setModalToggle,
-    modalLoading,
-    text,
-    afterRequest,
-    desc,
-  } = props;
+  const { modalToggle, setModalToggle, onClickLeftButton, onClickRightButton } =
+    props;
 
   const closeModal = () => {
     setModalToggle(false);
@@ -43,8 +37,8 @@ const ParticipationModal = (props) => {
           </CautionDesc>
         </CautionContent>
         <ButtonContainer>
-          <AcceptButton onClick={closeModal}>새로 녹음하기</AcceptButton>
-          <AcceptButton onClick={afterRequest}>
+          <AcceptButton onClick={onClickLeftButton}>새로 녹음하기</AcceptButton>
+          <AcceptButton onClick={onClickRightButton}>
             라이브러리로 참여하기
           </AcceptButton>
         </ButtonContainer>

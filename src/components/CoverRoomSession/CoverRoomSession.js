@@ -1,5 +1,6 @@
 import react, { useEffect, useState, useCallback } from 'react';
 import { Collapse, Drawer } from 'antd';
+
 import { gql, useQuery } from '@apollo/client';
 import { IS_LOGGED_IN } from '../../apollo/cache';
 import styled from 'styled-components';
@@ -26,6 +27,8 @@ const CoverRoomSession = (props) => {
     getSession,
     setLibraryFilter,
     sessionData,
+    history,
+    match,
   } = props;
   const [selectedSession, setSelectedSession] = useState();
   const [modalToggle, setModalToggle] = useState(false);
@@ -113,7 +116,10 @@ const CoverRoomSession = (props) => {
       <ParticipationModal
         modalToggle={participationModal}
         setModalToggle={setParticipationModal}
-        afterRequest={() => onClickLibrary()}
+        onClickLeftButton={() =>
+          history.push(`/lounge/record/${match.params.id}`)
+        }
+        onClickRightButton={() => onClickLibrary()}
       />
       <AuthModal
         modalToggle={modalToggle}

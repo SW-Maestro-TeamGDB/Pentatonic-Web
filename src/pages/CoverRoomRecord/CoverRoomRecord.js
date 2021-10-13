@@ -27,7 +27,7 @@ const GET_SONG = gql`
   }
 `;
 
-const RecordMaking = ({ match }) => {
+const CoverRoomRecord = ({ match }) => {
   const [page, setPage] = useState(0);
   const [audioFile, setAudioFile] = useState();
   const [audioDuration, setAudioDuration] = useState();
@@ -46,25 +46,25 @@ const RecordMaking = ({ match }) => {
   const [songData, setSongData] = useState();
   const [selectedSession, setSelectedSession] = useState(); // 녹음 참여 세션
 
-  const { data } = useQuery(GET_SONG, {
-    variables: {
-      getSongSongId: songId,
-    },
-    onCompleted: (data) => {
-      setSongData({
-        ...songData,
-        name: data.getSong.name,
-        artist: data.getSong.artist,
-        songImg: data.getSong.songImg,
-      });
-      setAudioDuration(parseInt(data.getSong.duration));
-      setSessionData(data.getSong.instrument);
-    },
-    onError: (error) => {
-      alert('에러');
-      console.log(error);
-    },
-  });
+  // const { data } = useQuery(GET_SONG, {
+  //   variables: {
+  //     getSongSongId: songId,
+  //   },
+  //   onCompleted: (data) => {
+  //     setSongData({
+  //       ...songData,
+  //       name: data.getSong.name,
+  //       artist: data.getSong.artist,
+  //       songImg: data.getSong.songImg,
+  //     });
+  //     setAudioDuration(parseInt(data.getSong.duration));
+  //     setSessionData(data.getSong.instrument);
+  //   },
+  //   onError: (error) => {
+  //     alert('에러');
+  //     console.log(error);
+  //   },
+  // });
 
   const initBandData = () => {
     setBandData({
@@ -155,4 +155,4 @@ const StepContents = styled.div`
   margin-bottom: 3vh;
 `;
 
-export default RecordMaking;
+export default CoverRoomRecord;
