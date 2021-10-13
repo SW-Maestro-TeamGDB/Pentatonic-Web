@@ -1,12 +1,14 @@
 import react, { useState, useEffect } from 'react';
 import styled from 'styled-components';
+import { useLocation } from 'react-router';
 import { useQuery, gql, useLazyQuery } from '@apollo/client';
 import { Steps } from 'antd';
 import PageContainer from '../../components/PageContainer';
 import RecordPage from '../RecordPage';
 import RecordEdit from '../RecordEdit';
 import instrument from '../CoverMaking/inst.mp3';
-import RecordForm from '../RecordForm';
+import ParticipationForm from '../ParticipationForm';
+import NotFoundPage from '../NotFoundPage';
 
 import LoginAuth from '../../lib/LoginAuth';
 
@@ -28,6 +30,7 @@ const GET_SONG = gql`
 `;
 
 const CoverRoomRecord = ({ match }) => {
+  const location = useLocation();
   const [page, setPage] = useState(0);
   const [audioFile, setAudioFile] = useState();
   const [audioDuration, setAudioDuration] = useState();
@@ -35,6 +38,7 @@ const CoverRoomRecord = ({ match }) => {
   const [sessionData, setSessionData] = useState();
   const pageUrl = match.url;
   const songId = match.params.id;
+  const selectedSession = location?.state?.selectedSession;
 
   const [bandId, setBandId] = useState();
   const [bandData, setBandData] = useState({
@@ -44,7 +48,6 @@ const CoverRoomRecord = ({ match }) => {
     songId: songId,
   });
   const [songData, setSongData] = useState();
-  const [selectedSession, setSelectedSession] = useState(); // 녹음 참여 세션
 
   // const { data } = useQuery(GET_SONG, {
   //   variables: {
@@ -79,14 +82,13 @@ const CoverRoomRecord = ({ match }) => {
     {
       description: '라이브러리 정보 입력',
       content: (
-        <RecordForm
+        <ParticipationForm
           setPage={setPage}
           audioDuration={audioDuration}
           pageUrl={pageUrl}
           bandData={bandData}
           setBandData={setBandData}
           selectedSession={selectedSession}
-          setSelectedSession={setSelectedSession}
           setInst={setInst}
           songData={songData}
           sessionData={sessionData}
@@ -124,7 +126,7 @@ const CoverRoomRecord = ({ match }) => {
     },
   ];
 
-  return (
+  return selectedSession ? (
     <LoginAuth>
       <PageContainer>
         <CustomSteps progressDot current={page}>
@@ -139,6 +141,8 @@ const CoverRoomRecord = ({ match }) => {
         <StepContents>{pages[page].content}</StepContents>
       </PageContainer>
     </LoginAuth>
+  ) : (
+    <NotFoundPage desc="올바르지 않은 접근입니다" />
   );
 };
 

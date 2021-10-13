@@ -117,7 +117,10 @@ const CoverRoomSession = (props) => {
         modalToggle={participationModal}
         setModalToggle={setParticipationModal}
         onClickLeftButton={() =>
-          history.push(`/lounge/record/${match.params.id}`)
+          history.push({
+            pathname: `/lounge/record/${match.params.id}`,
+            state: { selectedSession: sessionData.position },
+          })
         }
         onClickRightButton={() => onClickLibrary()}
       />
