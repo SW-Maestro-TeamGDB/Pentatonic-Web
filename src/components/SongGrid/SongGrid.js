@@ -9,14 +9,6 @@ import { sessionIconMatch } from '../../lib/sessionIconMatch';
 import ThumbIcon from '../../images/ThumbIcon.svg';
 import ViewIcon from '../../images/ViewIcon.svg';
 
-import TameImpala from '../../images/TempData/TameImpala.jpeg';
-import Hyukoh from '../../images/TempData/Hyukoh.jpeg';
-import Beatles from '../../images/TempData/Beatles.jpeg';
-import MenITrust from '../../images/TempData/MenITrust.jpeg';
-import NoSurprises from '../../images/TempData/NoSurprises.jpeg';
-import TheVolunteers from '../../images/TempData/TheVolunteers.jpeg';
-import FixYou from '../../images/TempData/FixYou.png';
-
 import vocal from '../../images/Session/vocal.svg';
 import tempData from '../../data/songs/tempData.json';
 
