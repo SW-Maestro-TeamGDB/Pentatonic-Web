@@ -14,27 +14,13 @@ import LoginAuth from '../../lib/LoginAuth';
 
 const { Step } = Steps;
 
-const GET_SONG = gql`
-  query Query($getSongSongId: ObjectID!) {
-    getSong(songId: $getSongSongId) {
-      name
-      songImg
-      duration
-      artist
-      instrument {
-        position
-        instURI
-      }
-    }
-  }
-`;
-
 const GET_BAND = gql`
   query Query($getBandBandId: ObjectID!) {
     getBand(bandId: $getBandBandId) {
       backGroundURI
       creator {
         id
+        username
       }
       session {
         position
@@ -92,15 +78,18 @@ const CoverRoomRecord = ({ match }) => {
       commentFirst: 10,
     },
     onCompleted: (data) => {
-      setBandData(data.getBand);
-      setSongData(data.getBand.song);
-      setAudioDuration(parseInt(data.getBand.song.duration));
+      const band = data.getBand;
+
+      setBandData(band);
+      setSongData({
+        name: band.name,
+        artist: band.creator.username,
+        songImg: band.backGroundURI,
+        songId: band.song.songId,
+      });
+      setAudioDuration(parseInt(band.song.duration));
     },
   });
-
-  useEffect(() => {
-    console.log(bandData);
-  }, [bandData]);
 
   const initBandData = () => {
     setBandData({
@@ -126,7 +115,6 @@ const CoverRoomRecord = ({ match }) => {
           songData={songData}
           sessionData={sessionData}
           initBandData={initBandData}
-          formTitle={bandData.name}
         />
       ),
     },
@@ -154,6 +142,7 @@ const CoverRoomRecord = ({ match }) => {
           bandData={bandData}
           bandId={bandId}
           selectedSession={selectedSession}
+          songData={songData}
         />
       ),
     },

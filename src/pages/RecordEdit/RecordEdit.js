@@ -113,7 +113,7 @@ const RecordEdit = (props) => {
                 cover: {
                   name: bandData.name,
                   coverURI: data.uploadCoverFile,
-                  songId: bandData.songId,
+                  songId: songData.songId,
                   position: selectedSession,
                 },
               },

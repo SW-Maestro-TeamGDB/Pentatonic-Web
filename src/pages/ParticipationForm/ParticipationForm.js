@@ -30,7 +30,6 @@ const MERGE_AUDIOS = gql`
 
 const ParticipationForm = (props) => {
   const {
-    formTitle,
     setPage,
     audioDuration,
     pageUrl,
@@ -131,7 +130,7 @@ const ParticipationForm = (props) => {
         <BackwardButton onClick={() => history.goBack()}>
           <LeftOutlined />
         </BackwardButton>
-        <SongTitle>{formTitle}</SongTitle>
+        <SongTitle>{songData ? `${songData.name}` : null}</SongTitle>
       </SongMetaContainer>
       <FormContainer>
         <InputContainer>
@@ -164,7 +163,7 @@ const ParticipationForm = (props) => {
           <CustomTitle>제공 반주</CustomTitle>
           <CustomDescription>녹음에 사용될 반주를 조합합니다</CustomDescription>
           <InstContainer>
-            <GridContainer>{showCoverRoomSession()}</GridContainer>
+            <GridContainer width="90%">{showCoverRoomSession()}</GridContainer>
           </InstContainer>
           <ErrorContainer>
             {instError ? <ErrorMessage>{instError}</ErrorMessage> : null}
@@ -223,8 +222,9 @@ const SessionContainer = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  color: #666;
 
-  margin: 3rem 0;
+  margin: 3.5rem 0;
 `;
 
 const SessionAddButtonContainer = styled.div`
@@ -241,6 +241,12 @@ const SongMetaContainer = styled.div`
 
 const InstContainer = styled.div`
   margin: 2.5rem 0;
+  padding: 1rem 0;
+
+  display: flex;
+  justify-content: center;
+  box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.2);
+  border-radius: 16px;
 `;
 
 const CustomPictureIcon = styled(PictureOutlined)`

@@ -29,6 +29,7 @@ const CoverRoomSessionItem = (props) => {
     edit,
     getSession,
     cover,
+    participation,
   } = props;
   const selected = selectedSession === count;
   const [profileURI, setProfileURI] = useState();
@@ -108,7 +109,9 @@ const CoverRoomSessionItem = (props) => {
             />
           </ImgContainer>
           <SessionIdContainer to={`/profile/${data.coverBy.id}`}>
-            {creator === data.coverBy.id ? <CreatorIcon>★</CreatorIcon> : null}
+            {creator === data.coverBy.id && !participation ? (
+              <CreatorIcon>★</CreatorIcon>
+            ) : null}
             <SessionId>{data.coverBy.username}</SessionId>
           </SessionIdContainer>
           <QuestionModal

@@ -43,6 +43,11 @@ const UploadCompleteModal = (props) => {
             <CustomCheckIcon />
             <TextWrapper>라이브러리가 업로드 되었습니다.</TextWrapper>
             <ButtonContainer>
+              {bandId ? (
+                <CoverRoomButton to={`/lounge/cover/${bandId}`}>
+                  커버룸 확인하기
+                </CoverRoomButton>
+              ) : null}
               <LibraryButton to="/library">라이브러리 확인하기</LibraryButton>
             </ButtonContainer>
           </>
