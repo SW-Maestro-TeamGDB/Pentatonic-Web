@@ -260,15 +260,15 @@ const RecordPage = (props) => {
       setOnRec(1);
 
       analyser.onaudioprocess = function (e) {
-        let left = e.inputBuffer.getChannelData(0);
-        let right = e.inputBuffer.getChannelData(1);
+        let left = new Float32Array(e.inputBuffer.getChannelData(0));
+        let right = new Float32Array(e.inputBuffer.getChannelData(1));
 
         if (mediaRecorder.state === 'recording') {
           setCount(parseInt(e.playbackTime));
 
           // wav 파일 저장
-          // setLeftChannel((prev) => [...prev, new Float32Array(left)]);
-          // setRightChannel((prev) => [...prev, new Float32Array(right)]);
+          setLeftChannel((prev) => [...prev, left]);
+          setRightChannel((prev) => [...prev, right]);
           setRecordingLength((recordingLength) => recordingLength + bufferSize);
         }
 
