@@ -5,12 +5,12 @@ import styled from 'styled-components';
 
 const MyMenu = (props) => {
   const onClickLogout = () => {
-    localStorage.clear();
+    sessionStorage.clear();
     isLoggedInVar(false);
     currentUserVar(null);
   };
 
-  const userInfo = JSON.parse(localStorage.getItem('userInfo'));
+  const userInfo = JSON.parse(sessionStorage.getItem('userInfo'));
 
   return (
     <MenuContainer>

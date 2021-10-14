@@ -24,10 +24,10 @@ const Register = ({ history }) => {
 
   // 회원가입 중 로그인 할 시 메인화면으로 이동
   useEffect(() => {
-    if (localStorage.getItem('token')) {
+    if (sessionStorage.getItem('token')) {
       history.push('/');
     }
-  }, [localStorage]);
+  }, [sessionStorage]);
 
   const nextPage = () => {
     setPageStep(pageStep + 1);

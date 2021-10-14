@@ -59,7 +59,7 @@ const RegisterPhoneAuth = (props) => {
       setAuthError(error.message);
     },
     onCompleted: (data) => {
-      localStorage.setItem('token', data.register);
+      sessionStorage.setItem('token', data.register);
       window.location.href = '/';
     },
   });
