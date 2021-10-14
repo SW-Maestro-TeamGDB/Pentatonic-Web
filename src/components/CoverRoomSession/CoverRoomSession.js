@@ -83,6 +83,7 @@ const CoverRoomSession = (props) => {
           }
           getSession={getSession}
           setLibraryFilter={setLibraryFilter}
+          cover={cover}
         />
       );
     });

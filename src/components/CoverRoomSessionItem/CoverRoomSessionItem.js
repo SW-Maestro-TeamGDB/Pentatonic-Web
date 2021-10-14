@@ -28,6 +28,7 @@ const CoverRoomSessionItem = (props) => {
     bandId,
     edit,
     getSession,
+    cover,
   } = props;
   const selected = selectedSession === count;
   const [profileURI, setProfileURI] = useState();
@@ -53,14 +54,25 @@ const CoverRoomSessionItem = (props) => {
 
   const onClickSession = () => {
     if (selected) {
-      setSelectedSession(null);
       removeSession();
-    } else {
-      setSelectedSession(count);
+      setSelectedSession(null);
+    } else if (!selected) {
+      if (selectedSession || selectedSession === 0) {
+        replaceSession();
+      } else {
+        setSelectedSession(count);
+      }
     }
   };
 
-  const removeSession = () => {
+  const replaceSession = () => {
+    setSession(
+      session.filter((uri) => uri !== cover[selectedSession].coverURI),
+    );
+    setSelectedSession(count);
+  };
+
+  const removeSession = (num) => {
     setSession(session.filter((uri) => uri !== data.coverURI));
   };
 
