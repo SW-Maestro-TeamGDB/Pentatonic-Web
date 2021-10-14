@@ -267,8 +267,8 @@ const RecordPage = (props) => {
           setCount(parseInt(e.playbackTime));
 
           // wav 파일 저장
-          setLeftChannel((prev) => [...prev, new Float32Array(left)]);
-          setRightChannel((prev) => [...prev, new Float32Array(right)]);
+          // setLeftChannel((prev) => [...prev, new Float32Array(left)]);
+          // setRightChannel((prev) => [...prev, new Float32Array(right)]);
           setRecordingLength((recordingLength) => recordingLength + bufferSize);
         }
 
@@ -276,6 +276,7 @@ const RecordPage = (props) => {
           setOnRec(2);
           mediaRecorder.pause();
         }
+
         // 곡 길이만큼 시간 지나면 자동으로 음성 저장 및 녹음 중지
         if (e.playbackTime > audioDuration) {
           stream.getAudioTracks().forEach(function (track) {
@@ -411,14 +412,14 @@ const RecordPage = (props) => {
   };
 
   const onSubmitAudioFile = () => {
-    if (parseInt(count) < 60) {
-      return notification['warning']({
-        key: 'audioNotification',
-        description: '1분 이상의 녹음만 저장 가능합니다',
-        placement: 'bottomRight',
-        duration: 3,
-      });
-    }
+    // if (parseInt(count) < 60) {
+    //   return notification['warning']({
+    //     key: 'audioNotification',
+    //     description: '1분 이상의 녹음만 저장 가능합니다',
+    //     placement: 'bottomRight',
+    //     duration: 3,
+    //   });
+    // }
 
     makeAudioFile();
 
