@@ -74,6 +74,7 @@ const CoverMaking = ({ match }) => {
         name: data.getSong.name,
         artist: data.getSong.artist,
         songImg: data.getSong.songImg,
+        songId: songId,
       });
       setAudioDuration(parseInt(data.getSong.duration));
       setSessionData(data.getSong.instrument);

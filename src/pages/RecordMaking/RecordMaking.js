@@ -56,6 +56,7 @@ const RecordMaking = ({ match }) => {
         name: data.getSong.name,
         artist: data.getSong.artist,
         songImg: data.getSong.songImg,
+        songId: songId,
       });
       setAudioDuration(parseInt(data.getSong.duration));
       setSessionData(data.getSong.instrument);
@@ -119,6 +120,7 @@ const RecordMaking = ({ match }) => {
           bandId={bandId}
           setBandId={setBandId}
           selectedSession={selectedSession}
+          songData={songData}
         />
       ),
     },
