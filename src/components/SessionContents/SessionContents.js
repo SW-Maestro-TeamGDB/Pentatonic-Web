@@ -26,7 +26,6 @@ const SessionContents = (props) => {
 
     // 현재 선택된 세션 삭제할 경우 선택 세션 초기화
     if (title === selectedSession) {
-      console.log(title, selectedSession);
       setSelectedSession(null);
     }
   };

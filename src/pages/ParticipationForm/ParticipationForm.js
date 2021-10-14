@@ -54,10 +54,6 @@ const ParticipationForm = (props) => {
   const [selectInstURI, setSelectInstURI] = useState([]);
   const history = useHistory();
 
-  useEffect(() => {
-    console.log(selectInstURI);
-  }, [selectInstURI]);
-
   // 반주 병합
   const [mergeAudios, mergeAudiosResult] = useMutation(MERGE_AUDIOS, {
     onCompleted: (data) => {

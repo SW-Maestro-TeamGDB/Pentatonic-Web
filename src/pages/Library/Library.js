@@ -33,7 +33,6 @@ const Library = () => {
   const userData = useQuery(GET_CURRENT_USER);
   const [getUserInfo] = useLazyQuery(GET_USER_INFO, {
     onCompleted: (data) => {
-      console.log(data);
       setLibraryData(data.getUserInfo.library);
     },
     onError: (error) => {

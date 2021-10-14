@@ -33,7 +33,6 @@ const SearchPage = ({ match }) => {
       },
     },
     onCompleted: (data) => {
-      console.log(data);
       setSearchList(data.queryBand.bands);
     },
   });

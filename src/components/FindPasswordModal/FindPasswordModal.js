@@ -54,7 +54,6 @@ const FindPasswordModal = (props) => {
       setPasswordError(error.message);
     },
     onCompleted: (data) => {
-      console.log(data);
       setPage(2);
     },
   });
