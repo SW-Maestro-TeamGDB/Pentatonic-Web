@@ -98,8 +98,11 @@ const LibraryList = (props) => {
   const [deleteCover, deleteCoverResult] = useMutation(DELETE_COVER, {
     onCompleted: () => {
       setDeleteModal(false);
-      setLibraryData(libraryData.filter((v) => v.coverId != data.coverId));
-      getCover();
+      getUserInfo({
+        variables: {
+          getUserInfoUserId: userId,
+        },
+      });
 
       notification['success']({
         key: 'successEditTitle',

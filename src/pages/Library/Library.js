@@ -32,6 +32,7 @@ const Library = () => {
   const [libraryData, setLibraryData] = useState([]);
   const userData = useQuery(GET_CURRENT_USER);
   const [getUserInfo] = useLazyQuery(GET_USER_INFO, {
+    fetchPolicy: 'no-cache',
     onCompleted: (data) => {
       setLibraryData(data.getUserInfo.library);
     },
