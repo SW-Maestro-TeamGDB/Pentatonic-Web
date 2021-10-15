@@ -12,6 +12,10 @@ const GET_RANKED_BANDS = gql`
       name
       backGroundURI
       likeCount
+      song {
+        name
+        artist
+      }
     }
   }
 `;

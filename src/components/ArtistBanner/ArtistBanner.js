@@ -1,3 +1,4 @@
+import react, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { Carousel } from 'antd';
 import { Default } from '../../lib/Media';
@@ -7,47 +8,63 @@ import ArtistBannerContents from '../ArtistBannerContents/ArtistBannerContents';
 import ThumbIcon from '../../images/ThumbIcon.svg';
 import ViewIcon from '../../images/ViewIcon.svg';
 
-const ArtistBanner = () => {
-  const tempData = [
-    {
-      id: 1,
-      name: '무지성 밴드',
-      title: 'Han',
-      singer: 'Berhana',
-      image: 'https://i.ytimg.com/vi/Chezi1Ojjtc/maxresdefault.jpg',
-      type: 'band',
-    },
-    {
-      id: 2,
-      title: '이종민',
-      singer: '@jongmin',
-      image:
-        'https://penta-tonic.s3.ap-northeast-2.amazonaws.com/1630505095528-jongminfire.jpeg',
-      type: 'artist',
-    },
-    {
-      id: 3,
-      name: '박지성 밴드',
-      title: 'Something About Us',
-      singer: 'Daft Punk',
-      image: 'https://pbs.twimg.com/media/Eu4zvhKWgAM85gy.jpg:large',
-      type: 'band',
-    },
-    {
-      id: 2,
-      title: '고대백',
-      singer: '@GDB',
-      image:
-        'https://avatars.githubusercontent.com/u/86421641?s=400&u=86dd054aeb4b0f6c1988509261e7e84437f360e0&v=4',
-      type: 'artist',
-    },
-  ];
+const ArtistBanner = (props) => {
+  const { artistData, bandData } = props;
+  const [randomArtist, setRandomArtist] = useState();
+  const [randomBand, setRandomBand] = useState();
+  const [mixedData, setMixedData] = useState();
 
   const showContents = () => {
-    return Array.from({ length: 4 }, () => 0).map((v, i) => {
-      return <ArtistBannerContents data={tempData[i]} />;
-    });
+    if (randomArtist && randomBand) {
+      let temp = [];
+      let idx = 0;
+
+      while (idx < randomArtist.length - 1 && idx < randomBand.length - 1) {
+        if (idx < randomArtist.length - 1) {
+          temp.push({ data: artistData[randomArtist[idx]], type: 'artist' });
+        }
+        if (idx < randomBand.length - 1) {
+          temp.push({ data: bandData[randomBand[idx]], type: 'band' });
+        }
+
+        idx += 1;
+      }
+
+      return temp.map((v, i) => {
+        return (
+          <ArtistBannerContents
+            data={v.data}
+            type={v.type}
+            key={`ArtistBanner+${i}`}
+          />
+        );
+      });
+    }
   };
+
+  const selectRandomIdx = (data, type) => {
+    const lastIdx = data.length >= 10 ? 10 : data.length;
+    const limit = lastIdx > 1 ? 3 : lastIdx;
+    let set = new Set();
+
+    while (set.size < limit) {
+      set.add(parseInt(Math.random() * lastIdx));
+    }
+
+    if (type === 'artist') {
+      setRandomArtist([...set]);
+    } else {
+      setRandomBand([...set]);
+    }
+  };
+
+  useEffect(() => {
+    if (artistData) selectRandomIdx(artistData, 'artist');
+  }, [artistData]);
+
+  useEffect(() => {
+    if (bandData) selectRandomIdx(bandData, 'band');
+  }, [bandData]);
 
   return (
     <BannerContainer>
