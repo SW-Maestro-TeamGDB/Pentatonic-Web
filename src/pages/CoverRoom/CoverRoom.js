@@ -17,6 +17,7 @@ import {
   LoadingOutlined,
   ReloadOutlined,
   DeleteOutlined,
+  LeftOutlined,
 } from '@ant-design/icons';
 import QuestionModal from '../../components/QuestionModal';
 import { LikeFilled, ShareAltOutlined, LikeOutlined } from '@ant-design/icons';
@@ -441,8 +442,18 @@ const CoverRoom = ({ match }) => {
               </DeleteButton>
             ) : null}
             <BackwardButton onClick={() => onClickToSelect()} mode={mode}>
-              <CustomReloadIcon />
-              다시 조합하기
+              {coverData.isFreeBand === true &&
+              coverData.isSoloBand === true ? (
+                <>
+                  <CustomLeftOutlinedIcon />
+                  뒤로가기
+                </>
+              ) : (
+                <>
+                  <CustomReloadIcon />
+                  다시 조합하기
+                </>
+              )}
             </BackwardButton>
             <BannerContents mode={mode}>
               <CoverTitle>{coverData.name}</CoverTitle>
@@ -874,6 +885,11 @@ const CommentContainer = styled.div`
 `;
 
 const CustomDeleteIcon = styled(DeleteOutlined)`
+  padding-right: 8px;
+  line-height: 1;
+`;
+
+const CustomLeftOutlinedIcon = styled(LeftOutlined)`
   padding-right: 8px;
   line-height: 1;
 `;
