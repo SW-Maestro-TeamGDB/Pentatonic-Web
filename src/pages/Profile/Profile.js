@@ -1,5 +1,6 @@
 import react, { useState, useEffect, useRef, useCallback } from 'react';
 import PageContainer from '../../components/PageContainer';
+import { Link } from 'react-router-dom';
 import { useQuery, gql, useLazyQuery, useMutation } from '@apollo/client';
 import { GET_CURRENT_USER, currentUserVar } from '../../apollo/cache';
 import {
@@ -391,7 +392,12 @@ const Profile = ({ match }) => {
               </UserSession>
             </UserSessionContainer>
             <CoverHistoryContainer ref={coverRef}>
-              <BoardTitle>커버 히스토리</BoardTitle>
+              <BoardHeader>
+                <BoardTitle>커버 히스토리</BoardTitle>
+                <BoardLink to={`/profile/${userData.id}/cover`}>
+                  더보기
+                </BoardLink>
+              </BoardHeader>
               {userData.band.length === 0 ? (
                 <NoCoverText>참여한 커버가 없습니다</NoCoverText>
               ) : (
@@ -452,6 +458,16 @@ const CustomPictureIcon = styled(PictureOutlined)`
   transform: translate(-50%, -50%);
 `;
 
+const BoardHeader = styled.div`
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+
+  width: 100%;
+`;
+
 const CustomUnvisiblePictureIcon = styled(PictureOutlined)`
   font-size: 4rem;
   transition: all 0.3s ease-in-out !important;
@@ -464,6 +480,18 @@ const CustomUnvisiblePictureIcon = styled(PictureOutlined)`
   opacity: 0;
 
   visibility: hidden;
+`;
+
+const BoardLink = styled(Link)`
+  font-size: 14px;
+  font-weight: 500;
+  color: #bbbbbb;
+  position: absolute;
+  right: 0;
+
+  &:hover {
+    color: rgb(150, 150, 150);
+  }
 `;
 
 const EditProfile = styled.img`
