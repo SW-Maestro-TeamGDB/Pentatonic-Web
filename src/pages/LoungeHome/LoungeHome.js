@@ -58,8 +58,6 @@ const LoungeHome = () => {
     },
   });
 
-  console.log(data);
-
   return (
     <PageContainer>
       <WeeklyBanner />

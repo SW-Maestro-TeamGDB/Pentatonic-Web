@@ -1,107 +1,6 @@
 import react, { useRef, useState, useEffect } from 'react';
 import AudioCanvas from '../AudioCanvas';
 
-// class AudioVisualizer {
-//   constructor(audioContext, processFrame, processError) {
-//     this.audioContext = audioContext;
-//     this.processFrame = processFrame;
-//     this.connectStream = this.connectStream.bind(this);
-//     navigator.mediaDevices
-//       .getUserMedia({ audio: true, video: false })
-//       .then(this.connectStream)
-//       .catch((error) => {
-//         if (processError) {
-//           processError(error);
-//         }
-//       });
-//   }
-
-//   connectStream(stream) {
-//     this.analyser = this.audioContext.createAnalyser();
-//     const source = this.audioContext.createMediaStreamSource(stream);
-//     source.connect(this.analyser);
-//     this.analyser.smoothingTimeConstant = 0.5;
-//     this.analyser.fftSize = 32;
-
-//     this.initRenderLoop(this.analyser);
-//   }
-
-//   initRenderLoop() {
-//     const frequencyData = new Uint8Array(this.analyser.frequencyBinCount);
-//     const processFrame = this.processFrame || (() => {});
-
-//     const renderFrame = () => {
-//       this.analyser.getByteFrequencyData(frequencyData);
-//       processFrame(frequencyData);
-
-//       requestAnimationFrame(renderFrame);
-//     };
-//     requestAnimationFrame(renderFrame);
-//   }
-// }
-
-// const visualMainElement = document.querySelector('main');
-// const visualValueCount = 16;
-// let visualElements;
-// const createDOMElements = () => {
-//   let i;
-//   for (i = 0; i < visualValueCount; ++i) {
-//     const elm = document.createElement('div');
-//     visualMainElement.appendChild(elm);
-//   }
-
-//   visualElements = document.querySelectorAll('main div');
-// };
-// createDOMElements();
-
-// const init = () => {
-//   // Creating initial DOM elements
-//   const audioContext = new AudioContext();
-//   const initDOM = () => {
-//     visualMainElement.innerHTML = '';
-//     createDOMElements();
-//   };
-//   initDOM();
-
-//   // Swapping values around for a better visual effect
-//   const dataMap = {
-//     0: 15,
-//     1: 10,
-//     2: 8,
-//     3: 9,
-//     4: 6,
-//     5: 5,
-//     6: 2,
-//     7: 1,
-//     8: 0,
-//     9: 4,
-//     10: 3,
-//     11: 7,
-//     12: 11,
-//     13: 12,
-//     14: 13,
-//     15: 14,
-//   };
-//   const processFrame = (data) => {
-//     const values = Object.values(data);
-//     let i;
-//     for (i = 0; i < visualValueCount; ++i) {
-//       const value = values[dataMap[i]] / 255;
-//       const elmStyles = visualElements[i].style;
-//       elmStyles.transform = `scaleY( ${value} )`;
-//       elmStyles.opacity = Math.max(0.25, value);
-//     }
-//   };
-
-//   const processError = () => {
-//     visualMainElement.classList.add('error');
-//     visualMainElement.innerText =
-//       'Please allow access to your microphone in order to see this demo.\nNothing bad is going to happen... hopefully :P';
-//   };
-
-//   const a = new AudioVisualizer(audioContext, processFrame, processError);
-// };
-
 const defaultOptions = {
   canvasColor: 'transparent',
   lineColor: '#000000',
@@ -155,42 +54,8 @@ const AudioVisualizer = (props) => {
     }
   }, [audioCtx]);
 
-  // useEffect(() => {
-  //   if (audioCtx) {
-  //     setAudioSource(audioCtx.createBufferSource());
-  //   }
-  // }, [audioCtx]);
-
-  // useEffect(() => {
-  //   if (audioSource) {
-  //     let gainNode = audioCtx.createGain();
-
-  //     gainNode.gain.value = 0;
-
-  //     audioSource.connect(gainNode);
-  //     gainNode.connect(audioCtx.destination);
-
-  //     source.connect(audioAnalyser.current);
-
-  //     audioSource.buffer = audioBuffer;
-  //     audioSource.connect(audioAnalyser.current);
-  //     audioSource.loop = true;
-  //     audioSource.start(0);
-  //     audioCtx.resume();
-
-  //     drawAudioData();
-  //   }
-  // }, [audioSource]);
-
   useEffect(() => {
     if (source) {
-      // let gainNode = audioCtx.createGain();
-
-      // gainNode.gain.value = 1;
-
-      // source.connect(gainNode);
-      // gainNode.connect(audioCtx.destination);
-
       source.connect(audioAnalyser.current);
 
       source.buffer = audioBuffer;
@@ -214,13 +79,6 @@ const AudioVisualizer = (props) => {
         canvasRef.current.height,
       );
 
-      // canvasContext.fillStyle = mergedOptions.canvasColor;
-      // canvasContext.fillRect(
-      //   0,
-      //   0,
-      //   canvasRef.current.width,
-      //   canvasRef.current.height,
-      // );
       canvasContext.lineWidth = mergedOptions.strokeWidth;
       canvasContext.strokeStyle = mergedOptions.lineColor;
       canvasContext.beginPath();
@@ -253,61 +111,17 @@ const AudioVisualizer = (props) => {
         drawWholeFrequency(i);
       }
 
-      // let sliceWidth =
-      //   canvasRef.current.width /
-      //   filteredData.length /
-      //   (mergedOptions.mirrored ? 2 : 1);
-      // let x = 0;
-
-      // const drawFrequency = (i, drawHeight, drawBottom) => {
-      //   let frequencyPercent = filteredData[i] / 255;
-      //   let y = frequencyPercent * drawHeight + drawBottom;
-
-      //   i === 0 ? canvasContext.moveTo(x, y) : canvasContext.lineTo(x, y);
-
-      //   x += sliceWidth;
-      // };
-
-      // const drawWholeFrequency = (heightMultiplier) => {
-      //   let drawHeight = canvasRef.current.height; //* heightMultiplier;
-      //   let drawBottom =
-      //     (canvasRef.current.height * (1 - heightMultiplier)) /
-      //     mergedOptions.strokeTightness;
-
-      //   for (let i = 0; i < filteredData.length; i++) {
-      //     drawFrequency(i, drawHeight, drawBottom);
-      //   }
-
-      //   if (mergedOptions.mirrored) {
-      //     for (let i = filteredData.length; i > 0; i--) {
-      //       drawFrequency(i, drawHeight, drawBottom);
-      //     }
-      //   }
-
-      //   x += sliceWidth;
-      //   canvasContext.lineTo(x, drawHeight + drawBottom);
-      //   x = 0;
-      // };
-
-      // const interval = (1.05 - 0.25) / mergedOptions.lineAmount;
-
-      // for (let i = 1.05; i > 0.25; i -= interval) {
-      //   drawWholeFrequency(i);
-      // }
-
       canvasContext.stroke();
     }
   }
 
   return (
-    <>
-      <AudioCanvas
-        height={height}
-        maxWidth={width}
-        ref={canvasRef}
-        style={{ zIndex: 1 }}
-      />
-    </>
+    <AudioCanvas
+      height={height}
+      maxWidth={width}
+      ref={canvasRef}
+      style={{ zIndex: 1 }}
+    />
   );
 };
 
