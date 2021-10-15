@@ -111,7 +111,7 @@ const LoungeBandCovers = ({ match }) => {
           title="새로운 커버 만들기"
         />
       </SubContainer>
-      <CoverContainer ref={coverRef}>{loadFreeCover()}</CoverContainer>
+      {loadFreeCover()}
     </PageContainer>
   );
 };
@@ -121,10 +121,6 @@ const PageDesc = styled.div`
   margin: 3rem 0;
   width: 80%;
   text-align: center;
-`;
-
-const CoverContainer = styled.div`
-  width: 100%;
 `;
 
 const SearchContent = styled.span`
