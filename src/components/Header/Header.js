@@ -178,10 +178,10 @@ const UserImg = styled.img`
 `;
 
 const UserName = styled.div`
-  font-size: 18px;
+  font-size: 16px;
   font-weight: 600;
   line-height: 1.13;
-  letter-spacing: -0.4px;
+  letter-spacing: -1px;
 `;
 
 const HeaderContainer = styled.div`

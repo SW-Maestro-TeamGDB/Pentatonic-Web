@@ -38,16 +38,16 @@ const MenuContainer = styled.div`
   z-index: 5;
   transform: translate(-20%);
   border-radius: 1rem;
-  padding: 0.5rem 0;
+  padding: 1rem 0;
 `;
 
 const MenuLink = styled(Link)`
   color: black;
-  font-size: 16px;
+  font-size: 14px;
   font-weight: 500;
   padding: 10px 10px;
   line-height: 1.13;
-  letter-spacing: -0.4px;
+  letter-spacing: -1px;
   width: 100%;
   text-align: center;
   transition: background-color 0.1s ease-in-out;
@@ -61,11 +61,11 @@ const MenuLink = styled(Link)`
 
 const MenuButton = styled.div`
   color: black;
-  font-size: 16px;
+  font-size: 14px;
   font-weight: 500;
   padding: 10px 10px;
   line-height: 1.13;
-  letter-spacing: -0.4px;
+  letter-spacing: -1px;
   width: 100%;
   text-align: center;
   transition: background-color 0.1s ease-in-out;
