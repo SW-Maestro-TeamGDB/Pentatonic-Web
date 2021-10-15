@@ -1,4 +1,4 @@
-import react, { useState, useEffect } from 'react';
+import react, { useState, useEffect, useRef, useCallback } from 'react';
 import PageContainer from '../../components/PageContainer';
 import { useQuery, gql, useLazyQuery, useMutation } from '@apollo/client';
 import { GET_CURRENT_USER, currentUserVar } from '../../apollo/cache';
@@ -12,6 +12,7 @@ import CoverGrid from '../../components/CoverGrid';
 import QuestionModal from '../../components/QuestionModal/QuestionModal';
 import NotFoundPage from '../NotFoundPage';
 import PositionGrid from '../../components/PositionGrid';
+import CoverHistory from '../../components/CoverHistroy/CoverHistory';
 import { Upload, notification } from 'antd';
 import styled from 'styled-components';
 
@@ -80,6 +81,9 @@ const Profile = ({ match }) => {
     username: null,
   });
 
+  const coverRef = useRef();
+  const coverWidth = 220;
+
   const [unfollowModal, setUnfollowModal] = useState(false);
   const [editUserDataModal, setEditUserDataModal] = useState(false);
 
@@ -140,9 +144,15 @@ const Profile = ({ match }) => {
   });
 
   const showCoverHistory = () => {
-    return userData.band.map((v) => {
-      return <CoverGrid key={v.bandId} data={v} />;
-    });
+    if (coverRef.current) {
+      const coverUnit = parseInt(
+        (coverRef.current.clientWidth * 0.95) / coverWidth,
+      );
+
+      return userData.band.slice(0, coverUnit > 1 ? coverUnit : 2).map((v) => {
+        return <CoverGrid key={v.bandId} data={v} />;
+      });
+    }
   };
 
   const onClickFollowing = () => {
@@ -380,14 +390,15 @@ const Profile = ({ match }) => {
                 )}
               </UserSession>
             </UserSessionContainer>
-            <CoverHistoryContainer>
+            <CoverHistoryContainer ref={coverRef}>
               <BoardTitle>커버 히스토리</BoardTitle>
               {userData.band.length === 0 ? (
                 <NoCoverText>참여한 커버가 없습니다</NoCoverText>
               ) : (
-                <GridContainer templateColumn="250px" autoFill>
-                  {showCoverHistory()}
-                </GridContainer>
+                <CoverHistory
+                  coverWidth={coverWidth}
+                  coverData={userData?.band}
+                />
               )}
             </CoverHistoryContainer>
             <QuestionModal
@@ -774,9 +785,10 @@ const FollowContainerTitle = styled.div`
 
 const BoardTitle = styled.nav`
   font-size: 20px;
-  font-weight: 600;
+  font-weight: 700;
   width: 100%;
   color: black;
+  letter-spacing: -1.5px;
 `;
 
 const Padding = styled.div`
