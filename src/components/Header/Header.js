@@ -14,6 +14,7 @@ import MyMenu from '../MyMenu';
 import MobileMenu from '../MobileMenu/MobileMenu';
 import AuthModal from '../AuthModal';
 import Menu from '../Menu';
+import Logo from '../../images/Logo/Logo.png';
 
 const Header = () => {
   const [menuToggle, setMenuToggle] = useState(false);
@@ -78,13 +79,17 @@ const Header = () => {
             ☰
           </MobileMenuButton>
           <LogoContainer>
-            <LogoLink to="/">Pentatonic</LogoLink>
+            <LogoLink to="/">
+              <LogoImage src={Logo} />
+            </LogoLink>
           </LogoContainer>
         </Mobile>
         <Default>
           <HeaderContents>
             <LogoContainer>
-              <LogoLink to="/">Pentatonic</LogoLink>
+              <LogoLink to="/">
+                <LogoImage src={Logo} />
+              </LogoLink>
             </LogoContainer>
             <MenuContainer>
               <Menu />
@@ -124,6 +129,10 @@ const Fixed = styled.div`
   width: 100%;
   top: 0;
   z-index: 4;
+`;
+
+const LogoImage = styled.img`
+  width: 170px;
 `;
 
 const HeaderContents = styled.div`

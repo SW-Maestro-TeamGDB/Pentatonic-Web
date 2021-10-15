@@ -116,14 +116,14 @@ const SubMenuSpacing = styled.div`
 const ArtistLink = styled(Link)`
   font-size: 18px;
   letter-spacing: 4px;
-  color: ${(props) => (props.current === 'artist' ? '#6236ff' : 'black')};
+  color: ${(props) => (props.current === 'artist' ? '#584C9D' : 'black')};
   font-weight: 800;
   line-height: 1.13;
   letter-spacing: -0.4px;
 
   &:hover {
     color: ${(props) =>
-      props.current === 'artist' ? '#6236ff' : 'rgb(60,60,60)'};
+      props.current === 'artist' ? '#584C9D' : 'rgba(88, 76, 157, 0.8)'};
   }
 `;
 
@@ -134,11 +134,11 @@ const LoungeLink = styled(Link)`
   font-weight: 800;
   line-height: 1.13;
   letter-spacing: -0.4px;
-  color: ${(props) => (props.current === 'lounge' ? '#6236ff' : 'black')};
+  color: ${(props) => (props.current === 'lounge' ? '#584C9D' : 'black')};
 
   &:hover {
     color: ${(props) =>
-      props.current === 'lounge' ? '#6236ff' : 'rgb(60,60,60)'};
+      props.current === 'lounge' ? '#584C9D' : 'rgba(88, 76, 157, 0.8)'};
   }
 `;
 
@@ -149,11 +149,11 @@ const StudioLink = styled(Link)`
   font-weight: 800;
   line-height: 1.13;
   letter-spacing: -0.4px;
-  color: ${(props) => (props.current === 'studio' ? '#6236ff' : 'black')};
+  color: ${(props) => (props.current === 'studio' ? '#584C9D' : 'black')};
 
   &:hover {
     color: ${(props) =>
-      props.current === 'studio' ? '#6236ff' : 'rgb(60,60,60)'};
+      props.current === 'studio' ? '#584C9D' : 'rgba(88, 76, 157, 0.8)'};
   }
 `;
 
