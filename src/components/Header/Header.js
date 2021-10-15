@@ -132,7 +132,7 @@ const Fixed = styled.div`
 `;
 
 const LogoImage = styled.img`
-  width: 170px;
+  width: 160px;
 `;
 
 const HeaderContents = styled.div`

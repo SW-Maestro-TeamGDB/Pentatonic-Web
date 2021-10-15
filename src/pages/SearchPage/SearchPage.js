@@ -6,17 +6,13 @@ import PageContainer from '../../components/PageContainer';
 import RankList from '../../components/RankList';
 import SearchBar from '../../components/SearchBar';
 
-const QUERY_BAND = gql`
-  query Query($filter: QueryBandInput!) {
-    queryBand(filter: $filter) {
-      bands {
-        creator {
-          username
-          profileURI
-          id
-          followerCount
-        }
-      }
+const QUERY_USER = gql`
+  query Query($username: String!) {
+    queryUser(username: $username) {
+      id
+      username
+      followerCount
+      profileURI
     }
   }
 `;
@@ -24,25 +20,19 @@ const QUERY_BAND = gql`
 const SearchPage = ({ match }) => {
   const content = match.params?.content;
   const [searchList, setSearchList] = useState();
-  const { data } = useQuery(QUERY_BAND, {
+  const { data } = useQuery(QUERY_USER, {
     variables: {
-      filter: {
-        type: 'CREATOR_ID',
-        content: content,
-        sort: 'DATE_DESC',
-      },
+      username: content,
     },
     onCompleted: (data) => {
-      setSearchList(data.queryBand.bands);
+      setSearchList(data.queryUser);
     },
   });
 
   const showSearchResult = () => {
     if (searchList && searchList.length > 0)
       return searchList.map((v, i) => {
-        return (
-          <RankList key={`tempBand+${i}`} data={v.creator} type={'user'} />
-        );
+        return <RankList key={`tempBand+${i}`} data={v} type={'user'} />;
       });
     else {
       return <NoCover>해당하는 유저가 없습니다</NoCover>;
@@ -75,7 +65,7 @@ const SearchResult = styled.div`
   font-size: 20px;
   font-weight: 700;
   letter-spacing: -1px;
-  margin: 1rem 0 2rem;
+  margin: 1.5rem 0 3rem;
 
   display: flex;
   justify-content: center;
