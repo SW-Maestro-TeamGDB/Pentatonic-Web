@@ -23,9 +23,12 @@ const CoverHistory = (props) => {
     if (windowWidth) {
       const coverUnit = parseInt((windowWidth * 0.95) / coverWidth);
 
-      return coverData.slice(0, coverUnit > 1 ? coverUnit : 2).map((v) => {
-        return <CoverGrid key={v.bandId} data={v} />;
-      });
+      return [...coverData]
+        .reverse()
+        .slice(0, coverUnit > 1 ? coverUnit : 2)
+        .map((v) => {
+          return <CoverGrid key={v.bandId} data={v} />;
+        });
     }
   };
 
