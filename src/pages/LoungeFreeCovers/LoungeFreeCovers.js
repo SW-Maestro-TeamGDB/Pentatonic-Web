@@ -1,4 +1,4 @@
-import react, { useState, useEffect } from 'react';
+import react, { useState, useEffect, useRef } from 'react';
 import { Space, Dropdown, Menu, Button } from 'antd';
 import { useQuery, gql, useLazyQuery } from '@apollo/client';
 import { Link } from 'react-router-dom';
@@ -36,21 +36,23 @@ const QUERY_BANDS = gql`
 `;
 
 const LoungeBandCovers = ({ match }) => {
-  const content = match.params?.content;
   const [genre, setGenre] = useState('전체');
   const [bandFilter, setBandFilter] = useState({
     type: 'ALL',
     content: match.params?.content,
+    isFreeSong: true,
   });
+  const content = match.params?.content;
+  const coverRef = useRef();
 
   const loadFreeCover = () => {
     if (data) {
-      const filtered = data.queryBand.bands.filter((v) => v.isFreeBand);
+      const coverData = data.queryBand.bands;
 
-      if (filtered.length > 0)
+      if (coverData.length > 0)
         return (
           <GridContainer width="95%" templateColumn="250px" autoFill>
-            {filtered.map((v, i) => {
+            {coverData.map((v, i) => {
               return <CoverGrid key={`bandData+${i}`} data={v} />;
             })}
           </GridContainer>
@@ -109,7 +111,7 @@ const LoungeBandCovers = ({ match }) => {
           title="새로운 커버 만들기"
         />
       </SubContainer>
-      {loadFreeCover()}
+      <CoverContainer ref={coverRef}>{loadFreeCover()}</CoverContainer>
     </PageContainer>
   );
 };
@@ -119,6 +121,10 @@ const PageDesc = styled.div`
   margin: 3rem 0;
   width: 80%;
   text-align: center;
+`;
+
+const CoverContainer = styled.div`
+  width: 100%;
 `;
 
 const SearchContent = styled.span`

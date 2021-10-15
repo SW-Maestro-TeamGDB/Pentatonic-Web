@@ -46,18 +46,18 @@ const LoungeBandCovers = ({ match }) => {
     type: 'ALL',
     content: content,
     isSoloBand: false,
+    isFreeSong: false,
+    weeklyChallenge: false,
   });
 
   const loadBandCover = () => {
     if (data) {
-      const filtered = data.queryBand.bands.filter(
-        (v) => !v.isFreeBand && !v.song.weeklyChallenge,
-      );
+      const coverData = data.queryBand.bands;
 
-      if (filtered.length > 0)
+      if (coverData.length > 0)
         return (
           <GridContainer width="95%" templateColumn="250px" autoFill>
-            {filtered.map((v, i) => {
+            {coverData.map((v, i) => {
               return <CoverGrid key={`bandData+${i}`} data={v} />;
             })}
           </GridContainer>

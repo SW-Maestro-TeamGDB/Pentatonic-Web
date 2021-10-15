@@ -46,18 +46,18 @@ const LoungeSoloCovers = ({ match }) => {
     type: 'ALL',
     content: match.params?.content,
     isSoloBand: true,
+    isFreeSong: false,
+    weeklyChallenge: false,
   });
 
   const loadSoloCover = () => {
     if (data) {
-      const filtered = data.queryBand.bands.filter(
-        (v) => !v.isFreeBand && !v.song.weeklyChallenge,
-      );
+      const coverData = data.queryBand.bands;
 
-      if (filtered.length > 0)
+      if (coverData.length > 0)
         return (
           <GridContainer width="95%" templateColumn="250px" autoFill>
-            {filtered.map((v, i) => {
+            {coverData.map((v, i) => {
               return <CoverGrid key={`bandData+${i}`} data={v} />;
             })}
           </GridContainer>
@@ -71,6 +71,9 @@ const LoungeSoloCovers = ({ match }) => {
   const { data } = useQuery(QUERY_BAND, {
     variables: {
       queryBandFilter: bandFilter,
+    },
+    onCompleted: (data) => {
+      console.log(data);
     },
   });
 
