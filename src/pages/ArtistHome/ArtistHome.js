@@ -39,6 +39,10 @@ const GET_RANKED_BANDS = gql`
       name
       backGroundURI
       likeCount
+      song {
+        name
+        artist
+      }
     }
   }
 `;
@@ -90,7 +94,7 @@ const ArtistHome = ({ match }) => {
 
   return (
     <PageContainer>
-      <ArtistBanner />
+      <ArtistBanner artistData={artistRankList} bandData={bandRankList} />
       <Spacing />
       <SearchBar
         placeholder="닉네임을 입력하세요"

@@ -40,6 +40,9 @@ const RankList = (props) => {
       <ListTitle>
         <CustomLink to={link}>
           {bandType ? data.name : data.username}
+          <SongText>
+            {bandType ? `${data.song.name} - ${data.song.artist}` : null}
+          </SongText>
         </CustomLink>
         <IdText>{bandType ? null : `(@${data.id})`}</IdText>
       </ListTitle>
@@ -77,6 +80,12 @@ const RankListImg = styled.div`
   width: 4.5em;
   height: 4.5em;
   box-sizing: border-box;
+`;
+
+const SongText = styled.div`
+  font-size: 12px;
+  margin-top: 3px;
+  color: #aaa;
 `;
 
 const RankContainer = styled.div`
