@@ -1,7 +1,11 @@
 import react from 'react';
 import styled from 'styled-components';
 import { media } from '../../lib/Media';
-import { PlusOutlined, MinusOutlined } from '@ant-design/icons';
+import {
+  PlusOutlined,
+  MinusOutlined,
+  WarningOutlined,
+} from '@ant-design/icons';
 import { Slider } from 'antd';
 
 const RecordEditSlider = (props) => {
@@ -14,6 +18,8 @@ const RecordEditSlider = (props) => {
     min,
     onAfterChange,
     unit = 1,
+    disable,
+    disableDesc,
   } = props;
 
   const onChangeValue = (value) => {
@@ -32,7 +38,13 @@ const RecordEditSlider = (props) => {
 
   return (
     <Container>
-      <SliderContainer>
+      {disable ? (
+        <Disabled>
+          <CustomWarningIcon />
+          {disableDesc}
+        </Disabled>
+      ) : null}
+      <SliderContainer disable={disable}>
         <SliderHeader>
           <SliderTitle>{title}</SliderTitle>
           <SliderValue>{desc}</SliderValue>
@@ -54,13 +66,42 @@ const RecordEditSlider = (props) => {
   );
 };
 
-const Container = styled.div`
-  width: 100%;
-  margin: 1.5rem 0;
+const Disabled = styled.div`
+  width: 95%;
+  height: 100%;
+  border-radius: 16px;
+  position: absolute;
+  z-index: 2;
+  padding: 0 1rem;
 
   display: flex;
   justify-content: center;
   align-items: center;
+  color: #333;
+  font-size: 16px;
+  font-weight: 900;
+  letter-spacing: -2 px;
+
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+`;
+
+const CustomWarningIcon = styled(WarningOutlined)`
+  margin-right: 0.5rem;
+`;
+
+const Container = styled.div`
+  width: 100%;
+  margin: 0.5rem 0;
+  padding: 1.5rem 0;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  position: relative;
 `;
 
 const SliderContainer = styled.div`
@@ -69,6 +110,8 @@ const SliderContainer = styled.div`
   align-items: center;
   justify-content: center;
   width: 90%;
+
+  filter: ${(props) => (props.disable ? 'blur(8.5px)' : null)};
 `;
 
 const SliderWrapper = styled.div`

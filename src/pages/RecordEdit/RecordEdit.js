@@ -391,6 +391,8 @@ const RecordEdit = (props) => {
         min={-500}
         unit={50}
         onAfterChange={() => changeSync(sync)}
+        disable={isFreeCover}
+        disableDesc="자유곡 커버 생성 시 싱크 조절이 불가능합니다"
       />
     );
   }, [sync]);
@@ -420,6 +422,8 @@ const RecordEdit = (props) => {
         max={100}
         min={0}
         unit={5}
+        disable={true}
+        disableDesc="게인효과는 프리미엄 회원에게 제공됩니다"
       />
     );
   }, [gain]);
