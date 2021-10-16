@@ -1,5 +1,5 @@
 import react, { useState, useEffect, useRef } from 'react';
-import { Space, Dropdown, Menu, Button } from 'antd';
+import { Dropdown, Menu } from 'antd';
 import { useQuery, gql, useLazyQuery } from '@apollo/client';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
@@ -12,6 +12,9 @@ import MakingIcon from '../../images/MakingIcon.svg';
 import PageImage from '../../components/PageImage/PageImage';
 import GenreButton from '../../components/GenreButton/GenreButton';
 import GridContainer from '../../components/GridContainer/GridContainer';
+
+import GroupIcon from '../../images/GroupIcon.svg';
+import SoloIcon from '../../images/SoloIcon.svg';
 
 const QUERY_BANDS = gql`
   query Query($queryBandFilter: QueryBandInput!, $queryBandFirst: Int!) {
@@ -44,6 +47,21 @@ const LoungeBandCovers = ({ match }) => {
   });
   const content = match.params?.content;
   const coverRef = useRef();
+
+  const CoverMenu = (
+    <SubMenuContainer>
+      <SubMenuSpacing />
+      <SubMenuLink to={`/studio/solo/free/cover`}>
+        <SoloIconContainer src={SoloIcon} />
+        솔로 커버
+      </SubMenuLink>
+      <SubMenuLink to={`/studio/band/free/cover`}>
+        <BandIconContainer src={GroupIcon} />
+        밴드 커버
+      </SubMenuLink>
+      <SubMenuSpacing />
+    </SubMenuContainer>
+  );
 
   const loadFreeCover = () => {
     if (data) {
@@ -86,7 +104,7 @@ const LoungeBandCovers = ({ match }) => {
   return (
     <PageContainer>
       <PageImage
-        imgUrl="https://images.unsplash.com/photo-1527261834078-9b37d35a4a32?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1170&q=80"
+        imgUrl="https://images.unsplash.com/photo-1499364615650-ec38552f4f34?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1072&q=80"
         title="자유곡 커버"
         position="top"
       />
@@ -107,15 +125,90 @@ const LoungeBandCovers = ({ match }) => {
       />
       <SubContainer>
         <GenreButton genre={genre} setGenre={setGenre} />
-        <MakingCoverButton
-          link={`/studio/band/free/cover`}
-          title="새로운 커버 만들기"
-        />
+        <Dropdown
+          overlay={CoverMenu}
+          placement="bottomCenter"
+          getPopupContainer={(trigger) => trigger.parentNode}
+          trigger={['click']}
+        >
+          <ButtonContainer>
+            새로운 커버 만들기
+            <MakingIconImg src={MakingIcon} />
+          </ButtonContainer>
+        </Dropdown>
       </SubContainer>
       {loadFreeCover()}
     </PageContainer>
   );
 };
+
+const BandIconContainer = styled.img`
+  width: 48px;
+  filter: invert(100%);
+  padding-right: 10px;
+`;
+
+const SoloIconContainer = styled.img`
+  width: 36px;
+  filter: invert(100%);
+  padding-right: 10px;
+`;
+
+const MakingIconImg = styled.img`
+  width: 1rem;
+  margin-left: 0.5rem;
+  filter: invert(100%);
+`;
+
+const ButtonContainer = styled.div`
+  cursor: pointer;
+  min-width: 12em;
+  padding: 0.8vh 0.7vw;
+  color: white;
+  background-image: linear-gradient(to right, #6236ff, #9b66ff);
+  border-radius: 10px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  font-size: 16px;
+  font-weight: 700;
+`;
+
+const SubMenuContainer = styled.div`
+  border-radius: 1rem;
+  min-width: 12rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  z-index: 5;
+  background-color: white;
+  position: fixed;
+  box-shadow: 0 2px 0px rgba(0, 0, 0, 0.3);
+`;
+
+const SubMenuLink = styled(Link)`
+  color: black;
+  font-size: 15px;
+  font-weight: 700;
+  padding: 10px 10px;
+  line-height: 1.13;
+  letter-spacing: -1px;
+  width: 100%;
+  text-align: center;
+  transition: background-color 0.1s ease-in-out;
+  border-radius: 3px;
+
+  &:hover {
+    color: rgb(60, 60, 60);
+    background-color: rgba(200, 200, 200, 0.5);
+  }
+`;
+
+const SubMenuSpacing = styled.div`
+  height: 0.5rem;
+`;
 
 const PageDesc = styled.div`
   font-size: 1rem;
@@ -149,11 +242,6 @@ const SubContainer = styled.div`
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
-`;
-
-const MakingIconImg = styled.img`
-  width: 1rem;
-  margin-right: 0.5rem;
 `;
 
 const MakingCoverLink = styled(Link)`

@@ -1,5 +1,6 @@
 import react, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { Dropdown, Menu } from 'antd';
 import { useQuery, gql, useLazyQuery } from '@apollo/client';
 import styled from 'styled-components';
 import MakingCoverButton from '../../components/MakingCoverButton';
@@ -10,6 +11,9 @@ import CoverGrid from '../../components/CoverGrid/CoverGrid';
 import MakingIcon from '../../images/MakingIcon.svg';
 import PageImage from '../../components/PageImage';
 import GridContainer from '../../components/GridContainer/GridContainer';
+
+import GroupIcon from '../../images/GroupIcon.svg';
+import SoloIcon from '../../images/SoloIcon.svg';
 
 const QUERY_SONG = gql`
   query Query($querySongFilter: QuerySongInput!) {
@@ -102,6 +106,21 @@ const WeeklyChallenge = ({ match }) => {
 
   const songData = data?.querySong[0];
 
+  const CoverMenu = (
+    <SubMenuContainer>
+      <SubMenuSpacing />
+      <SubMenuLink to={songData ? `/studio/solo/${songData.songId}/cover` : ``}>
+        <SoloIconContainer src={SoloIcon} />
+        솔로 커버
+      </SubMenuLink>
+      <SubMenuLink to={songData ? `/studio/band/${songData.songId}/cover` : ``}>
+        <BandIconContainer src={GroupIcon} />
+        밴드 커버
+      </SubMenuLink>
+      <SubMenuSpacing />
+    </SubMenuContainer>
+  );
+
   return (
     <PageContainer>
       <PageImage
@@ -125,15 +144,90 @@ const WeeklyChallenge = ({ match }) => {
         match={match}
       />
       <SubContainer>
-        <MakingCoverButton
-          link={songData ? `/studio/band/${songData.songId}/cover` : ``}
-          title="새로운 커버 만들기"
-        />
+        <Dropdown
+          overlay={CoverMenu}
+          placement="bottomCenter"
+          getPopupContainer={(trigger) => trigger.parentNode}
+          trigger={['click']}
+        >
+          <ButtonContainer>
+            새로운 커버 만들기
+            <MakingIconImg src={MakingIcon} />
+          </ButtonContainer>
+        </Dropdown>
       </SubContainer>
       {loadCover()}
     </PageContainer>
   );
 };
+
+const BandIconContainer = styled.img`
+  width: 48px;
+  filter: invert(100%);
+  padding-right: 10px;
+`;
+
+const SoloIconContainer = styled.img`
+  width: 36px;
+  filter: invert(100%);
+  padding-right: 10px;
+`;
+
+const MakingIconImg = styled.img`
+  width: 1rem;
+  margin-left: 0.5rem;
+  filter: invert(100%);
+`;
+
+const ButtonContainer = styled.div`
+  cursor: pointer;
+  min-width: 12em;
+  padding: 0.8vh 0.7vw;
+  color: white;
+  background-image: linear-gradient(to right, #6236ff, #9b66ff);
+  border-radius: 10px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  font-size: 16px;
+  font-weight: 700;
+`;
+
+const SubMenuContainer = styled.div`
+  border-radius: 1rem;
+  min-width: 12rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  z-index: 5;
+  background-color: white;
+  position: fixed;
+  box-shadow: 0 2px 0px rgba(0, 0, 0, 0.3);
+`;
+
+const SubMenuLink = styled(Link)`
+  color: black;
+  font-size: 15px;
+  font-weight: 700;
+  padding: 10px 10px;
+  line-height: 1.13;
+  letter-spacing: -1px;
+  width: 100%;
+  text-align: center;
+  transition: background-color 0.1s ease-in-out;
+  border-radius: 3px;
+
+  &:hover {
+    color: rgb(60, 60, 60);
+    background-color: rgba(200, 200, 200, 0.5);
+  }
+`;
+
+const SubMenuSpacing = styled.div`
+  height: 0.5rem;
+`;
 
 const PageDesc = styled.div`
   font-size: 1rem;
@@ -170,11 +264,6 @@ const SubContainer = styled.div`
   flex-direction: row;
   align-items: center;
   justify-content: flex-end;
-`;
-
-const MakingIconImg = styled.img`
-  width: 1rem;
-  margin-right: 0.5rem;
 `;
 
 const MakingCoverLink = styled(Link)`
