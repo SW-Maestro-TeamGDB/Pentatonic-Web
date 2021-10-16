@@ -12,6 +12,7 @@ const GET_RANKED_USER = gql`
       profileURI
       id
       followerCount
+      introduce
     }
   }
 `;

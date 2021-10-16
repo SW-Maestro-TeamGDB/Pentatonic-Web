@@ -122,6 +122,7 @@ const WeeklyChallenge = ({ match }) => {
         placeholder="커버 제목을 입력해주세요"
         sort="weekly"
         searching={content}
+        match={match}
       />
       <SubContainer>
         <MakingCoverButton

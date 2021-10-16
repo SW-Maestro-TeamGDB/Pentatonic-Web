@@ -40,11 +40,13 @@ const RankList = (props) => {
       <ListTitle>
         <CustomLink to={link}>
           {bandType ? data.name : data.username}
+          <IdText>{bandType ? null : `(@${data.id})`}</IdText>
           <SongText>
-            {bandType ? `${data.song.name} - ${data.song.artist}` : null}
+            {bandType
+              ? `${data.song.name} - ${data.song.artist}`
+              : data.introduce}
           </SongText>
         </CustomLink>
-        <IdText>{bandType ? null : `(@${data.id})`}</IdText>
       </ListTitle>
       <CountContainer>
         <CustomIcon src={bandType ? ThumbIcon : HeartIcon} />
@@ -86,6 +88,11 @@ const SongText = styled.div`
   font-size: 12px;
   margin-top: 3px;
   color: #aaa;
+
+  width: 11rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 `;
 
 const RankContainer = styled.div`
@@ -121,7 +128,6 @@ const ListTitle = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
-  overflow: hidden;
 `;
 
 const CountText = styled.div`
@@ -148,7 +154,7 @@ const CountContainer = styled.div`
   padding-right: 1rem;
 `;
 
-const IdText = styled.div`
+const IdText = styled.span`
   color: lightgray;
   font-size: 0.8rem;
   padding-left: 0.5rem;

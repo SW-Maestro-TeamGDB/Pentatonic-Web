@@ -28,6 +28,7 @@ const GET_RANKED_USER = gql`
       profileURI
       id
       followerCount
+      introduce
     }
   }
 `;
@@ -100,6 +101,7 @@ const ArtistHome = ({ match }) => {
         placeholder="닉네임을 입력하세요"
         sort="artist"
         searching={content}
+        match={match}
       />
       <BoardContainer>
         <BoardWrapper>

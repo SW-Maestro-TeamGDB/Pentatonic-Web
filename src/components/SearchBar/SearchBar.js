@@ -5,7 +5,7 @@ import { Default } from '../../lib/Media';
 import SearchIcon from '../../images/SearchIcon.svg';
 
 const SearchBar = (props) => {
-  const { placeholder, afterRequest, sort, searching } = props;
+  const { placeholder, afterRequest, sort, searching, match } = props;
   const [inputText, setInputText] = useState();
   const history = useHistory();
 
@@ -13,11 +13,19 @@ const SearchBar = (props) => {
     if (inputText) {
       if (searching) history.push(`${inputText}`);
       else history.push(`${sort}/search/${inputText}`);
+    } else {
+      const idx = match.path.indexOf('/search');
+      const artist = match.path.indexOf('artist');
+      console.log(artist);
+      if (searching && artist == -1)
+        history.replace(`${match.path.slice(0, idx)}`);
     }
   };
 
+  console.log(match);
+
   const handleKeyPress = (event) => {
-    if (event.key === 'Enter' && inputText) {
+    if (event.key === 'Enter') {
       event.preventDefault();
       handleSubmit();
     }

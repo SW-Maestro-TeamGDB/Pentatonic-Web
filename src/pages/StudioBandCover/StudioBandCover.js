@@ -90,6 +90,7 @@ const StudioBandCover = ({ match }) => {
         placeholder="아티스트나 곡을 입력해주세요"
         sort="band"
         searching={content}
+        match={match}
       />
       <SubContainer>
         <ButtonContainer>

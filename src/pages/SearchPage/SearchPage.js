@@ -13,6 +13,7 @@ const QUERY_USER = gql`
       username
       followerCount
       profileURI
+      introduce
     }
   }
 `;
@@ -48,6 +49,7 @@ const SearchPage = ({ match }) => {
         placeholder="닉네임을 입력하세요"
         sort="artist"
         searching={content}
+        match={match}
       />
       <SearchResultContainer>{showSearchResult()}</SearchResultContainer>
     </PageContainer>

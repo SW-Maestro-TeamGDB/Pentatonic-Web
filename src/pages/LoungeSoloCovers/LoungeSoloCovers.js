@@ -112,6 +112,7 @@ const LoungeSoloCovers = ({ match }) => {
         placeholder="커버 제목, 커버 소개를 입력해주세요"
         sort="solo"
         searching={content}
+        match={match}
       />
       <SubContainer>
         <ButtonContainer>

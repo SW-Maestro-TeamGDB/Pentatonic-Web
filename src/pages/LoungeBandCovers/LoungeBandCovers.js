@@ -72,9 +72,6 @@ const LoungeBandCovers = ({ match }) => {
     variables: {
       queryBandFilter: bandFilter,
     },
-    onCompleted: (data) => {
-      console.log(data);
-    },
   });
 
   useEffect(() => {
@@ -113,6 +110,7 @@ const LoungeBandCovers = ({ match }) => {
         placeholder="커버 제목, 커버 소개를 입력해주세요"
         sort="band"
         searching={content}
+        match={match}
       />
       <SubContainer>
         <ButtonContainer>
