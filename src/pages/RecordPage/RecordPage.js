@@ -412,13 +412,27 @@ const RecordPage = (props) => {
   };
 
   const onSubmitAudioFile = () => {
-    if (parseInt(count) < 60) {
-      return notification['warning']({
-        key: 'audioNotification',
-        description: '1분 이상의 녹음만 저장 가능합니다',
-        placement: 'bottomRight',
-        duration: 3,
-      });
+    if (audioDuration) {
+      if (parseInt(count) < (audioDuration > 60 ? 60 : 10)) {
+        return notification['warning']({
+          key: 'audioNotification',
+          description:
+            audioDuration >= 60
+              ? '1분 이상의 녹음만 저장 가능합니다'
+              : `10초 이상의 녹음만 저장 가능합니다`,
+          placement: 'bottomRight',
+          duration: 3,
+        });
+      }
+    } else {
+      if (parseInt(count) < 10) {
+        return notification['warning']({
+          key: 'audioNotification',
+          description: '10초 이상의 녹음만 저장 가능합니다',
+          placement: 'bottomRight',
+          duration: 3,
+        });
+      }
     }
 
     makeAudioFile();
