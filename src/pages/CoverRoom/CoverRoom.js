@@ -29,6 +29,7 @@ import {
   IS_LOGGED_IN,
   GET_CURRENT_USER,
 } from '../../apollo/cache';
+import { media } from '../../lib/Media';
 
 import ThumbIcon from '../../images/ThumbIcon.svg';
 import ViewIcon from '../../images/ViewIcon.svg';
@@ -629,6 +630,10 @@ const SessionContainer = styled.div`
   margin-top: 2rem;
   padding-bottom: 3rem;
   border-bottom: 1px solid #eee;
+
+  ${media.small} {
+    padding: 0 1rem;
+  }
 `;
 
 const SongArtist = styled.div`
@@ -790,6 +795,10 @@ const ButtonContainer = styled.div`
   flex-direction: row;
   justify-content: center;
   align-items: center;
+
+  ${media.small} {
+    right: 3%;
+  }
 `;
 
 const MyProfileImg = styled.img`
@@ -834,6 +843,10 @@ const BackwardButton = styled.div`
   visibility: ${(props) => (props.mode === 1 ? 'visible' : 'hidden')};
   filter: ${(props) => (props.mode === 1 ? 'opacity(100%)' : 'opacity(0%)')};
   transition: filter 0.5s ease-in-out;
+
+  ${media.small} {
+    font-size: 14px;
+  }
 `;
 
 const CustomInput = styled.input`
@@ -882,6 +895,10 @@ const CommentContainer = styled.div`
   flex-direction: column;
   margin-top: 2rem;
   padding: 1rem 0;
+
+  ${media.small} {
+    padding: 1rem 1rem;
+  }
 `;
 
 const CustomDeleteIcon = styled(DeleteOutlined)`
@@ -909,11 +926,19 @@ const AudioPlayerContainer = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
+
+  ${media.small} {
+    bottom: 3%;
+  }
 `;
 
 const AudioPlayerWrapper = styled.div`
   width: 80%;
   height: 100%;
+
+  ${media.small} {
+    width: 95%;
+  }
 `;
 
 const CommentHeader = styled.div`
@@ -941,6 +966,10 @@ const CoverBackground = styled.div`
   height: 100%;
   position: absolute;
   border-radius: 15px;
+
+  ${media.small} {
+    border-radius: 0px;
+  }
 `;
 
 const CoverBannerContainer = styled.div`
@@ -965,6 +994,10 @@ const BannerContents = styled.div`
   flex-direction: column;
   right: 3%;
 
+  ${media.small} {
+    top: ${(props) => (props.mode === 1 ? '30px' : '40%')};
+  }
+
   transition: top 0.3s ease-in-out;
 `;
 
@@ -979,6 +1012,11 @@ const CoverTitle = styled.span`
 
   line-height: 1.5;
   letter-spacing: 2px;
+
+  ${media.small} {
+    font-size: 40px;
+    letter-spacing: 0px;
+  }
 `;
 
 const CoverDesc = styled.span`
@@ -991,6 +1029,10 @@ const CoverDesc = styled.span`
   align-items: center;
 
   line-height: 1;
+
+  ${media.small} {
+    font-size: 16px;
+  }
 `;
 
 const CoverMetaContainer = styled.div`
@@ -999,6 +1041,10 @@ const CoverMetaContainer = styled.div`
   justify-content: flex-end;
   margin-top: 5%;
   color: white;
+
+  ${media.small} {
+    margin-top: 16px;
+  }
 `;
 
 const LikeCount = styled.span`
@@ -1007,6 +1053,10 @@ const LikeCount = styled.span`
   display: flex;
   flex-direction: row;
   align-items: center;
+
+  ${media.small} {
+    font-size: 14px;
+  }
 `;
 const ViewCount = styled.span`
   font-size: 16px;
@@ -1014,6 +1064,10 @@ const ViewCount = styled.span`
   display: flex;
   flex-direction: row;
   align-items: center;
+
+  ${media.small} {
+    font-size: 14px;
+  }
 `;
 
 const SpacingSpan = styled.span`
@@ -1025,6 +1079,11 @@ const CustomIcon = styled.img`
   height: 16px;
   filter: invert(100%);
   margin-right: 10px;
+
+  ${media.small} {
+    width: 14px;
+    height: 14px;
+  }
 `;
 
 const SubmitButton = styled.div`
@@ -1044,6 +1103,13 @@ const SubmitButton = styled.div`
 
   font-size: 16px;
   font-weight: 700;
+
+  ${media.small} {
+    right: 50%;
+    transform: translateX(50%);
+    width: 90%;
+    bottom: 5%;
+  }
 `;
 
 const CommentButton = styled.button`
