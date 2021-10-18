@@ -56,19 +56,19 @@ const StudioHome = () => {
       <StudioBanner />
       <BoardContainer>
         <BoardWrapper>
-          <BoardHeader>
+          {/* <BoardHeader>
             <BoardTitle>커버 녹음하기</BoardTitle>
-          </BoardHeader>
+          </BoardHeader> */}
           <GridContainer>
             <CoverLinkContainer to="/studio/band">
               <Background url={StudioBandImage} position="top" />
               <BandIconContainer src={GroupIcon} />
-              <LinkText>밴드 커버</LinkText>
+              <LinkText>밴드 커버 녹음하기</LinkText>
             </CoverLinkContainer>
             <CoverLinkContainer to="/studio/solo">
               <Background url={StudioSoloImage} position="center" />
               <SoloIconContainer src={SoloIcon} />
-              <LinkText>솔로 커버</LinkText>
+              <LinkText>솔로 커버 녹음하기</LinkText>
             </CoverLinkContainer>
           </GridContainer>
         </BoardWrapper>
@@ -100,7 +100,7 @@ const BoardWrapper = styled.div`
   justify-content: center;
   align-items: center;
 
-  margin-top: 2vw;
+  margin: 1rem 0;
 `;
 
 const BoardHeader = styled.div`
@@ -143,19 +143,19 @@ const Background = styled.div`
   background-repeat: no-repeat;
   background-position: ${(props) => `${props.position} center`};
   background-size: cover;
-  filter: blur(2px) brightness(50%);
+  filter: blur(1px) brightness(50%);
   transition: all 0.3s ease-in-out;
 
   &:hover {
-    filter: blur(1px) brightness(70%);
+    filter: blur(0.5px) brightness(65%);
   }
 `;
 
 const CoverLinkContainer = styled(Link)`
   width: 100%;
-  height: 8vw;
+  height: 10rem;
   border-radius: 15px;
-  margin-top: 1vw;
+  margin-top: 1rem;
   overflow: hidden;
 
   display: flex;
@@ -167,24 +167,23 @@ const CoverLinkContainer = styled(Link)`
 `;
 
 const BandIconContainer = styled.img`
-  width: 3.5vw;
+  width: 4.5rem;
 
   position: absolute;
   top: 15%;
 `;
 
 const SoloIconContainer = styled.img`
-  width: 2.5vw;
+  width: 3rem;
 
   position: absolute;
   top: 25%;
 `;
 
 const LinkText = styled.div`
-  font-size: 1.2vw;
+  font-size: 1.4rem;
   font-weight: 700;
   color: white;
-  margin-top: 0.2vw;
 
   position: absolute;
   bottom: 20%;
