@@ -34,9 +34,10 @@ const Container = styled.div`
   }
 
   ${media.small} {
-    width: 90%;
+    width: 100%;
     min-width: 0px;
     margin-top: 1rem;
+    padding: 0;
   }
 `;
 

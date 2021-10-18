@@ -7,6 +7,7 @@ import { sessionIconMatch } from '../../lib/sessionIconMatch';
 import ThumbIcon from '../../images/ThumbIcon.svg';
 import ViewIcon from '../../images/ViewIcon.svg';
 import HeadPhoneIcon from '../../images/HeadPhoneIcon.svg';
+import { media } from '../../lib/Media';
 
 const CoverGrid = (props) => {
   const { idx, title, artist, img, data } = props;
@@ -118,6 +119,10 @@ const CoverContainer = styled.div`
   height: auto;
   margin: 2vh 0;
   color: black;
+
+  ${media.small} {
+    margin: 0;
+  }
 
   &:hover ${HeadPhoneImage} {
     width: 2.5rem;

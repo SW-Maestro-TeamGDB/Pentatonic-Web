@@ -7,6 +7,7 @@ import PageContainer from '../../components/PageContainer';
 import SearchBar from '../../components/SearchBar';
 import CoverGrid from '../../components/CoverGrid/CoverGrid';
 import GridContainer from '../../components/GridContainer/GridContainer';
+import { media } from '../../lib/Media';
 
 const GET_TREND_BANDS = gql`
   query Query {
@@ -96,6 +97,12 @@ const BoardContainer = styled.div`
   justify-content: space-between;
   align-items: flex-start;
   width: 100%;
+
+  ${media.small} {
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
 `;
 
 const BoardWrapper = styled.div`
@@ -104,6 +111,12 @@ const BoardWrapper = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
+
+  ${media.small} {
+    width: 100%;
+    padding: 0 1rem;
+    margin: 0 0 1rem;
+  }
 `;
 
 const BoardHeader = styled.div`
@@ -114,6 +127,10 @@ const BoardHeader = styled.div`
   justify-content: center;
   margin-bottom: 10px;
   width: 95%;
+
+  ${media.small} {
+    margin-bottom: 15px;
+  }
 `;
 
 const BoardTitle = styled.nav`

@@ -1,5 +1,6 @@
 import react from 'react';
 import styled from 'styled-components';
+import { media } from '../../lib/Media';
 import { useQuery, gql } from '@apollo/client';
 import { Default } from '../../lib/Media';
 import { Link } from 'react-router-dom';
@@ -56,17 +57,26 @@ const Background = styled.div`
   &:hover {
     transform: scale(1.1);
   }
+
+  ${media.small} {
+    border-radius: 0px;
+  }
 `;
 
 const BannerContainer = styled.div`
   display: flex;
   flex-direction: column;
   height: 25vw;
+  min-height: 20rem;
   width: 100%;
   border-radius: 10px;
   position: relative;
   cursor: pointer;
   overflow: hidden;
+
+  ${media.small} {
+    border-radius: 0px;
+  }
 
   ${Background} {
     filter: brightness(60%);
@@ -118,6 +128,10 @@ const SongTitle = styled.span`
 
   line-height: 1.3;
   letter-spacing: 2px;
+
+  ${media.small} {
+    font-size: 12vw;
+  }
 `;
 
 const Singer = styled.span`
@@ -130,6 +144,10 @@ const Singer = styled.span`
   align-items: center;
 
   line-height: 1;
+
+  ${media.small} {
+    font-size: 8vw;
+  }
 `;
 
 export default WeeklyBanner;
