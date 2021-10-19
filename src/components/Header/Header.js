@@ -47,8 +47,14 @@ const Header = () => {
   const showDrawer = () => {
     setMenuToggle(true);
   };
+
   const onClose = () => {
     setMenuToggle(false);
+  };
+
+  const onClickRegisterButton = (bool) => {
+    setMenuToggle(bool);
+    setModalToggle(bool);
   };
 
   const isMobile = useMediaQuery({
@@ -98,7 +104,7 @@ const Header = () => {
           </LogoContainer>
           <AuthModal
             modalToggle={modalToggle}
-            setModalToggle={setModalToggle}
+            setModalToggle={onClickRegisterButton}
           />
         </Mobile>
         <Default>
@@ -130,11 +136,11 @@ const Header = () => {
                 </LoginButton>
               )}
             </UserContainer>
-            <AuthModal
-              modalToggle={modalToggle}
-              setModalToggle={setModalToggle}
-            />
           </HeaderContents>
+          <AuthModal
+            modalToggle={modalToggle}
+            setModalToggle={setModalToggle}
+          />
         </Default>
       </HeaderContainer>
     </Fixed>
