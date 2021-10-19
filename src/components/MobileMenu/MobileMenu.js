@@ -63,7 +63,7 @@ const MobileMenu = (props) => {
         <SubMenuLink to="/artist/rank/band" onClick={() => onClose()}>
           밴드 랭킹
         </SubMenuLink>
-        <SubMenuLink to="/artist/rank/solo" onClick={() => onClose()}>
+        <SubMenuLink to="/artist/rank/artist" onClick={() => onClose()}>
           아티스트 랭킹
         </SubMenuLink>
       </MenuWrapper>
@@ -79,9 +79,9 @@ const MobileMenu = (props) => {
           <SubMenuLink to="/library" onClick={() => onClose()}>
             라이브러리
           </SubMenuLink>
-          <SubMenuLink to="/" onClick={() => onClickLogoutButton()}>
+          <LogoutButton onClick={() => onClickLogoutButton()}>
             로그아웃
-          </SubMenuLink>
+          </LogoutButton>
         </MenuWrapper>
       ) : null}
     </MenuContents>
@@ -231,6 +231,16 @@ const SubMenuLink = styled(Link)`
   &:focus {
     color: black;
   }
+`;
+
+const LogoutButton = styled.div`
+  color: black;
+  font-size: 0.9rem;
+  font-weight: 500;
+  margin: 0.3vh 0;
+  padding-left: 20px;
+  letter-spacing: -1px;
+  cursor: pointer;
 `;
 
 export default MobileMenu;
