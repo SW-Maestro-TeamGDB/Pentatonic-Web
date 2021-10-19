@@ -38,7 +38,7 @@ const Container = styled.div`
     min-width: 0px;
     margin-top: 1rem;
     padding: 0;
-    overflow: hidden;
+    overflow-x: hidden;
   }
 `;
 
