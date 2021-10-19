@@ -10,9 +10,9 @@ body {
   --antd-wave-shadow-color: #6236ff !important;
 }
 
-::-webkit-scrollbar {
+/* ::-webkit-scrollbar {
   width: 0.8rem;
-}
+} */
 
 .ant-select-selector {
   border: 2px solid #ddd;
@@ -95,14 +95,14 @@ body {
   height: 0.5rem;
 }
 
-::-webkit-scrollbar-track {
+/* ::-webkit-scrollbar-track {
   background: #f0f0f0;
 }
 
 ::-webkit-scrollbar-thumb {
   background: #8c8c8c;
   border-radius: 1rem;
-}
+} */
 
 .ant-steps-item-finish
   > .ant-steps-item-container
