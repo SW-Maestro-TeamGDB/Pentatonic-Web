@@ -13,7 +13,9 @@ const MobileMenu = (props) => {
           <UserDataWrapper>
             <MyProfileImg src={data.profileURI} />
             <UserDataContainer>
-              <Username>{data.username}</Username>
+              <Username to={`/profile/${data.id}`} onClick={() => onClose()}>
+                {data.username}
+              </Username>
               <UserId>@{data.id}</UserId>
             </UserDataContainer>
           </UserDataWrapper>
@@ -68,7 +70,7 @@ const MobileMenu = (props) => {
       <Divider />
       {data ? (
         <MenuWrapper>
-          <SubMenuLink to="/profile" onClick={() => onClose()}>
+          <SubMenuLink to={`/profile/${data.id}`} onClick={() => onClose()}>
             마이페이지
           </SubMenuLink>
           <SubMenuLink to="/liked" onClick={() => onClose()}>
@@ -132,14 +134,23 @@ const UserId = styled.div`
   text-overflow: ellipsis;
 `;
 
-const Username = styled.div`
+const Username = styled(Link)`
   font-size: 1rem;
   font-weight: 700;
   width: 9rem;
 
+  color: #000;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+
+  &:hover {
+    color: #000;
+  }
+
+  &:focus {
+    color: #000;
+  }
 `;
 
 const LoginProfileImg = styled.img`
@@ -195,6 +206,14 @@ const MenuLink = styled(Link)`
   font-size: 1rem;
   padding-left: 20px;
   letter-spacing: -1px;
+
+  &:hover {
+    color: #666;
+  }
+
+  &:focus {
+    color: #666;
+  }
 `;
 
 const SubMenuLink = styled(Link)`
@@ -204,6 +223,14 @@ const SubMenuLink = styled(Link)`
   margin: 0.3vh 0;
   padding-left: 20px;
   letter-spacing: -1px;
+
+  &:hover {
+    color: black;
+  }
+
+  &:focus {
+    color: black;
+  }
 `;
 
 export default MobileMenu;
