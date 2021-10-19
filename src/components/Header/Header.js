@@ -4,10 +4,12 @@ import {
   GET_CURRENT_USER,
   GET_USER_INFORM,
   currentUserVar,
+  isLoggedInVar,
 } from '../../apollo/cache';
 import { useMediaQuery } from 'react-responsive';
 import { Dropdown, Drawer, Modal, Select } from 'antd';
 import { Default, Mobile, media } from '../../lib/Media';
+
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import MyMenu from '../MyMenu';
@@ -34,6 +36,12 @@ const Header = () => {
 
   const onClickLoginButton = () => {
     setModalToggle(true);
+  };
+
+  const onClickLogoutButton = () => {
+    sessionStorage.clear();
+    isLoggedInVar(false);
+    currentUserVar(null);
   };
 
   const showDrawer = () => {
@@ -69,7 +77,12 @@ const Header = () => {
             onClose={onClose}
             visible={menuToggle}
           >
-            <MobileMenu onClose={onClose} />
+            <MobileMenu
+              onClose={onClose}
+              data={data?.user}
+              onClickLoginButton={onClickLoginButton}
+              onClickLogoutButton={onClickLogoutButton}
+            />
           </CustomDrawer>
           <MobileMenuButton
             onClick={() => {
@@ -83,6 +96,10 @@ const Header = () => {
               <LogoImage src={Logo} />
             </LogoLink>
           </LogoContainer>
+          <AuthModal
+            modalToggle={modalToggle}
+            setModalToggle={setModalToggle}
+          />
         </Mobile>
         <Default>
           <HeaderContents>

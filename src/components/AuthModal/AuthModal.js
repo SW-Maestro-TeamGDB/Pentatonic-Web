@@ -5,6 +5,7 @@ import LoginModal from '../LoginModal';
 import FindAccountModal from '../FindAccoutModal/FindAccountModal';
 import FindIdModal from '../FindIdModal.js/FindIdModal';
 import FindPasswordModal from '../FindPasswordModal';
+import { media } from '../../lib/Media';
 
 import { useHistory } from 'react-router-dom';
 
