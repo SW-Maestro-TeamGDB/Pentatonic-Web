@@ -56,9 +56,6 @@ const StudioHome = () => {
       <StudioBanner />
       <BoardContainer>
         <BoardWrapper>
-          {/* <BoardHeader>
-            <BoardTitle>커버 녹음하기</BoardTitle>
-          </BoardHeader> */}
           <GridContainer>
             <CoverLinkContainer to="/studio/band">
               <Background url={StudioBandImage} position="top" />

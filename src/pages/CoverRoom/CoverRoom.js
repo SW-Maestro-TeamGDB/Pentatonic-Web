@@ -602,7 +602,7 @@ const CoverRoom = ({ match }) => {
           </Drawer>
         </>
       ) : error || coverData === null ? (
-        <NotFoundPage desc="올바르지 않은 커버 주소입니다" />
+        <NotFoundPage desc="삭제된 커버 혹은 올바르지 않은 주소입니다" />
       ) : null}
       <QuestionModal
         modalToggle={deleteModal}
