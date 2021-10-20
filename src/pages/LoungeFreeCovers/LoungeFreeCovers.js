@@ -94,6 +94,10 @@ const LoungeBandCovers = ({ match }) => {
   useEffect(() => {
     if (genre !== '전체') {
       setBandFilter({ ...bandFilter, genre: genre });
+    } else {
+      let tempFilter = { ...bandFilter };
+      delete tempFilter.genre;
+      setBandFilter(tempFilter);
     }
   }, [genre]);
 

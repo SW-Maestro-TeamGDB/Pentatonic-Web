@@ -80,12 +80,20 @@ const LoungeSoloCovers = ({ match }) => {
   useEffect(() => {
     if (genre !== '전체') {
       setBandFilter({ ...bandFilter, genre: genre });
+    } else {
+      let tempFilter = { ...bandFilter };
+      delete tempFilter.genre;
+      setBandFilter(tempFilter);
     }
   }, [genre]);
 
   useEffect(() => {
     if (difficulty !== '전체') {
       setBandFilter({ ...bandFilter, level: difficulty });
+    } else {
+      let tempFilter = { ...bandFilter };
+      delete tempFilter.level;
+      setBandFilter(tempFilter);
     }
   }, [difficulty]);
 
