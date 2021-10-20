@@ -1,12 +1,14 @@
 import react, { useEffect, useState, useMutation } from 'react';
 import styled from 'styled-components';
 import { Steps } from 'antd';
+import { GET_CURRENT_USER } from '../../apollo/cache';
 import { gql, useQuery } from '@apollo/client';
 import { useForm } from 'react-hook-form';
 import PageContainer from '../../components/PageContainer';
 import RegisterForm from '../RegisterForm';
 import RegisterPhoneAuth from '../RegisterPhoneAuth';
 import RegisterTermsOfService from '../RegisterTermsOfService';
+import { Default, Mobile, media } from '../../lib/Media';
 
 const { Step } = Steps;
 
@@ -17,6 +19,7 @@ const Register = ({ history }) => {
     type: null,
     username: null,
   };
+  const { data } = useQuery(GET_CURRENT_USER);
   const [pageStep, setPageStep] = useState(0);
   const [phoneNumber, setPhoneNumber] = useState(null);
   const [authCode, setAuthCode] = useState(null);
@@ -24,10 +27,10 @@ const Register = ({ history }) => {
 
   // 회원가입 중 로그인 할 시 메인화면으로 이동
   useEffect(() => {
-    if (sessionStorage.getItem('token')) {
+    if (data.user) {
       history.push('/');
     }
-  }, [sessionStorage]);
+  }, [data]);
 
   const nextPage = () => {
     setPageStep(pageStep + 1);
@@ -83,16 +86,21 @@ const Register = ({ history }) => {
 
   return (
     <PageContainer>
-      <CustomSteps progressDot current={pageStep}>
-        {pages.map((item) => (
-          <Step
-            progressDot
-            key={item.title}
-            title={item.title}
-            description={item.description}
-          />
-        ))}
-      </CustomSteps>
+      <Default>
+        <CustomSteps progressDot current={pageStep}>
+          {pages.map((item, i) => (
+            <Step
+              progressDot
+              key={`registerStep - ${i}`}
+              title={item.title}
+              description={item.description}
+            />
+          ))}
+        </CustomSteps>
+      </Default>
+      <Mobile>
+        <MobileDescription>{pages[pageStep].description}</MobileDescription>
+      </Mobile>
       <StepContents>{pages[pageStep].content}</StepContents>
     </PageContainer>
   );
@@ -106,6 +114,18 @@ const StepContents = styled.div`
   padding: 3rem 0;
   min-height: 75vh;
   position: relative;
+
+  ${media.small} {
+    margin-top: 0;
+    box-shadow: none;
+    padding: 1rem 0;
+  }
+`;
+
+const MobileDescription = styled.div`
+  margin: 3vh 0 2vh;
+  font-size: 1.2rem;
+  font-weight: 800;
 `;
 
 const CustomSteps = styled(Steps)`
