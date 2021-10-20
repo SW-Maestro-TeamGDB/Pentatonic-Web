@@ -111,13 +111,35 @@ const Profile = ({ match }) => {
       setEditUserDataModal(false);
     },
     onCompleted: (data) => {
-      getUserInfo();
+      updateUserData();
       setEditUserDataModal(false);
       setEdit(false);
     },
   });
 
   const [getUserInfo] = useLazyQuery(GET_USER_INFO, {
+    fetchPolicy: 'network-only',
+    variables: {
+      getUserInfoUserId: ID,
+    },
+    onCompleted: (data) => {
+      if (data.getUserInfo) {
+        setUserData(data.getUserInfo);
+        setLoading(false);
+        setError(false);
+      } else {
+        setError(true);
+        setLoading(false);
+      }
+    },
+    onError: (error) => {
+      console.log(error);
+      setError(true);
+      setLoading(false);
+    },
+  });
+
+  const [updateUserData] = useLazyQuery(GET_USER_INFO, {
     fetchPolicy: 'network-only',
     variables: {
       getUserInfoUserId: ID,

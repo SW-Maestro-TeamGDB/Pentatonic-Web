@@ -1,6 +1,5 @@
 import react, { useEffect, useState } from 'react';
 import { useQuery, gql, useLazyQuery } from '@apollo/client';
-import { GET_CURRENT_USER } from '../../apollo/cache';
 import PageContainer from '../../components/PageContainer';
 import LibraryList from '../../components/LibraryList';
 import SearchBar from '../../components/SearchBar';
