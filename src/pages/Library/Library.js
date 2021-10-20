@@ -5,6 +5,7 @@ import PageContainer from '../../components/PageContainer';
 import LibraryList from '../../components/LibraryList';
 import SearchBar from '../../components/SearchBar';
 import styled from 'styled-components';
+import { StopOutlined } from '@ant-design/icons';
 
 import LoginAuth from '../../lib/LoginAuth';
 
@@ -92,7 +93,10 @@ const Library = () => {
           {libraryData && libraryData.length > 0 ? (
             loadLibrary()
           ) : (
-            <NoLibraryText>저장된 라이브러리가 없습니다</NoLibraryText>
+            <NoDataContainer>
+              <CustomStopOutlined />
+              <NoLibrary>저장된 라이브러리가 없습니다</NoLibrary>
+            </NoDataContainer>
           )}
         </LibraryContainer>
       </PageContainer>
@@ -110,15 +114,34 @@ const Spacing = styled.div`
   height: 3rem;
 `;
 
-const NoLibraryText = styled.div`
-  text-align: center;
-  color: #666666;
-  font-size: 1.2rem;
-  font-weight: 700;
-`;
-
 const LibraryContainer = styled.div`
   width: 100%;
+`;
+
+const NoLibrary = styled.div`
+  color: #bbb;
+  font-size: 2rem;
+  font-weight: 700;
+  width: 100%;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
+const NoDataContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 25rem;
+`;
+
+const CustomStopOutlined = styled(StopOutlined)`
+  font-size: 12rem;
+  color: #bbb;
+  margin-bottom: 2rem;
 `;
 
 export default Library;

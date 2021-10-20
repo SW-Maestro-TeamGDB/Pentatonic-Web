@@ -105,10 +105,6 @@ const NoDataContainer = styled.div`
   height: 25rem;
 `;
 
-const LibraryContainer = styled.div`
-  width: 100%;
-`;
-
 const CustomStopOutlined = styled(StopOutlined)`
   font-size: 12rem;
   color: #bbb;
