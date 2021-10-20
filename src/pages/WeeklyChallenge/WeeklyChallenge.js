@@ -38,7 +38,7 @@ const QUERY_SONG = gql`
 
 const WeeklyChallenge = ({ match }) => {
   const content = match.params?.content;
-  const { data } = useQuery(QUERY_SONG, {
+  const { loading, error, data } = useQuery(QUERY_SONG, {
     variables: {
       querySongFilter: {
         weeklyChallenge: true,
@@ -90,7 +90,7 @@ const WeeklyChallenge = ({ match }) => {
           })}
         </GridContainer>
       );
-    } else {
+    } else if (!loading) {
       return <NoCover>등록된 커버가 없습니다</NoCover>;
     }
   };
