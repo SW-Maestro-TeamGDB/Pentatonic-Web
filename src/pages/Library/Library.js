@@ -30,15 +30,18 @@ const GET_USER_INFO = gql`
 `;
 
 const Library = () => {
+  const [loadLibraryState, setLoadLibraryState] = useState(true);
   const [libraryData, setLibraryData] = useState([]);
   const userData = useQuery(GET_CURRENT_USER);
-  const [getUserInfo] = useLazyQuery(GET_USER_INFO, {
+  const [getUserInfo, { loading, error, data }] = useLazyQuery(GET_USER_INFO, {
     fetchPolicy: 'no-cache',
     onCompleted: (data) => {
       setLibraryData(data.getUserInfo.library);
+      setLoadLibraryState(false);
     },
     onError: (error) => {
       console.log(error);
+      setLoadLibraryState(false);
     },
   });
 
@@ -53,7 +56,7 @@ const Library = () => {
   }, [userData]);
 
   const loadLibrary = () => {
-    if (libraryData)
+    if (libraryData && userData?.data?.user)
       return libraryData
         .slice(0, libraryData.length)
         .reverse()
@@ -93,10 +96,14 @@ const Library = () => {
           {libraryData && libraryData.length > 0 ? (
             loadLibrary()
           ) : (
-            <NoDataContainer>
-              <CustomStopOutlined />
-              <NoLibrary>저장된 라이브러리가 없습니다</NoLibrary>
-            </NoDataContainer>
+            <>
+              {loadLibraryState ? null : (
+                <NoDataContainer>
+                  <CustomStopOutlined />
+                  <NoLibrary>저장된 라이브러리가 없습니다</NoLibrary>
+                </NoDataContainer>
+              )}
+            </>
           )}
         </LibraryContainer>
       </PageContainer>

@@ -5,10 +5,6 @@ import { IS_LOGGED_IN } from '../../apollo/cache';
 import { useHistory } from 'react-router-dom';
 
 const LoginAuth = ({ children }) => {
-  // const userInfo = localStorage.getItem('userInfo');
-  // const token = localStorage.getItem('token');
-  // const isLogged = userInfo && token;
-
   const { data } = useQuery(IS_LOGGED_IN, {});
 
   const [modalToggle, setModalToggle] = useState(true);
