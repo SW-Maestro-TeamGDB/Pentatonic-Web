@@ -131,6 +131,8 @@ const Profile = ({ match }) => {
     },
     onCompleted: (data) => {
       if (data.getUserInfo) {
+        sessionStorage.setItem('userInfo', JSON.stringify(data.getUserInfo));
+        currentUserVar(data.getUserInfo);
         setUserData(data.getUserInfo);
         setLoading(false);
         setError(false);
