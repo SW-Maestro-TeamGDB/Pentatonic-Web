@@ -18,9 +18,7 @@ const ArtistBannerContents = (props) => {
         type === 'band' ? `/lounge/cover/${data.bandId}` : `/profile/${data.id}`
       }
     >
-      <Background
-        url={type === 'band' ? data.backGroundURI : ArtistRank}
-      ></Background>
+      <Background url={type === 'band' ? data.backGroundURI : ArtistRank} />
       {type === 'band' ? null : (
         <ProfileContainer>
           <ProfileImage src={data.profileURI} />
@@ -90,7 +88,8 @@ const Background = styled.div`
 `;
 
 const ProfileContainer = styled.div`
-  width: 20%;
+  width: 15rem;
+  height: 15rem;
   position: absolute;
   right: 5%;
   top: 50%;
@@ -105,9 +104,11 @@ const ProfileContainer = styled.div`
 
 const ProfileImage = styled.img`
   width: 100%;
+  height: 100%;
   padding: 1rem;
   border-radius: 30px;
   filter: brightness(90%);
+  object-fit: cover;
 `;
 
 const BannerContents = styled.div`

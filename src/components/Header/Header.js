@@ -198,6 +198,7 @@ const UserImg = styled.img`
   height: 32px;
   border-radius: 30px;
   margin-right: 10px;
+  object-fit: cover;
 `;
 
 const UserName = styled.div`
