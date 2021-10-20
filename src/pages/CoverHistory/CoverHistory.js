@@ -33,7 +33,7 @@ const CoverHistory = ({ match }) => {
   const coverWidth = 220;
 
   const [userData, setUserData] = useState();
-  const { data } = useQuery(GET_USER_INFO, {
+  const { loading, error, data } = useQuery(GET_USER_INFO, {
     fetchPolicy: 'network-only',
     variables: {
       getUserInfoUserId: ID,
@@ -60,10 +60,14 @@ const CoverHistory = ({ match }) => {
           {showCover()}
         </GridContainer>
       ) : (
-        <NoDataContainer>
-          <CustomStopOutlined />
-          <NoCoverData>참여한 커버가 없습니다</NoCoverData>
-        </NoDataContainer>
+        <>
+          {loading ? null : (
+            <NoDataContainer>
+              <CustomStopOutlined />
+              <NoCoverData>참여한 커버가 없습니다</NoCoverData>
+            </NoDataContainer>
+          )}
+        </>
       )}
     </PageContainer>
   );
