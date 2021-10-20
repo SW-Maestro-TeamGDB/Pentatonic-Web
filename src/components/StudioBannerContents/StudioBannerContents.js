@@ -10,23 +10,23 @@ import ViewIcon from '../../images/ViewIcon.svg';
 const StudioBannerContents = (props) => {
   const { data } = props;
   return (
-    <CarouselContents to={`/lounge/cover/${data ? data.id : '1'}`}>
-      <Background url={data.image} />
+    <CarouselContents to={`/lounge/cover/${data.bandId}`}>
+      <Background url={data.backGroundURI} />
       <BannerContents>
         <CoverRecommendTitleContainer>
           <CoverRecommendTitle>이런 커버 어때요?</CoverRecommendTitle>
         </CoverRecommendTitleContainer>
         <CoverInfoContainer>
-          <SongTitle>{data.title}</SongTitle>
-          <Singer>{data.singer}</Singer>
+          <SongTitle>{data.name}</SongTitle>
+          {/* <Singer>{data.singer}</Singer> */}
         </CoverInfoContainer>
         <CountContainer>
           <LikeCount>
-            <CustomIcon src={ViewIcon} /> {parseInt(Math.random() * 300 + 200)}
+            <CustomIcon src={ViewIcon} /> {data.viewCount}
           </LikeCount>
           <SpacingSpan />
           <ViewCount>
-            <CustomIcon src={ThumbIcon} /> {parseInt(Math.random() * 500 + 600)}
+            <CustomIcon src={ThumbIcon} /> {data.likeCount}
           </ViewCount>
           <SpacingSpan />
         </CountContainer>
@@ -37,7 +37,7 @@ const StudioBannerContents = (props) => {
 
 const CarouselContents = styled(Link)`
   width: 100%;
-  height: 22vw;
+  height: 20rem;
   font-size: 3rem;
 
   display: flex;
@@ -86,9 +86,9 @@ const CoverRecommendTitleContainer = styled.div`
 
 const CoverRecommendTitle = styled.div`
   color: white;
-  font-size: 1.3vw;
-  font-weight: 800;
-  line-height: 2.5;
+  font-size: 1.2rem;
+  font-weight: 600;
+  line-height: 3;
   letter-spacing: -0.4px;
 
   display: flex;
@@ -98,13 +98,13 @@ const CoverRecommendTitle = styled.div`
 
 const SongTitle = styled.span`
   font-weight: 900;
-  font-size: 3.5vw;
+  font-size: 3.5rem;
   color: white;
 
   display: flex;
   justify-content: flex-start;
 
-  line-height: 1;
+  line-height: 1.3;
   letter-spacing: 2px;
 `;
 
@@ -122,12 +122,12 @@ const Singer = styled.span`
 const CountContainer = styled.span`
   display: flex;
   align-items: center;
-  color: #bababa;
-  margin-top: 1vw;
+  color: #fff;
+  margin-top: 0.7rem;
 `;
 
 const LikeCount = styled.span`
-  font-size: 0.8vw;
+  font-size: 0.7rem;
   text-align: left;
   display: flex;
   flex-direction: row;
@@ -135,7 +135,7 @@ const LikeCount = styled.span`
 `;
 
 const ViewCount = styled.span`
-  font-size: 0.8vw;
+  font-size: 0.7rem;
   text-align: left;
   display: flex;
   flex-direction: row;
@@ -143,15 +143,14 @@ const ViewCount = styled.span`
 `;
 
 const CustomIcon = styled.img`
-  width: 1.2vw;
-  height: 1.2vw;
-  filter: invert(80%) sepia(0%) saturate(468%) hue-rotate(238deg)
-    brightness(96%) contrast(86%);
+  width: 1.3rem;
+  height: 1.3rem;
+  filter: invert(100%);
   margin: 0 0.5vw;
 `;
 
 const SpacingSpan = styled.span`
-  margin: 0 5px;
+  margin: 0 3px;
 `;
 
 export default StudioBannerContents;
