@@ -16,6 +16,7 @@ import Liked from './pages/Liked';
 import Login from './pages/Login/Login';
 import FindAccount from './pages/FindAccount';
 import NotFoundPage from './pages/NotFoundPage';
+import CoverHistory from './pages/CoverHistory';
 import PageTracker from './lib/PageTracker';
 
 function App() {
@@ -32,6 +33,7 @@ function App() {
             <Route path="/lounge" component={Lounge} />
             <Route path="/studio" component={Studio} />
             <Route path="/artist" component={Artist} />
+            <Route path="/profile/:id/history" component={CoverHistory} exact />
             <Route path="/profile/:id" component={Profile} />
             <Route path="/register" component={Register} />
             <Route path="/library" component={Library} />

@@ -85,13 +85,6 @@ const Profile = ({ match }) => {
     username: null,
   });
 
-  const cropperRef = useRef();
-  const onCrop = () => {
-    const imageElement = cropperRef?.current;
-    const cropper = imageElement?.cropper;
-    console.log(cropper.getCroppedCanvas().toDataURL());
-  };
-
   const coverRef = useRef();
   const coverWidth = 220;
 
@@ -438,7 +431,7 @@ const Profile = ({ match }) => {
             <CoverHistoryContainer ref={coverRef}>
               <BoardHeader>
                 <BoardTitle>커버 히스토리</BoardTitle>
-                <BoardLink to={`/profile/${userData.id}/cover`}>
+                <BoardLink to={`/profile/${userData.id}/history`}>
                   더보기
                 </BoardLink>
               </BoardHeader>
