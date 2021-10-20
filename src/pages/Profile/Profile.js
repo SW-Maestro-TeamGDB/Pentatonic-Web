@@ -14,8 +14,10 @@ import QuestionModal from '../../components/QuestionModal/QuestionModal';
 import NotFoundPage from '../NotFoundPage';
 import PositionGrid from '../../components/PositionGrid';
 import CoverHistory from '../../components/CoverHistroy/CoverHistory';
+import CropModal from '../../components/CropModal';
 import { Upload, notification } from 'antd';
 import styled from 'styled-components';
+import { file } from '@babel/types';
 
 const GET_USER_INFO = gql`
   query Query($getUserInfoUserId: Id!) {
@@ -71,6 +73,7 @@ const { Dragger } = Upload;
 const Profile = ({ match }) => {
   const { data } = useQuery(GET_CURRENT_USER);
   const ID = match.params.id;
+  const [beforeCropImage, setBeforeCropImage] = useState();
   const [userData, setUserData] = useState();
   const [error, setError] = useState(false);
   const [nameError, setNameError] = useState();
@@ -82,19 +85,29 @@ const Profile = ({ match }) => {
     username: null,
   });
 
+  const cropperRef = useRef();
+  const onCrop = () => {
+    const imageElement = cropperRef?.current;
+    const cropper = imageElement?.cropper;
+    console.log(cropper.getCroppedCanvas().toDataURL());
+  };
+
   const coverRef = useRef();
   const coverWidth = 220;
 
+  const [cropModal, setCropModal] = useState(false);
   const [unfollowModal, setUnfollowModal] = useState(false);
   const [editUserDataModal, setEditUserDataModal] = useState(false);
 
   const [uploadImage, uploadImageResult] = useMutation(UPLOAD_IMAGE_FILE, {
     fetchPolicy: 'no-cache',
     onError: (error) => {
-      // console.log(error);
+      alert('이미지 업로드가 실패하였습니다.');
+      console.log(error.message);
     },
     onCompleted: (data) => {
       setEditUserData({ ...editUserData, profileURI: data.uploadImageFile });
+      setCropModal(false);
     },
   });
 
@@ -202,14 +215,13 @@ const Profile = ({ match }) => {
     return true;
   };
 
-  const submitImageFile = (data) => {
-    if (imageFileCheck(data.file)) {
+  const submitImageFile = (file) => {
+    if (file)
       uploadImage({
         variables: {
-          uploadImageFileInput: { file: data.file },
+          uploadImageFileInput: { file: file },
         },
       });
-    }
   };
 
   const onClickProfileChange = () => {
@@ -244,6 +256,18 @@ const Profile = ({ match }) => {
     });
   };
 
+  const checkUploadImageFile = (data) => {
+    if (imageFileCheck(data.file)) {
+      const file = data.file;
+      file.arrayBuffer().then((arrayBuffer) => {
+        let blob = new Blob([new Uint8Array(arrayBuffer)], { type: file.type });
+        let url = URL.createObjectURL(blob);
+        setBeforeCropImage(url);
+      });
+      setCropModal(true);
+    }
+  };
+
   useEffect(() => {
     getUserInfo();
   }, []);
@@ -265,6 +289,10 @@ const Profile = ({ match }) => {
     getUserInfo();
   }, [data]);
 
+  useEffect(() => {
+    console.log(beforeCropImage);
+  }, [beforeCropImage]);
+
   return (
     <PageContainer width="55%">
       {!error ? (
@@ -273,23 +301,37 @@ const Profile = ({ match }) => {
             <UserInfoContainer>
               <UserImageContainer>
                 {edit ? (
-                  <CustomDragger
-                    maxCount={1}
-                    showUploadList={false}
-                    customRequest={(data) => submitImageFile(data)}
-                  >
-                    {editUserData.profileURI === userData.profileURI ? (
-                      <>
-                        <EditProfile src={userData.profileURI} opacity="0.3" />
-                        <CustomPictureIcon />
-                      </>
-                    ) : (
-                      <DraggerContents>
-                        <EditProfile src={editUserData.profileURI} />
-                        <CustomUnvisiblePictureIcon />
-                      </DraggerContents>
-                    )}
-                  </CustomDragger>
+                  <>
+                    <CustomDragger
+                      maxCount={1}
+                      showUploadList={false}
+                      customRequest={(data) => {
+                        checkUploadImageFile(data);
+                        // submitImageFile(data.file);
+                      }}
+                    >
+                      {editUserData.profileURI === userData.profileURI ? (
+                        <>
+                          <EditProfile
+                            src={userData.profileURI}
+                            opacity="0.3"
+                          />
+                          <CustomPictureIcon />
+                        </>
+                      ) : (
+                        <DraggerContents>
+                          <EditProfile src={editUserData.profileURI} />
+                          <CustomUnvisiblePictureIcon />
+                        </DraggerContents>
+                      )}
+                    </CustomDragger>
+                    <CropModal
+                      modalToggle={cropModal}
+                      setModalToggle={setCropModal}
+                      image={beforeCropImage}
+                      afterRequest={submitImageFile}
+                    />
+                  </>
                 ) : (
                   <UserImage src={userData.profileURI} />
                 )}
