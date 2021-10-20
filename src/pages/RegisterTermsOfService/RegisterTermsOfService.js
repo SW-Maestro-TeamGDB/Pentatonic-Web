@@ -1,6 +1,6 @@
 import react, { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { Default } from '../../lib/Media';
+import { Default, media } from '../../lib/Media';
 import { Checkbox } from 'antd';
 
 const RegisterTermsOfService = (props) => {
@@ -94,7 +94,7 @@ const RegisterTermsOfService = (props) => {
       <TermsCheckContainer>
         <TermsQuestion>이용약관에 동의합니다</TermsQuestion>
         <CustomCheckbox
-          value={check}
+          checked={check}
           onChange={(e) => {
             setCheck(e.target.checked);
           }}
@@ -103,7 +103,7 @@ const RegisterTermsOfService = (props) => {
       <ErrorContainer>
         {error ? <ErrorMessage>이용약관에 동의해주세요</ErrorMessage> : null}
       </ErrorContainer>
-      <ButtonConatiner>
+      <ButtonContainer>
         <CustomButton
           onClick={() => {
             window.history.back();
@@ -118,7 +118,7 @@ const RegisterTermsOfService = (props) => {
         >
           다음으로
         </CustomButton>
-      </ButtonConatiner>
+      </ButtonContainer>
     </Container>
   );
 };
@@ -137,12 +137,21 @@ const TermsContainer = styled.div`
   padding: 1rem 1rem;
   overflow-y: scroll;
   height: 46vh;
+
+  ${media.small} {
+    width: 85%;
+    font-size: 0.8rem;
+  }
 `;
 
 const TermsQuestion = styled.span`
   font-size: 1.2rem;
   font-weight: 600;
   margin: 0 1rem;
+
+  ${media.small} {
+    font-size: 0.9rem;
+  }
 `;
 
 const ErrorContainer = styled.div`
@@ -157,7 +166,7 @@ const CustomCheckbox = styled(Checkbox)`
 `;
 
 const TermsCheckContainer = styled.div`
-  width: 50vw;
+  width: 75%;
   min-width: 70%;
   margin-top: 2rem;
   display: flex;
@@ -171,21 +180,27 @@ const ErrorMessage = styled.span`
   color: #cb0000;
 `;
 
-const ButtonConatiner = styled.div`
+const ButtonContainer = styled.div`
   position: absolute;
-  width: 50vw;
-  min-width: 70%;
+  width: 50%;
+  min-width: 30rem;
   bottom: 0;
   display: flex;
   flex-direction: row;
-  justify-content: space-around;
+  justify-content: space-between;
+
+  ${media.small} {
+    width: 85%;
+    min-width: 85%;
+    justify-content: space-between;
+  }
 `;
 
 const CustomButton = styled.button`
   background-color: black;
   border: none;
   color: white;
-  width: 10rem;
+  width: 12rem;
   height: 3rem;
   font-size: 1.2rem;
   font-weight: 600;
@@ -196,6 +211,12 @@ const CustomButton = styled.button`
 
   &:hover {
     background-color: #3d3d3d;
+  }
+
+  ${media.small} {
+    width: 45%;
+    height: 3rem;
+    font-size: 0.9rem;
   }
 `;
 

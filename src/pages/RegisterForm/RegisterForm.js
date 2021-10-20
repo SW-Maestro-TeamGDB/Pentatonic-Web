@@ -3,25 +3,13 @@ import styled from 'styled-components';
 import { gql, useMutation, useLazyQuery, useQuery } from '@apollo/client';
 import { Default } from '../../lib/Media';
 import { Radio } from 'antd';
-import { check } from 'prettier';
-
-// const CHECK_ID = gql`
-//   query checkId($id: String!) {
-//     checkId(input: { user: { id: $id } })
-//   }
-// `;
+import { media } from '../../lib/Media';
 
 const IS_VALID_ID = gql`
   query isValidId($id: Id!) {
     isValidId(id: $id)
   }
 `;
-
-// const CHECK_USERNAME = gql`
-//   query checkUsername($username: String!) {
-//     checkUsername(input: { user: { username: $username } })
-//   }
-// `;
 
 const IS_VALID_USERNAME = gql`
   query isValidUsername($username: Username!) {
@@ -244,17 +232,17 @@ const RegisterForm = (props) => {
             })
           }
         >
-          <RadioButtonConatiner>
+          <RadioButtonContainer>
             <CustomRadio value={1}>직업</CustomRadio>
             <CustomRadio value={2}>취미</CustomRadio>
             <CustomRadio value={3}>리스너</CustomRadio>
-          </RadioButtonConatiner>
+          </RadioButtonContainer>
         </CustomRadioGroup>
         <ErrorContainer>
           {typeError ? <ErrorMessage>{typeError}</ErrorMessage> : null}
         </ErrorContainer>
       </InputContainer>
-      <ButtonConatiner>
+      <ButtonContainer>
         <CustomButton
           onClick={() => {
             prevPage();
@@ -269,7 +257,7 @@ const RegisterForm = (props) => {
         >
           다음으로
         </CustomButton>
-      </ButtonConatiner>
+      </ButtonContainer>
     </Container>
   );
 };
@@ -286,11 +274,19 @@ const Container = styled.div`
 const InputContainer = styled.div`
   width: 70%;
   margin-top: 0.8rem;
+
+  ${media.small} {
+    width: 85%;
+  }
 `;
 
 const CustomTitle = styled.div`
   font-size: 1.2rem;
   font-weight: 800;
+
+  ${media.small} {
+    font-size: 1rem;
+  }
 `;
 
 const CustomDescription = styled.div`
@@ -298,40 +294,36 @@ const CustomDescription = styled.div`
   font-weight: 500;
   margin: 0.2rem 0 1rem;
   color: #3d3d3d;
+
+  ${media.small} {
+    font-size: 0.8rem;
+  }
 `;
 
 const CustomRadioGroup = styled(Radio.Group)`
   position: relative;
   width: 100%;
   margin-bottom: 2rem;
+
+  ${media.small} {
+    margin-top: 5px;
+    margin-bottom: 1rem;
+  }
 `;
 
-const RadioButtonConatiner = styled.div`
+const RadioButtonContainer = styled.div`
   width: 60%;
   position: absolute;
   display: flex;
   justify-content: space-between;
+
+  ${media.small} {
+    width: 100%;
+  }
 `;
 
 const CustomRadio = styled(Radio)`
   font-size: 1rem;
-`;
-
-const PhoneNumberInput = styled.input`
-  width: 70%;
-  color: black;
-  border: 2px solid lightgray;
-  transition: all ease 0.3s;
-  outline: none;
-  height: 4rem;
-  border-radius: 0.8rem;
-  margin: 0.5rem 0;
-  padding: 0 1rem;
-  font-size: 1.2rem;
-
-  &:focus {
-    border: 2px solid black;
-  }
 `;
 
 const CustomInput = styled.input`
@@ -348,6 +340,12 @@ const CustomInput = styled.input`
 
   &:focus {
     border: 2px solid black;
+  }
+
+  ${media.small} {
+    font-size: 1rem;
+    height: 3rem;
+    border-radius: 10px;
   }
 `;
 
@@ -371,6 +369,12 @@ const PasswordInput = styled.input.attrs({ type: 'password' })`
   ::placeholder {
     font-family: 'NanumSquare';
   }
+
+  ${media.small} {
+    font-size: 1rem;
+    height: 3rem;
+    border-radius: 10px;
+  }
 `;
 
 const ErrorContainer = styled.div`
@@ -378,6 +382,11 @@ const ErrorContainer = styled.div`
   width: 100%;
   margin-left: 0.5rem;
   margin-top: 0.5rem;
+
+  ${media.small} {
+    height: 1.3rem;
+    font-size: 0.8rem;
+  }
 `;
 
 const ErrorMessage = styled.span`
@@ -385,31 +394,18 @@ const ErrorMessage = styled.span`
   color: #cb0000;
 `;
 
-const ButtonConatiner = styled.div`
-  width: 100%;
-  min-width: 70%;
-  margin-top: 3rem;
+const ButtonContainer = styled.div`
+  width: 50%;
+  min-width: 30rem;
   display: flex;
   flex-direction: row;
-  justify-content: space-evenly;
-`;
+  justify-content: space-between;
+  margin-top: 3rem;
 
-const AuthButton = styled.button`
-  background-color: black;
-  border: none;
-  color: white;
-  width: 25%;
-  height: 4rem;
-  font-size: 1.2rem;
-  font-weight: 600;
-  padding: 0.5rem 1rem;
-  border-radius: 0.8rem;
-  cursor: pointer;
-  transition: all ease 0.3s;
-  margin-left: 5%;
-
-  &:hover {
-    background-color: #3d3d3d;
+  ${media.small} {
+    width: 85%;
+    min-width: 85%;
+    justify-content: space-between;
   }
 `;
 
@@ -417,7 +413,7 @@ const CustomButton = styled.button`
   background-color: black;
   border: none;
   color: white;
-  width: 10rem;
+  width: 12rem;
   height: 3rem;
   font-size: 1.2rem;
   font-weight: 600;
@@ -428,6 +424,12 @@ const CustomButton = styled.button`
 
   &:hover {
     background-color: #3d3d3d;
+  }
+
+  ${media.small} {
+    width: 45%;
+    height: 3rem;
+    font-size: 0.9rem;
   }
 `;
 

@@ -1,7 +1,7 @@
 import react, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { gql, useMutation } from '@apollo/client';
-import { Default } from '../../lib/Media';
+import { media, Mobile, Default } from '../../lib/Media';
 import { Checkbox } from 'antd';
 
 const SEND_AUTH_CODE = gql`
@@ -160,12 +160,15 @@ const RegisterPhoneAuth = (props) => {
           onChange={(e) => setTempNumber(e.target.value)}
           disabled={numberStatus === 1}
         />
-        <AuthButton onClick={() => numberCheck()}>인증번호 받기</AuthButton>
-        <ErrorContainer>
-          {numberStatus === -1 ? (
+        <AuthButton onClick={() => numberCheck()}>
+          <Default>인증번호 받기</Default>
+          <Mobile>전송</Mobile>
+        </AuthButton>
+        {numberStatus === -1 ? (
+          <ErrorContainer>
             <ErrorMessage>{numberError}</ErrorMessage>
-          ) : null}
-        </ErrorContainer>
+          </ErrorContainer>
+        ) : null}
         {numberStatus === 1 ? (
           <AuthNumberInput
             value={authCode}
@@ -178,8 +181,7 @@ const RegisterPhoneAuth = (props) => {
           {authError ? <ErrorMessage>{authError}</ErrorMessage> : null}
         </ErrorContainer>
       </PhoneNumberContainer>
-
-      <ButtonConatiner>
+      <ButtonContainer>
         <CustomButton
           onClick={() => {
             prevPage();
@@ -194,7 +196,7 @@ const RegisterPhoneAuth = (props) => {
         >
           가입하기
         </CustomButton>
-      </ButtonConatiner>
+      </ButtonContainer>
     </Container>
   );
 };
@@ -209,11 +211,19 @@ const Container = styled.div`
 
 const PhoneNumberContainer = styled.div`
   width: 70%;
+
+  ${media.small} {
+    width: 85%;
+  }
 `;
 
 const CustomTitle = styled.div`
   font-size: 1.2rem;
   font-weight: 800;
+
+  ${media.small} {
+    font-size: 1rem;
+  }
 `;
 
 const CustomDescription = styled.div`
@@ -221,6 +231,10 @@ const CustomDescription = styled.div`
   font-weight: 500;
   margin: 0.2rem 0 1rem;
   color: #3d3d3d;
+
+  ${media.small} {
+    font-size: 0.8rem;
+  }
 `;
 
 const PhoneNumberInput = styled.input`
@@ -237,6 +251,12 @@ const PhoneNumberInput = styled.input`
 
   &:focus {
     border: 2px solid black;
+  }
+
+  ${media.small} {
+    font-size: 1rem;
+    height: 3rem;
+    border-radius: 10px;
   }
 `;
 
@@ -255,33 +275,28 @@ const AuthNumberInput = styled.input`
   &:focus {
     border: 2px solid black;
   }
+
+  ${media.small} {
+    font-size: 1rem;
+    height: 3rem;
+    border-radius: 10px;
+  }
 `;
 
 const ErrorContainer = styled.div`
   height: 1rem;
   width: 100%;
   margin-left: 0.5rem;
+
+  ${media.small} {
+    height: 1.3rem;
+    font-size: 0.8rem;
+  }
 `;
 
 const ErrorMessage = styled.span`
   text-align: center;
   color: #cb0000;
-`;
-
-const CustomCheckbox = styled(Checkbox)`
-  margin: 0 1rem;
-`;
-
-const ButtonConatiner = styled.div`
-  position: absolute;
-  width: 100%;
-  min-width: 70%;
-  left: 50%;
-  transform: translateX(-50%);
-  bottom: 0;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-evenly;
 `;
 
 const AuthButton = styled.button`
@@ -301,13 +316,36 @@ const AuthButton = styled.button`
   &:hover {
     background-color: #3d3d3d;
   }
+
+  ${media.small} {
+    height: 3rem;
+    padding: 0;
+    font-size: 0.8rem;
+    margin-left: 5%;
+  }
+`;
+
+const ButtonContainer = styled.div`
+  position: absolute;
+  width: 50%;
+  min-width: 30rem;
+  bottom: 0;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+
+  ${media.small} {
+    width: 85%;
+    min-width: 85%;
+    justify-content: space-between;
+  }
 `;
 
 const CustomButton = styled.button`
   background-color: black;
   border: none;
   color: white;
-  width: 10rem;
+  width: 12rem;
   height: 3rem;
   font-size: 1.2rem;
   font-weight: 600;
@@ -318,6 +356,12 @@ const CustomButton = styled.button`
 
   &:hover {
     background-color: #3d3d3d;
+  }
+
+  ${media.small} {
+    width: 45%;
+    height: 3rem;
+    font-size: 0.9rem;
   }
 `;
 
