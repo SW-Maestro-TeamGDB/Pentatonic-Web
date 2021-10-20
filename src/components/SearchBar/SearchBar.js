@@ -16,13 +16,11 @@ const SearchBar = (props) => {
     } else {
       const idx = match.path.indexOf('/search');
       const artist = match.path.indexOf('artist');
-      console.log(artist);
+
       if (searching && artist == -1)
         history.replace(`${match.path.slice(0, idx)}`);
     }
   };
-
-  console.log(match);
 
   const handleKeyPress = (event) => {
     if (event.key === 'Enter') {

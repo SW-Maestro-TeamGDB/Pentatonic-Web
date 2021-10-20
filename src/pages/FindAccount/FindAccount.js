@@ -3,7 +3,6 @@ import styled from 'styled-components';
 import PageContainer from '../../components/PageContainer';
 
 const FindAccount = ({ match }) => {
-  console.log(match);
   return (
     <PageContainer>
       <h3>ID/PW 찾기</h3>

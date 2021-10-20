@@ -72,9 +72,6 @@ const LoungeSoloCovers = ({ match }) => {
     variables: {
       queryBandFilter: bandFilter,
     },
-    onCompleted: (data) => {
-      console.log(data);
-    },
   });
 
   useEffect(() => {

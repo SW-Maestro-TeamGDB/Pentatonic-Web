@@ -306,10 +306,6 @@ const Profile = ({ match }) => {
     getUserInfo();
   }, [data]);
 
-  useEffect(() => {
-    console.log(beforeCropImage);
-  }, [beforeCropImage]);
-
   return (
     <PageContainer width="55%">
       {!error ? (

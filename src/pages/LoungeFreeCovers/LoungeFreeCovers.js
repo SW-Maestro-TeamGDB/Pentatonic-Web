@@ -86,9 +86,6 @@ const LoungeBandCovers = ({ match }) => {
       queryBandFilter: bandFilter,
       queryBandFirst: 10,
     },
-    onCompleted: (data) => {
-      console.log(data);
-    },
   });
 
   useEffect(() => {
