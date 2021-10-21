@@ -122,42 +122,46 @@ const WeeklyChallenge = ({ match }) => {
   );
 
   return (
-    <PageContainer>
-      <PageImage
-        imgUrl={songData ? songData.songImg : null}
-        title={songData ? `${songData.name} - ${songData.artist}` : null}
-        position="top"
-      />
-      <PageDesc>
-        {content ? (
-          <SearchResult>
-            <SearchContent>'{content}'</SearchContent>검색 결과입니다
-          </SearchResult>
-        ) : (
-          tempDesc
-        )}
-      </PageDesc>
-      <SearchBar
-        placeholder="커버 제목을 입력해주세요"
-        sort="weekly"
-        searching={content}
-        match={match}
-      />
-      <SubContainer>
-        <Dropdown
-          overlay={CoverMenu}
-          placement="bottomCenter"
-          getPopupContainer={(trigger) => trigger.parentNode}
-          trigger={['click']}
-        >
-          <ButtonContainer>
-            새로운 커버 만들기
-            <MakingIconImg src={MakingIcon} />
-          </ButtonContainer>
-        </Dropdown>
-      </SubContainer>
-      {loadCover()}
-    </PageContainer>
+    <>
+      {!loading ? (
+        <PageContainer>
+          <PageImage
+            imgUrl={songData ? songData.songImg : null}
+            title={songData ? `${songData.name} - ${songData.artist}` : null}
+            position="top"
+          />
+          <PageDesc>
+            {content ? (
+              <SearchResult>
+                <SearchContent>'{content}'</SearchContent>검색 결과입니다
+              </SearchResult>
+            ) : (
+              tempDesc
+            )}
+          </PageDesc>
+          <SearchBar
+            placeholder="커버 제목을 입력해주세요"
+            sort="weekly"
+            searching={content}
+            match={match}
+          />
+          <SubContainer>
+            <Dropdown
+              overlay={CoverMenu}
+              placement="bottomCenter"
+              getPopupContainer={(trigger) => trigger.parentNode}
+              trigger={['click']}
+            >
+              <ButtonContainer>
+                새로운 커버 만들기
+                <MakingIconImg src={MakingIcon} />
+              </ButtonContainer>
+            </Dropdown>
+          </SubContainer>
+          {loadCover()}
+        </PageContainer>
+      ) : null}
+    </>
   );
 };
 
