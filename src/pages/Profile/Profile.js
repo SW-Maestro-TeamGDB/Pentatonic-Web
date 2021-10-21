@@ -18,6 +18,7 @@ import CropModal from '../../components/CropModal';
 import { Upload, notification } from 'antd';
 import styled from 'styled-components';
 import { file } from '@babel/types';
+import { media, Default, Mobile } from '../../lib/Media';
 
 const GET_USER_INFO = gql`
   query Query($getUserInfoUserId: Id!) {
@@ -79,6 +80,7 @@ const Profile = ({ match }) => {
   const [nameError, setNameError] = useState();
   const [loading, setLoading] = useState(true);
   const [edit, setEdit] = useState(false);
+  const [editUserName, setEditUserName] = useState();
   const [editUserData, setEditUserData] = useState({
     introduce: null,
     profileURI: null,
@@ -286,6 +288,12 @@ const Profile = ({ match }) => {
   };
 
   useEffect(() => {
+    if (editUserDataModal && editUserName) {
+      setEditUserData({ ...editUserData, username: editUserName });
+    }
+  }, [editUserDataModal]);
+
+  useEffect(() => {
     getUserInfo();
   }, []);
 
@@ -296,6 +304,7 @@ const Profile = ({ match }) => {
         profileURI: userData.profileURI,
         username: userData.username,
       });
+    setEditUserName(userData?.username);
   }, [userData]);
 
   useEffect(() => {
@@ -354,14 +363,15 @@ const Profile = ({ match }) => {
                   <>
                     <CustomInput
                       placeholder="닉네임을 입력해주세요"
-                      onChange={(e) =>
+                      onChange={(e) => {
+                        setEditUserName(e.target.value);
                         setEditUserData({
                           ...editUserData,
                           username: e.target.value,
-                        })
-                      }
-                      value={editUserData.username}
-                      defaultValue={editUserData.username}
+                        });
+                      }}
+                      value={editUserName}
+                      defaultValue={editUserName}
                       maxLength="14"
                     />
                     {nameError ? (
@@ -392,11 +402,11 @@ const Profile = ({ match }) => {
                   {edit ? null : (
                     <>
                       <FollowWrapper>
-                        {userData.followerCount}
+                        <FollowCounter>{userData.followerCount}</FollowCounter>
                         <FollowContainerTitle>팔로워</FollowContainerTitle>
                       </FollowWrapper>
                       <FollowWrapper>
-                        {userData.followingCount}
+                        <FollowCounter>{userData.followingCount}</FollowCounter>
                         <FollowContainerTitle>팔로우</FollowContainerTitle>
                       </FollowWrapper>
                     </>
@@ -411,7 +421,7 @@ const Profile = ({ match }) => {
                     ) : (
                       <FollowButton onClick={() => setEdit(true)}>
                         <CustomSettingIcon />
-                        프로필 수정
+                        <Default>프로필 수정</Default>
                       </FollowButton>
                     )
                   ) : userData.followingStatus ? (
@@ -483,6 +493,14 @@ const Profile = ({ match }) => {
   );
 };
 
+const FollowCounter = styled.div`
+  color: #666;
+
+  ${media.small} {
+    padding-right: 5px;
+  }
+`;
+
 const ErrorMessage = styled.div`
   color: #cb0000;
   font-size: 0.8rem;
@@ -500,6 +518,10 @@ const NoPosition = styled.div`
   height: 12rem;
   letter-spacing: -0.5px;
   font-weight: 800;
+
+  ${media.small} {
+    font-size: 1.2rem;
+  }
 `;
 
 const CustomPictureIcon = styled(PictureOutlined)`
@@ -511,6 +533,10 @@ const CustomPictureIcon = styled(PictureOutlined)`
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
+
+  ${media.small} {
+    font-size: 2rem;
+  }
 `;
 
 const BoardHeader = styled.div`
@@ -521,6 +547,10 @@ const BoardHeader = styled.div`
   justify-content: center;
 
   width: 100%;
+
+  ${media.small} {
+    margin-bottom: 1rem;
+  }
 `;
 
 const CustomUnvisiblePictureIcon = styled(PictureOutlined)`
@@ -535,6 +565,10 @@ const CustomUnvisiblePictureIcon = styled(PictureOutlined)`
   opacity: 0;
 
   visibility: hidden;
+
+  ${media.small} {
+    font-size: 2rem;
+  }
 `;
 
 const BoardLink = styled(Link)`
@@ -556,11 +590,17 @@ const EditProfile = styled.img`
   transition: all 0.3s ease-in-out;
 
   opacity: ${(props) => (props.opacity ? props.opacity : 1)};
+
+  ${media.small} {
+    width: 5rem;
+    height: 5rem;
+  }
 `;
 
 const DraggerContents = styled.div`
   width: 9rem;
   height: 9rem;
+  border-radius: 10px;
 
   display: flex;
   justify-content: center;
@@ -576,12 +616,17 @@ const DraggerContents = styled.div`
   &:hover ${EditProfile} {
     filter: brightness(70%);
   }
+
+  ${media.small} {
+    width: 5rem;
+    height: 5rem;
+  }
 `;
 
 const CustomDragger = styled(Dragger)`
   background-color: transparent !important;
   border: 2px solid lightgray !important;
-  border-radius: 0.8rem !important;
+  border-radius: 10px !important;
   padding: 1rem 0 !important;
 
   width: 9rem !important;
@@ -597,15 +642,12 @@ const CustomDragger = styled(Dragger)`
     border: 2px solid #999 !important;
     box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.2);
   }
+
+  ${media.small} {
+    width: 5rem !important;
+    height: 5rem !important;
+  }
 `;
-
-/* ${CustomPictureIcon} {
-      color: #444444;
-    }
-
-    ${UploadText} {
-      color: #444444;
-    } */
 
 const NoCoverText = styled.div`
   font-size: 1.4rem;
@@ -619,6 +661,10 @@ const NoCoverText = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+
+  ${media.small} {
+    font-size: 1.2rem;
+  }
 `;
 
 const CustomInput = styled.input`
@@ -628,7 +674,7 @@ const CustomInput = styled.input`
   transition: all ease 0.3s;
   outline: none;
   height: 2.8rem;
-  border-radius: 0.8rem;
+  border-radius: 10px;
   margin: 0 0 0.5rem;
   padding: 0 0.8rem;
   font-size: 0.9rem;
@@ -641,6 +687,11 @@ const CustomInput = styled.input`
     font-size: 0.8rem;
     color: #777;
   }
+
+  ${media.small} {
+    font-size: 0.9rem;
+    margin: 0.5rem 0;
+  }
 `;
 
 const CustomTextArea = styled.textarea`
@@ -650,7 +701,7 @@ const CustomTextArea = styled.textarea`
   transition: all ease 0.3s;
   outline: none;
   height: 5.5rem;
-  border-radius: 0.8rem;
+  border-radius: 10px;
   margin: 0;
   padding: 0.5rem 0.8rem;
   font-size: 0.9rem;
@@ -669,11 +720,21 @@ const CustomTextArea = styled.textarea`
   ::-webkit-scrollbar {
     display: none;
   }
+
+  ${media.small} {
+    font-size: 0.9rem;
+  }
 `;
 
 const CustomSettingIcon = styled(SettingFilled)`
   font-size: 1.2rem;
   padding-right: 0.5rem;
+
+  ${media.small} {
+    font-size: 1.2rem;
+    color: #666;
+    padding-right: 0;
+  }
 `;
 
 const CustomFollowIcon = styled(PlusCircleFilled)`
@@ -686,6 +747,10 @@ const FollowButtonContainer = styled.div`
   display: flex;
   justify-content: flex-end;
   align-items: center;
+
+  ${media.small} {
+    min-width: 8em;
+  }
 `;
 
 const FollowingButton = styled.div`
@@ -712,6 +777,19 @@ const FollowingButton = styled.div`
 
   &:hover {
     background-color: #555;
+  }
+
+  ${media.small} {
+    position: absolute;
+    right: 0;
+    top: 0;
+    border: none;
+    width: auto;
+    justify-content: center;
+    align-items: center;
+    height: 1.8rem;
+    min-width: 70px;
+    font-size: 14px;
   }
 `;
 
@@ -745,6 +823,19 @@ const FollowButton = styled.div`
     border-color: #666;
     color: #666;
   }
+
+  ${media.small} {
+    position: absolute;
+    right: 0;
+    top: 0;
+    border: none;
+    width: auto;
+    justify-content: flex-end;
+    align-items: center;
+    padding: 0;
+    min-width: auto;
+    height: 1.8rem;
+  }
 `;
 
 const FollowContainer = styled.div`
@@ -755,11 +846,21 @@ const FollowContainer = styled.div`
   justify-content: space-evenly;
   align-items: flex-start;
   padding-top: 0.5rem;
+
+  ${media.small} {
+    justify-content: flex-start;
+    padding-top: 0;
+  }
 `;
 
 const UserSessionContainer = styled.div`
   width: 100%;
   margin-top: 2rem;
+
+  ${media.small} {
+    width: 90%;
+    margin-top: 2rem;
+  }
 `;
 
 const UserSession = styled.div`
@@ -775,6 +876,11 @@ const UserSession = styled.div`
 const CoverHistoryContainer = styled.div`
   width: 100%;
   margin-top: 2rem;
+
+  ${media.small} {
+    width: 90%;
+    margin: 1rem 0;
+  }
 `;
 
 const UserInfoContainer = styled.div`
@@ -788,6 +894,14 @@ const UserInfoContainer = styled.div`
   height: 12rem;
   border-radius: 10px;
   width: 100%;
+
+  ${media.small} {
+    width: 90%;
+    flex-direction: column;
+    align-items: flex-start;
+    height: auto;
+    box-shadow: none;
+  }
 `;
 
 const UserImageContainer = styled.div`
@@ -800,6 +914,12 @@ const UserImageContainer = styled.div`
   height: 9rem;
 
   margin: 0 5%;
+
+  ${media.small} {
+    width: 5rem;
+    height: 5rem;
+    margin: 0;
+  }
 `;
 
 const UserImage = styled.div`
@@ -819,18 +939,33 @@ const UserInfo = styled.div`
 
   display: flex;
   flex-direction: column;
+
+  ${media.small} {
+    width: 100%;
+    min-height: auto;
+  }
 `;
 
 const UserName = styled.div`
   font-size: 2.2rem;
   font-weight: 800;
   letter-spacing: -0.6px;
+
+  ${media.small} {
+    font-size: 1.3rem;
+    margin-top: 0.5rem;
+  }
 `;
 
 const UserIntroduce = styled.pre`
   margin-top: 1.3rem;
   font-size: 1rem;
   font-family: 'NanumSquare';
+
+  ${media.small} {
+    margin-top: 0.1rem;
+    font-size: 0.8rem;
+  }
 
   // 자기소개 텍스트 최대 3줄표시
   overflow: hidden;
@@ -848,6 +983,12 @@ const MetaContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: space-between;
+
+  ${media.small} {
+    width: 100%;
+    flex-direction: row;
+    height: auto;
+  }
 `;
 
 const FollowWrapper = styled.div`
@@ -859,6 +1000,12 @@ const FollowWrapper = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
+
+  ${media.small} {
+    font-size: 0.8rem;
+    flex-direction: row;
+    padding-right: 8px;
+  }
 `;
 
 const FollowContainerTitle = styled.div`
@@ -872,6 +1019,10 @@ const BoardTitle = styled.nav`
   width: 100%;
   color: black;
   letter-spacing: -1.5px;
+
+  ${media.small} {
+    font-size: 1rem;
+  }
 `;
 
 const Padding = styled.div`
