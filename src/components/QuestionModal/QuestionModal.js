@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import { Modal } from 'antd';
 import { QuestionCircleOutlined, LoadingOutlined } from '@ant-design/icons';
+import { media } from '../../lib/Media';
 
 const QuestionModal = (props) => {
   const {
@@ -75,12 +76,20 @@ const TextWrapper = styled.div`
   font-size: 1.4rem;
   font-weight: 700;
   margin-top: 2.5rem;
+
+  ${media.small} {
+    font-size: 1.1rem;
+  }
 `;
 
 const DescWrapper = styled.div`
   font-size: 1rem;
   margin-top: 3rem;
   font-weight: 500;
+
+  ${media.small} {
+    font-size: 0.8rem;
+  }
 `;
 
 const ButtonContainer = styled.div`
@@ -110,6 +119,10 @@ const AcceptButton = styled.div`
   &:hover {
     color: white;
   }
+
+  ${media.small} {
+    min-width: 8em;
+  }
 `;
 
 const RefuseButton = styled.div`
@@ -129,6 +142,10 @@ const RefuseButton = styled.div`
 
   &:hover {
     color: #925fff;
+  }
+
+  ${media.small} {
+    min-width: 8em;
   }
 `;
 
