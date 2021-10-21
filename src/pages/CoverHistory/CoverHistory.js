@@ -7,6 +7,7 @@ import styled from 'styled-components';
 import GridContainer from '../../components/GridContainer';
 import CoverGrid from '../../components/CoverGrid';
 import { StopOutlined } from '@ant-design/icons';
+import { media } from '../../lib/Media';
 
 const GET_USER_INFO = gql`
   query Query($getUserInfoUserId: Id!) {
@@ -54,20 +55,22 @@ const CoverHistory = ({ match }) => {
         </PageTitle>
       ) : null}
       <Spacing />
-      {userData && userData.band.length > 0 ? (
-        <GridContainer templateColumn={`${coverWidth}px`} autoFill>
-          {showCover()}
-        </GridContainer>
-      ) : (
-        <>
-          {loading ? null : (
-            <NoDataContainer>
-              <CustomStopOutlined />
-              <NoCoverData>참여한 커버가 없습니다</NoCoverData>
-            </NoDataContainer>
-          )}
-        </>
-      )}
+      <CoverContainer>
+        {userData && userData.band.length > 0 ? (
+          <GridContainer templateColumn={`${coverWidth}px`} autoFill>
+            {showCover()}
+          </GridContainer>
+        ) : (
+          <>
+            {loading ? null : (
+              <NoDataContainer>
+                <CustomStopOutlined />
+                <NoCoverData>참여한 커버가 없습니다</NoCoverData>
+              </NoDataContainer>
+            )}
+          </>
+        )}
+      </CoverContainer>
     </PageContainer>
   );
 };
@@ -76,6 +79,17 @@ const PageTitle = styled.div`
   font-size: 1.5rem;
   font-weight: 600;
   margin-top: 1rem;
+
+  ${media.small} {
+    font-size: 1.2rem;
+    margin-top: 2rem;
+  }
+`;
+
+const CoverContainer = styled.div`
+  ${media.small} {
+    width: 90%;
+  }
 `;
 
 const Spacing = styled.div`
@@ -86,6 +100,10 @@ const Username = styled.span`
   font-size: 2rem;
   font-weight: 800;
   margin-right: 6px;
+
+  ${media.small} {
+    font-size: 1.5rem;
+  }
 `;
 
 const NoCoverData = styled.div`
@@ -97,6 +115,10 @@ const NoCoverData = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+
+  ${media.small} {
+    font-size: 1.4rem;
+  }
 `;
 
 const NoDataContainer = styled.div`
@@ -112,6 +134,10 @@ const CustomStopOutlined = styled(StopOutlined)`
   font-size: 12rem;
   color: #bbb;
   margin-bottom: 2rem;
+
+  ${media.small} {
+    font-size: 8rem;
+  }
 `;
 
 export default CoverHistory;
