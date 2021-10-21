@@ -316,7 +316,7 @@ const Profile = ({ match }) => {
   }, [data]);
 
   return (
-    <PageContainer width="55%">
+    <PageContainer width="55%" minWidth="800px">
       {!error ? (
         !loading && userData ? (
           <>
@@ -441,16 +441,32 @@ const Profile = ({ match }) => {
               <BoardTitle>포지션</BoardTitle>
               <UserSession>
                 {userData.band.length > 0 ? (
-                  <Padding>
-                    <GridContainer
-                      templateColumn="180px"
-                      rowGap="1.5rem"
-                      columnGap="1.5rem"
-                      autoFill
-                    >
-                      {showPosition()}
-                    </GridContainer>
-                  </Padding>
+                  <>
+                    <Default>
+                      <Padding>
+                        <GridContainer
+                          templateColumn="180px"
+                          rowGap="1.5rem"
+                          columnGap="1.5rem"
+                          autoFill
+                        >
+                          {showPosition()}
+                        </GridContainer>
+                      </Padding>
+                    </Default>
+                    <Mobile>
+                      <Padding>
+                        <GridContainer
+                          templateColumn="120px"
+                          rowGap="15px"
+                          columnGap="15px"
+                          autoFill
+                        >
+                          {showPosition()}
+                        </GridContainer>
+                      </Padding>
+                    </Mobile>
+                  </>
                 ) : (
                   <NoPosition>참여한 포지션이 없습니다</NoPosition>
                 )}
@@ -901,6 +917,7 @@ const UserInfoContainer = styled.div`
     align-items: flex-start;
     height: auto;
     box-shadow: none;
+    margin-top: 1.2rem;
   }
 `;
 
