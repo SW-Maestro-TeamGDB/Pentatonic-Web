@@ -1,6 +1,6 @@
 import react from 'react';
 import styled from 'styled-components';
-import { Default } from '../../lib/Media';
+import { media, Default } from '../../lib/Media';
 import DifficultyIcon from '../DifficultyIcon';
 import { changeSessionNameToKorean } from '../../lib/changeSessionNameToKorean';
 import { sessionIconMatch } from '../../lib/sessionIconMatch';
@@ -18,10 +18,12 @@ const PositionGrid = (props) => {
         <SessionLevel>
           <DifficultyIcon value={1} />
         </SessionLevel>
-        <SessionRank>
-          <CustomIcon src={ThumbIcon} />
-          {like ? like : 0}
-        </SessionRank>
+        <Default>
+          <SessionRank>
+            <CustomIcon src={ThumbIcon} />
+            {like ? like : 0}
+          </SessionRank>
+        </Default>
       </SessionMeta>
     </Container>
   );
@@ -42,6 +44,10 @@ const Container = styled.div`
 
   color: #666;
   letter-spacing: -0.5px;
+
+  ${media.small} {
+    height: 8rem;
+  }
 `;
 
 const SessionMeta = styled.div`
@@ -55,6 +61,10 @@ const SessionMeta = styled.div`
   padding: 0.5rem 0;
   background-color: rgba(153, 127, 249, 0.04);
   border-radius: 10px;
+
+  ${media.small} {
+    padding: 3px 0;
+  }
 `;
 
 const SessionIcon = styled.img`
@@ -62,12 +72,22 @@ const SessionIcon = styled.img`
   margin-top: 0.5rem;
   opacity: 0.3;
   opacity: 0.3;
+
+  ${media.small} {
+    width: 2.5rem;
+    margin-top: 0;
+  }
 `;
 
 const SessionTitle = styled.div`
   margin-top: 0.5rem;
   font-weight: 700;
   font-size: 0.9rem;
+
+  ${media.small} {
+    margin-top: 5px;
+    font-size: 0.8rem;
+  }
 `;
 
 const SessionRank = styled.div`
@@ -77,6 +97,10 @@ const SessionRank = styled.div`
 
 const SessionLevel = styled.div`
   width: 50%;
+
+  ${media.small} {
+    width: 80%;
+  }
 `;
 
 const CustomIcon = styled.img`

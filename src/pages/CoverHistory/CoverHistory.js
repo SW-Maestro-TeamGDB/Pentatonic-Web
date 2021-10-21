@@ -94,6 +94,10 @@ const CoverContainer = styled.div`
 
 const Spacing = styled.div`
   height: 3rem;
+
+  ${media.small} {
+    height: 2rem;
+  }
 `;
 
 const Username = styled.span`
