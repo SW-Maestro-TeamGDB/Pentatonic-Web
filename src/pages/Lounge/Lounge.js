@@ -8,6 +8,7 @@ import LoungeSoloCovers from '../LoungeSoloCovers';
 import CoverRoom from '../CoverRoom/CoverRoom';
 import NotFoundPage from '../NotFoundPage';
 import LoungeFreeCovers from '../LoungeFreeCovers';
+import LoungeSongCovers from '../LoungeSongCovers';
 import CoverRoomRecord from '../CoverRoomRecord/CoverRoomRecord';
 
 const Lounge = ({ match }) => {
@@ -19,6 +20,7 @@ const Lounge = ({ match }) => {
         component={WeeklyChallenge}
         exact
       />
+      <Route path={`${match.path}/song/:id`} component={LoungeSongCovers} />
       <Route path={`${match.path}/weekly`} component={WeeklyChallenge} />
       <Route
         path={`${match.path}/band/search/:content`}

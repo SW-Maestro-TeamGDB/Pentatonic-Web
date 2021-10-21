@@ -141,12 +141,12 @@ const MusicInformation = ({ match }) => {
           <Divider />
           <BoardContainer>
             <BoardHeader>
-              <BoardTitle>이 곡의 {typeName}커버</BoardTitle>
+              <BoardTitle>이 곡의 다른 커버</BoardTitle>
               <BoardLink
                 to={
                   musicData.weeklyChallenge
                     ? '/lounge/weekly'
-                    : `/lounge/${type}`
+                    : `/lounge/song/${songId}`
                 }
               >
                 더보기
