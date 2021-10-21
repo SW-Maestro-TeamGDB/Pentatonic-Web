@@ -234,10 +234,11 @@ const SubMenuSpacing = styled.div`
 `;
 
 const PageDesc = styled.div`
-  font-size: 1rem;
-  margin: 3rem 0;
+  font-size: 0.9rem;
+  margin: 2rem 0;
   width: 80%;
   text-align: center;
+  letter-spacing: -1px;
 
   white-space: pre-line; // 개행 유지
   word-break: break-all; // width 벗어날 경우 줄바꿈
