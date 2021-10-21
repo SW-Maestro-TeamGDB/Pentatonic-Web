@@ -148,8 +148,13 @@ const Profile = ({ match }) => {
     },
     onCompleted: (data) => {
       if (data.getUserInfo) {
-        sessionStorage.setItem('userInfo', JSON.stringify(data.getUserInfo));
-        currentUserVar(data.getUserInfo);
+        const sessionData = JSON.parse(sessionStorage.getItem('userInfo'));
+
+        if (sessionData.id === ID) {
+          currentUserVar(data.getUserInfo);
+          sessionStorage.setItem('userInfo', JSON.stringify(data.getUserInfo));
+        }
+
         setUserData(data.getUserInfo);
         setLoading(false);
         setError(false);
@@ -662,6 +667,11 @@ const CustomDragger = styled(Dragger)`
   ${media.small} {
     width: 5rem !important;
     height: 5rem !important;
+
+    &:hover {
+      border: none;
+      box-shadow: none;
+    }
   }
 `;
 
