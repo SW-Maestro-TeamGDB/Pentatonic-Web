@@ -58,7 +58,9 @@ const CoverRoomRecord = ({ match }) => {
   const [audioFile, setAudioFile] = useState();
   const [audioDuration, setAudioDuration] = useState();
   const [inst, setInst] = useState();
+  const [instDuration, setInstDuration] = useState();
   const [sessionData, setSessionData] = useState();
+  const [existingInst, setExistingInst] = useState();
   const pageUrl = match.url;
   const bandId = match.params.id;
 
@@ -115,6 +117,8 @@ const CoverRoomRecord = ({ match }) => {
           songData={songData}
           sessionData={sessionData}
           initBandData={initBandData}
+          setExistingInst={setExistingInst}
+          setInstDuration={setInstDuration}
         />
       ),
     },
@@ -129,6 +133,7 @@ const CoverRoomRecord = ({ match }) => {
           bandData={bandData}
           songData={songData}
           setInst={setInst}
+          instDuration={instDuration}
         />
       ),
     },
@@ -138,11 +143,15 @@ const CoverRoomRecord = ({ match }) => {
         <RecordEdit
           setPage={setPage}
           audioFile={audioFile}
+          audioDuration={audioDuration}
           inst={inst}
+          setInst={setInst}
           bandData={bandData}
           bandId={bandId}
           selectedSession={selectedSession}
           songData={songData}
+          instDuration={instDuration}
+          existingInst={existingInst}
         />
       ),
     },

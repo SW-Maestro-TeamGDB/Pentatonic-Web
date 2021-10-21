@@ -43,6 +43,8 @@ const ParticipationForm = (props) => {
     songData,
     sessionData,
     initBandData,
+    setExistingInst,
+    setInstDuration,
   } = props;
 
   const [informError, setInformError] = useState(null);
@@ -59,7 +61,12 @@ const ParticipationForm = (props) => {
       const audio = new Audio();
       audio.src = data.mergeAudios;
 
+      audio.onloadedmetadata = () => {
+        setInstDuration(audio.duration);
+      };
+
       setInst(audio);
+      setExistingInst(audio);
       setModalToggle(false);
       setPage(1);
     },

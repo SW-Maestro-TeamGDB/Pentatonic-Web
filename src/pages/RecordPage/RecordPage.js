@@ -31,6 +31,7 @@ const RecordPage = (props) => {
     songData,
     isFreeCover,
     setInst,
+    instDuration,
   } = props;
   const [countdown, setCountDown] = useState(4);
   const [audioCtx, setAudioCtx] = useState();
@@ -326,7 +327,8 @@ const RecordPage = (props) => {
     navigator.mediaDevices
       .getUserMedia({ audio: true })
       .then((stream) => {
-        if (inst) inst.play();
+        if (inst && (!instDuration || (instDuration && instDuration > count)))
+          inst.play();
         audioCtx.resume();
         if (media.state === 'paused') {
           media.resume();

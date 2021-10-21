@@ -5,6 +5,7 @@ import GridContainer from '../../components/GridContainer/GridContainer';
 import UploadCompleteModal from '../../components/UploadCompleteModal';
 import AudioPlayer, { RHAP_UI } from 'react-h5-audio-player';
 import RecordEditSlider from '../../components/RecordEditSlider';
+import { createSilentAudio } from 'create-silent-audio';
 import Pizzicato from 'pizzicato';
 
 import PlayIcon from '../../images/PlayIcon.svg';
@@ -54,6 +55,7 @@ const RecordEdit = (props) => {
     setPage,
     audioFile,
     inst,
+    setInst,
     bandData,
     setBandData,
     bandId,
@@ -64,6 +66,9 @@ const RecordEdit = (props) => {
     isFreeCover,
     userId,
     songData,
+    instDuration,
+    audioDuration,
+    existingInst,
   } = props;
   // 업로드 모달
   const [modalToggle, setModalToggle] = useState(false);
@@ -199,7 +204,9 @@ const RecordEdit = (props) => {
   });
 
   const onClickStart = (e) => {
-    if (inst) inst.play();
+    if (inst) {
+      inst.play();
+    }
     if (recordSound) {
       const tempTime = inst.currentTime - sync * 0.001;
 
@@ -208,11 +215,15 @@ const RecordEdit = (props) => {
         tempTime >= 0 ? tempTime : 0,
       );
     }
+    if (existingInst && instDuration > inst.currentTime) {
+      existingInst.play();
+    }
     setAudioState(1);
   };
 
   const onClickPause = () => {
     if (inst) inst.pause();
+    if (existingInst) existingInst.pause();
     if (recordSound) recordSound.pause();
     setAudioState(2);
   };
@@ -238,12 +249,29 @@ const RecordEdit = (props) => {
         recordSound.pause();
       }
     }
+    if (existingInst) {
+      if (instDuration > e.target.currentTime) {
+        existingInst.currentTime = e.target.currentTime;
+        if (audioState === 1) existingInst.play();
+      } else {
+        existingInst.pause();
+      }
+
+      if (audioState !== 1 && !existingInst.paused) {
+        existingInst.pause();
+      }
+    }
   };
 
   const onClickSeeking = (e) => {
-    if (inst) inst.pause();
+    if (inst) {
+      inst.pause();
+    }
     if (recordSound) {
       recordSound.stop();
+    }
+    if (existingInst) {
+      existingInst.pause();
     }
   };
 
@@ -268,11 +296,21 @@ const RecordEdit = (props) => {
     });
     setReverbEffect(tempReverb);
 
+    if (instDuration) {
+      const audio = new Audio();
+      audio.src = createSilentAudio(audioDuration);
+      setInst(audio);
+    }
+
     // 언마운트시 반주 및 녹음파일 정지
     return () => {
       if (inst) {
         inst.pause();
         inst.currentTime = 0;
+        if (existingInst) {
+          existingInst.pause();
+          existingInst.currentTime = 0;
+        }
       }
 
       if (recordSoundRef) {
