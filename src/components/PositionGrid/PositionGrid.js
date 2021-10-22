@@ -1,6 +1,6 @@
 import react from 'react';
 import styled from 'styled-components';
-import { media, Default } from '../../lib/Media';
+import { media, Default, Mobile } from '../../lib/Media';
 import DifficultyIcon from '../DifficultyIcon';
 import { changeSessionNameToKorean } from '../../lib/changeSessionNameToKorean';
 import { sessionIconMatch } from '../../lib/sessionIconMatch';

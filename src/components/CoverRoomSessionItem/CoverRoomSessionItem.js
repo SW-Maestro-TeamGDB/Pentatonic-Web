@@ -2,7 +2,7 @@ import react, { useEffect, useState } from 'react';
 import { Collapse, notification } from 'antd';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
-import { Default } from '../../lib/Media';
+import { media, Default } from '../../lib/Media';
 import { useQuery, gql, useLazyQuery, useMutation } from '@apollo/client';
 import GridContainer from '../GridContainer/GridContainer';
 import { CloseOutlined } from '@ant-design/icons';
@@ -140,6 +140,11 @@ const ImgContainer = styled.div`
   width: 4.5rem;
   height: 4.5rem;
   border-radius: 100%;
+
+  ${media.small} {
+    width: 4rem;
+    height: 4rem;
+  }
 `;
 
 const SessionImg = styled.img`
@@ -199,6 +204,10 @@ const SessionIdContainer = styled(Link)`
   &:hover {
     color: black;
   }
+
+  ${media.small} {
+    font-size: 0.8rem;
+  }
 `;
 
 const CreatorIcon = styled.div`
@@ -217,6 +226,13 @@ const CreatorIcon = styled.div`
   font-weight: 900;
 
   margin-right: 8px;
+
+  ${media.small} {
+    width: 0.9rem;
+    height: 0.9rem;
+    font-size: 0.6rem;
+    margin-right: 5px;
+  }
 `;
 
 const SessionContentsContainer = styled.div`

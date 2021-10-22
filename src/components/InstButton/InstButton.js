@@ -65,6 +65,10 @@ const InstButtonContainer = styled.div`
     background-color: ${(props) =>
       props.selected ? 'rgba(98, 54, 255, 0.65)' : 'rgba(98, 54, 255, 0.12)'};
   }
+
+  ${media.small} {
+    box-shadow: 0 0 3px 0 rgba(98, 54, 255, 0.4);
+  }
 `;
 
 const SessionText = styled.div`
@@ -72,6 +76,10 @@ const SessionText = styled.div`
   font-weight: 700;
   margin-left: ${(props) => (props.icon ? '1rem' : null)};
   color: ${(props) => (props.selected ? 'white' : 'gray')};
+
+  ${media.small} {
+    font-size: 0.9rem;
+  }
 `;
 
 const SessionIcon = styled.img`
@@ -79,6 +87,10 @@ const SessionIcon = styled.img`
 
   opacity: ${(props) => (props.selected ? '1' : '0.5')};
   filter: ${(props) => (props.selected ? 'invert(100%)' : null)};
+
+  ${media.small} {
+    width: 1.3rem;
+  }
 `;
 
 export default InstButton;

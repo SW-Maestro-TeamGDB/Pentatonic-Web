@@ -188,6 +188,11 @@ const EditButtonWrapper = styled.div`
 const EditContainer = styled.div`
   width: 93%;
   margin-left: 2rem;
+
+  ${media.small} {
+    width: 100%;
+    margin-left: 0.6rem;
+  }
 `;
 
 const EditCancleButton = styled.div`
@@ -206,6 +211,10 @@ const EditCancleButton = styled.div`
 
   &:hover {
     color: #666;
+  }
+
+  ${media.small} {
+    font-size: 0.8rem;
   }
 `;
 
@@ -234,6 +243,10 @@ const EditSubmitButton = styled.button`
     background-color: #666;
     color: #eee;
     cursor: not-allowed;
+  }
+
+  ${media.small} {
+    font-size: 0.8rem;
   }
 `;
 
@@ -274,6 +287,10 @@ const CommentUserWrapper = styled.div`
 
 const CommentContent = styled.div`
   margin-top: 3px;
+
+  ${media.small} {
+    font-size: 0.8rem;
+  }
 `;
 
 const UserProfile = styled.img`
@@ -289,12 +306,20 @@ const UserName = styled.div`
   &:hover {
     color: #333;
   }
+
+  ${media.small} {
+    font-size: 0.8rem;
+  }
 `;
 
 const CommentTime = styled.div`
   font-size: 14px;
   margin-left: 6px;
   color: #999;
+
+  ${media.small} {
+    font-size: 0.8rem;
+  }
 `;
 
 const ContentsMetaWrapper = styled.div`
@@ -309,6 +334,10 @@ const CommentContentsContainer = styled.div`
 
   display: flex;
   flex-direction: column;
+
+  ${media.small} {
+    margin: 0 1rem;
+  }
 `;
 
 const CommentEditContainer = styled.div`
@@ -343,6 +372,17 @@ const CustomInput = styled.input`
 
   &:focus {
     border: 2px solid black;
+  }
+
+  ${media.small} {
+    width: 100%;
+    font-size: 0.8rem;
+    margin: 0 0 5px;
+
+    ::placeholder {
+      color: #bbbbbb;
+      font-size: 0.8rem;
+    }
   }
 `;
 

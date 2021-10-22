@@ -4,10 +4,11 @@ import { Collapse, Drawer } from 'antd';
 import { gql, useQuery } from '@apollo/client';
 import { IS_LOGGED_IN } from '../../apollo/cache';
 import styled from 'styled-components';
-import { Default } from '../../lib/Media';
+import { media, Default } from '../../lib/Media';
 import CoverRoomSessionItem from '../CoverRoomSessionItem';
 import LibraryDrawer from '../LibraryDrawer/LibraryDrawer';
 import ParticipationModal from '../ParticipationModal';
+import { useMediaQuery } from 'react-responsive';
 
 import AuthModal from '../../components/AuthModal';
 
@@ -144,15 +145,23 @@ const CoverRoomSessionContainer = styled.div`
   width: 100%;
   position: relative;
   margin-top: 1rem;
+
+  ${media.small} {
+    margin-top: 0;
+  }
 `;
 
 const SessionContainer = styled.div`
   width: 100%;
   min-height: 5rem;
   display: flex;
-  flex-direction: row;
-
+  height: auto;
   margin: 1.2rem 0 0.5rem;
+  overflow-x: hidden;
+
+  ${media.small} {
+    margin: 0.8rem 0 1rem;
+  }
 `;
 
 const NoSession = styled.div`
@@ -161,7 +170,12 @@ const NoSession = styled.div`
   align-items: center;
   justify-content: center;
   font-size: 1rem;
+  font-weight: 700;
   color: gray;
+
+  ${media.small} {
+    font-size: 0.9rem;
+  }
 `;
 
 const Header = styled.div`
@@ -172,6 +186,11 @@ const Header = styled.div`
   justify-content: center;
   margin-bottom: 10px;
   width: 90%;
+
+  ${media.small} {
+    width: 100%;
+    margin-bottom: 0;
+  }
 `;
 
 const SessionTitle = styled.div`
@@ -180,6 +199,10 @@ const SessionTitle = styled.div`
   display: flex;
   align-items: center;
   flex-direction: row;
+
+  ${media.small} {
+    font-size: 1.2rem;
+  }
 `;
 
 const SessionCount = styled.div`
@@ -189,6 +212,10 @@ const SessionCount = styled.div`
   display: flex;
   align-items: center;
   flex-direction: row;
+
+  ${media.small} {
+    font-size: 0.9rem;
+  }
 `;
 
 const BoardTitle = styled.div`
@@ -199,6 +226,10 @@ const BoardTitle = styled.div`
   display: flex;
   align-items: center;
   flex-direction: row;
+
+  ${media.small} {
+    font-size: 1.2rem;
+  }
 `;
 
 const BoardLink = styled.div`
@@ -208,6 +239,11 @@ const BoardLink = styled.div`
   position: absolute;
   right: 0;
   cursor: pointer;
+
+  ${media.small} {
+    font-size: 0.9rem;
+    display: flex;
+  }
 `;
 
 export default CoverRoomSession;

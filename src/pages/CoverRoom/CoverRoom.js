@@ -29,7 +29,8 @@ import {
   IS_LOGGED_IN,
   GET_CURRENT_USER,
 } from '../../apollo/cache';
-import { media } from '../../lib/Media';
+import { useMediaQuery } from 'react-responsive';
+import { media, Default, Mobile } from '../../lib/Media';
 
 import ThumbIcon from '../../images/ThumbIcon.svg';
 import ViewIcon from '../../images/ViewIcon.svg';
@@ -177,6 +178,9 @@ const CoverRoom = ({ match }) => {
   const [comment, setComment] = useState('');
   const [deleteModal, setDeleteModal] = useState(false);
   const [libraryFilter, setLibraryFilter] = useState();
+  const isMobile = useMediaQuery({
+    query: '(max-width:767px)',
+  });
 
   // session select guide modal
   const [sessionModal, setSessionModal] = useState(false);
@@ -514,7 +518,33 @@ const CoverRoom = ({ match }) => {
           </CoverBannerContainer>
           {mode === 1 ? null : coverData.isSoloBand ? (
             <SessionContainer>
-              <GridContainer>
+              <Default>
+                <GridContainer>
+                  <CoverBy data={coverData.session[0]} width="20rem" />
+                  <CoverRoomSessionContainer>
+                    <Header>
+                      <BoardTitle>
+                        <SessionTitle>제공 반주</SessionTitle>
+                      </BoardTitle>
+                    </Header>
+                    <InstContainer>
+                      {coverData.isFreeBand ? (
+                        <NoInst>자유곡 커버는 반주가 제공되지 않습니다</NoInst>
+                      ) : (
+                        <InstSelect
+                          sessionData={coverData.song.instrument}
+                          setSelectInst={setSelectInst}
+                          selectInst={selectInst}
+                          selectInstURI={session}
+                          setSelectInstURI={setSession}
+                          icon
+                        />
+                      )}
+                    </InstContainer>
+                  </CoverRoomSessionContainer>
+                </GridContainer>
+              </Default>
+              <Mobile>
                 <CoverBy data={coverData.session[0]} width="20rem" />
                 <CoverRoomSessionContainer>
                   <Header>
@@ -537,11 +567,14 @@ const CoverRoom = ({ match }) => {
                     )}
                   </InstContainer>
                 </CoverRoomSessionContainer>
-              </GridContainer>
+              </Mobile>
             </SessionContainer>
           ) : (
             <SessionContainer>
-              <GridContainer>{showCoverRoomSession()}</GridContainer>
+              <Default>
+                <GridContainer>{showCoverRoomSession()}</GridContainer>
+              </Default>
+              <Mobile>{showCoverRoomSession()}</Mobile>
             </SessionContainer>
           )}
           <CommentContainer>
@@ -560,7 +593,11 @@ const CoverRoom = ({ match }) => {
                     }
                   />
                   <CustomInput
-                    placeholder="게시물의 저작권 등 분쟁, 개인정보 노출로 인한 책임은 작성자 또는 게시자에게 있음을 유의해주세요"
+                    placeholder={
+                      isMobile
+                        ? '댓글 입력'
+                        : '게시물의 저작권 등 분쟁, 개인정보 노출로 인한 책임은 작성자 또는 게시자에게 있음을 유의해주세요'
+                    }
                     onChange={(e) => setComment(e.target.value)}
                     value={comment}
                   />
@@ -632,7 +669,7 @@ const SessionContainer = styled.div`
   border-bottom: 1px solid #eee;
 
   ${media.small} {
-    padding: 0 1rem;
+    padding: 0 1rem 1rem;
   }
 `;
 
@@ -690,11 +727,18 @@ const SongData = styled.div`
   visibility: ${(props) => (props.mode === 0 ? 'visible' : 'hidden')};
   filter: ${(props) => (props.mode === 0 ? 'opacity(100%)' : 'opacity(0%)')};
   transition: filter 0.5s ease-in-out;
+
+  ${media.small} {
+    top: 20px;
+    width: 10rem;
+  }
 `;
 
 const CoverRoomSessionContainer = styled.div`
   width: 100%;
   position: relative;
+
+  margin-top: 2rem;
 `;
 
 const Header = styled.div`
@@ -715,6 +759,10 @@ const SessionTitle = styled.div`
 
   font-weight: 900;
   padding-left: 5px;
+
+  ${media.small} {
+    font-size: 1.2rem;
+  }
 `;
 
 const BoardTitle = styled.div`
@@ -727,7 +775,11 @@ const BoardTitle = styled.div`
   flex-direction: row;
 `;
 
-const InstContainer = styled.div``;
+const InstContainer = styled.div`
+  ${media.small} {
+    margin-bottom: 2rem;
+  }
+`;
 
 const CustomLikeOutlinedIcon = styled(LikeOutlined)`
   color: #ffffff;
@@ -824,6 +876,11 @@ const DeleteButton = styled.div`
   visibility: ${(props) => (props.mode === 0 ? 'visible' : 'hidden')};
   filter: ${(props) => (props.mode === 0 ? 'opacity(100%)' : 'opacity(0%)')};
   transition: filter 0.5s ease-in-out;
+
+  ${media.small} {
+    font-size: 14px;
+    top: 20px;
+  }
 `;
 
 const BackwardButton = styled.div`
@@ -846,6 +903,7 @@ const BackwardButton = styled.div`
 
   ${media.small} {
     font-size: 14px;
+    top: 20px;
   }
 `;
 
@@ -868,6 +926,17 @@ const CustomInput = styled.input`
 
   &:focus {
     border: 2px solid black;
+  }
+
+  ${media.small} {
+    margin: 0 0.7rem;
+    width: 90%;
+    font-size: 0.8rem;
+
+    ::placeholder {
+      color: #bbbbbb;
+      font-size: 0.8rem;
+    }
   }
 `;
 
@@ -948,12 +1017,20 @@ const CommentHeader = styled.div`
   font-weight: 700;
   align-items: center;
   width: 100%;
+
+  ${media.small} {
+    font-size: 1rem;
+  }
 `;
 
 const CurrentComment = styled.div`
   margin-left: 0.5rem;
   color: #bbbbbb;
   font-size: 16px;
+
+  ${media.small} {
+    font-size: 0.9rem;
+  }
 `;
 
 const CoverBackground = styled.div`
@@ -974,7 +1051,7 @@ const CoverBackground = styled.div`
 
 const CoverBannerContainer = styled.div`
   width: 100%;
-  height: ${(props) => (props.mode === 1 ? '40rem' : '25rem')};
+  height: ${(props) => (props.mode === 1 ? '33rem' : '25rem')};
   position: relative;
   display: flex;
   flex-direction: column;
@@ -984,6 +1061,10 @@ const CoverBannerContainer = styled.div`
 
   ${CoverBackground} {
     filter: brightness(40%);
+  }
+
+  ${media.small} {
+    height: ${(props) => (props.mode === 1 ? '30rem' : '24rem')};
   }
 `;
 
@@ -995,7 +1076,7 @@ const BannerContents = styled.div`
   right: 3%;
 
   ${media.small} {
-    top: ${(props) => (props.mode === 1 ? '30px' : '40%')};
+    top: ${(props) => (props.mode === 1 ? '12%' : '40%')};
   }
 
   transition: top 0.3s ease-in-out;
@@ -1014,7 +1095,7 @@ const CoverTitle = styled.span`
   letter-spacing: 2px;
 
   ${media.small} {
-    font-size: 40px;
+    font-size: 2.5rem;
     letter-spacing: 0px;
   }
 `;
@@ -1031,7 +1112,7 @@ const CoverDesc = styled.span`
   line-height: 1;
 
   ${media.small} {
-    font-size: 16px;
+    font-size: 1rem;
   }
 `;
 
@@ -1108,7 +1189,7 @@ const SubmitButton = styled.div`
     right: 50%;
     transform: translateX(50%);
     width: 90%;
-    bottom: 5%;
+    bottom: 10%;
   }
 `;
 
@@ -1132,6 +1213,11 @@ const CommentButton = styled.button`
     background-color: #666;
     color: #eee;
     cursor: not-allowed;
+  }
+
+  ${media.small} {
+    width: 5rem;
+    font-size: 0.9rem;
   }
 `;
 
@@ -1157,6 +1243,11 @@ const NoInst = styled.div`
   height: 10rem;
   letter-spacing: -0.5px;
   font-weight: 800;
+
+  ${media.small} {
+    font-size: 0.9rem;
+    height: 8rem;
+  }
 `;
 
 export default CoverRoom;

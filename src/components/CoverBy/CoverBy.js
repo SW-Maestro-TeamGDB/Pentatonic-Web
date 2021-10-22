@@ -4,12 +4,12 @@ import { Collapse, Drawer } from 'antd';
 import { gql, useQuery } from '@apollo/client';
 import { IS_LOGGED_IN } from '../../apollo/cache';
 import styled from 'styled-components';
-import { Default } from '../../lib/Media';
+import { Default, media, Mobile } from '../../lib/Media';
 import GridContainer from '../GridContainer/GridContainer';
 import CoverRoomSessionItem from '../CoverRoomSessionItem';
 import PositionGrid from '../PositionGrid';
 import LibraryDrawer from '../LibraryDrawer/LibraryDrawer';
-
+import { useMediaQuery } from 'react-responsive';
 import { sessionIconMatch } from '../../lib/sessionIconMatch';
 
 import AuthModal from '../../components/AuthModal';
@@ -30,6 +30,9 @@ const CoverBy = (props) => {
   const { data } = props;
   const coverData = data.cover[0];
   const [positionData, setPositionData] = useState();
+  const isMobile = useMediaQuery({
+    query: '(max-width:767px)',
+  });
 
   const { getUserPosition } = useQuery(GET_USER_INFO, {
     fetchPolicy: 'network-only',
@@ -69,7 +72,7 @@ const CoverBy = (props) => {
           <PositionGrid
             position={coverData.position}
             like={positionData?.likeCount}
-            width="20rem"
+            width={isMobile ? '9rem' : '20rem'}
           />
         </PositionWrapper>
       </SessionContainer>
@@ -136,6 +139,10 @@ const SessionTitle = styled.div`
 
   font-weight: 900;
   padding-left: 5px;
+
+  ${media.small} {
+    font-size: 1.2rem;
+  }
 `;
 
 const SessionCount = styled.div`
@@ -224,6 +231,10 @@ const CreatorIcon = styled.div`
   font-weight: 900;
 
   margin-right: 6px;
+
+  ${media.small} {
+    margin-top: 5px;
+  }
 `;
 
 const SessionId = styled(Link)`
@@ -236,6 +247,11 @@ const SessionId = styled(Link)`
 
   &:hover {
     color: black;
+  }
+
+  ${media.small} {
+    font-size: 0.9rem;
+    margin-top: 5px;
   }
 `;
 

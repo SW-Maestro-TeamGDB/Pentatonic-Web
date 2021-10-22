@@ -47,6 +47,10 @@ const InstConatiner = styled.div`
   margin-top: 2.5rem;
   grid-column-gap: 1rem;
   grid-row-gap: 1rem;
+
+  ${media.small} {
+    margin-top: 1rem;
+  }
 `;
 
 export default InstSelect;
