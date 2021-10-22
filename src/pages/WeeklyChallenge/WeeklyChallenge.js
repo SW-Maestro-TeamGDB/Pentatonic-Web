@@ -11,6 +11,8 @@ import CoverGrid from '../../components/CoverGrid/CoverGrid';
 import MakingIcon from '../../images/MakingIcon.svg';
 import PageImage from '../../components/PageImage';
 import GridContainer from '../../components/GridContainer/GridContainer';
+import { useMediaQuery } from 'react-responsive';
+import { media, Default } from '../../lib/Media';
 
 import GroupIcon from '../../images/GroupIcon.svg';
 import SoloIcon from '../../images/SoloIcon.svg';
@@ -38,6 +40,7 @@ const QUERY_SONG = gql`
 
 const WeeklyChallenge = ({ match }) => {
   const content = match.params?.content;
+  const COVER_WIDTH = useMediaQuery({ maxWidth: 767 }) ? '160px' : '220px';
   const { loading, error, data } = useQuery(QUERY_SONG, {
     variables: {
       querySongFilter: {
@@ -59,7 +62,7 @@ const WeeklyChallenge = ({ match }) => {
 
         if (filteredData.length > 0) {
           return (
-            <GridContainer width="95%" templateColumn="250px" autoFill>
+            <GridContainer width="95%" templateColumn={COVER_WIDTH} autoFill>
               {filteredData.map((v, i) => {
                 return (
                   <CoverGrid
@@ -77,7 +80,7 @@ const WeeklyChallenge = ({ match }) => {
         }
       }
       return (
-        <GridContainer width="95%" templateColumn="250px" autoFill>
+        <GridContainer width="95%" templateColumn={COVER_WIDTH} autoFill>
           {songData.band.map((v, i) => {
             return (
               <CoverGrid
@@ -94,15 +97,6 @@ const WeeklyChallenge = ({ match }) => {
       return <NoCover>등록된 커버가 없습니다</NoCover>;
     }
   };
-
-  const tempDesc = (
-    <>
-      콜드플레이(영어: Coldplay)는 1996년 영국 런던 UCL에서 결성된 얼터너티브록
-      밴드이다. <br /> 밴드의 멤버는 그룹의 보컬이자 피아니스트,기타리스트인
-      크리스 마틴, 리드 기타리스트 조니 버클랜드, 베이스 가이베리먼, 그리고
-      드러머와 기타 악기 연주를 맡은 윌 챔피언이다.
-    </>
-  );
 
   const songData = data?.querySong[0];
 
@@ -128,6 +122,7 @@ const WeeklyChallenge = ({ match }) => {
           <PageImage
             imgUrl={songData ? songData.songImg : null}
             title={songData ? `${songData.name} - ${songData.artist}` : null}
+            desc="금주의 위클리 챌린지 커버를 감상해보세요"
             position="top"
           />
           <PageDesc>
@@ -135,9 +130,7 @@ const WeeklyChallenge = ({ match }) => {
               <SearchResult>
                 <SearchContent>'{content}'</SearchContent>검색 결과입니다
               </SearchResult>
-            ) : (
-              tempDesc
-            )}
+            ) : null}
           </PageDesc>
           <SearchBar
             placeholder="커버 제목을 입력해주세요"
@@ -146,17 +139,19 @@ const WeeklyChallenge = ({ match }) => {
             match={match}
           />
           <SubContainer>
-            <Dropdown
-              overlay={CoverMenu}
-              placement="bottomCenter"
-              getPopupContainer={(trigger) => trigger.parentNode}
-              trigger={['click']}
-            >
-              <ButtonContainer>
-                새로운 커버 만들기
-                <MakingIconImg src={MakingIcon} />
-              </ButtonContainer>
-            </Dropdown>
+            <Default>
+              <Dropdown
+                overlay={CoverMenu}
+                placement="bottomCenter"
+                getPopupContainer={(trigger) => trigger.parentNode}
+                trigger={['click']}
+              >
+                <ButtonContainer>
+                  새로운 커버 만들기
+                  <MakingIconImg src={MakingIcon} />
+                </ButtonContainer>
+              </Dropdown>
+            </Default>
           </SubContainer>
           {loadCover()}
         </PageContainer>
@@ -235,7 +230,7 @@ const SubMenuSpacing = styled.div`
 
 const PageDesc = styled.div`
   font-size: 0.9rem;
-  margin: 2rem 0;
+  margin: 1.5rem 0;
   width: 80%;
   text-align: center;
   letter-spacing: -1px;
@@ -269,6 +264,10 @@ const SubContainer = styled.div`
   flex-direction: row;
   align-items: center;
   justify-content: flex-end;
+
+  ${media.small} {
+    margin: 1.5rem 0;
+  }
 `;
 
 const MakingCoverLink = styled(Link)`
@@ -295,6 +294,13 @@ const NoCover = styled.div`
   height: 12rem;
   letter-spacing: -0.5px;
   font-weight: 800;
+
+  ${media.small} {
+    font-size: 1rem;
+    height: 10rem;
+    padding-bottom: 0.5rem;
+    font-weight: 700;
+  }
 `;
 
 export default WeeklyChallenge;
