@@ -3,6 +3,7 @@ import { useHistory } from 'react-router';
 import styled from 'styled-components';
 import { Default } from '../../lib/Media';
 import SearchIcon from '../../images/SearchIcon.svg';
+import { media } from '../../lib/Media';
 
 const SearchBar = (props) => {
   const { placeholder, afterRequest, sort, searching, match } = props;
@@ -72,10 +73,19 @@ const CustomInput = styled.input`
   ::placeholder {
     font-size: 16px;
   }
+
+  ${media.small} {
+    padding-left: 1rem;
+    padding-right: 3rem;
+    margin-left: 0;
+
+    ::placeholder {
+      font-size: 14px;
+    }
+  }
 `;
 
 const SearchBarContainer = styled.div`
-  padding-left: 0.5rem;
   display: flex;
   flex-direction: row;
   width: 70%;
@@ -84,6 +94,11 @@ const SearchBarContainer = styled.div`
   justify-content: space-between;
 
   position: relative;
+
+  ${media.small} {
+    width: 90%;
+    padding-left: 0;
+  }
 `;
 
 const CustomIcon = styled.img`
@@ -94,6 +109,10 @@ const CustomIcon = styled.img`
   opacity: 0.3;
   position: absolute;
   right: 0;
+
+  ${media.small} {
+    right: 5px;
+  }
 `;
 
 export default SearchBar;
