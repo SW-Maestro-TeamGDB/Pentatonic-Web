@@ -2,58 +2,112 @@ import react from 'react';
 import styled from 'styled-components';
 import { media } from '../../lib/Media';
 
-const PageImage = ({ title, imgUrl, position }) => {
-  // 포지션 정의 안할경우 기본 center
+const PageImage = (props) => {
+  const { title, imgUrl, position, desc } = props;
   const pose = position ? position : 'center';
+
+  console.log(desc);
 
   return (
     <PageImageContainer>
       <CustomImg imgUrl={imgUrl} pose={pose} />
       <PageTitle>{title}</PageTitle>
+      {desc ? <PageDesc>{desc}</PageDesc> : null}
     </PageImageContainer>
   );
 };
 
 const CustomImg = styled.div`
-  background: linear-gradient(
-      to bottom,
-      rgba(255, 255, 255, 0) 10%,
-      rgba(255, 255, 255, 0.25) 35%,
-      rgba(255, 255, 255, 0.5) 60%,
-      rgba(255, 255, 255, 0.75) 85%,
-      rgba(255, 255, 255, 1) 100%
-    ),
-    url(${(props) => props.imgUrl});
+  background: url(${(props) => props.imgUrl});
   background-repeat: no-repeat;
   background-position: ${(props) => props.pose} center;
   background-size: 100%;
+  overflow: hidden;
 
-  border-top-left-radius: 5vh;
-  border-top-right-radius: 5vh;
+  border-top-left-radius: 2rem;
+  border-top-right-radius: 2rem;
 
-  height: 20vh;
-  width: 95%;
+  height: 18rem;
+  width: 100%;
+
+  ${media.small} {
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+    background-image: url(${(props) => props.imgUrl});
+    background-size: cover;
+    width: 100%;
+    height: 18rem;
+  }
 `;
 
 const PageImageContainer = styled.div`
-  height: 20vh;
+  height: 18rem;
   width: 100%;
 
   display: flex;
   justify-content: center;
   align-items: center;
+  position: relative;
+
+  border-top-left-radius: 2rem;
+  border-top-right-radius: 2rem;
+  border: 2px solid rgb(255, 255, 255);
+  overflow: hidden;
 
   ${CustomImg} {
-    filter: brightness(70%);
+    filter: brightness(50%) blur(2px);
+  }
+
+  ${media.small} {
+    width: 110%;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+    border: none;
+    height: 18rem;
+    justify-content: flex-start;
+    align-items: flex-start;
+
+    ${CustomImg} {
+      filter: brightness(40%) blur(2px);
+    }
   }
 `;
 
 const PageTitle = styled.div`
-  font-size: 5vh;
+  font-size: 3rem;
   font-weight: 900;
   color: white;
   letter-spacing: -0.2rem;
   position: absolute;
+
+  ${media.small} {
+    width: 100%;
+    height: 90%;
+
+    font-size: 2rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+`;
+
+const PageDesc = styled.div`
+  font-size: 16px;
+  position: absolute;
+  color: white;
+  bottom: 15%;
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  font-weight: 700;
+
+  ${media.small} {
+    font-size: 0.9rem;
+    bottom: 20%;
+    display: flex;
+    justify-content: center;
+    width: 100%;
+  }
 `;
 
 export default PageImage;
