@@ -68,7 +68,9 @@ const LoungeHome = () => {
         return (
           <GridContainer templateColumn={COVER_WIDTH} autoFill>
             {filtered.map((v, i) => {
-              <CoverGrid key={`bandData+${v.bandId}`} data={v} autoFill />;
+              return (
+                <CoverGrid key={`bandData+${v.bandId}`} data={v} autoFill />
+              );
             })}
           </GridContainer>
         );
