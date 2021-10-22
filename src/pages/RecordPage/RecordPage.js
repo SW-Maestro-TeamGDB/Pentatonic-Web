@@ -275,9 +275,7 @@ const RecordPage = (props) => {
           setOnRec(2);
           mediaRecorder.pause();
 
-          setLeftChannel(tempLeftChannel);
-          setRightChannel(tempRightChannel);
-          setRecordingLength(tempAudioBuffer);
+          changeAudioFile(tempLeftChannel, tempRightChannel, tempAudioBuffer);
         }
 
         // 곡 길이만큼 시간 지나면 자동으로 음성 저장 및 녹음 중지
@@ -292,9 +290,7 @@ const RecordPage = (props) => {
           }
           setOnRec(0);
 
-          setLeftChannel(tempLeftChannel);
-          setRightChannel(tempRightChannel);
-          setRecordingLength(tempAudioBuffer);
+          changeAudioFile(tempLeftChannel, tempRightChannel, tempAudioBuffer);
 
           // 메서드가 호출 된 노드 연결 해제
           analyser.disconnect();
@@ -307,8 +303,9 @@ const RecordPage = (props) => {
       };
 
       audioCtx.onstatechange = function () {
-        if (audioCtx.state === 'suspended')
+        if (audioCtx.state === 'suspended') {
           changeAudioFile(tempLeftChannel, tempRightChannel, tempAudioBuffer);
+        }
       };
     });
   };
@@ -598,6 +595,7 @@ const RecordPage = (props) => {
     sourceRef.current,
     media,
     audioUrl,
+    recordingLength,
   ]);
 
   const showRecordModal = useMemo(() => {
