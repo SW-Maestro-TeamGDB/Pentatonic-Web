@@ -2,45 +2,45 @@ import react from 'react';
 import styled from 'styled-components';
 import { Space, Dropdown, Menu, Button, Select } from 'antd';
 import { changeGenreToKorean } from '../../lib/changeGenreToKorean';
-import { Default } from '../../lib/Media';
+import { Default, media } from '../../lib/Media';
 
 const GenreButton = (props) => {
   const { genre, setGenre } = props;
   const genreMenu = (
     <CustomMenu>
-      <Menu.Item key={0} onClick={() => setGenre('전체')}>
+      <CustomMenuItem key={0} onClick={() => setGenre('전체')}>
         전체
-      </Menu.Item>
-      <Menu.Item key={1} onClick={() => setGenre('POP')}>
+      </CustomMenuItem>
+      <CustomMenuItem key={1} onClick={() => setGenre('POP')}>
         {changeGenreToKorean('POP')}
-      </Menu.Item>
-      <Menu.Item key={2} onClick={() => setGenre('ROCK')}>
+      </CustomMenuItem>
+      <CustomMenuItem key={2} onClick={() => setGenre('ROCK')}>
         {changeGenreToKorean('ROCK')}
-      </Menu.Item>
-      <Menu.Item key={3} onClick={() => setGenre('K_POP')}>
+      </CustomMenuItem>
+      <CustomMenuItem key={3} onClick={() => setGenre('K_POP')}>
         {changeGenreToKorean('K_POP')}
-      </Menu.Item>
-      <Menu.Item key={4} onClick={() => setGenre('DANCE')}>
+      </CustomMenuItem>
+      <CustomMenuItem key={4} onClick={() => setGenre('DANCE')}>
         {changeGenreToKorean('DANCE')}
-      </Menu.Item>
-      <Menu.Item key={5} onClick={() => setGenre('HIP_HOP')}>
+      </CustomMenuItem>
+      <CustomMenuItem key={5} onClick={() => setGenre('HIP_HOP')}>
         {changeGenreToKorean('HIP_HOP')}
-      </Menu.Item>
-      <Menu.Item key={6} onClick={() => setGenre('BALLAD')}>
+      </CustomMenuItem>
+      <CustomMenuItem key={6} onClick={() => setGenre('BALLAD')}>
         {changeGenreToKorean('BALLAD')}
-      </Menu.Item>
-      <Menu.Item key={7} onClick={() => setGenre('ELECTRONIC')}>
+      </CustomMenuItem>
+      <CustomMenuItem key={7} onClick={() => setGenre('ELECTRONIC')}>
         {changeGenreToKorean('ELECTRONIC')}
-      </Menu.Item>
-      <Menu.Item key={8} onClick={() => setGenre('JAZZ')}>
+      </CustomMenuItem>
+      <CustomMenuItem key={8} onClick={() => setGenre('JAZZ')}>
         {changeGenreToKorean('JAZZ')}
-      </Menu.Item>
-      <Menu.Item key={9} onClick={() => setGenre('CLASSICAL')}>
+      </CustomMenuItem>
+      <CustomMenuItem key={9} onClick={() => setGenre('CLASSICAL')}>
         {changeGenreToKorean('CLASSICAL')}
-      </Menu.Item>
-      <Menu.Item key={10} onClick={() => setGenre('BLUES')}>
+      </CustomMenuItem>
+      <CustomMenuItem key={10} onClick={() => setGenre('BLUES')}>
         {changeGenreToKorean('BLUES')}
-      </Menu.Item>
+      </CustomMenuItem>
     </CustomMenu>
   );
 
@@ -66,11 +66,38 @@ const CustomButton = styled.span`
   &:hover {
     border: 1px solid rgba(98, 54, 255, 0.8);
   }
+
+  ${media.small} {
+    font-size: 0.8rem;
+    padding: 5px 10px;
+    min-width: 5rem;
+  }
 `;
 
 const CustomMenu = styled(Menu)`
   min-width: 7rem;
   text-align: center;
+
+  ${media.small} {
+    min-width: 5rem;
+    font-size: 0.8rem;
+  }
+`;
+
+const CustomMenuItem = styled(Menu.Item)`
+  margin: 0.2rem 0;
+  width: 7rem;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  text-align: center;
+
+  ${media.small} {
+    min-width: 5rem;
+    font-size: 0.8rem;
+  }
 `;
 
 export default GenreButton;

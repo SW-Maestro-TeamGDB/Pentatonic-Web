@@ -2,7 +2,7 @@ import react from 'react';
 import styled from 'styled-components';
 import DifficultyIcon from '../DifficultyIcon';
 import { Space, Dropdown, Menu, Button, Select } from 'antd';
-import { Default } from '../../lib/Media';
+import { Default, media } from '../../lib/Media';
 
 const { Option } = Select;
 
@@ -76,6 +76,12 @@ const CustomButton = styled.span`
   &:hover {
     border: 1px solid rgba(98, 54, 255, 0.8);
   }
+
+  ${media.small} {
+    font-size: 0.8rem;
+    padding: 5px 10px;
+    min-width: 5rem;
+  }
 `;
 
 const TotalContainer = styled.div`
@@ -111,6 +117,11 @@ const CustomMenuItem = styled(Menu.Item)`
   align-items: center;
 
   text-align: center;
+
+  ${media.small} {
+    min-width: 5rem;
+    font-size: 0.8rem;
+  }
 `;
 
 export default DifficultyButton;
