@@ -12,6 +12,8 @@ import MakingIcon from '../../images/MakingIcon.svg';
 import PageImage from '../../components/PageImage';
 import GridContainer from '../../components/GridContainer/GridContainer';
 import NotFoundPage from '../NotFoundPage';
+import { useMediaQuery } from 'react-responsive';
+import { media, Default } from '../../lib/Media';
 
 import GroupIcon from '../../images/GroupIcon.svg';
 import SoloIcon from '../../images/SoloIcon.svg';
@@ -40,7 +42,7 @@ const GET_SONG = gql`
 
 const LoungeSongCovers = ({ match }) => {
   const id = match.params?.id;
-
+  const COVER_WIDTH = useMediaQuery({ maxWidth: 767 }) ? '160px' : '220px';
   const { loading, error, data } = useQuery(GET_SONG, {
     variables: {
       songId: id,
@@ -54,7 +56,7 @@ const LoungeSongCovers = ({ match }) => {
       const artist = songData.name;
 
       return (
-        <GridContainer width="95%" templateColumn="250px" autoFill>
+        <GridContainer width="95%" templateColumn={COVER_WIDTH} autoFill>
           {songData.band.map((v, i) => {
             return (
               <CoverGrid
@@ -96,19 +98,22 @@ const LoungeSongCovers = ({ match }) => {
               imgUrl={songData ? songData.songImg : null}
               title={songData ? `${songData.name} - ${songData.artist}` : null}
               position="top"
+              desc="유저들의 커버를 감상하고 참여해보세요"
             />
             <SubContainer>
-              <Dropdown
-                overlay={CoverMenu}
-                placement="bottomCenter"
-                getPopupContainer={(trigger) => trigger.parentNode}
-                trigger={['click']}
-              >
-                <ButtonContainer>
-                  새로운 커버 만들기
-                  <MakingIconImg src={MakingIcon} />
-                </ButtonContainer>
-              </Dropdown>
+              <Default>
+                <Dropdown
+                  overlay={CoverMenu}
+                  placement="bottomCenter"
+                  getPopupContainer={(trigger) => trigger.parentNode}
+                  trigger={['click']}
+                >
+                  <ButtonContainer>
+                    새로운 커버 만들기
+                    <MakingIconImg src={MakingIcon} />
+                  </ButtonContainer>
+                </Dropdown>
+              </Default>
             </SubContainer>
             {loadCover()}
           </PageContainer>
@@ -223,6 +228,10 @@ const SubContainer = styled.div`
   flex-direction: row;
   align-items: center;
   justify-content: flex-end;
+
+  ${media.small} {
+    margin: 1.5rem 0;
+  }
 `;
 
 const MakingCoverLink = styled(Link)`

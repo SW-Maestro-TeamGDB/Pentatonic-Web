@@ -57,13 +57,11 @@ const PageImageContainer = styled.div`
   }
 
   ${media.small} {
-    width: 110%;
+    width: 120%;
     border-top-left-radius: 0;
     border-top-right-radius: 0;
     border: none;
     height: 15rem;
-    justify-content: flex-start;
-    align-items: flex-start;
 
     ${CustomImg} {
       filter: brightness(40%) blur(2px);
@@ -82,7 +80,7 @@ const PageTitle = styled.div`
   ${media.small} {
     width: 100%;
     top: 35%;
-    font-size: 2.5rem;
+    font-size: 2.2rem;
     display: flex;
     justify-content: center;
     align-items: center;
