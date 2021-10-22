@@ -13,6 +13,9 @@ import PageImage from '../../components/PageImage/PageImage';
 import GenreButton from '../../components/GenreButton/GenreButton';
 import GridContainer from '../../components/GridContainer/GridContainer';
 
+import { useMediaQuery } from 'react-responsive';
+import { media, Default } from '../../lib/Media';
+
 import GroupIcon from '../../images/GroupIcon.svg';
 import SoloIcon from '../../images/SoloIcon.svg';
 
@@ -47,6 +50,7 @@ const LoungeBandCovers = ({ match }) => {
   });
   const content = match.params?.content;
   const coverRef = useRef();
+  const COVER_WIDTH = useMediaQuery({ maxWidth: 767 }) ? '160px' : '220px';
 
   const CoverMenu = (
     <SubMenuContainer>
@@ -69,7 +73,7 @@ const LoungeBandCovers = ({ match }) => {
 
       if (coverData.length > 0)
         return (
-          <GridContainer width="95%" templateColumn="250px" autoFill>
+          <GridContainer width="95%" templateColumn={COVER_WIDTH} autoFill>
             {coverData.map((v, i) => {
               return <CoverGrid key={`bandData+${i}`} data={v} />;
             })}
@@ -107,6 +111,7 @@ const LoungeBandCovers = ({ match }) => {
       <PageImage
         imgUrl="https://images.unsplash.com/photo-1499364615650-ec38552f4f34?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1072&q=80"
         title="자유곡 커버"
+        desc="유저들이 자유롭게 녹음한 커버를 감상하고 참여해보세요"
         position="top"
       />
       <PageDesc>
@@ -114,9 +119,7 @@ const LoungeBandCovers = ({ match }) => {
           <SearchResult>
             <SearchContent>'{content}'</SearchContent>검색 결과입니다
           </SearchResult>
-        ) : (
-          '유저들이 자유롭게 녹음한 커버를 감상하고 참여해보세요'
-        )}
+        ) : null}
       </PageDesc>
       <SearchBar
         placeholder="커버 제목, 커버 소개를 입력해주세요"
@@ -126,17 +129,19 @@ const LoungeBandCovers = ({ match }) => {
       />
       <SubContainer>
         <GenreButton genre={genre} setGenre={setGenre} />
-        <Dropdown
-          overlay={CoverMenu}
-          placement="bottomCenter"
-          getPopupContainer={(trigger) => trigger.parentNode}
-          trigger={['click']}
-        >
-          <ButtonContainer>
-            새로운 커버 만들기
-            <MakingIconImg src={MakingIcon} />
-          </ButtonContainer>
-        </Dropdown>
+        <Default>
+          <Dropdown
+            overlay={CoverMenu}
+            placement="bottomCenter"
+            getPopupContainer={(trigger) => trigger.parentNode}
+            trigger={['click']}
+          >
+            <ButtonContainer>
+              새로운 커버 만들기
+              <MakingIconImg src={MakingIcon} />
+            </ButtonContainer>
+          </Dropdown>
+        </Default>
       </SubContainer>
       {loadFreeCover()}
     </PageContainer>
@@ -213,7 +218,7 @@ const SubMenuSpacing = styled.div`
 
 const PageDesc = styled.div`
   font-size: 1rem;
-  margin: 3rem 0;
+  margin: 1.5rem 0;
   width: 80%;
   text-align: center;
 `;
@@ -223,6 +228,10 @@ const SearchContent = styled.span`
   font-size: 24px;
   font-weight: 800;
   padding: 0 0.5rem;
+
+  ${media.small} {
+    font-size: 20px;
+  }
 `;
 
 const SearchResult = styled.div`
@@ -233,6 +242,10 @@ const SearchResult = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+
+  ${media.small} {
+    font-size: 14px;
+  }
 `;
 
 const SubContainer = styled.div`
@@ -243,6 +256,10 @@ const SubContainer = styled.div`
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
+
+  ${media.small} {
+    margin: 1.5rem 0;
+  }
 `;
 
 const MakingCoverLink = styled(Link)`
