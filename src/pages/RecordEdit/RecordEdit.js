@@ -490,7 +490,12 @@ const RecordEdit = (props) => {
         </GridContainer>
       </EditConatiner>
       <ButtonConatiner>
-        <BackwardButton onClick={() => setPage(1)}>
+        <BackwardButton
+          onClick={() => {
+            setInst(existingInst);
+            setPage(1);
+          }}
+        >
           다시 녹음하기
         </BackwardButton>
         <SubmitButton onClick={submitRecord}>업로드</SubmitButton>
