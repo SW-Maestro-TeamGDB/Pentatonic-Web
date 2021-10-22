@@ -17,6 +17,10 @@ const GET_RECOMMEND_BAND = gql`
       backGroundURI
       likeCount
       viewCount
+      song {
+        name
+        artist
+      }
     }
   }
 `;

@@ -17,8 +17,8 @@ const StudioBannerContents = (props) => {
           <CoverRecommendTitle>이런 커버 어때요?</CoverRecommendTitle>
         </CoverRecommendTitleContainer>
         <CoverInfoContainer>
-          <SongTitle>{data.name}</SongTitle>
-          {/* <Singer>{data.singer}</Singer> */}
+          <SongTitle>{data.song.name}</SongTitle>
+          <Singer>{data.song.artist}</Singer>
         </CoverInfoContainer>
         <CountContainer>
           <LikeCount>
@@ -35,24 +35,6 @@ const StudioBannerContents = (props) => {
   );
 };
 
-const CarouselContents = styled(Link)`
-  width: 100%;
-  height: 20rem;
-  font-size: 3rem;
-
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  position: relative;
-`;
-
-const CoverInfoContainer = styled.div`
-  display: flex;
-  flex-direction: row;
-  align-items: flex-end;
-`;
-
 const Background = styled.div`
   width: 100%;
   height: 100%;
@@ -63,12 +45,32 @@ const Background = styled.div`
   background-size: cover;
   border-radius: 15px;
   transition: all 0.3s ease-in-out;
-  filter: brightness(60%);
+  filter: brightness(50%) blur(1px);
+`;
 
-  &:hover {
-    filter: brightness(80%);
-    transform: scale(1.05);
+const CarouselContents = styled(Link)`
+  width: 100%;
+  height: 20rem;
+  font-size: 3rem;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  position: relative;
+
+  ${Background} {
+    &:hover {
+      filter: brightness(80%);
+      transform: scale(1.05);
+    }
   }
+`;
+
+const CoverInfoContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: flex-end;
 `;
 
 const BannerContents = styled.div`
@@ -146,7 +148,7 @@ const CustomIcon = styled.img`
   width: 1.3rem;
   height: 1.3rem;
   filter: invert(100%);
-  margin: 0 0.5vw;
+  margin: 0 0.5vw 2px;
 `;
 
 const SpacingSpan = styled.span`
