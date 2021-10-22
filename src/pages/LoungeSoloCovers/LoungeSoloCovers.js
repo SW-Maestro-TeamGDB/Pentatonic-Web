@@ -13,6 +13,8 @@ import PageImage from '../../components/PageImage';
 import GenreButton from '../../components/GenreButton/GenreButton';
 import DifficultyButton from '../../components/DifficultyButton/DifficultyButton';
 import GridContainer from '../../components/GridContainer/GridContainer';
+import { useMediaQuery } from 'react-responsive';
+import { media, Default } from '../../lib/Media';
 
 const QUERY_BAND = gql`
   query Query($queryBandFilter: QueryBandInput!) {
@@ -40,6 +42,7 @@ const QUERY_BAND = gql`
 
 const LoungeSoloCovers = ({ match }) => {
   const content = match.params?.content;
+  const COVER_WIDTH = useMediaQuery({ maxWidth: 767 }) ? '160px' : '220px';
   const [genre, setGenre] = useState('전체');
   const [difficulty, setDifficulty] = useState('전체');
   const [bandFilter, setBandFilter] = useState({
@@ -56,7 +59,7 @@ const LoungeSoloCovers = ({ match }) => {
 
       if (coverData.length > 0)
         return (
-          <GridContainer width="95%" templateColumn="250px" autoFill>
+          <GridContainer width="95%" templateColumn={COVER_WIDTH} autoFill>
             {coverData.map((v, i) => {
               return <CoverGrid key={`bandData+${i}`} data={v} />;
             })}
@@ -103,15 +106,14 @@ const LoungeSoloCovers = ({ match }) => {
       <PageImage
         imgUrl="https://images.unsplash.com/photo-1510915361894-db8b60106cb1?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1050&q=80"
         title="솔로 커버"
+        desc="유저들의 솔로 커버를 감상하고 참여해보세요"
       />
       <PageDesc>
         {content ? (
           <SearchResult>
             <SearchContent>'{content}'</SearchContent>검색 결과입니다
           </SearchResult>
-        ) : (
-          '유저들의 솔로 커버를 감상 해보세요'
-        )}
+        ) : null}
       </PageDesc>
       <SearchBar
         placeholder="커버 제목, 커버 소개를 입력해주세요"
@@ -128,7 +130,9 @@ const LoungeSoloCovers = ({ match }) => {
             setDifficulty={setDifficulty}
           />
         </ButtonContainer>
-        <MakingCoverButton link={`/studio/solo`} title="새로운 커버 만들기" />
+        <Default>
+          <MakingCoverButton link={`/studio/solo`} title="새로운 커버 만들기" />
+        </Default>
       </SubContainer>
       {loadSoloCover()}
     </PageContainer>
@@ -137,6 +141,11 @@ const LoungeSoloCovers = ({ match }) => {
 
 const ButtonContainer = styled.div`
   display: flex;
+
+  ${media.small} {
+    margin: 1rem 0;
+    justify-content: flex-start;
+  }
 `;
 
 const Spacing = styled.div`
@@ -145,7 +154,7 @@ const Spacing = styled.div`
 
 const PageDesc = styled.div`
   font-size: 1rem;
-  margin: 3rem 0;
+  margin: 1.5rem 0;
   width: 80%;
   text-align: center;
 `;
@@ -158,6 +167,10 @@ const SubContainer = styled.div`
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
+
+  ${media.small} {
+    margin: 1.5rem 0;
+  }
 `;
 
 const SearchContent = styled.span`
@@ -165,6 +178,10 @@ const SearchContent = styled.span`
   font-size: 24px;
   font-weight: 800;
   padding: 0 0.5rem;
+
+  ${media.small} {
+    font-size: 20px;
+  }
 `;
 
 const SearchResult = styled.div`
@@ -175,6 +192,10 @@ const SearchResult = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+
+  ${media.small} {
+    font-size: 14px;
+  }
 `;
 
 const NoCover = styled.div`
@@ -187,6 +208,13 @@ const NoCover = styled.div`
   height: 12rem;
   letter-spacing: -0.5px;
   font-weight: 800;
+
+  ${media.small} {
+    font-size: 1rem;
+    height: 10rem;
+    padding-bottom: 0.5rem;
+    font-weight: 700;
+  }
 `;
 
 export default LoungeSoloCovers;
