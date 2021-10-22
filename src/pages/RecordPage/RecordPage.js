@@ -125,7 +125,6 @@ const RecordPage = (props) => {
   hihatSound.src = hihat;
 
   // 카운트 다운
-
   const runCountDown = () => {
     if (countdown > 1 && countdown <= 4) {
       hihatSound.currentTime = 0;
@@ -133,23 +132,6 @@ const RecordPage = (props) => {
     }
     setCountDown((countdown) => countdown - 1);
   };
-
-  // const startCountDown = () => {
-  //   setCountDownState(true);
-  //   runCountDown();
-  //   setTimeout(() => {
-  //     runCountDown();
-  //     setTimeout(() => {
-  //       runCountDown();
-  //       setTimeout(() => {
-  //         setCountDown(4);
-  //         setOnRec(1);
-  //         onRecAudio();
-  //         setCountDownState(false);
-  //       }, 1000);
-  //     }, 1000);
-  //   }, 1000);
-  // };
 
   const startCountDown = () => {
     setCountDownState(true);
@@ -224,6 +206,12 @@ const RecordPage = (props) => {
     setLyricsIndex(0);
   };
 
+  const changeAudioFile = (left, right, length) => {
+    setLeftChannel([...left]);
+    setRightChannel([...right]);
+    setRecordingLength(length);
+  };
+
   const onRecAudio = () => {
     // 음원정보를 담은 노드를 생성하거나 음원을 실행또는 디코딩 시키는 일을 한다
     const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -260,22 +248,36 @@ const RecordPage = (props) => {
       makeSound(stream);
       setOnRec(1);
 
-      analyser.onaudioprocess = function (e) {
-        let left = new Float32Array(e.inputBuffer.getChannelData(0));
-        let right = new Float32Array(e.inputBuffer.getChannelData(1));
+      let tempLeftChannel = [];
+      let tempRightChannel = [];
+      let tempAudioBuffer = 0;
 
+      analyser.onaudioprocess = function (e) {
         if (mediaRecorder.state === 'recording') {
-          setCount(parseInt(e.playbackTime));
+          let left = new Float32Array(e.inputBuffer.getChannelData(0));
+          let right = new Float32Array(e.inputBuffer.getChannelData(1));
+
+          if (parseInt(e.playbackTime) !== count)
+            setCount(parseInt(e.playbackTime));
 
           // wav 파일 저장
-          setLeftChannel((prev) => [...prev, left]);
-          setRightChannel((prev) => [...prev, right]);
-          setRecordingLength((recordingLength) => recordingLength + bufferSize);
+          // setLeftChannel((prev) => [...prev, left]);
+          // setRightChannel((prev) => [...prev, right]);
+          // setRecordingLength((recordingLength) => recordingLength + bufferSize);
+          // addAudioBuffer(left, right, bufferSize);
+
+          tempLeftChannel.push(left);
+          tempRightChannel.push(right);
+          tempAudioBuffer += bufferSize;
         }
 
         if (mediaRecorder.state === 'paused') {
           setOnRec(2);
           mediaRecorder.pause();
+
+          setLeftChannel(tempLeftChannel);
+          setRightChannel(tempRightChannel);
+          setRecordingLength(tempAudioBuffer);
         }
 
         // 곡 길이만큼 시간 지나면 자동으로 음성 저장 및 녹음 중지
@@ -290,6 +292,10 @@ const RecordPage = (props) => {
           }
           setOnRec(0);
 
+          setLeftChannel(tempLeftChannel);
+          setRightChannel(tempRightChannel);
+          setRecordingLength(tempAudioBuffer);
+
           // 메서드가 호출 된 노드 연결 해제
           analyser.disconnect();
           audioCtx.createMediaStreamSource(stream).disconnect();
@@ -298,6 +304,11 @@ const RecordPage = (props) => {
             setAudioUrl(e.data);
           };
         }
+      };
+
+      audioCtx.onstatechange = function () {
+        if (audioCtx.state === 'suspended')
+          changeAudioFile(tempLeftChannel, tempRightChannel, tempAudioBuffer);
       };
     });
   };
@@ -602,38 +613,13 @@ const RecordPage = (props) => {
 
   return (
     <Container>
+      {showBackground}
+      {isFreeCover ? null : showAudioDuration}
       <RecordModal modalToggle={modalToggle} setModalToggle={setModalToggle} />
       <MicAuthModal
         modalToggle={micAuthModalToggle}
         setModalToggle={setMicAuthModalToggle}
       />
-      {/* {showRecordModal}
-      {showMicAuthModal} */}
-      {showBackground}
-      {/* <Background url={isFreeCover ? bandData.backGroundURI : songData.songImg}>
-        <BackwardButton onClick={() => onClickStop()}>
-          <LeftOutlined />
-          <BackwardText>커버 정보 입력</BackwardText>
-        </BackwardButton>
-        <BackgroundBlur>
-          <IconContainer canSave={canSave}>
-            {showRecordingState}
-            {canSave ? (
-              <CustomPlayIcon
-                src={SaveIcon}
-                onClick={() => onSubmitAudioFile()}
-              />
-            ) : null}
-          </IconContainer>
-          {isFreeCover ? null : showLyrics}
-          {isMobile ? null : (
-            <VisualizerContainer onRec={onRec}>
-              {showVisualizer}
-            </VisualizerContainer>
-          )}
-        </BackgroundBlur>
-      </Background> */}
-      {isFreeCover ? null : showAudioDuration}
     </Container>
   );
 };

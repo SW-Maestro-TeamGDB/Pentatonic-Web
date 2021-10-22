@@ -125,4 +125,4 @@ const AudioVisualizer = (props) => {
   );
 };
 
-export default AudioVisualizer;
+export default react.memo(AudioVisualizer);
