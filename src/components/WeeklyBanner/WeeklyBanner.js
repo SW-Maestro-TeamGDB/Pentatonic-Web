@@ -60,6 +60,10 @@ const Background = styled.div`
 
   ${media.small} {
     border-radius: 0px;
+
+    &:hover {
+      transform: none;
+    }
   }
 `;
 
@@ -80,6 +84,12 @@ const BannerContainer = styled.div`
 
   ${Background} {
     filter: brightness(60%);
+
+    ${media.small} {
+      &:hover {
+        filter: none;
+      }
+    }
 
     &:hover {
       filter: brightness(80%);

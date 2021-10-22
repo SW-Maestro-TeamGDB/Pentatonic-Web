@@ -161,6 +161,15 @@ const CoverContainer = styled.div`
 
   ${media.small} {
     margin: 0;
+
+    &:hover ${CoverImage} {
+      transform: none;
+      filter: none;
+    }
+
+    &:hover ${HeadPhoneImage} {
+      visibility: none;
+    }
   }
 
   &:hover ${HeadPhoneImage} {
