@@ -580,7 +580,7 @@ const RecordPage = (props) => {
             ) : null}
           </IconContainer>
           {isFreeCover ? null : showLyrics}
-          <VisualizerContainer onRec={onRec}>
+          <VisualizerContainer recStatus={onRec}>
             {showVisualizer}
           </VisualizerContainer>
         </BackgroundBlur>
@@ -657,7 +657,7 @@ const VisualizerContainer = styled.div`
   width: 100%;
   height: 25rem;
   z-index: -1;
-  visibility: ${(props) => (props.onRec === 1 ? 'visible' : 'hidden')};
+  visibility: ${(props) => (props.recStatus === 1 ? 'visible' : 'hidden')};
 
   -webkit-filter: blur(2px) brightness(80%);
   filter: blur(2px) brightness(80%);
