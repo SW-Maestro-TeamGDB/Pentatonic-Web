@@ -7,6 +7,7 @@ import PageContainer from '../../components/PageContainer';
 import SearchBar from '../../components/SearchBar';
 import CoverGrid from '../../components/CoverGrid/CoverGrid';
 import GridContainer from '../../components/GridContainer/GridContainer';
+import { useMediaQuery } from 'react-responsive';
 import { media } from '../../lib/Media';
 
 const GET_TREND_BANDS = gql`
@@ -38,13 +39,14 @@ const LoungeHome = () => {
       },
     },
   });
+  const COVER_WIDTH = useMediaQuery({ maxWidth: 767 }) ? '160px' : '220px';
   const loadBandCover = () => {
     if (data) {
       const filtered = data.getTrendBands.filter((v) => !v.isSoloBand);
 
       if (filtered.length > 0)
         return (
-          <GridContainer templateColumn="250px" autoFill>
+          <GridContainer templateColumn={COVER_WIDTH} autoFill>
             {filtered.map((v, i) => {
               return (
                 <CoverGrid key={`bandData+${v.bandId}`} data={v} autoFill />
@@ -64,7 +66,7 @@ const LoungeHome = () => {
 
       if (filtered.length > 0)
         return (
-          <GridContainer templateColumn="250px" autoFill>
+          <GridContainer templateColumn={COVER_WIDTH} autoFill>
             {filtered.map((v, i) => {
               <CoverGrid key={`bandData+${v.bandId}`} data={v} autoFill />;
             })}
