@@ -34,7 +34,7 @@ const CustomImg = styled.div`
     background-image: url(${(props) => props.imgUrl});
     background-size: cover;
     width: 100%;
-    height: 15rem;
+    height: 20rem;
   }
 `;
 
@@ -61,7 +61,7 @@ const PageImageContainer = styled.div`
     border-top-left-radius: 0;
     border-top-right-radius: 0;
     border: none;
-    height: 15rem;
+    height: 20rem;
 
     ${CustomImg} {
       filter: brightness(40%) blur(2px);
@@ -79,7 +79,7 @@ const PageTitle = styled.div`
 
   ${media.small} {
     width: 100%;
-    top: 35%;
+    top: 40%;
     font-size: 2.2rem;
     display: flex;
     justify-content: center;

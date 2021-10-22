@@ -730,7 +730,7 @@ const SongData = styled.div`
 
   ${media.small} {
     top: 20px;
-    width: 10rem;
+    width: 15rem;
   }
 `;
 
@@ -1231,6 +1231,10 @@ const LoadingIconContainer = styled.div`
 const CustomLoadingIcon = styled(LoadingOutlined)`
   font-size: 16rem;
   color: #fff;
+
+  ${media.small} {
+    font-size: 10rem;
+  }
 `;
 
 const NoInst = styled.div`
