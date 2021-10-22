@@ -6,8 +6,6 @@ const PageImage = (props) => {
   const { title, imgUrl, position, desc } = props;
   const pose = position ? position : 'center';
 
-  console.log(desc);
-
   return (
     <PageImageContainer>
       <CustomImg imgUrl={imgUrl} pose={pose} />
@@ -79,12 +77,12 @@ const PageTitle = styled.div`
   color: white;
   letter-spacing: -0.2rem;
   position: absolute;
+  top: 35%;
 
   ${media.small} {
     width: 100%;
-    height: 90%;
-
-    font-size: 2rem;
+    top: 35%;
+    font-size: 2.5rem;
     display: flex;
     justify-content: center;
     align-items: center;
