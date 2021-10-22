@@ -201,7 +201,7 @@ const CoverInform = styled.div`
   ${media.small} {
     position: absolute;
     z-index: 2;
-    bottom: 10%;
+    bottom: 7%;
     left: 12px;
     color: white;
   }
@@ -256,9 +256,14 @@ const CoverTitle = styled.div`
   font-weight: bold;
 
   ${media.small} {
-    font-size: 1.5rem;
+    font-size: 1.4rem;
     font-weight: 900;
-    line-height: 1.5;
+    line-height: 1.7;
+    max-width: 90%;
+
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 `;
 
@@ -268,8 +273,13 @@ const SongInform = styled.div`
 
   ${media.small} {
     color: white;
-    font-size: 0.8rem;
+    font-size: 0.75rem;
     line-height: 1;
+    max-width: 90%;
+
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 `;
 
