@@ -31,26 +31,6 @@ const GET_TREND_BANDS = gql`
 `;
 
 const LoungeHome = () => {
-  const loadBandCover = () => {
-    if (data) {
-      return data.getTrendBands
-        .filter((v) => !v.isSoloBand)
-        .map((v, i) => {
-          return <CoverGrid key={`bandData+${v.bandId}`} data={v} autoFill />;
-        });
-    }
-  };
-
-  const loadSoloCover = () => {
-    if (data) {
-      return data.getTrendBands
-        .filter((v) => v.isSoloBand)
-        .map((v, i) => {
-          return <CoverGrid key={`bandData+${v.bandId}`} data={v} autoFill />;
-        });
-    }
-  };
-
   const { data } = useQuery(GET_TREND_BANDS, {
     variables: {
       queryBandFilter: {
@@ -58,6 +38,43 @@ const LoungeHome = () => {
       },
     },
   });
+  const loadBandCover = () => {
+    if (data) {
+      const filtered = data.getTrendBands.filter((v) => !v.isSoloBand);
+
+      if (filtered.length > 0)
+        return (
+          <GridContainer templateColumn="250px" autoFill>
+            {filtered.map((v, i) => {
+              return (
+                <CoverGrid key={`bandData+${v.bandId}`} data={v} autoFill />
+              );
+            })}
+          </GridContainer>
+        );
+      else {
+        return <NoCover>최근 떠오르는 밴드커버가 없습니다</NoCover>;
+      }
+    }
+  };
+
+  const loadSoloCover = () => {
+    if (data) {
+      const filtered = data.getTrendBands.filter((v) => v.isSoloBand);
+
+      if (filtered.length > 0)
+        return (
+          <GridContainer templateColumn="250px" autoFill>
+            {filtered.map((v, i) => {
+              <CoverGrid key={`bandData+${v.bandId}`} data={v} autoFill />;
+            })}
+          </GridContainer>
+        );
+      else {
+        return <NoCover>최근 떠오르는 솔로커버가 없습니다</NoCover>;
+      }
+    }
+  };
 
   return (
     <PageContainer>
@@ -69,18 +86,14 @@ const LoungeHome = () => {
             <BoardTitle>떠오르는 솔로커버</BoardTitle>
             <BoardLink to="/lounge/solo">더보기</BoardLink>
           </BoardHeader>
-          <GridContainer templateColumn="250px" autoFill>
-            {loadSoloCover()}
-          </GridContainer>
+          {loadSoloCover()}
         </BoardWrapper>
         <BoardWrapper>
           <BoardHeader>
             <BoardTitle>떠오르는 밴드커버</BoardTitle>
             <BoardLink to="/lounge/band">더보기</BoardLink>
           </BoardHeader>
-          <GridContainer templateColumn="250px" autoFill>
-            {loadBandCover()}
-          </GridContainer>
+          {loadBandCover()}
         </BoardWrapper>
       </BoardContainer>
     </PageContainer>
@@ -129,15 +142,22 @@ const BoardHeader = styled.div`
   width: 95%;
 
   ${media.small} {
-    margin-bottom: 15px;
+    margin-bottom: 1.5rem;
   }
 `;
 
 const BoardTitle = styled.nav`
   font-size: 20px;
-  font-weight: 600;
+  font-weight: 700;
   width: 100%;
   color: black;
+  letter-spacing: -1px;
+
+  ${media.small} {
+    font-size: 16px;
+    letter-spacing: -1px;
+    font-weight: 800;
+  }
 `;
 
 const BoardLink = styled(Link)`
@@ -149,6 +169,31 @@ const BoardLink = styled(Link)`
 
   &:hover {
     color: rgb(150, 150, 150);
+  }
+
+  ${media.small} {
+    font-size: 12px;
+    letter-spacing: -1px;
+    font-weight: 500;
+  }
+`;
+
+const NoCover = styled.div`
+  font-size: 1.3rem;
+  color: #9b94b3;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  height: 12rem;
+  letter-spacing: -0.5px;
+  font-weight: 700;
+
+  ${media.small} {
+    font-size: 0.9rem;
+    height: 3rem;
+    padding-bottom: 0.5rem;
+    font-weight: 700;
   }
 `;
 
