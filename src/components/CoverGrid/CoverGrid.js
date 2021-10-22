@@ -1,18 +1,15 @@
 import react from 'react';
 import styled from 'styled-components';
-import { Default } from '../../lib/Media';
 import { Link } from 'react-router-dom';
 import { Skeleton } from 'antd';
 import { sessionIconMatch } from '../../lib/sessionIconMatch';
 import ThumbIcon from '../../images/ThumbIcon.svg';
 import ViewIcon from '../../images/ViewIcon.svg';
 import HeadPhoneIcon from '../../images/HeadPhoneIcon.svg';
-import { media } from '../../lib/Media';
+import { media, Default, Mobile } from '../../lib/Media';
 
 const CoverGrid = (props) => {
   const { idx, title, artist, img, data } = props;
-  const category = ['animals', 'arch', 'nature', 'people', 'tech'];
-  const randomImg = `https://placeimg.com/300/300/${category[idx]}`;
 
   const showSession = (session) => {
     return session.map((v, idx) => {
@@ -28,56 +25,94 @@ const CoverGrid = (props) => {
   return (
     <CustomLink to={data ? `/lounge/cover/${data.bandId}` : `/`}>
       <CoverContainer>
-        <ImageContainer>
-          {data?.backGroundURI ? (
-            <>
-              <CoverImage src={data.backGroundURI} />
-              <HeadPhoneImage src={HeadPhoneIcon} />
-            </>
-          ) : (
-            <Skeleton.Button
-              style={{ width: '50rem', height: '50rem' }}
-              active
-            />
-          )}
-        </ImageContainer>
-        <DataContainer>
-          {data ? (
-            <>
-              <CoverInform>
-                <CoverTitle>{data.name}</CoverTitle>
-                <SongInform>
-                  {data.song
-                    ? `${data.song.name} - ${data.song.artist}`
-                    : title && artist
-                    ? `${title} - ${artist}`
-                    : null}
-                </SongInform>
-              </CoverInform>
-              <CoverMeta>
-                <CountContainer>
-                  <LikeCount>
-                    <CustomIcon src={ThumbIcon} /> {data.likeCount}
-                  </LikeCount>
-                  <SpacingSpan />
-                  <ViewCount>
-                    <CustomIcon src={ViewIcon} /> {data.viewCount}
-                  </ViewCount>
-                  <SpacingSpan />
-                </CountContainer>
-                <SessionInform>
-                  {!data.session ? null : showSession(data.session)}
-                </SessionInform>
-              </CoverMeta>
-            </>
-          ) : (
-            <Skeleton
-              title={{ width: '100%' }}
-              paragraph={{ width: '100%', rows: 1 }}
-              active
-            />
-          )}
-        </DataContainer>
+        <Default>
+          <ImageContainer>
+            {data?.backGroundURI ? (
+              <>
+                <CoverImage src={data.backGroundURI} />
+                <HeadPhoneImage src={HeadPhoneIcon} />
+              </>
+            ) : (
+              <Skeleton.Button
+                style={{ width: '50rem', height: '50rem' }}
+                active
+              />
+            )}
+          </ImageContainer>
+          <DataContainer>
+            {data ? (
+              <>
+                <CoverInform>
+                  <CoverTitle>{data.name}</CoverTitle>
+                  <SongInform>
+                    {data.song
+                      ? `${data.song.name} - ${data.song.artist}`
+                      : title && artist
+                      ? `${title} - ${artist}`
+                      : null}
+                  </SongInform>
+                </CoverInform>
+                <CoverMeta>
+                  <CountContainer>
+                    <LikeCount>
+                      <CustomIcon src={ThumbIcon} /> {data.likeCount}
+                    </LikeCount>
+                    <SpacingSpan />
+                    <ViewCount>
+                      <CustomIcon src={ViewIcon} /> {data.viewCount}
+                    </ViewCount>
+                    <SpacingSpan />
+                  </CountContainer>
+                  <SessionInform>
+                    {!data.session ? null : showSession(data.session)}
+                  </SessionInform>
+                </CoverMeta>
+              </>
+            ) : (
+              <Skeleton
+                title={{ width: '100%' }}
+                paragraph={{ width: '100%', rows: 1 }}
+                active
+              />
+            )}
+          </DataContainer>
+        </Default>
+        <Mobile>
+          <ImageContainer>
+            {data?.backGroundURI ? (
+              <>
+                <CoverImage src={data.backGroundURI} />
+                <CoverInform>
+                  <CoverTitle>{data.name}</CoverTitle>
+                  <SongInform>
+                    {data.song
+                      ? `${data.song.name} - ${data.song.artist}`
+                      : title && artist
+                      ? `${title} - ${artist}`
+                      : null}
+                  </SongInform>
+                </CoverInform>
+                <CoverMeta>
+                  <CountContainer>
+                    <ViewCount>
+                      <CustomIcon src={ViewIcon} /> {data.viewCount}
+                    </ViewCount>
+                    <SpacingSpan />
+                    <LikeCount>
+                      <CustomIcon src={ThumbIcon} /> {data.likeCount}
+                    </LikeCount>
+                    <SpacingSpan />
+                  </CountContainer>
+                </CoverMeta>
+              </>
+            ) : (
+              <Skeleton.Button
+                style={{ width: '50rem', height: '50rem' }}
+                active
+              />
+            )}
+          </ImageContainer>
+        </Mobile>
       </CoverContainer>
     </CustomLink>
   );
@@ -108,6 +143,10 @@ const CoverImage = styled.img`
   transition: all ease-in-out 0.3s;
   object-fit: cover;
   z-index: 2;
+
+  ${media.small} {
+    filter: brightness(60%);
+  }
 `;
 
 const CoverContainer = styled.div`
@@ -158,6 +197,14 @@ const DataContainer = styled.div`
 const CoverInform = styled.div`
   width: 100%;
   color: black;
+
+  ${media.small} {
+    position: absolute;
+    z-index: 2;
+    bottom: 10%;
+    left: 12px;
+    color: white;
+  }
 `;
 
 const CoverMeta = styled.div`
@@ -169,6 +216,16 @@ const CoverMeta = styled.div`
   justify-content: space-between;
   margin-top: 5px;
   position: relative;
+
+  ${media.small} {
+    position: absolute;
+    z-index: 2;
+    top: 10%;
+    right: 8px;
+    color: white;
+    justify-content: flex-end;
+    margin-top: 0;
+  }
 `;
 
 const InstrumentIcon = styled.img`
@@ -184,16 +241,36 @@ const CustomIcon = styled.img`
   filter: invert(80%) sepia(0%) saturate(468%) hue-rotate(238deg)
     brightness(96%) contrast(86%);
   margin-right: 0.2vw;
+
+  ${media.small} {
+    filter: invert(100%);
+    height: 0.8rem;
+    width: 0.8rem;
+    margin-right: 5px;
+    padding-bottom: 3px;
+  }
 `;
 
 const CoverTitle = styled.div`
   font-size: 18px;
   font-weight: bold;
+
+  ${media.small} {
+    font-size: 1.5rem;
+    font-weight: 900;
+    line-height: 1.5;
+  }
 `;
 
 const SongInform = styled.div`
   font-size: 12px;
   color: rgb(50, 50, 50);
+
+  ${media.small} {
+    color: white;
+    font-size: 0.8rem;
+    line-height: 1;
+  }
 `;
 
 const SessionInform = styled.div`
@@ -213,6 +290,14 @@ const CountContainer = styled.span`
   color: #bababa;
 
   font-weight: 600;
+
+  ${media.small} {
+    align-items: flex-end;
+    justify-content: flex-end;
+    flex-direction: column;
+    color: #fff;
+    font-size: 0.8rem;
+  }
 `;
 
 const LikeCount = styled.span`
@@ -222,7 +307,12 @@ const LikeCount = styled.span`
   flex-direction: row;
   align-items: center;
   line-height: 1;
+
+  ${media.small} {
+    font-size: 0.8rem;
+  }
 `;
+
 const ViewCount = styled.span`
   font-size: 10px;
   text-align: left;
@@ -230,10 +320,18 @@ const ViewCount = styled.span`
   flex-direction: row;
   align-items: center;
   line-height: 1;
+
+  ${media.small} {
+    font-size: 0.8rem;
+  }
 `;
 
 const SpacingSpan = styled.span`
   margin: 0 5px;
+
+  ${media.small} {
+    margin-bottom: 3px;
+  }
 `;
 
 export default CoverGrid;
