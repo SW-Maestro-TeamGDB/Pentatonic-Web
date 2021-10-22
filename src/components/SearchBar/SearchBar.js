@@ -1,9 +1,8 @@
 import react, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router';
 import styled from 'styled-components';
-import { Default } from '../../lib/Media';
+import { media, Default } from '../../lib/Media';
 import SearchIcon from '../../images/SearchIcon.svg';
-import { media } from '../../lib/Media';
 
 const SearchBar = (props) => {
   const { placeholder, afterRequest, sort, searching, match } = props;
@@ -111,7 +110,7 @@ const CustomIcon = styled.img`
   right: 0;
 
   ${media.small} {
-    right: 5px;
+    right: 10px;
   }
 `;
 
