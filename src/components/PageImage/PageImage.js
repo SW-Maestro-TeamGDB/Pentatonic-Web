@@ -34,7 +34,7 @@ const CustomImg = styled.div`
     background-image: url(${(props) => props.imgUrl});
     background-size: cover;
     width: 100%;
-    height: 18rem;
+    height: 15rem;
   }
 `;
 
@@ -61,7 +61,7 @@ const PageImageContainer = styled.div`
     border-top-left-radius: 0;
     border-top-right-radius: 0;
     border: none;
-    height: 18rem;
+    height: 15rem;
     justify-content: flex-start;
     align-items: flex-start;
 
@@ -77,7 +77,7 @@ const PageTitle = styled.div`
   color: white;
   letter-spacing: -0.2rem;
   position: absolute;
-  top: 35%;
+  top: 30%;
 
   ${media.small} {
     width: 100%;
@@ -101,7 +101,7 @@ const PageDesc = styled.div`
 
   ${media.small} {
     font-size: 0.9rem;
-    bottom: 20%;
+    bottom: 15%;
     display: flex;
     justify-content: center;
     width: 100%;
