@@ -154,11 +154,16 @@ const WeeklyChallenge = ({ match }) => {
             </Default>
           </SubContainer>
           {loadCover()}
+          <PageSpacing />
         </PageContainer>
       ) : null}
     </>
   );
 };
+
+const PageSpacing = styled.div`
+  height: 1.5rem;
+`;
 
 const BandIconContainer = styled.img`
   width: 48px;

@@ -136,9 +136,14 @@ const LoungeBandCovers = ({ match }) => {
         </Default>
       </SubContainer>
       {loadBandCover()}
+      <PageSpacing />
     </PageContainer>
   );
 };
+
+const PageSpacing = styled.div`
+  height: 1.5rem;
+`;
 
 const ButtonContainer = styled.div`
   display: flex;

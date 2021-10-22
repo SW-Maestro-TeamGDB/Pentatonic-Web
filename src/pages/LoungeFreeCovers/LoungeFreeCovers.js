@@ -144,9 +144,14 @@ const LoungeBandCovers = ({ match }) => {
         </Default>
       </SubContainer>
       {loadFreeCover()}
+      <PageSpacing />
     </PageContainer>
   );
 };
+
+const PageSpacing = styled.div`
+  height: 1.5rem;
+`;
 
 const BandIconContainer = styled.img`
   width: 48px;
