@@ -165,6 +165,10 @@ const SearchContent = styled.span`
   font-size: 24px;
   font-weight: 800;
   padding: 0 0.5rem;
+
+  ${media.small} {
+    font-size: 20px;
+  }
 `;
 
 const SearchResult = styled.div`
@@ -175,6 +179,10 @@ const SearchResult = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+
+  ${media.small} {
+    font-size: 14px;
+  }
 `;
 
 const SubContainer = styled.div`
