@@ -38,6 +38,7 @@ const Container = styled.div`
     min-width: 0px;
     margin-top: 1rem;
     padding: 0;
+    padding-bottom: 2rem;
     overflow-x: hidden;
   }
 `;
