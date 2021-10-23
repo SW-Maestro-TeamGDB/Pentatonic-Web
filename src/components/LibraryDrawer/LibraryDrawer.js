@@ -170,6 +170,10 @@ const SubmitButtonConatiner = styled.div`
   width: 100%;
   height: 13%;
   z-index: 2;
+
+  ${media.small} {
+    height: 18%;
+  }
 `;
 
 const NoLibraryText = styled.div`
@@ -178,6 +182,10 @@ const NoLibraryText = styled.div`
   font-size: 1.2rem;
   font-weight: 700;
   margin-top: 1.5rem;
+
+  ${media.small} {
+    font-size: 1rem;
+  }
 `;
 
 const LibaryContainer = styled.div`
@@ -233,6 +241,7 @@ const SubmitButton = styled.button`
 
   ${media.small} {
     font-size: 1rem;
+    height: 50%;
   }
 `;
 
