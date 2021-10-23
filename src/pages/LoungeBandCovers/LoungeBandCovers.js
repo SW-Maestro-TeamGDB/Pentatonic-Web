@@ -42,7 +42,7 @@ const QUERY_BAND = gql`
 
 const LoungeBandCovers = ({ match }) => {
   const content = match.params?.content;
-  const COVER_WIDTH = useMediaQuery({ maxWidth: 767 }) ? '160px' : '220px';
+  const COVER_WIDTH = useMediaQuery({ maxWidth: 767 }) ? '250px' : '220px';
   const [genre, setGenre] = useState('전체');
   const [difficulty, setDifficulty] = useState('전체');
   const [bandFilter, setBandFilter] = useState({

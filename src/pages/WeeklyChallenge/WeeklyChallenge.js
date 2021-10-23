@@ -40,7 +40,7 @@ const QUERY_SONG = gql`
 
 const WeeklyChallenge = ({ match }) => {
   const content = match.params?.content;
-  const COVER_WIDTH = useMediaQuery({ maxWidth: 767 }) ? '160px' : '220px';
+  const COVER_WIDTH = useMediaQuery({ maxWidth: 767 }) ? '250px' : '220px';
   const { loading, error, data } = useQuery(QUERY_SONG, {
     variables: {
       querySongFilter: {

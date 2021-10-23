@@ -50,7 +50,7 @@ const LoungeBandCovers = ({ match }) => {
   });
   const content = match.params?.content;
   const coverRef = useRef();
-  const COVER_WIDTH = useMediaQuery({ maxWidth: 767 }) ? '160px' : '220px';
+  const COVER_WIDTH = useMediaQuery({ maxWidth: 767 }) ? '250px' : '220px';
 
   const CoverMenu = (
     <SubMenuContainer>
