@@ -208,7 +208,7 @@ const DataContainer = styled.div`
   display: flex;
   flex-direction: column;
   width: 90%;
-  margin-top: 10px;
+  margin-top: 8px;
 `;
 
 const CoverInform = styled.div`
@@ -231,7 +231,7 @@ const CoverMeta = styled.div`
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
-  margin-top: 5px;
+  margin-top: 8px;
   position: relative;
 
   ${media.small} {
@@ -269,8 +269,8 @@ const CustomIcon = styled.img`
 `;
 
 const CoverTitle = styled.div`
-  font-size: 18px;
-  font-weight: bold;
+  font-size: 16px;
+  font-weight: 700;
 
   ${media.small} {
     font-size: 1.4rem;
@@ -286,7 +286,8 @@ const CoverTitle = styled.div`
 
 const SongInform = styled.div`
   font-size: 12px;
-  color: rgb(50, 50, 50);
+  color: #999;
+  font-weight: 600;
 
   ${media.small} {
     color: white;

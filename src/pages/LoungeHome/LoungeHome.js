@@ -39,7 +39,7 @@ const LoungeHome = () => {
       },
     },
   });
-  const COVER_WIDTH = useMediaQuery({ maxWidth: 767 }) ? '160px' : '220px';
+  const COVER_WIDTH = useMediaQuery({ maxWidth: 767 }) ? '160px' : '200px';
   const loadBandCover = () => {
     if (data) {
       const filtered = data.getTrendBands.filter((v) => !v.isSoloBand);
@@ -142,7 +142,6 @@ const BoardHeader = styled.div`
   flex-direction: row;
   align-items: center;
   justify-content: center;
-  margin-bottom: 10px;
   width: 95%;
 
   ${media.small} {
