@@ -58,10 +58,10 @@ const CarouselContents = styled(Link)`
 
   position: relative;
 
-  ${Background} {
-    &:hover {
-      filter: brightness(80%);
-      transform: scale(1.05);
+  &:hover {
+    ${Background} {
+      filter: brightness(70%);
+      transform: scale(1.1);
     }
   }
 `;
@@ -91,9 +91,9 @@ const CoverRecommendTitleContainer = styled.div`
 
 const CoverRecommendTitle = styled.div`
   color: white;
-  font-size: 1.2rem;
+  font-size: 1.1rem;
   font-weight: 600;
-  line-height: 3;
+  line-height: 2;
   letter-spacing: -0.4px;
 
   display: flex;
@@ -116,7 +116,7 @@ const SongTitle = styled.span`
   justify-content: flex-start;
 
   line-height: 1.3;
-  letter-spacing: 2px;
+  letter-spacing: -2px;
 
   white-space: nowrap;
   text-overflow: ellipsis;
@@ -160,28 +160,41 @@ const CountContainer = styled.span`
 `;
 
 const LikeCount = styled.span`
-  font-size: 0.7rem;
+  font-size: 0.9rem;
   text-align: left;
   display: flex;
   flex-direction: row;
   align-items: center;
+
+  ${media.small} {
+    font-size: 0.7rem;
+    width: 1rem;
+    margin: 0 8px 1px;
+  }
 `;
 
 const ViewCount = styled.span`
-  font-size: 0.7rem;
+  font-size: 0.9rem;
   text-align: left;
   display: flex;
   flex-direction: row;
   align-items: center;
+
+  ${media.small} {
+    font-size: 0.7rem;
+    width: 1rem;
+    margin: 0 8px 1px;
+  }
 `;
 
 const CustomIcon = styled.img`
-  width: 1.3rem;
-  height: 1.3rem;
+  width: 1rem;
+  height: 1rem;
   filter: invert(100%);
   margin: 0 0.5vw 2px;
 
   ${media.small} {
+    font-size: 0.7rem;
     width: 1rem;
     margin: 0 6px 1px;
   }

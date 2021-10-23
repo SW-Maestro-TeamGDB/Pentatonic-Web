@@ -51,24 +51,6 @@ const ArtistBannerContents = (props) => {
   );
 };
 
-const CarouselContents = styled(Link)`
-  width: 100%;
-  height: 18rem;
-  font-size: 3rem;
-
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  position: relative;
-`;
-
-const CoverInfoContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  margin-top: 1vw;
-`;
-
 const Background = styled.div`
   width: 100%;
   height: 100%;
@@ -79,11 +61,31 @@ const Background = styled.div`
   background-size: cover;
   transition: all 0.3s ease-in-out;
   filter: brightness(50%) blur(2px);
+`;
+
+const CarouselContents = styled(Link)`
+  width: 100%;
+  height: 18rem;
+  font-size: 3rem;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  position: relative;
 
   &:hover {
-    filter: brightness(70%);
-    transform: scale(1.05);
+    ${Background} {
+      filter: brightness(70%);
+      transform: scale(1.05);
+    }
   }
+`;
+
+const CoverInfoContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  margin-top: 1vw;
 `;
 
 const ProfileContainer = styled.div`

@@ -90,9 +90,12 @@ const BannerContainer = styled.div`
         filter: none;
       }
     }
+  }
 
-    &:hover {
-      filter: brightness(80%);
+  &:hover {
+    ${Background} {
+      filter: brightness(70%);
+      transform: scale(1.1);
     }
   }
 `;
