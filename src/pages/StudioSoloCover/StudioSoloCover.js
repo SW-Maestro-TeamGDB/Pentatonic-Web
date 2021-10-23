@@ -14,6 +14,7 @@ import MakingIcon from '../../images/MakingIcon.svg';
 import PageImage from '../../components/PageImage/PageImage';
 import GenreButton from '../../components/GenreButton/GenreButton';
 import GridContainer from '../../components/GridContainer/GridContainer';
+import { useMediaQuery } from 'react-responsive';
 
 const QUERY_SONG = gql`
   query Query($querySongFilter: QuerySongInput!) {
@@ -36,6 +37,7 @@ const StudioSoloCover = ({ match }) => {
   const [genre, setGenre] = useState('전체');
   const [difficulty, setDifficulty] = useState('전체');
   const [songData, setSongData] = useState();
+  const isDesktop = useMediaQuery({ minWidth: 992 });
   const content = match.params?.content;
 
   const { data } = useQuery(QUERY_SONG, {
@@ -101,10 +103,12 @@ const StudioSoloCover = ({ match }) => {
             setDifficulty={setDifficulty}
           />
         </ButtonContainer>
-        <MakingCoverButton
-          link={`/studio/solo/free/cover`}
-          title="자유곡 커버 만들기"
-        />
+        {isDesktop ? (
+          <MakingCoverButton
+            link={`/studio/solo/free/cover`}
+            title="자유곡 커버 만들기"
+          />
+        ) : null}
       </SubContainer>
       <SongContainer>{showCover()}</SongContainer>
     </PageContainer>
@@ -142,6 +146,7 @@ const Spacing = styled.div`
 const PageTitle = styled.div`
   font-size: 2rem;
   font-weight: 800;
+  margin-top: 1rem;
 `;
 
 const SongContainer = styled.div`
