@@ -29,66 +29,48 @@ const SongGrid = (props) => {
   return (
     <CustomLink to={`/studio/band/${data.songId}`}>
       <CoverContainer>
-        <Default>
-          <ImageContainer>
-            {data ? (
-              <>
-                <CoverImage src={data.songImg} />
-                <RecordIcon src={vocal} />
-              </>
-            ) : (
-              <>
-                <Skeleton.Button
-                  style={{ width: '50rem', height: '50rem' }}
-                  active
-                />
-              </>
-            )}
-          </ImageContainer>
-
-          <DataContainer>
-            {data ? (
-              <>
-                <CoverInform>
-                  <CoverTitle>{data.name}</CoverTitle>
-                  <CoverArtist>{data.artist}</CoverArtist>
-                </CoverInform>
+        <ImageContainer>
+          {data ? (
+            <>
+              <CoverImage src={data.songImg} />
+              <RecordIcon src={vocal} />
+              <Mobile>
+                <DifficultyContainer>Lv.{data.level}</DifficultyContainer>
+              </Mobile>
+            </>
+          ) : (
+            <>
+              <Skeleton.Button
+                style={{ width: '50rem', height: '50rem' }}
+                active
+              />
+            </>
+          )}
+        </ImageContainer>
+        <DataContainer>
+          {data ? (
+            <>
+              <CoverInform>
+                <CoverTitle>{data.name}</CoverTitle>
+                <CoverArtist>{data.artist}</CoverArtist>
+              </CoverInform>
+              <Default>
                 <CoverMeta>
                   <DifficultyContainer>
                     <DifficultyIcon value={data.level} />
                   </DifficultyContainer>
                   <SessionInform>{showSession(data.instrument)}</SessionInform>
                 </CoverMeta>
-              </>
-            ) : (
-              <Skeleton
-                title={{ width: '100%' }}
-                paragraph={{ width: '100%', rows: 0 }}
-                active
-              />
-            )}
-          </DataContainer>
-        </Default>
-        <Mobile>
-          <ImageContainer>
-            {data ? (
-              <>
-                <CoverImage src={data.songImg} />
-                <CoverInform>
-                  <CoverTitle>{data.name}</CoverTitle>
-                  <CoverArtist>{data.artist}</CoverArtist>
-                </CoverInform>
-                <CoverMeta>
-                  <DifficultyContainer>
-                    <DifficultyIcon value={data.level} />
-                  </DifficultyContainer>
-                </CoverMeta>
-              </>
-            ) : (
-              <Skeleton.Button style={{ width: '50rem', height: '50rem' }} />
-            )}
-          </ImageContainer>
-        </Mobile>
+              </Default>
+            </>
+          ) : (
+            <Skeleton
+              title={{ width: '100%' }}
+              paragraph={{ width: '100%', rows: 0 }}
+              active
+            />
+          )}
+        </DataContainer>
       </CoverContainer>
     </CustomLink>
   );
@@ -177,7 +159,7 @@ const DataContainer = styled.div`
   display: flex;
   flex-direction: column;
   width: 90%;
-  margin-top: 0.7vw;
+  margin-top: 8px;
 `;
 
 const CoverInform = styled.div`
@@ -185,20 +167,17 @@ const CoverInform = styled.div`
   color: black;
 
   display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
   text-overflow: ellipsis;
 
   position: relative;
 
   ${media.small} {
-    position: absolute;
-    z-index: 2;
-    bottom: 25%;
-    left: 12px;
-    color: white;
+    flex-direction: column;
     justify-content: flex-start;
+    align-items: flex-start;
   }
 `;
 
@@ -209,40 +188,22 @@ const CoverMeta = styled.div`
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
-  margin-top: 0.5vw;
-  position: relative;
+  margin-top: 8px;
 
-  ${media.small} {
-    position: absolute;
-    z-index: 2;
-    bottom: 10%;
-    color: white;
-    justify-content: flex-start;
-    margin-top: 0;
-    left: 12px;
-  }
+  position: relative;
 `;
 
 const InstrumentIcon = styled.img`
-  width: 1em;
-  height: 1rem;
+  width: 12px;
+  height: 12px;
   margin-right: 0.2vw;
   opacity: 0.3;
-
-  ${media.small} {
-    filter: invert(100%);
-    height: 1rem;
-    width: 1rem;
-    margin-right: 3px;
-    padding-bottom: 3px;
-  }
 `;
 
 const CoverTitle = styled.div`
-  font-size: 18px;
-  font-weight: bold;
-
-  width: 70%;
+  font-size: 16px;
+  font-weight: 700;
+  width: 100%;
 
   // 텍스트 생략표현
   white-space: nowrap;
@@ -250,32 +211,31 @@ const CoverTitle = styled.div`
   text-overflow: ellipsis;
 
   ${media.small} {
-    font-size: 1.4rem;
+    font-size: 1rem;
     font-weight: 900;
-    line-height: 1.7;
-    width: auto;
+    width: 100%;
+    color: black;
   }
 `;
 
 const CoverArtist = styled.div`
   font-size: 12px;
-  color: rgb(50, 50, 50);
-
-  width: 30%;
+  color: #999;
+  text-align: left;
+  width: 100%;
 
   // 텍스트 생략표현
-  text-align: right;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 
   ${media.small} {
-    color: white;
+    color: #999;
     font-size: 0.8rem;
     font-weight: 700;
-    line-height: 1;
-    margin-left: 8px;
-    width: auto;
+    line-height: 1.2;
+    width: 100%;
+    text-align: left;
   }
 `;
 
@@ -297,10 +257,22 @@ const SessionInform = styled.div`
 const DifficultyContainer = styled.span`
   display: flex;
   align-items: center;
-  width: 40%;
-  background-color: rgba(245, 245, 245, 0.4);
-  padding: 0.2rem 0.5rem;
+  width: 50%;
+  background-color: rgba(230, 230, 230, 0.4);
+  padding: 0.2rem 0.7rem;
   border-radius: 10px;
+
+  ${media.small} {
+    position: absolute;
+    bottom: 10px;
+    z-index: 2;
+    width: auto;
+    right: 8px;
+    background-color: rgba(245, 245, 245, 0.4);
+
+    color: #fff;
+    font-weight: 800;
+  }
 `;
 
 const LikeCount = styled.span`

@@ -34,6 +34,9 @@ const QUERY_SONG = gql`
 
 const StudioHome = () => {
   const [songData, setSongData] = useState();
+  const isMobile = useMediaQuery({
+    query: '(max-width:767px)',
+  });
 
   const { data } = useQuery(QUERY_SONG, {
     variables: {
@@ -75,7 +78,7 @@ const StudioHome = () => {
           <BoardHeader>
             <BoardTitle>이런 곡 어때요?</BoardTitle>
           </BoardHeader>
-          <GridContainer templateColumn={'250px'} autoFill>
+          <GridContainer templateColumn={isMobile ? '150px' : '250px'} autoFill>
             {showSongGrid()}
           </GridContainer>
         </BoardWrapper>
