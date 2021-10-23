@@ -35,11 +35,10 @@ const CoverRoomSession = (props) => {
   const [selectedSession, setSelectedSession] = useState();
   const [modalToggle, setModalToggle] = useState(false);
   const [participationModal, setParticipationModal] = useState(false);
+  const isDesktop = useMediaQuery({ minWidth: 992 });
   const { data } = useQuery(IS_LOGGED_IN, {
     fetchPolicy: 'network-only',
   });
-
-  const isDesktop = useMediaQuery({ minWidth: 992 });
 
   const onClickLibrary = () => {
     setParticipationModal(false);

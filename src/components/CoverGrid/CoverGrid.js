@@ -139,13 +139,18 @@ const HeadPhoneImage = styled.img`
 const CoverImage = styled.img`
   width: 100%;
   min-height: 160px;
-  border-radius: 10px;
+  border-radius: 1rem;
   transition: all ease-in-out 0.3s;
   object-fit: cover;
   z-index: 2;
 
   ${media.small} {
     filter: brightness(60%);
+  }
+
+  ${media.small} {
+    overflow: hidden;
+    border-radius: 1rem;
   }
 `;
 
@@ -183,6 +188,7 @@ const CoverContainer = styled.div`
   &:hover ${CoverImage} {
     transform: scale(1.15);
     filter: brightness(50%);
+    overflow: hidden;
   }
 `;
 
@@ -194,6 +200,11 @@ const ImageContainer = styled.div`
   overflow: hidden;
   position: relative;
   width: 95%;
+
+  ${media.small} {
+    border-radius: 1rem;
+    overflow: hidden;
+  }
 `;
 
 const DataContainer = styled.div`
