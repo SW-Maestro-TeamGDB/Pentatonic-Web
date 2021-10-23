@@ -1,7 +1,7 @@
 import react from 'react';
 import styled from 'styled-components';
 import { Carousel, Card } from 'antd';
-import { Default } from '../../lib/Media';
+import { media, Default } from '../../lib/Media';
 import { Link } from 'react-router-dom';
 
 import ThumbIcon from '../../images/ThumbIcon.svg';
@@ -70,6 +70,10 @@ const CoverInfoContainer = styled.div`
   display: flex;
   flex-direction: row;
   align-items: flex-end;
+
+  ${media.small} {
+    width: 100%;
+  }
 `;
 
 const BannerContents = styled.div`
@@ -95,11 +99,17 @@ const CoverRecommendTitle = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+
+  ${media.small} {
+    font-size: 1.1rem;
+    line-height: 2;
+  }
 `;
 
 const SongTitle = styled.span`
   font-weight: 900;
   font-size: 3.5rem;
+  max-width: 40rem;
   color: white;
 
   display: flex;
@@ -107,17 +117,38 @@ const SongTitle = styled.span`
 
   line-height: 1.3;
   letter-spacing: 2px;
+
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+
+  ${media.small} {
+    font-size: 2rem;
+    max-width: 70vw;
+  }
 `;
 
 const Singer = styled.span`
   font-weight: 900;
-  font-size: 1.5vw;
+  font-size: 1.8rem;
   color: white;
 
   display: flex;
   justify-content: flex-start;
 
   margin-left: 2vw;
+
+  ${media.small} {
+    font-size: 1rem;
+    margin-left: 1.2rem;
+
+    max-width: 20vw;
+    width: auto;
+
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
 `;
 
 const CountContainer = styled.span`
@@ -148,6 +179,11 @@ const CustomIcon = styled.img`
   height: 1.3rem;
   filter: invert(100%);
   margin: 0 0.5vw 2px;
+
+  ${media.small} {
+    width: 1rem;
+    margin: 0 6px 1px;
+  }
 `;
 
 const SpacingSpan = styled.span`

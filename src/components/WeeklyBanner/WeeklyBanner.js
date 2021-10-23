@@ -125,6 +125,10 @@ const WeeklyChallengeTitle = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+
+  ${media.small} {
+    font-size: 1.1rem;
+  }
 `;
 
 const SongTitle = styled.span`
@@ -140,7 +144,7 @@ const SongTitle = styled.span`
   letter-spacing: 2px;
 
   ${media.small} {
-    font-size: 12vw;
+    font-size: 2.8rem;
   }
 `;
 
@@ -156,7 +160,7 @@ const Singer = styled.span`
   line-height: 1;
 
   ${media.small} {
-    font-size: 8vw;
+    font-size: 1.8rem;
   }
 `;
 

@@ -5,6 +5,7 @@ import { Default } from '../../lib/Media';
 import { Link } from 'react-router-dom';
 import { useQuery, gql } from '@apollo/client';
 import StudioBannerContents from '../StudioBannerContents/StudioBannerContents';
+import { media } from '../../lib/Media';
 
 import ThumbIcon from '../../images/ThumbIcon.svg';
 import ViewIcon from '../../images/ViewIcon.svg';
@@ -61,6 +62,10 @@ const BannerContainer = styled.div`
 
   border-radius: 15px;
   overflow: hidden;
+
+  ${media.small} {
+    border-radius: 0;
+  }
 `;
 
 export default StudioBanner;
