@@ -43,7 +43,6 @@ const Background = styled.div`
   background-repeat: no-repeat;
   background-position: center center;
   background-size: cover;
-  border-radius: 15px;
   transition: all 0.3s ease-in-out;
   filter: brightness(50%) blur(1px);
 `;

@@ -77,7 +77,7 @@ const ArtistBanner = (props) => {
 
 const CustomCarousel = styled(Carousel)`
   width: 100%;
-  height: 16vw;
+  height: 18rem;
   position: relative;
 `;
 

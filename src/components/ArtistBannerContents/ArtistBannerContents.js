@@ -53,7 +53,7 @@ const ArtistBannerContents = (props) => {
 
 const CarouselContents = styled(Link)`
   width: 100%;
-  height: 16vw;
+  height: 18rem;
   font-size: 3rem;
 
   display: flex;
@@ -77,7 +77,6 @@ const Background = styled.div`
   background-repeat: no-repeat;
   background-position: center center;
   background-size: cover;
-  border-radius: 15px;
   transition: all 0.3s ease-in-out;
   filter: brightness(50%) blur(2px);
 
