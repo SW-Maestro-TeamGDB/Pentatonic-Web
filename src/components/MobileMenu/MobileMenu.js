@@ -73,9 +73,6 @@ const MobileMenu = (props) => {
           <SubMenuLink to={`/profile/${data.id}`} onClick={() => onClose()}>
             마이페이지
           </SubMenuLink>
-          <SubMenuLink to="/liked" onClick={() => onClose()}>
-            좋아요 누른 커버
-          </SubMenuLink>
           <SubMenuLink to="/library" onClick={() => onClose()}>
             라이브러리
           </SubMenuLink>

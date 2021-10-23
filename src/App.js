@@ -37,7 +37,6 @@ function App() {
             <Route path="/profile/:id" component={Profile} />
             <Route path="/register" component={Register} />
             <Route path="/library" component={Library} />
-            <Route path="/liked" component={Liked} />
             <Route path="/account" component={FindAccount} />
             <Route path="*" component={NotFoundPage} exact />
           </Switch>

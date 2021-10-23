@@ -15,7 +15,6 @@ const MyMenu = (props) => {
   return (
     <MenuContainer>
       <MenuLink to={`/profile/${userInfo.id}`}>마이페이지</MenuLink>
-      <MenuLink to="/liked">좋아요 누른 커버</MenuLink>
       <MenuLink to="/library">라이브러리</MenuLink>
       <MenuButton onClick={onClickLogout}>로그아웃</MenuButton>
     </MenuContainer>
