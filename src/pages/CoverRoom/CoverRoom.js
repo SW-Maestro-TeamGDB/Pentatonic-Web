@@ -627,7 +627,7 @@ const CoverRoom = ({ match }) => {
             onClose={onClose}
             visible={visibleDrawer}
             placement={isMobile ? 'bottom' : 'right'}
-            width={isMobile ? '100%' : '35%'}
+            width={isMobile ? '100%' : '30rem'}
             height={isMobile ? '70%' : '100%'}
           >
             <LibraryDrawer

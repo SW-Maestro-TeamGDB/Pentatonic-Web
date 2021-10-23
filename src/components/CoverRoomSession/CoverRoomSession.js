@@ -39,6 +39,8 @@ const CoverRoomSession = (props) => {
     fetchPolicy: 'network-only',
   });
 
+  const isDesktop = useMediaQuery({ minWidth: 992 });
+
   const onClickLibrary = () => {
     setParticipationModal(false);
     setVisibleDrawer(true);
@@ -46,7 +48,10 @@ const CoverRoomSession = (props) => {
 
   const onClickParticipate = () => {
     if (data.isLoggedIn) {
-      setParticipationModal(true);
+      if (isDesktop) setParticipationModal(true);
+      else {
+        onClickLibrary();
+      }
       // setVisibleDrawer(true);
       setLibraryFilter({ songId: songId, position: sessionData.position });
     } else {

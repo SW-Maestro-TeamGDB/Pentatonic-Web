@@ -457,6 +457,8 @@ const IconContainer = styled.div`
     border-radius: 10px;
     width: 4rem;
     height: 3rem;
+    position: absolute;
+    right: 5%;
   }
 `;
 
