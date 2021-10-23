@@ -7,8 +7,10 @@ import RecordPage from '../RecordPage';
 import RecordEdit from '../RecordEdit';
 import instrument from '../CoverMaking/inst.mp3';
 import RecordForm from '../RecordForm';
-
+import { useMediaQuery } from 'react-responsive';
+import { media, Desktop, Mobile } from '../../lib/Media';
 import LoginAuth from '../../lib/LoginAuth';
+import NotFoundPage from '../NotFoundPage';
 
 const { Step } = Steps;
 
@@ -35,6 +37,7 @@ const RecordMaking = ({ match }) => {
   const [sessionData, setSessionData] = useState();
   const pageUrl = match.url;
   const songId = match.params.id;
+  const isDesktop = useMediaQuery({ minWidth: 992 });
 
   const [bandId, setBandId] = useState();
   const [bandData, setBandData] = useState({
@@ -128,20 +131,29 @@ const RecordMaking = ({ match }) => {
   ];
 
   return (
-    <LoginAuth>
-      <PageContainer>
-        <CustomSteps progressDot current={page}>
-          {pages.map((item) => (
-            <Step
-              progressDot
-              key={item.description}
-              description={item.description}
-            />
-          ))}
-        </CustomSteps>
-        <StepContents>{pages[page].content}</StepContents>
-      </PageContainer>
-    </LoginAuth>
+    <>
+      {isDesktop ? (
+        <LoginAuth>
+          <PageContainer>
+            <CustomSteps progressDot current={page}>
+              {pages.map((item) => (
+                <Step
+                  progressDot
+                  key={item.description}
+                  description={item.description}
+                />
+              ))}
+            </CustomSteps>
+            <StepContents>{pages[page].content}</StepContents>
+          </PageContainer>
+        </LoginAuth>
+      ) : (
+        <NotFoundPage
+          desc="커버녹음은 데스크탑 환경에서 가능합니다"
+          icon={true}
+        />
+      )}
+    </>
   );
 };
 

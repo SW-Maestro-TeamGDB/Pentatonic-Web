@@ -2,12 +2,14 @@ import react from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import PageContainer from '../../components/PageContainer';
+import { StopOutlined } from '@ant-design/icons';
+import { media } from '../../lib/Media';
 
 const NotFoundPage = (props) => {
-  const { desc = '찾을 수 없는 페이지입니다' } = props;
+  const { desc = '찾을 수 없는 페이지입니다', icon = false } = props;
   return (
     <Container>
-      <Title>404</Title>
+      {icon ? <CustomStopOutlined /> : <Title>404</Title>}
       <Description>
         {desc}
         <HomeButton to="/">홈으로</HomeButton>
@@ -17,7 +19,7 @@ const NotFoundPage = (props) => {
 };
 
 const Container = styled.div`
-  width: 40%;
+  width: 50%;
   height: 70vh;
   display: flex;
   flex-direction: column;
@@ -29,6 +31,11 @@ const Container = styled.div`
   -webkit-user-select: none;
   -khtml-user-select: none;
   user-select: none;
+
+  ${media.medium} {
+    width: 80%;
+    height: 80vh;
+  }
 `;
 
 const Title = styled.div`
@@ -36,14 +43,20 @@ const Title = styled.div`
   font-weight: 900;
   letter-spacing: -0.2rem;
   line-height: 1.2;
+  border-bottom: 8px solid rgba(0, 0, 0, 0.05);
+  padding-bottom: 0.5rem;
 `;
 
 const Description = styled.div`
   font-size: 1.7rem;
   font-weight: 700;
   letter-spacing: -0.1rem;
-  border-top: 8px solid rgba(0, 0, 0, 0.05);
   padding-top: 1rem;
+  text-align: center;
+
+  ${media.medium} {
+    font-size: 1.5rem;
+  }
 `;
 
 const HomeButton = styled(Link)`
@@ -79,6 +92,16 @@ const HomeButton = styled(Link)`
     100% {
       background-position: 0% 50%;
     }
+  }
+`;
+
+const CustomStopOutlined = styled(StopOutlined)`
+  font-size: 12rem;
+  color: #bbb;
+
+  ${media.medium} {
+    font-size: 8rem;
+    margin-bottom: 2rem;
   }
 `;
 

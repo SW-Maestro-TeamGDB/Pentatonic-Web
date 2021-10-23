@@ -9,6 +9,8 @@ import RecordEdit from '../RecordEdit';
 import instrument from '../CoverMaking/inst.mp3';
 import ParticipationForm from '../ParticipationForm';
 import NotFoundPage from '../NotFoundPage';
+import { useMediaQuery } from 'react-responsive';
+import { media, Desktop, Mobile } from '../../lib/Media';
 
 import LoginAuth from '../../lib/LoginAuth';
 
@@ -63,6 +65,7 @@ const CoverRoomRecord = ({ match }) => {
   const [existingInst, setExistingInst] = useState();
   const pageUrl = match.url;
   const bandId = match.params.id;
+  const isDesktop = useMediaQuery({ minWidth: 992 });
 
   const selectedSession = location?.state?.selectedSession;
 
@@ -157,23 +160,34 @@ const CoverRoomRecord = ({ match }) => {
     },
   ];
 
-  return selectedSession ? (
-    <LoginAuth>
-      <PageContainer>
-        <CustomSteps progressDot current={page}>
-          {pages.map((item) => (
-            <Step
-              progressDot
-              key={item.description}
-              description={item.description}
-            />
-          ))}
-        </CustomSteps>
-        <StepContents>{pages[page].content}</StepContents>
-      </PageContainer>
-    </LoginAuth>
-  ) : (
-    <NotFoundPage desc="올바르지 않은 접근입니다" />
+  return (
+    <>
+      {isDesktop ? (
+        selectedSession ? (
+          <LoginAuth>
+            <PageContainer>
+              <CustomSteps progressDot current={page}>
+                {pages.map((item) => (
+                  <Step
+                    progressDot
+                    key={item.description}
+                    description={item.description}
+                  />
+                ))}
+              </CustomSteps>
+              <StepContents>{pages[page].content}</StepContents>
+            </PageContainer>
+          </LoginAuth>
+        ) : (
+          <NotFoundPage />
+        )
+      ) : (
+        <NotFoundPage
+          desc="커버녹음은 데스크탑 환경에서 가능합니다"
+          icon={true}
+        />
+      )}
+    </>
   );
 };
 

@@ -4,6 +4,9 @@ import styled from 'styled-components';
 import { Steps } from 'antd';
 import PageContainer from '../../components/PageContainer';
 import { GET_CURRENT_USER } from '../../apollo/cache';
+import { useMediaQuery } from 'react-responsive';
+import { media, Desktop, Mobile } from '../../lib/Media';
+import NotFoundPage from '../NotFoundPage';
 
 import CoverForm from '../CoverForm';
 import RecordPage from '../RecordPage';
@@ -39,6 +42,7 @@ const CoverMaking = ({ match }) => {
   const songId = match.params.id;
   const isFreeCover = match.params.id === 'free';
   const isSolo = match.path.indexOf('band') === -1;
+  const isDesktop = useMediaQuery({ minWidth: 992 });
 
   const [bandId, setBandId] = useState();
   const [bandData, setBandData] = useState({
@@ -161,20 +165,29 @@ const CoverMaking = ({ match }) => {
   ];
 
   return (
-    <LoginAuth>
-      <PageContainer>
-        <CustomSteps progressDot current={page}>
-          {pages.map((item) => (
-            <Step
-              progressDot
-              key={item.description}
-              description={item.description}
-            />
-          ))}
-        </CustomSteps>
-        <StepContents>{pages[page].content}</StepContents>
-      </PageContainer>
-    </LoginAuth>
+    <>
+      {isDesktop ? (
+        <LoginAuth>
+          <PageContainer>
+            <CustomSteps progressDot current={page}>
+              {pages.map((item) => (
+                <Step
+                  progressDot
+                  key={item.description}
+                  description={item.description}
+                />
+              ))}
+            </CustomSteps>
+            <StepContents>{pages[page].content}</StepContents>
+          </PageContainer>
+        </LoginAuth>
+      ) : (
+        <NotFoundPage
+          desc="커버녹음은 데스크탑 환경에서 가능합니다"
+          icon={true}
+        />
+      )}
+    </>
   );
 };
 
