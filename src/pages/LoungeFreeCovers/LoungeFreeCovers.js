@@ -10,7 +10,6 @@ import SearchBar from '../../components/SearchBar';
 import CoverGrid from '../../components/CoverGrid';
 import MakingIcon from '../../images/MakingIcon.svg';
 import PageImage from '../../components/PageImage/PageImage';
-import GenreButton from '../../components/GenreButton/GenreButton';
 import GridContainer from '../../components/GridContainer/GridContainer';
 
 import { useMediaQuery } from 'react-responsive';
@@ -128,7 +127,6 @@ const LoungeBandCovers = ({ match }) => {
         match={match}
       />
       <SubContainer>
-        <GenreButton genre={genre} setGenre={setGenre} />
         <Default>
           <Dropdown
             overlay={CoverMenu}
