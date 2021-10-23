@@ -42,7 +42,7 @@ const GET_SONG = gql`
 
 const LoungeSongCovers = ({ match }) => {
   const id = match.params?.id;
-  const COVER_WIDTH = useMediaQuery({ maxWidth: 767 }) ? '160px' : '220px';
+  const COVER_WIDTH = useMediaQuery({ maxWidth: 767 }) ? '250px' : '220px';
   const { loading, error, data } = useQuery(GET_SONG, {
     variables: {
       songId: id,
