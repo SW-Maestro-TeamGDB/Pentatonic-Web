@@ -2,6 +2,8 @@ import react, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import { useQuery, gql, useLazyQuery } from '@apollo/client';
+import { useMediaQuery } from 'react-responsive';
+import { media, Default } from '../../lib/Media';
 
 import PageContainer from '../../components/PageContainer';
 import StudioBanner from '../../components/StudioBanner/StudioBanner';
@@ -98,6 +100,10 @@ const BoardWrapper = styled.div`
   align-items: center;
 
   margin: 1rem 0;
+
+  ${media.small} {
+    padding: 0 1rem;
+  }
 `;
 
 const BoardHeader = styled.div`
@@ -108,6 +114,10 @@ const BoardHeader = styled.div`
   justify-content: center;
   margin-bottom: 10px;
   width: 100%;
+
+  ${media.small} {
+    margin-bottom: 1.5rem;
+  }
 `;
 
 const BoardTitle = styled.nav`
@@ -117,6 +127,12 @@ const BoardTitle = styled.nav`
   color: black;
 
   line-height: 1;
+
+  ${media.small} {
+    font-size: 16px;
+    letter-spacing: -1px;
+    font-weight: 800;
+  }
 `;
 
 const BoardLink = styled(Link)`
@@ -168,6 +184,11 @@ const BandIconContainer = styled.img`
 
   position: absolute;
   top: 15%;
+
+  ${media.small} {
+    width: 3rem;
+    top: 28%;
+  }
 `;
 
 const SoloIconContainer = styled.img`
@@ -175,6 +196,11 @@ const SoloIconContainer = styled.img`
 
   position: absolute;
   top: 25%;
+
+  ${media.small} {
+    width: 2.5rem;
+    top: 30%;
+  }
 `;
 
 const LinkText = styled.div`
@@ -184,6 +210,11 @@ const LinkText = styled.div`
 
   position: absolute;
   bottom: 20%;
+
+  ${media.small} {
+    font-size: 0.9rem;
+    font-weight: 800;
+  }
 `;
 
 export default StudioHome;

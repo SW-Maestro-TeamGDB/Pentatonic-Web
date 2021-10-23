@@ -125,6 +125,7 @@ const SongTitle = styled.span`
   ${media.small} {
     font-size: 2rem;
     max-width: 70vw;
+    letter-spacing: -1px;
   }
 `;
 
