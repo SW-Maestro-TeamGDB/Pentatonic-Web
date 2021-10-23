@@ -1,11 +1,12 @@
 import react, { useState, useEffect, useRef } from 'react';
 import styled from 'styled-components';
 import { useQuery, gql, useLazyQuery, useMutation } from '@apollo/client';
-import { Default } from '../../lib/Media';
 import { DeleteFilled, EditOutlined, LoadingOutlined } from '@ant-design/icons';
 import { Skeleton, notification } from 'antd';
 import QuestionModal from '../QuestionModal';
 import { sessionIconMatch } from '../../lib/sessionIconMatch';
+import { useMediaQuery } from 'react-responsive';
+import { media, Default, Mobile } from '../../lib/Media';
 import ThumbIcon from '../../images/ThumbIcon.svg';
 import ViewIcon from '../../images/ViewIcon.svg';
 
@@ -66,6 +67,9 @@ const LibraryList = (props) => {
   const [editToggle, setEditToggle] = useState(false);
   const [editTitle, setEditTitle] = useState();
   const [editTitleError, setEditTitleError] = useState();
+  const isMobile = useMediaQuery({
+    query: '(max-width:767px)',
+  });
   const instRef = useRef();
   const buttonRef = useRef();
 
@@ -227,7 +231,7 @@ const LibraryList = (props) => {
           <ImageContainer>
             <CoverImage src={data.song.songImg} />
           </ImageContainer>
-          <Spacing width={'2%'} />
+          <Spacing width={isMobile ? '3px' : '2%'} />
           <CoverInform edit={edit}>
             {editToggle ? (
               <>
@@ -260,7 +264,7 @@ const LibraryList = (props) => {
               <CoverTime>{data.date.substr(0, 10)}</CoverTime>
             </>
           ) : null}
-          <Spacing width={'3%'} />
+          <Spacing width={isMobile ? '3px' : '3%'} />
           {edit ? (
             <>
               <EditButtonContainer>
@@ -282,7 +286,7 @@ const LibraryList = (props) => {
                   </>
                 )}
               </EditButtonContainer>
-              <Spacing width={'3%'} />
+              <Spacing width={isMobile ? '3px' : '3%'} />
             </>
           ) : null}
           {edit ? (
@@ -294,7 +298,7 @@ const LibraryList = (props) => {
               ) : (
                 <>
                   <LibararyPagePlayIcon src={PlayIcon} color="white" />
-                  <Spacing width={'5%'} />
+                  <Spacing width={isMobile ? '5px' : '5%'} />
                   재생
                 </>
               )}
@@ -313,12 +317,12 @@ const LibraryList = (props) => {
               )}
             </IconContainer>
           )}
-          <Spacing width={'5%'} />
+          <Spacing width={isMobile ? '5px' : '5%'} />
         </>
       ) : (
         <>
           <Skeleton.Button size={'large'} active />
-          <Spacing width={'5%'} />
+          <Spacing width={isMobile ? '5px' : '5%'} />
           <Skeleton
             title={{ width: '95%' }}
             paragraph={{ width: '95%', rows: 1 }}
@@ -448,6 +452,12 @@ const IconContainer = styled.div`
       filter: invert(100%);
     }
   }
+
+  ${media.small} {
+    border-radius: 10px;
+    width: 4rem;
+    height: 3rem;
+  }
 `;
 
 const Spacing = styled.div`
@@ -536,6 +546,11 @@ const ImageContainer = styled.div`
   align-items: center;
   width: 6.5rem;
   height: 4.5rem;
+
+  ${media.small} {
+    width: 5rem;
+    height: 4rem;
+  }
 `;
 
 const CoverImage = styled.img`
@@ -543,6 +558,10 @@ const CoverImage = styled.img`
   border-radius: 0.5vw;
   object-fit: cover;
   height: 100%;
+
+  ${media.small} {
+    border-radius: 1rem;
+  }
 `;
 
 const CoverInform = styled.div`
@@ -580,6 +599,10 @@ const CoverTitle = styled.div`
   text-overflow: ellipsis;
 
   color: ${(props) => (props.selected ? '#fff' : '000')};
+
+  ${media.small} {
+    font-size: 1.2rem;
+  }
 `;
 
 const SongInform = styled.div`
@@ -589,6 +612,10 @@ const SongInform = styled.div`
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+
+  ${media.small} {
+    font-size: 0.8rem;
+  }
 `;
 
 const CustomInput = styled.input`

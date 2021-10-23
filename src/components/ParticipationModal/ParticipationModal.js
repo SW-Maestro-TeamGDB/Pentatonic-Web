@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import { Modal } from 'antd';
 import { ExclamationCircleOutlined } from '@ant-design/icons';
+import { media } from '../../lib/Media';
 
 const ParticipationModal = (props) => {
   const { modalToggle, setModalToggle, onClickLeftButton, onClickRightButton } =
@@ -113,6 +114,10 @@ const TextWrapper = styled.div`
   font-size: 1.5rem;
   font-weight: 800;
   margin-top: 1rem;
+
+  ${media.small} {
+    font-size: 1.2rem;
+  }
 `;
 
 const DescWrapper = styled.div`
@@ -147,6 +152,13 @@ const AcceptButton = styled.div`
 
   &:hover {
     color: white;
+  }
+
+  ${media.small} {
+    font-size: 0.9rem;
+    padding: 0 auto;
+
+    margin: 0 5px;
   }
 `;
 

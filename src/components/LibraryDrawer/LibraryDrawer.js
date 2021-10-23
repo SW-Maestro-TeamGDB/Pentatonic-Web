@@ -4,6 +4,8 @@ import { notification } from 'antd';
 import { GET_CURRENT_USER } from '../../apollo/cache';
 import styled from 'styled-components';
 import LibraryList from '../LibraryList/LibraryList';
+import { useMediaQuery } from 'react-responsive';
+import { media, Default, Mobile } from '../../lib/Media';
 
 const GET_USER_INFO = gql`
   query Query($getUserInfoUserId: Id!) {
@@ -143,14 +145,19 @@ const LibraryDrawer = (props) => {
 };
 
 const Title = styled.div`
-  font-size: 2vw;
+  font-size: 1.5rem;
   height: 7%;
   font-weight: 800;
   border-bottom: 1px solid #eee;
   width: 90%;
   text-align: center;
   position: absolute;
-  top: 1vw;
+  top: 3%;
+
+  ${media.small} {
+    font-size: 1.2rem;
+    top: 2.5%;
+  }
 `;
 
 const SubmitButtonConatiner = styled.div`
@@ -222,6 +229,10 @@ const SubmitButton = styled.button`
     background-image: linear-gradient(to right, #666, #777);
     color: #eee;
     cursor: not-allowed;
+  }
+
+  ${media.small} {
+    font-size: 1rem;
   }
 `;
 
