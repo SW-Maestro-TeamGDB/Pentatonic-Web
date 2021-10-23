@@ -144,6 +144,7 @@ const ImgContainer = styled.div`
   ${media.small} {
     width: 4rem;
     height: 4rem;
+    border-radius: 100%;
   }
 `;
 
@@ -155,6 +156,10 @@ const SessionImg = styled.img`
   transition: opacity 0.3s ease;
 
   object-fit: cover;
+
+  ${media.small} {
+    border-radius: 100%;
+  }
 `;
 
 const LeaveButton = styled.div`
