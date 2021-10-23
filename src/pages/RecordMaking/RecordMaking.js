@@ -121,6 +121,7 @@ const RecordMaking = ({ match }) => {
           setBandId={setBandId}
           selectedSession={selectedSession}
           songData={songData}
+          setInst={setInst}
         />
       ),
     },

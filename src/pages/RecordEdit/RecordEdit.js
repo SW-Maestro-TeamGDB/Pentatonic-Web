@@ -358,15 +358,24 @@ const RecordEdit = (props) => {
 
   const addReverbEffect = (value) => {
     if (recordSound && reverbEffect) {
-      recordSound.removeEffect(reverbEffect);
+      recordSound.effects.forEach((v) => {
+        recordSound.removeEffect(v);
+      });
+
       const tempReverb = new Pizzicato.Effects.Reverb({
-        time: value / 30,
-        decay: value / 30,
+        time: (value / 100) * 3 + 0.01,
+        decay: (value / 100) * 3,
         reverse: false,
-        mix: 0.5,
+        mix: (value / 100) * 0.5,
       });
       setReverbEffect(tempReverb);
       recordSound.addEffect(tempReverb);
+    }
+
+    if (value === 0) {
+      recordSound.effects.forEach((v) => {
+        recordSound.removeEffect(v);
+      });
     }
   };
 
