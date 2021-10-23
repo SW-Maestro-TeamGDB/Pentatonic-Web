@@ -1,6 +1,6 @@
 import react from 'react';
 import styled from 'styled-components';
-import { Default } from '../../lib/Media';
+import { media, Default, Mobile } from '../../lib/Media';
 import { Link } from 'react-router-dom';
 import { Skeleton } from 'antd';
 import DifficultyIcon from '../DifficultyIcon';
@@ -29,43 +29,66 @@ const SongGrid = (props) => {
   return (
     <CustomLink to={`/studio/band/${data.songId}`}>
       <CoverContainer>
-        <ImageContainer>
-          {data ? (
-            <>
-              <CoverImage src={data.songImg} />
-              <RecordIcon src={vocal} />
-            </>
-          ) : (
-            <>
-              <Skeleton.Button
-                style={{ width: '50rem', height: '50rem' }}
+        <Default>
+          <ImageContainer>
+            {data ? (
+              <>
+                <CoverImage src={data.songImg} />
+                <RecordIcon src={vocal} />
+              </>
+            ) : (
+              <>
+                <Skeleton.Button
+                  style={{ width: '50rem', height: '50rem' }}
+                  active
+                />
+              </>
+            )}
+          </ImageContainer>
+
+          <DataContainer>
+            {data ? (
+              <>
+                <CoverInform>
+                  <CoverTitle>{data.name}</CoverTitle>
+                  <CoverArtist>{data.artist}</CoverArtist>
+                </CoverInform>
+                <CoverMeta>
+                  <DifficultyContainer>
+                    <DifficultyIcon value={data.level} />
+                  </DifficultyContainer>
+                  <SessionInform>{showSession(data.instrument)}</SessionInform>
+                </CoverMeta>
+              </>
+            ) : (
+              <Skeleton
+                title={{ width: '100%' }}
+                paragraph={{ width: '100%', rows: 0 }}
                 active
               />
-            </>
-          )}
-        </ImageContainer>
-        <DataContainer>
-          {data ? (
-            <>
-              <CoverInform>
-                <CoverTitle>{data.name}</CoverTitle>
-                <CoverArtist>{data.artist}</CoverArtist>
-              </CoverInform>
-              <CoverMeta>
-                <DifficultyContainer>
-                  <DifficultyIcon value={data.level} />
-                </DifficultyContainer>
-                <SessionInform>{showSession(data.instrument)}</SessionInform>
-              </CoverMeta>
-            </>
-          ) : (
-            <Skeleton
-              title={{ width: '100%' }}
-              paragraph={{ width: '100%', rows: 0 }}
-              active
-            />
-          )}
-        </DataContainer>
+            )}
+          </DataContainer>
+        </Default>
+        <Mobile>
+          <ImageContainer>
+            {data ? (
+              <>
+                <CoverImage src={data.songImg} />
+                <CoverInform>
+                  <CoverTitle>{data.name}</CoverTitle>
+                  <CoverArtist>{data.artist}</CoverArtist>
+                </CoverInform>
+                <CoverMeta>
+                  <DifficultyContainer>
+                    <DifficultyIcon value={data.level} />
+                  </DifficultyContainer>
+                </CoverMeta>
+              </>
+            ) : (
+              <Skeleton.Button style={{ width: '50rem', height: '50rem' }} />
+            )}
+          </ImageContainer>
+        </Mobile>
       </CoverContainer>
     </CustomLink>
   );
@@ -98,6 +121,12 @@ const CoverImage = styled.img`
   transition: all ease-in-out 0.3s;
   object-fit: cover;
   z-index: 2;
+
+  ${media.small} {
+    filter: brightness(50%);
+    overflow: hidden;
+    border-radius: 1rem;
+  }
 `;
 
 const CoverContainer = styled.div`
@@ -109,6 +138,10 @@ const CoverContainer = styled.div`
   height: auto;
   margin: 2vh 0;
   color: black;
+
+  ${media.small} {
+    margin: 0;
+  }
 
   &:hover ${RecordIcon} {
     width: 2.5rem;
@@ -132,6 +165,12 @@ const ImageContainer = styled.div`
   overflow: hidden;
   position: relative;
   width: 95%;
+
+  ${media.small} {
+    border-radius: 1rem;
+    width: 100%;
+    overflow: hidden;
+  }
 `;
 
 const DataContainer = styled.div`
@@ -152,6 +191,15 @@ const CoverInform = styled.div`
   text-overflow: ellipsis;
 
   position: relative;
+
+  ${media.small} {
+    position: absolute;
+    z-index: 2;
+    bottom: 25%;
+    left: 12px;
+    color: white;
+    justify-content: flex-start;
+  }
 `;
 
 const CoverMeta = styled.div`
@@ -163,6 +211,16 @@ const CoverMeta = styled.div`
   justify-content: space-between;
   margin-top: 0.5vw;
   position: relative;
+
+  ${media.small} {
+    position: absolute;
+    z-index: 2;
+    bottom: 10%;
+    color: white;
+    justify-content: flex-start;
+    margin-top: 0;
+    left: 12px;
+  }
 `;
 
 const InstrumentIcon = styled.img`
@@ -170,6 +228,14 @@ const InstrumentIcon = styled.img`
   height: 1rem;
   margin-right: 0.2vw;
   opacity: 0.3;
+
+  ${media.small} {
+    filter: invert(100%);
+    height: 1rem;
+    width: 1rem;
+    margin-right: 3px;
+    padding-bottom: 3px;
+  }
 `;
 
 const CoverTitle = styled.div`
@@ -182,6 +248,13 @@ const CoverTitle = styled.div`
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+
+  ${media.small} {
+    font-size: 1.4rem;
+    font-weight: 900;
+    line-height: 1.7;
+    width: auto;
+  }
 `;
 
 const CoverArtist = styled.div`
@@ -195,6 +268,15 @@ const CoverArtist = styled.div`
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+
+  ${media.small} {
+    color: white;
+    font-size: 0.8rem;
+    font-weight: 700;
+    line-height: 1;
+    margin-left: 8px;
+    width: auto;
+  }
 `;
 
 const SessionInform = styled.div`
@@ -206,12 +288,19 @@ const SessionInform = styled.div`
   flex: row;
   align-items: center;
   justify-content: flex-end;
+
+  ${media.small} {
+    width: auto;
+  }
 `;
 
 const DifficultyContainer = styled.span`
   display: flex;
   align-items: center;
   width: 40%;
+  background-color: rgba(245, 245, 245, 0.4);
+  padding: 0.2rem 0.5rem;
+  border-radius: 10px;
 `;
 
 const LikeCount = styled.span`
@@ -221,6 +310,7 @@ const LikeCount = styled.span`
   flex-direction: row;
   align-items: center;
 `;
+
 const SpacingSpan = styled.span`
   margin: 0 5px;
 `;

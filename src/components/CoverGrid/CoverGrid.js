@@ -146,9 +146,6 @@ const CoverImage = styled.img`
 
   ${media.small} {
     filter: brightness(60%);
-  }
-
-  ${media.small} {
     overflow: hidden;
     border-radius: 1rem;
   }

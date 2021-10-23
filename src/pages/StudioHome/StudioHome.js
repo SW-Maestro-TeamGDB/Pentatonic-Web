@@ -75,7 +75,7 @@ const StudioHome = () => {
           <BoardHeader>
             <BoardTitle>이런 곡 어때요?</BoardTitle>
           </BoardHeader>
-          <GridContainer templateColumn={'220px'} autoFill>
+          <GridContainer templateColumn={'250px'} autoFill>
             {showSongGrid()}
           </GridContainer>
         </BoardWrapper>
