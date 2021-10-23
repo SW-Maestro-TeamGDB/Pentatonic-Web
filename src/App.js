@@ -12,7 +12,6 @@ import Lounge from './pages/Lounge';
 import Profile from './pages/Profile';
 import Studio from './pages/Studio';
 import Library from './pages/Library';
-import Liked from './pages/Liked';
 import Login from './pages/Login/Login';
 import FindAccount from './pages/FindAccount';
 import NotFoundPage from './pages/NotFoundPage';
