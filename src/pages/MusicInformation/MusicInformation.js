@@ -7,6 +7,7 @@ import PageContainer from '../../components/PageContainer';
 import GridContainer from '../../components/GridContainer';
 import DifficultyIcon from '../../components/DifficultyIcon';
 import { changeGenreToKorean } from '../../lib/changeGenreToKorean';
+import { useMediaQuery } from 'react-responsive';
 
 import tempData from '../../data/songs/tempData.json';
 
@@ -43,6 +44,7 @@ const MusicInformation = ({ match }) => {
   const type = match.path.indexOf('band') === -1 ? 'solo' : 'band';
   const songId = match.params.id;
   const typeName = type === 'band' ? '밴드' : '솔로';
+  const isDesktop = useMediaQuery({ minWidth: 992 });
   const [musicData, setMusicData] = useState();
 
   const { data } = useQuery(GET_SONG, {
@@ -68,7 +70,14 @@ const MusicInformation = ({ match }) => {
     if (musicData) {
       if (musicData.band.length > 0)
         return musicData.band.map((v) => {
-          return <CoverGrid key={v.bandId} data={v} />;
+          return (
+            <CoverGrid
+              key={v.bandId}
+              data={v}
+              title={musicData.name}
+              artist={musicData.artist}
+            />
+          );
         });
       else {
         return <NoCover>등록된 커버가 없습니다</NoCover>;
@@ -84,32 +93,20 @@ const MusicInformation = ({ match }) => {
             <MusicInformImg img={musicData.songImg} />
             <MusicMetaContainer>
               <MusicTitle>{musicData.name}</MusicTitle>
-              <MusicMetaWrapper>
+              <MusicMetaWrapper isDesktop={isDesktop}>
                 <GridContainer>
                   <MusicMeta>
                     <MetaTitle>아티스트</MetaTitle>
                     <MetaContents>{musicData.artist}</MetaContents>
                   </MusicMeta>
-                  {/* <MusicMeta>
-                    <MetaTitle>작곡</MetaTitle>
-                    <MetaContents>없음</MetaContents>
-                  </MusicMeta> */}
                   <MusicMeta>
                     <MetaTitle>앨범</MetaTitle>
                     <MetaContents>{musicData.album}</MetaContents>
                   </MusicMeta>
-                  {/* <MusicMeta>
-                    <MetaTitle>작사</MetaTitle>
-                    <MetaContents>없음</MetaContents>
-                  </MusicMeta> */}
                   <MusicMeta>
                     <MetaTitle>발매</MetaTitle>
                     <MetaContents>{musicData.releaseDate}</MetaContents>
                   </MusicMeta>
-                  {/* <MusicMeta>
-                    <MetaTitle>편곡</MetaTitle>
-                    <MetaContents>없음</MetaContents>
-                  </MusicMeta> */}
                   <MusicMeta>
                     <MetaTitle>장르</MetaTitle>
                     <MetaContents>
@@ -128,14 +125,22 @@ const MusicInformation = ({ match }) => {
                   </MusicMeta>
                 </GridContainer>
               </MusicMetaWrapper>
-              <ButtonContainer>
-                <RecordButton to={match.url + '/record'}>
-                  라이브러리 녹음하기
-                </RecordButton>
-                <MakingCoverButton to={match.url + '/cover'}>
-                  커버룸 만들기
-                </MakingCoverButton>
-              </ButtonContainer>
+              {isDesktop ? (
+                <ButtonContainer>
+                  <RecordButton to={match.url + '/record'}>
+                    라이브러리 녹음하기
+                  </RecordButton>
+                  <MakingCoverButton to={match.url + '/cover'}>
+                    커버룸 만들기
+                  </MakingCoverButton>
+                </ButtonContainer>
+              ) : (
+                <RecordNoticeContainer>
+                  <RecordNoticeText>
+                    커버 녹음은 데스크탑에서만 가능합니다
+                  </RecordNoticeText>
+                </RecordNoticeContainer>
+              )}
             </MusicMetaContainer>
           </MusicInformContainer>
           <Divider />
@@ -228,6 +233,22 @@ const MetaContents = styled.div`
 const DifficultyContents = styled.div`
   width: 30%;
   transform: translateX(-3%);
+`;
+
+const RecordNoticeContainer = styled.div`
+  height: 30%;
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-end;
+`;
+
+const RecordNoticeText = styled.div`
+  background-color: #bbb;
+  color: #fff;
+  font-size: 0.8rem;
+  font-weight: 700;
+  padding: 0.5rem 1rem;
+  border-radius: 1rem;
 `;
 
 const ButtonContainer = styled.div`

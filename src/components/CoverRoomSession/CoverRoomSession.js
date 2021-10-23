@@ -1,6 +1,5 @@
 import react, { useEffect, useState, useCallback } from 'react';
 import { Collapse, Drawer } from 'antd';
-
 import { gql, useQuery } from '@apollo/client';
 import { IS_LOGGED_IN } from '../../apollo/cache';
 import styled from 'styled-components';
