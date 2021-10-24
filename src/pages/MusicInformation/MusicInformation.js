@@ -6,8 +6,10 @@ import CoverGrid from '../../components/CoverGrid/CoverGrid';
 import PageContainer from '../../components/PageContainer';
 import GridContainer from '../../components/GridContainer';
 import DifficultyIcon from '../../components/DifficultyIcon';
+import { StopOutlined, CustomerServiceOutlined } from '@ant-design/icons';
 import { changeGenreToKorean } from '../../lib/changeGenreToKorean';
 import { useMediaQuery } from 'react-responsive';
+import { media, Default, Mobile } from '../../lib/Media';
 
 import tempData from '../../data/songs/tempData.json';
 
@@ -45,6 +47,9 @@ const MusicInformation = ({ match }) => {
   const songId = match.params.id;
   const typeName = type === 'band' ? '밴드' : '솔로';
   const isDesktop = useMediaQuery({ minWidth: 992 });
+  const isMobile = useMediaQuery({
+    query: '(max-width:767px)',
+  });
   const [musicData, setMusicData] = useState();
 
   const { data } = useQuery(GET_SONG, {
@@ -91,59 +96,80 @@ const MusicInformation = ({ match }) => {
         <>
           <MusicInformContainer>
             <MusicInformImg img={musicData.songImg} />
-            <MusicMetaContainer>
-              <MusicTitle>{musicData.name}</MusicTitle>
-              <MusicMetaWrapper isDesktop={isDesktop}>
-                <GridContainer>
-                  <MusicMeta>
-                    <MetaTitle>아티스트</MetaTitle>
-                    <MetaContents>{musicData.artist}</MetaContents>
-                  </MusicMeta>
-                  <MusicMeta>
-                    <MetaTitle>앨범</MetaTitle>
-                    <MetaContents>{musicData.album}</MetaContents>
-                  </MusicMeta>
-                  <MusicMeta>
-                    <MetaTitle>발매</MetaTitle>
-                    <MetaContents>{musicData.releaseDate}</MetaContents>
-                  </MusicMeta>
-                  <MusicMeta>
-                    <MetaTitle>장르</MetaTitle>
-                    <MetaContents>
-                      {changeGenreToKorean(musicData.genre)}
-                    </MetaContents>
-                  </MusicMeta>
-                  <MusicMeta>
-                    <MetaTitle>길이</MetaTitle>
-                    <MetaContents>{durationToKorean()}</MetaContents>
-                  </MusicMeta>
-                  <MusicMeta>
-                    <MetaTitle>난이도</MetaTitle>
-                    <DifficultyContents>
-                      <DifficultyIcon value={musicData.level} />
-                    </DifficultyContents>
-                  </MusicMeta>
-                </GridContainer>
-              </MusicMetaWrapper>
-              {isDesktop ? (
-                <ButtonContainer>
-                  <RecordButton to={match.url + '/record'}>
-                    라이브러리 녹음하기
-                  </RecordButton>
-                  <MakingCoverButton to={match.url + '/cover'}>
-                    커버룸 만들기
-                  </MakingCoverButton>
-                </ButtonContainer>
-              ) : (
-                <RecordNoticeContainer>
-                  <RecordNoticeText>
-                    커버 녹음은 데스크탑에서만 가능합니다
-                  </RecordNoticeText>
-                </RecordNoticeContainer>
-              )}
-            </MusicMetaContainer>
+            <Background src={musicData.songImg} />
+            {isMobile ? (
+              <>
+                <MusicTitle>{musicData.name}</MusicTitle>
+                <ArtistText>{musicData.artist}</ArtistText>
+                <MetaContents>
+                  <CustomerServiceOutlined style={{ marginRight: '8px' }} />
+                  {musicData.album}
+                </MetaContents>
+              </>
+            ) : (
+              <MusicMetaContainer>
+                <MusicTitle>{musicData.name}</MusicTitle>
+                <MusicMetaWrapper isDesktop={isDesktop}>
+                  <GridContainer>
+                    <MusicMeta>
+                      <MetaTitle>아티스트</MetaTitle>
+                      <MetaContents>{musicData.artist}</MetaContents>
+                    </MusicMeta>
+                    <MusicMeta>
+                      <MetaTitle>앨범</MetaTitle>
+                      <MetaContents>{musicData.album}</MetaContents>
+                    </MusicMeta>
+                    <MusicMeta>
+                      <MetaTitle>발매</MetaTitle>
+                      <MetaContents>{musicData.releaseDate}</MetaContents>
+                    </MusicMeta>
+                    <MusicMeta>
+                      <MetaTitle>장르</MetaTitle>
+                      <MetaContents>
+                        {changeGenreToKorean(musicData.genre)}
+                      </MetaContents>
+                    </MusicMeta>
+                    <MusicMeta>
+                      <MetaTitle>길이</MetaTitle>
+                      <MetaContents>{durationToKorean()}</MetaContents>
+                    </MusicMeta>
+                    <MusicMeta>
+                      <MetaTitle>난이도</MetaTitle>
+                      <DifficultyContents>
+                        <DifficultyIcon value={musicData.level} />
+                      </DifficultyContents>
+                    </MusicMeta>
+                  </GridContainer>
+                </MusicMetaWrapper>
+                {isDesktop ? (
+                  <ButtonContainer>
+                    <RecordButton to={match.url + '/record'}>
+                      라이브러리 녹음하기
+                    </RecordButton>
+                    <MakingCoverButton to={match.url + '/cover'}>
+                      커버룸 만들기
+                    </MakingCoverButton>
+                  </ButtonContainer>
+                ) : (
+                  <RecordNoticeContainer>
+                    <RecordNoticeText>
+                      커버 녹음은 데스크탑에서만 가능합니다
+                    </RecordNoticeText>
+                  </RecordNoticeContainer>
+                )}
+              </MusicMetaContainer>
+            )}
           </MusicInformContainer>
-          <Divider />
+          {isMobile ? (
+            <RecordNoticeContainer>
+              <RecordNoticeText>
+                <StopOutlined style={{ marginRight: '8px' }} />
+                커버 녹음은 데스크탑에서만 가능합니다
+              </RecordNoticeText>
+            </RecordNoticeContainer>
+          ) : (
+            <Divider />
+          )}
           <BoardContainer>
             <BoardHeader>
               <BoardTitle>이 곡의 다른 커버</BoardTitle>
@@ -171,12 +197,38 @@ const MusicInformContainer = styled.div`
   display: flex;
   flex-direction: row;
 
-  height: 30vh;
+  height: 18rem;
 
-  margin-top: 4vh;
+  margin-top: 2rem;
   width: 100%;
   position: relative;
   box-sizing: border-box;
+
+  ${media.small} {
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-top: 0rem;
+    padding: 3rem 0 2rem;
+    height: auto;
+    z-index: 2;
+    overflow: hidden;
+  }
+`;
+
+const Background = styled.img`
+  display: none;
+
+  ${media.small} {
+    position: absolute;
+    width: 140%;
+    height: 140%;
+    display: block;
+    z-index: 1;
+    top: -20%;
+
+    filter: blur(20px) brightness(50%);
+  }
 `;
 
 const MusicInformImg = styled.div`
@@ -185,9 +237,15 @@ const MusicInformImg = styled.div`
   background-position: top center;
   background-size: cover;
 
-  width: 30vh;
+  min-width: 18rem;
   height: 100%;
   border-radius: 10px;
+
+  ${media.small} {
+    height: 15rem;
+    min-width: 15rem;
+    z-index: 2;
+  }
 `;
 
 const MusicMetaWrapper = styled.div`
@@ -202,32 +260,85 @@ const MusicMetaContainer = styled.div`
 `;
 
 const MusicTitle = styled.div`
-  font-size: 4.5vh;
+  font-size: 2.8rem;
   font-weight: 800;
   height: 33%;
 
   color: #222222;
   margin-bottom: 0.5rem;
+
+  ${media.small} {
+    color: #eee;
+    margin-top: 1.2rem;
+    z-index: 2;
+    letter-spacing: -1px;
+    font-size: 2rem;
+    height: auto;
+    margin-bottom: 0;
+    line-height: 1.2;
+  }
 `;
 
 const MusicMeta = styled.div`
   display: flex;
   flex-direction: row;
-  height: 1.6vh;
-  font-size: 1.6vh;
+  height: 1rem;
+  font-size: 0.9rem;
+  font-weight: 700;
 
   display: flex;
   align-items: center;
 `;
 
 const MetaTitle = styled.div`
-  width: 20%;
+  width: 30%;
   color: #999999;
+  padding-right: 1rem;
+
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+
+  ${media.medium} {
+    width: 40%;
+  }
+
+  ${media.small} {
+    z-index: 2;
+    line-height: 1;
+  }
+`;
+
+const ArtistText = styled.div`
+  z-index: 2;
+  color: #ddd;
+  font-size: 1.1rem;
+  font-weight: 600;
+  width: auto;
+  letter-spacing: -1px;
+
+  margin-bottom: 1.5rem;
 `;
 
 const MetaContents = styled.div`
-  width: 80%;
+  width: 70%;
   color: #222222;
+
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+
+  ${media.medium} {
+    width: 60%;
+  }
+
+  ${media.small} {
+    z-index: 2;
+    color: #ddd;
+    font-size: 0.75rem;
+    width: auto;
+    letter-spacing: -0.5px;
+  }
 `;
 
 const DifficultyContents = styled.div`
@@ -249,6 +360,11 @@ const RecordNoticeText = styled.div`
   font-weight: 700;
   padding: 0.5rem 1rem;
   border-radius: 1rem;
+
+  ${media.small} {
+    margin-top: 1.5rem;
+    padding: 0.5rem 2rem;
+  }
 `;
 
 const ButtonContainer = styled.div`
@@ -308,7 +424,7 @@ const MakingCoverButton = styled(Link)`
 
 const Divider = styled.div`
   width: 100%;
-  height: 5vh;
+  height: 3rem;
   border-bottom: 1px solid #eeeeee;
 `;
 
@@ -317,7 +433,13 @@ const BoardContainer = styled.div`
   flex-direction: column;
   justify-content: space-between;
   width: 100%;
-  margin-top: 4vh;
+  margin-top: 2rem;
+
+  ${media.small} {
+    width: 95%;
+    justify-content: center;
+    align-items: center;
+  }
 `;
 
 const BoardWrapper = styled.div`
@@ -334,10 +456,15 @@ const BoardHeader = styled.div`
   flex-direction: row;
   align-items: center;
   justify-content: center;
-  margin-bottom: 1vh;
+  margin-bottom: 0.5rem;
   width: 100%;
 
   box-sizing: border-box;
+
+  ${media.small} {
+    width: 95%;
+    margin-bottom: 1rem;
+  }
 `;
 
 const BoardTitle = styled.nav`
@@ -346,6 +473,13 @@ const BoardTitle = styled.nav`
   width: 100%;
   color: black;
   padding-left: 1.5vh;
+
+  ${media.small} {
+    font-size: 16px;
+    letter-spacing: -1px;
+    font-weight: 800;
+    padding-left: 0;
+  }
 `;
 
 const BoardLink = styled(Link)`
@@ -360,6 +494,13 @@ const BoardLink = styled(Link)`
 
   &:hover {
     color: rgb(150, 150, 150);
+  }
+
+  ${media.small} {
+    font-size: 12px;
+    letter-spacing: -1px;
+    font-weight: 500;
+    right: 0;
   }
 `;
 
