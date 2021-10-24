@@ -15,6 +15,7 @@ import PageImage from '../../components/PageImage/PageImage';
 import GenreButton from '../../components/GenreButton/GenreButton';
 import GridContainer from '../../components/GridContainer/GridContainer';
 import { useMediaQuery } from 'react-responsive';
+import { media } from '../../lib/Media';
 
 const QUERY_SONG = gql`
   query Query($querySongFilter: QuerySongInput!) {
@@ -26,6 +27,8 @@ const QUERY_SONG = gql`
       artist
       weeklyChallenge
       level
+      duration
+      genre
       instrument {
         position
       }
@@ -120,6 +123,12 @@ const PageDesc = styled.div`
   margin: 2rem 0 3rem;
   width: 80%;
   text-align: center;
+
+  ${media.small} {
+    width: 90%;
+    font-size: 0.8rem;
+    margin-top: 2rem;
+  }
 `;
 
 const SearchContent = styled.span`
@@ -127,6 +136,10 @@ const SearchContent = styled.span`
   font-size: 24px;
   font-weight: 800;
   padding: 0 0.5rem;
+
+  ${media.small} {
+    font-size: 1.2rem;
+  }
 `;
 
 const SearchResult = styled.div`
@@ -137,6 +150,10 @@ const SearchResult = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+
+  ${media.small} {
+    font-size: 0.9rem;
+  }
 `;
 
 const Spacing = styled.div`
@@ -147,6 +164,11 @@ const PageTitle = styled.div`
   font-size: 2rem;
   font-weight: 800;
   margin-top: 1rem;
+
+  ${media.small} {
+    font-size: 1.2rem;
+    margin-top: 2rem;
+  }
 `;
 
 const SongContainer = styled.div`
@@ -158,6 +180,10 @@ const SongContainer = styled.div`
   width: 93%;
 
   position: relative;
+
+  ${media.small} {
+    margin-top: 0;
+  }
 `;
 
 const ButtonContainer = styled.div`
@@ -172,6 +198,11 @@ const SubContainer = styled.div`
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
+
+  ${media.small} {
+    margin: 1.5rem 0;
+    width: 90%;
+  }
 `;
 
 const MakingIconImg = styled.img`
