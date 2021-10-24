@@ -92,7 +92,7 @@ const StudioBandCover = ({ match }) => {
         )}
       </PageDesc>
       <SearchBar
-        placeholder="아티스트나 곡을 입력해주세요"
+        placeholder="곡 제목을 입력해주세요"
         sort="band"
         searching={content}
         match={match}
@@ -239,6 +239,10 @@ const NoSong = styled.div`
   height: 8rem;
   letter-spacing: -0.5px;
   font-weight: 800;
+
+  ${media.small} {
+    font-size: 0.9rem;
+  }
 `;
 
 export default StudioBandCover;
