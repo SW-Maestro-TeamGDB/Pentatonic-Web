@@ -3,7 +3,7 @@ import { Collapse, Drawer } from 'antd';
 import { gql, useQuery } from '@apollo/client';
 import { IS_LOGGED_IN } from '../../apollo/cache';
 import styled from 'styled-components';
-import { media, Default } from '../../lib/Media';
+import { media, Default, mobileCheck } from '../../lib/Media';
 import CoverRoomSessionItem from '../CoverRoomSessionItem';
 import LibraryDrawer from '../LibraryDrawer/LibraryDrawer';
 import ParticipationModal from '../ParticipationModal';
@@ -35,6 +35,7 @@ const CoverRoomSession = (props) => {
   const [modalToggle, setModalToggle] = useState(false);
   const [participationModal, setParticipationModal] = useState(false);
   const isDesktop = useMediaQuery({ minWidth: 992 });
+
   const { data } = useQuery(IS_LOGGED_IN, {
     fetchPolicy: 'network-only',
   });
@@ -46,7 +47,7 @@ const CoverRoomSession = (props) => {
 
   const onClickParticipate = () => {
     if (data.isLoggedIn) {
-      if (isDesktop) setParticipationModal(true);
+      if (isDesktop && !mobileCheck()) setParticipationModal(true);
       else {
         onClickLibrary();
       }

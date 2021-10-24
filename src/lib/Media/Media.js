@@ -17,6 +17,12 @@ const Default = ({ children }) => {
   return isNotMobile ? children : null;
 };
 
+const mobileCheck = () => {
+  return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+    navigator.userAgent,
+  );
+};
+
 const mediaQuery = (maxWidth) => `@media (max-width: ${maxWidth}px)`;
 
 const media = {
@@ -32,4 +38,4 @@ const media = {
   fold: mediaQuery(295),
 };
 
-export { Desktop, Tablet, Mobile, Default, media };
+export { Desktop, Tablet, Mobile, Default, media, mobileCheck };

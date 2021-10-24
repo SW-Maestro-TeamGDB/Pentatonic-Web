@@ -137,13 +137,6 @@ const CoverForm = (props) => {
   const onClickSubmitButton = () => {
     if (formCheck()) {
       if (isFreeCover) {
-        if (bandData.backGroundURI === null) {
-          setBandData({
-            ...bandData,
-            backGroundURI:
-              'https://images.unsplash.com/photo-1499364615650-ec38552f4f34?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1072&q=80',
-          });
-        }
         setPage(1);
       } else {
         // 배경사진 등록하지 않은 경우

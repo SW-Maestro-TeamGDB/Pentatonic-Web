@@ -15,7 +15,7 @@ import PageImage from '../../components/PageImage/PageImage';
 import GenreButton from '../../components/GenreButton/GenreButton';
 import GridContainer from '../../components/GridContainer/GridContainer';
 import { useMediaQuery } from 'react-responsive';
-import { media } from '../../lib/Media';
+import { media, mobileCheck } from '../../lib/Media';
 
 const QUERY_SONG = gql`
   query Query($querySongFilter: QuerySongInput!) {
@@ -104,7 +104,7 @@ const StudioSoloCover = ({ match }) => {
             setDifficulty={setDifficulty}
           />
         </ButtonContainer>
-        {isDesktop ? (
+        {isDesktop && !mobileCheck() ? (
           <MakingCoverButton
             link={`/studio/solo/free/cover`}
             title="자유곡 커버 만들기"

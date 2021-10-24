@@ -8,7 +8,7 @@ import RecordEdit from '../RecordEdit';
 import instrument from '../CoverMaking/inst.mp3';
 import RecordForm from '../RecordForm';
 import { useMediaQuery } from 'react-responsive';
-import { media, Desktop, Mobile } from '../../lib/Media';
+import { media, Desktop, Mobile, mobileCheck } from '../../lib/Media';
 import LoginAuth from '../../lib/LoginAuth';
 import NotFoundPage from '../NotFoundPage';
 
@@ -132,7 +132,7 @@ const RecordMaking = ({ match }) => {
 
   return (
     <>
-      {isDesktop ? (
+      {isDesktop && !mobileCheck() ? (
         <LoginAuth>
           <PageContainer>
             <CustomSteps progressDot current={page}>

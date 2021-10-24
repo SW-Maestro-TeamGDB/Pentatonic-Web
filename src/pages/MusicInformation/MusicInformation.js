@@ -9,7 +9,7 @@ import DifficultyIcon from '../../components/DifficultyIcon';
 import { StopOutlined, CustomerServiceOutlined } from '@ant-design/icons';
 import { changeGenreToKorean } from '../../lib/changeGenreToKorean';
 import { useMediaQuery } from 'react-responsive';
-import { media, Default, Mobile } from '../../lib/Media';
+import { media, Default, Mobile, mobileCheck } from '../../lib/Media';
 
 import tempData from '../../data/songs/tempData.json';
 
@@ -141,7 +141,7 @@ const MusicInformation = ({ match }) => {
                     </MusicMeta>
                   </GridContainer>
                 </MusicMetaWrapper>
-                {isDesktop ? (
+                {isDesktop && !mobileCheck() ? (
                   <ButtonContainer>
                     <RecordButton to={match.url + '/record'}>
                       라이브러리 녹음하기

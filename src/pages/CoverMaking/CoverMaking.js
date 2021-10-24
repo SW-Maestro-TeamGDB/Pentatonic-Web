@@ -5,7 +5,7 @@ import { Steps } from 'antd';
 import PageContainer from '../../components/PageContainer';
 import { GET_CURRENT_USER } from '../../apollo/cache';
 import { useMediaQuery } from 'react-responsive';
-import { media, Desktop, Mobile } from '../../lib/Media';
+import { media, Desktop, Mobile, mobileCheck } from '../../lib/Media';
 import NotFoundPage from '../NotFoundPage';
 
 import CoverForm from '../CoverForm';
@@ -166,7 +166,7 @@ const CoverMaking = ({ match }) => {
 
   return (
     <>
-      {isDesktop ? (
+      {isDesktop && !mobileCheck() ? (
         <LoginAuth>
           <PageContainer>
             <CustomSteps progressDot current={page}>

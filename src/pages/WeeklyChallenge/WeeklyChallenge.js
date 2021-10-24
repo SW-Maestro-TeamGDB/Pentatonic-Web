@@ -12,7 +12,7 @@ import MakingIcon from '../../images/MakingIcon.svg';
 import PageImage from '../../components/PageImage';
 import GridContainer from '../../components/GridContainer/GridContainer';
 import { useMediaQuery } from 'react-responsive';
-import { media, Default } from '../../lib/Media';
+import { media, Default, mobileCheck } from '../../lib/Media';
 
 import GroupIcon from '../../images/GroupIcon.svg';
 import SoloIcon from '../../images/SoloIcon.svg';
@@ -41,6 +41,8 @@ const QUERY_SONG = gql`
 const WeeklyChallenge = ({ match }) => {
   const content = match.params?.content;
   const COVER_WIDTH = useMediaQuery({ maxWidth: 767 }) ? '250px' : '220px';
+  const isDesktop = useMediaQuery({ minWidth: 992 });
+
   const { loading, error, data } = useQuery(QUERY_SONG, {
     variables: {
       querySongFilter: {
@@ -140,17 +142,19 @@ const WeeklyChallenge = ({ match }) => {
           />
           <SubContainer>
             <Default>
-              <Dropdown
-                overlay={CoverMenu}
-                placement="bottomCenter"
-                getPopupContainer={(trigger) => trigger.parentNode}
-                trigger={['click']}
-              >
-                <ButtonContainer>
-                  새로운 커버 만들기
-                  <MakingIconImg src={MakingIcon} />
-                </ButtonContainer>
-              </Dropdown>
+              {isDesktop && !mobileCheck() ? (
+                <Dropdown
+                  overlay={CoverMenu}
+                  placement="bottomCenter"
+                  getPopupContainer={(trigger) => trigger.parentNode}
+                  trigger={['click']}
+                >
+                  <ButtonContainer>
+                    새로운 커버 만들기
+                    <MakingIconImg src={MakingIcon} />
+                  </ButtonContainer>
+                </Dropdown>
+              ) : null}
             </Default>
           </SubContainer>
           {loadCover()}

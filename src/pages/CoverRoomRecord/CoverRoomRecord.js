@@ -10,7 +10,7 @@ import instrument from '../CoverMaking/inst.mp3';
 import ParticipationForm from '../ParticipationForm';
 import NotFoundPage from '../NotFoundPage';
 import { useMediaQuery } from 'react-responsive';
-import { media, Desktop, Mobile } from '../../lib/Media';
+import { media, Desktop, Mobile, mobileCheck } from '../../lib/Media';
 
 import LoginAuth from '../../lib/LoginAuth';
 
@@ -66,6 +66,10 @@ const CoverRoomRecord = ({ match }) => {
   const pageUrl = match.url;
   const bandId = match.params.id;
   const isDesktop = useMediaQuery({ minWidth: 992 });
+  const mobileCheck =
+    /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+      navigator.userAgent,
+    );
 
   const selectedSession = location?.state?.selectedSession;
 
@@ -162,7 +166,7 @@ const CoverRoomRecord = ({ match }) => {
 
   return (
     <>
-      {isDesktop ? (
+      {isDesktop && !mobileCheck() ? (
         selectedSession ? (
           <LoginAuth>
             <PageContainer>
