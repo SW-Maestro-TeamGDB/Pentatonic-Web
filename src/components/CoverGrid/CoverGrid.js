@@ -160,18 +160,10 @@ const CoverContainer = styled.div`
   height: auto;
   margin: 2vh 0;
   color: black;
+  overflow: hidden;
 
   ${media.small} {
     margin: 0;
-
-    &:hover ${CoverImage} {
-      transform: none;
-      filter: none;
-    }
-
-    &:hover ${HeadPhoneImage} {
-      visibility: none;
-    }
   }
 
   &:hover ${HeadPhoneImage} {
@@ -180,12 +172,22 @@ const CoverContainer = styled.div`
     transition: all ease-in-out 0.3s;
 
     opacity: 1;
+
+    ${media.small} {
+      display: none;
+    }
   }
 
   &:hover ${CoverImage} {
     transform: scale(1.15);
     filter: brightness(50%);
     overflow: hidden;
+
+    ${media.small} {
+      transform: none;
+      filter: none;
+      overflow: hidden;
+    }
   }
 `;
 
