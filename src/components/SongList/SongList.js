@@ -1,13 +1,22 @@
 import react from 'react';
 import styled from 'styled-components';
-import { media } from '../../lib/Media';
+import { media, Default } from '../../lib/Media';
 import { Link } from 'react-router-dom';
 import { Skeleton } from 'antd';
 import DifficultyIcon from '../DifficultyIcon';
+import { useMediaQuery } from 'react-responsive';
 import { changeSessionNameToKorean } from '../../lib/changeSessionNameToKorean';
+import { changeGenreToKorean } from '../../lib/changeGenreToKorean';
 
 const SongList = (props) => {
   const { link, data } = props;
+  const isDesktop = useMediaQuery({ minWidth: 992 });
+  const isMobile = useMediaQuery({
+    query: '(max-width:767px)',
+  });
+  const isXSMobile = useMediaQuery({
+    query: '(max-width:500px)',
+  });
 
   const showSession = () => {
     return data.instrument
@@ -20,18 +29,45 @@ const SongList = (props) => {
       {data ? (
         <>
           <SongImg img={data.songImg} />
-          <SongTitleContainer>
-            {data.name}
-            {data.weeklyChallenge ? <WeeklyBanner>Weekly</WeeklyBanner> : null}
-          </SongTitleContainer>
-          <ArtistContainer>{data.artist}</ArtistContainer>
-          <SessionContainer>{showSession()}</SessionContainer>
-          <DifficultyContainer>
-            난이도
-            <IconContainer>
-              <DifficultyIcon value={data.level} />
-            </IconContainer>
-          </DifficultyContainer>
+          <SongDataContainer>
+            <SongTitleContainer>
+              {data.name}
+              {data.weeklyChallenge ? (
+                <WeeklyBanner>Weekly</WeeklyBanner>
+              ) : null}
+            </SongTitleContainer>
+            <ArtistContainer>{data.artist}</ArtistContainer>
+            {!isDesktop ? (
+              <SessionContainer>{showSession()}</SessionContainer>
+            ) : null}
+            {isXSMobile ? (
+              <IconContainer>
+                <DifficultyIcon value={data.level} />
+              </IconContainer>
+            ) : null}
+          </SongDataContainer>
+          <SongMetaContainer>
+            <SongGenreContainer>
+              {changeGenreToKorean(data.genre)}
+            </SongGenreContainer>
+            {isMobile && !isXSMobile ? (
+              <DifficultyContainer>
+                <IconContainer>
+                  <DifficultyIcon value={data.level} />
+                </IconContainer>
+              </DifficultyContainer>
+            ) : null}
+          </SongMetaContainer>
+          {isDesktop ? (
+            <SessionContainer>{showSession()}</SessionContainer>
+          ) : null}
+          {isMobile ? null : (
+            <DifficultyContainer>
+              <IconContainer>
+                <DifficultyIcon value={data.level} />
+              </IconContainer>
+            </DifficultyContainer>
+          )}
         </>
       ) : (
         <SkeletonContainer>
@@ -52,6 +88,61 @@ const SongList = (props) => {
   );
 };
 
+const SongDataContainer = styled.div`
+  min-width: 35%;
+  width: 35rem;
+  padding-left: 2rem;
+
+  ${media.medium} {
+    min-width: 45%;
+  }
+
+  ${media.small} {
+    padding-left: 1.5rem;
+    width: 70%;
+  }
+
+  ${media.xsmall} {
+    min-width: 80%;
+  }
+`;
+
+const SongMetaContainer = styled.div`
+  width: 20%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0 1.5rem;
+
+  ${media.medium} {
+    padding: 0 1rem;
+  }
+
+  ${media.small} {
+    width: 20%;
+    flex-direction: column;
+    padding: 0;
+  }
+`;
+
+const SongGenreContainer = styled.div`
+  font-size: 1rem;
+  font-weight: 700;
+  background-color: rgba(100, 100, 100, 0.4);
+  color: #fff;
+  width: auto;
+  padding: 0.2rem 1rem;
+  border-radius: 10px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  ${media.five} {
+    display: none;
+  }
+`;
+
 const SkeletonContainer = styled.div`
   display: flex;
   flex-direction: row;
@@ -70,13 +161,17 @@ const SongInformLink = styled(Link)`
   display: flex;
   flex-direction: row;
   align-items: center;
-  height: 7rem;
+  height: 10rem;
   position: relative;
 
   color: black;
 
   &:hover {
     color: black;
+  }
+
+  ${media.small} {
+    height: 8rem;
   }
 `;
 
@@ -91,6 +186,10 @@ const WeeklyBanner = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+
+  ${media.small} {
+    padding: 3px 12px;
+  }
 `;
 
 const SongImg = styled.div`
@@ -99,55 +198,97 @@ const SongImg = styled.div`
   background-position: top center;
   background-size: cover;
   border-radius: 15px;
-  width: 15%;
+  min-width: 9rem;
   height: 80%;
   box-sizing: border-box;
+
+  ${media.small} {
+    min-width: 6rem;
+    width: 6rem;
+    height: 6rem;
+  }
 `;
 
 const IconContainer = styled.div`
-  width: 60%;
-  margin-left: 1rem;
+  width: 80%;
+  min-width: 7rem;
+
+  ${media.five} {
+    width: 3rem;
+    margin-top: 0.5rem;
+    transform: translateX(-5px);
+  }
 `;
 
 const SongTitleContainer = styled.div`
-  width: 30%;
-  height: 100%;
+  width: 100%;
   text-align: left;
-  font-size: 1.3rem;
-  font-weight: 700;
-  padding-left: 2.5rem;
+  font-size: 1.7rem;
+  font-weight: 800;
   display: flex;
   flex-direction: row;
   align-items: center;
   overflow: hidden;
+
+  ${media.small} {
+    font-size: 1.2rem;
+  }
+
+  ${media.five} {
+    font-size: 1.3rem;
+  }
 `;
 
 const ArtistContainer = styled.div`
-  width: 20%;
+  width: 100%;
   text-align: left;
-  font-size: 1.1rem;
-  color: #222222;
-  font-weight: 600;
-  padding-left: 2.5rem;
+  font-size: 1rem;
+  color: #666;
+  font-weight: 700;
   display: flex;
   flex-direction: row;
   align-items: center;
+
+  ${media.small} {
+    font-size: 0.8rem;
+  }
+
+  ${media.five} {
+    font-size: 0.8rem;
+    font-weight: 800;
+  }
 `;
 
 const SessionContainer = styled.div`
-  width: 25%;
+  width: 35%;
   font-size: 0.9rem;
   color: #222222;
-  font-weight: 500;
-  padding-left: 2.5rem;
+  font-weight: 700;
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: flex-start;
+  padding-left: 1.5rem;
+
+  ${media.medium} {
+    padding-left: 0;
+    width: 100%;
+    margin-top: 3px;
+    font-size: 0.8rem;
+    color: #666;
+  }
+
+  ${media.small} {
+    font-size: 0.8rem;
+  }
+
+  ${media.xsmall} {
+    font-size: 0.65rem;
+  }
 `;
 
 const DifficultyContainer = styled.div`
-  width: 25%;
+  width: 30%;
   font-size: 1rem;
   color: #222222;
   font-weight: 700;
@@ -157,6 +298,17 @@ const DifficultyContainer = styled.div`
   align-items: center;
   justify-content: flex-end;
   padding-right: 1rem;
+
+  ${media.small} {
+    padding-left: 0;
+    padding-right: 0;
+    justify-content: center;
+    margin-top: 1rem;
+  }
+
+  ${media.xsmall} {
+    width: 100%;
+  }
 `;
 
 export default SongList;

@@ -1,7 +1,7 @@
 import { useMediaQuery } from 'react-responsive';
 
 const Desktop = ({ children }) => {
-  const isDesktop = useMediaQuery({ minWidth: 992 });
+  const isDesktop = useMediaQuery({ minWidth: 1023 });
   return isDesktop ? children : null;
 };
 const Tablet = ({ children }) => {
@@ -26,6 +26,7 @@ const media = {
   large: mediaQuery(1200),
   medium: mediaQuery(1024),
   small: mediaQuery(768),
+  five: mediaQuery(500),
   xsmall: mediaQuery(375),
   se: mediaQuery(340),
   fold: mediaQuery(295),
