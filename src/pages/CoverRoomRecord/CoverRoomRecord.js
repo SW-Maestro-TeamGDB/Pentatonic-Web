@@ -66,10 +66,6 @@ const CoverRoomRecord = ({ match }) => {
   const pageUrl = match.url;
   const bandId = match.params.id;
   const isDesktop = useMediaQuery({ minWidth: 992 });
-  const mobileCheck =
-    /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
-      navigator.userAgent,
-    );
 
   const selectedSession = location?.state?.selectedSession;
 

@@ -18,8 +18,9 @@ const Default = ({ children }) => {
 };
 
 const mobileCheck = () => {
-  return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
-    navigator.userAgent,
+  console.log(navigator);
+  return !'win16|win32|win64|windows|mac|macintel|linux|freebsd|openbsd|sunos'.indexOf(
+    navigator.platform.toLocaleLowerCase() >= 0,
   );
 };
 
