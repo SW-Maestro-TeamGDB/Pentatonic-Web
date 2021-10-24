@@ -513,28 +513,43 @@ const RecordPage = (props) => {
 
   const showAudioDuration = useMemo(() => {
     return (
-      <ProgressContainer>
-        <CustomProgress
-          percent={(count / audioDuration) * 100}
-          showInfo={false}
-          strokeColor="black"
-        />
-        <TimeContainer>
-          <CurrentTimeContainer>
-            {minute}
-            {':'}
-            {second < 10 ? '0' + second : second}
-          </CurrentTimeContainer>
-          <RemainTimeContainer>
-            {'- '}
-            {audioMinute}
-            {':'}
-            {audioSecond < 10 ? '0' + audioSecond : audioSecond}
-          </RemainTimeContainer>
-        </TimeContainer>
-      </ProgressContainer>
+      <>
+        {isFreeCover ? (
+          <>
+            {onRec === 1 || onRec === 2 ? (
+              <RecordCountContainer>
+                {onRec === 1 ? <RecordStatusIcon> </RecordStatusIcon> : null}{' '}
+                {minute}
+                {':'}
+                {second < 10 ? '0' + second : second}
+              </RecordCountContainer>
+            ) : null}
+          </>
+        ) : (
+          <ProgressContainer>
+            <CustomProgress
+              percent={(count / audioDuration) * 100}
+              showInfo={false}
+              strokeColor="black"
+            />
+            <TimeContainer>
+              <CurrentTimeContainer>
+                {minute}
+                {':'}
+                {second < 10 ? '0' + second : second}
+              </CurrentTimeContainer>
+              <RemainTimeContainer>
+                {'- '}
+                {audioMinute}
+                {':'}
+                {audioSecond < 10 ? '0' + audioSecond : audioSecond}
+              </RemainTimeContainer>
+            </TimeContainer>
+          </ProgressContainer>
+        )}
+      </>
     );
-  }, [audioDuration, count, minute, second, audioMinute, audioSecond]);
+  }, [audioDuration, count, minute, second, audioMinute, audioSecond, onRec]);
 
   const showVisualizer = useMemo(() => {
     return (
@@ -560,7 +575,15 @@ const RecordPage = (props) => {
 
   const showBackground = useMemo(() => {
     return (
-      <Background url={isFreeCover ? bandData.backGroundURI : songData.songImg}>
+      <Background
+        url={
+          isFreeCover
+            ? bandData?.backGroundURI
+              ? bandData.backGroundURI
+              : 'https://images.unsplash.com/photo-1499364615650-ec38552f4f34?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1072&q=80'
+            : songData.songImg
+        }
+      >
         <BackwardButton onClick={() => onClickStop()}>
           <LeftOutlined />
           <BackwardText>커버 정보 입력</BackwardText>
@@ -612,7 +635,7 @@ const RecordPage = (props) => {
   return (
     <Container>
       {showBackground}
-      {isFreeCover ? null : showAudioDuration}
+      {showAudioDuration}
       <RecordModal modalToggle={modalToggle} setModalToggle={setModalToggle} />
       <MicAuthModal
         modalToggle={micAuthModalToggle}
@@ -630,6 +653,34 @@ const Container = styled.div`
 
 const CurrentTimeContainer = styled.div`
   font-weight: 800;
+`;
+
+const RecordStatusIcon = styled.div`
+  position: absolute;
+  left: 44%;
+  height: 1.2rem;
+  width: 1.2rem;
+  border-radius: 100%;
+  background-color: #ff6665;
+  border: 3px solid #cb0000;
+`;
+
+const RecordCountContainer = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 1.5rem;
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: #eee;
+
+  background-color: rgba(245, 245, 245, 0.2);
+  padding: 0.7rem 0;
+
+  position: absolute;
+  bottom: 18%;
+  z-index: 3;
 `;
 
 const RemainTimeContainer = styled.div`
