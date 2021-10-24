@@ -4,6 +4,7 @@ import { media, Default, Mobile } from '../../lib/Media';
 import DifficultyIcon from '../DifficultyIcon';
 import { changeSessionNameToKorean } from '../../lib/changeSessionNameToKorean';
 import { sessionIconMatch } from '../../lib/sessionIconMatch';
+import { levelCheck } from '../../lib/levelCheck';
 
 import ThumbIcon from '../../images/ThumbIcon.svg';
 
@@ -16,7 +17,7 @@ const PositionGrid = (props) => {
       <SessionTitle>{changeSessionNameToKorean(position)}</SessionTitle>
       <SessionMeta>
         <SessionLevel>
-          <DifficultyIcon value={1} />
+          <DifficultyIcon value={levelCheck(like)} />
         </SessionLevel>
         <Default>
           <SessionRank>
