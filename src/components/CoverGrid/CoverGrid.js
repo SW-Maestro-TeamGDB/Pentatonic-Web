@@ -121,7 +121,7 @@ const CoverGrid = (props) => {
 const CustomLink = styled(Link)`
   color: black;
   transition: all ease-in-out 0.3s;
-  border-radius: 1rem;
+  border-radius: 10px;
   z-index: 1;
 `;
 
@@ -139,7 +139,7 @@ const HeadPhoneImage = styled.img`
 const CoverImage = styled.img`
   width: 100%;
   min-height: 160px;
-  border-radius: 1rem;
+  border-radius: 10px;
   transition: all ease-in-out 0.3s;
   object-fit: cover;
   z-index: 2;
@@ -147,7 +147,8 @@ const CoverImage = styled.img`
   ${media.small} {
     filter: brightness(60%);
     overflow: hidden;
-    border-radius: 1rem;
+    border-radius: 10px;
+    transition: none;
   }
 `;
 
@@ -164,6 +165,7 @@ const CoverContainer = styled.div`
 
   ${media.small} {
     margin: 0;
+    transition: none;
   }
 
   &:hover ${HeadPhoneImage} {
@@ -181,19 +183,18 @@ const CoverContainer = styled.div`
   &:hover ${CoverImage} {
     transform: scale(1.15);
     filter: brightness(50%);
-    overflow: hidden;
 
     ${media.small} {
       transform: none;
       filter: none;
-      overflow: hidden;
+      transition: none;
     }
   }
 `;
 
 const ImageContainer = styled.div`
   height: 10rem;
-  border-radius: 1rem;
+  border-radius: 10px;
   display: flex;
   align-items: center;
   overflow: hidden;
@@ -201,7 +202,8 @@ const ImageContainer = styled.div`
   width: 95%;
 
   ${media.small} {
-    border-radius: 1rem;
+    border-radius: 10px;
+    transition: none;
     overflow: hidden;
   }
 `;
