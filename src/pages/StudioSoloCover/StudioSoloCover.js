@@ -125,7 +125,7 @@ const PageDesc = styled.div`
   ${media.small} {
     width: 90%;
     font-size: 0.8rem;
-    margin-top: 2rem;
+    margin: 2rem 0 1.5rem;
   }
 `;
 
