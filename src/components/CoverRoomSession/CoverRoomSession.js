@@ -137,7 +137,7 @@ const CoverRoomSession = (props) => {
           <AuthModal
             modalToggle={modalToggle}
             setModalToggle={setModalToggle}
-            action={() => setParticipationModal(true)}
+            action={() => onClickParticipate()}
           />
         </>
       ) : null}
