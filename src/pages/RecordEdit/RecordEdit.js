@@ -107,6 +107,7 @@ const RecordEdit = (props) => {
                   name: songData.name,
                   songURI: data.uploadCoverFile,
                   artist: songData.artist,
+                  songImg: bandData.backGroundURI,
                 },
               },
             },
