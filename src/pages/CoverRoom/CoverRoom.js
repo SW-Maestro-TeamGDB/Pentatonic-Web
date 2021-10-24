@@ -676,10 +676,12 @@ const SessionContainer = styled.div`
 `;
 
 const SongArtist = styled.div`
-  width: 125px; // 250/2 px
+  min-width: 125px; // 250/2 px
   height: 100%;
   color: white;
   position: relative;
+
+  padding: 0 1rem;
 
   background-color: rgba(0, 0, 0, 0.7);
   display: flex;
@@ -692,10 +694,12 @@ const SongArtist = styled.div`
 `;
 
 const SongName = styled.div`
-  width: 125px; // 250/2 px
+  min-width: 125px; // 250/2 px
   height: 100%;
   color: black;
   position: relative;
+
+  padding: 0 1rem;
 
   background-color: rgba(255, 255, 255, 0.7);
   display: flex;
@@ -711,7 +715,7 @@ const SongData = styled.div`
   position: absolute;
   top: 40px;
   right: 3%;
-  width: 250px;
+  min-width: 250px;
   height: 35px;
   color: black;
   border-radius: 12px;
