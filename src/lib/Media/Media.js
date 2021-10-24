@@ -18,7 +18,9 @@ const Default = ({ children }) => {
 };
 
 const mobileCheck = () => {
-  console.log(navigator);
+  console.log(navigator.platform.toLocaleLowerCase());
+  console.log(navigator.userAgent);
+
   return !'win16|win32|win64|windows|mac|macintel|linux|freebsd|openbsd|sunos'.indexOf(
     navigator.platform.toLocaleLowerCase() >= 0,
   );
