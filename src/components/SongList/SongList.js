@@ -33,7 +33,7 @@ const SongList = (props) => {
             <SongTitleContainer>
               {data.name}
               {data.weeklyChallenge ? (
-                <WeeklyBanner>Weekly</WeeklyBanner>
+                <WeeklyBanner>{isXSMobile ? 'W' : 'Weekly'}</WeeklyBanner>
               ) : null}
             </SongTitleContainer>
             <ArtistContainer>{data.artist}</ArtistContainer>
@@ -190,6 +190,10 @@ const WeeklyBanner = styled.div`
   ${media.small} {
     padding: 3px 12px;
   }
+
+  ${media.five} {
+    padding: 2px 6px;
+  }
 `;
 
 const SongImg = styled.div`
@@ -228,14 +232,16 @@ const SongTitleContainer = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
+  white-space: nowrap;
   overflow: hidden;
+  text-overflow: ellipsis;
 
   ${media.small} {
     font-size: 1.2rem;
   }
 
   ${media.five} {
-    font-size: 1.3rem;
+    font-size: 1.1rem;
   }
 `;
 
@@ -283,7 +289,7 @@ const SessionContainer = styled.div`
   }
 
   ${media.xsmall} {
-    font-size: 0.65rem;
+    font-size: 0.6rem;
   }
 `;
 
