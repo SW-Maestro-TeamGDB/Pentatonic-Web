@@ -227,7 +227,7 @@ const Background = styled.img`
     z-index: 1;
     top: -20%;
 
-    filter: blur(20px) brightness(50%);
+    filter: blur(20px) brightness(70%);
   }
 `;
 

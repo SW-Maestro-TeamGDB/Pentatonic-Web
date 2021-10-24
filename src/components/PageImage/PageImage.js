@@ -64,7 +64,7 @@ const PageImageContainer = styled.div`
     height: 20rem;
 
     ${CustomImg} {
-      filter: brightness(40%) blur(2px);
+      filter: brightness(60%) blur(2px);
     }
   }
 `;
