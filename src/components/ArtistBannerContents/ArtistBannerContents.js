@@ -101,7 +101,7 @@ const CarouselContents = styled(Link)`
 const CoverInfoContainer = styled.div`
   display: flex;
   flex-direction: column;
-  margin-top: 1vw;
+  margin-top: 1rem;
 `;
 
 const ProfileContainer = styled.div`
@@ -201,37 +201,6 @@ const Desc = styled.span`
     font-size: 1rem;
     margin-top: 10px;
   }
-`;
-
-const CountContainer = styled.span`
-  display: flex;
-  align-items: center;
-  color: #bababa;
-  margin-top: 1vw;
-`;
-
-const LikeCount = styled.span`
-  font-size: 0.8vw;
-  text-align: left;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-`;
-
-const ViewCount = styled.span`
-  font-size: 0.8vw;
-  text-align: left;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-`;
-
-const CustomIcon = styled.img`
-  width: 1.2vw;
-  height: 1.2vw;
-  filter: invert(80%) sepia(0%) saturate(468%) hue-rotate(238deg)
-    brightness(96%) contrast(86%);
-  margin: 0 0.5vw;
 `;
 
 const SpacingSpan = styled.span`
