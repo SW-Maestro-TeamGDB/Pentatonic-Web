@@ -163,7 +163,7 @@ const CoverRecommendTitle = styled.div`
     width: 100%;
     font-size: 0.8rem;
     padding-left: 3px;
-    margin-bottom: 0.5rem;
+    margin-bottom: 3px;
   }
 `;
 
