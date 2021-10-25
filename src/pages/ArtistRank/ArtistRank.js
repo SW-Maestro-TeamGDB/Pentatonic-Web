@@ -20,6 +20,7 @@ const GET_RANKED_USER = gql`
 
 const ArtistRank = () => {
   const [rankList, setRankList] = useState();
+
   const { data } = useQuery(GET_RANKED_USER, {
     onCompleted: (data) => {
       setRankList(data.getRankedUser);

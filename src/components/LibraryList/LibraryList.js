@@ -608,7 +608,7 @@ const CoverTitle = styled.div`
 `;
 
 const SongInform = styled.div`
-  font-size: 1rem;
+  font-size: 0.9rem;
   color: ${(props) => (props.selected ? '#ddd' : 'rgb(100, 100, 100)')};
 
   white-space: nowrap;

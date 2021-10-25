@@ -6,12 +6,14 @@ import LibraryList from '../../components/LibraryList';
 import SearchBar from '../../components/SearchBar';
 import styled from 'styled-components';
 import { StopOutlined } from '@ant-design/icons';
+import { media } from '../../lib/Media';
 
 import LoginAuth from '../../lib/LoginAuth';
 
 const GET_USER_INFO = gql`
   query Query($getUserInfoUserId: Id!) {
     getUserInfo(userId: $getUserInfoUserId) {
+      username
       library {
         position
         coverURI
@@ -90,14 +92,21 @@ const Library = () => {
   return (
     <LoginAuth>
       <PageContainer width="55%" minWidth="900px">
-        <PageTitle>라이브러리</PageTitle>
+        <PageTitle>
+          {userData?.data?.user?.username ? (
+            <>
+              <Username>{userData.data.user.username}</Username>
+              님의 라이브러리
+            </>
+          ) : null}
+        </PageTitle>
         <Spacing />
         <LibraryContainer>
           {libraryData && libraryData.length > 0 ? (
             loadLibrary()
           ) : (
             <>
-              {loadLibraryState ? null : (
+              {loadLibraryState ? null : loading ? null : (
                 <NoDataContainer>
                   <CustomStopOutlined />
                   <NoLibrary>저장된 라이브러리가 없습니다</NoLibrary>
@@ -112,17 +121,40 @@ const Library = () => {
 };
 
 const PageTitle = styled.div`
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-top: 1rem;
+
+  ${media.small} {
+    font-size: 1.2rem;
+    margin-top: 2rem;
+  }
+`;
+
+const Username = styled.span`
   font-size: 2rem;
   font-weight: 800;
-  margin-top: 1rem;
+  margin-right: 6px;
+
+  ${media.small} {
+    font-size: 1.5rem;
+  }
 `;
 
 const Spacing = styled.div`
   height: 3rem;
+
+  ${media.small} {
+    height: 2rem;
+  }
 `;
 
 const LibraryContainer = styled.div`
   width: 100%;
+
+  ${media.small} {
+    padding: 0 1rem;
+  }
 `;
 
 const NoLibrary = styled.div`
@@ -134,6 +166,10 @@ const NoLibrary = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+
+  ${media.small} {
+    font-size: 1.4rem;
+  }
 `;
 
 const NoDataContainer = styled.div`
@@ -149,6 +185,10 @@ const CustomStopOutlined = styled(StopOutlined)`
   font-size: 12rem;
   color: #bbb;
   margin-bottom: 2rem;
+
+  ${media.small} {
+    font-size: 8rem;
+  }
 `;
 
 export default Library;
