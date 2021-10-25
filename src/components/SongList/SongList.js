@@ -161,17 +161,13 @@ const SongInformLink = styled(Link)`
   display: flex;
   flex-direction: row;
   align-items: center;
-  height: 10rem;
+  height: 8rem;
   position: relative;
 
   color: black;
 
   &:hover {
     color: black;
-  }
-
-  ${media.small} {
-    height: 8rem;
   }
 `;
 
