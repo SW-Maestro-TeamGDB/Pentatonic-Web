@@ -72,16 +72,20 @@ const MusicInformation = ({ match }) => {
   const showCover = () => {
     if (musicData) {
       if (musicData.band.length > 0)
-        return musicData.band.map((v) => {
-          return (
-            <CoverGrid
-              key={v.bandId}
-              data={v}
-              title={musicData.name}
-              artist={musicData.artist}
-            />
-          );
-        });
+        return (
+          <GridContainer templateColumn="250px" autoFill>
+            {musicData.band.map((v) => {
+              return (
+                <CoverGrid
+                  key={v.bandId}
+                  data={v}
+                  title={musicData.name}
+                  artist={musicData.artist}
+                />
+              );
+            })}
+          </GridContainer>
+        );
       else {
         return <NoCover>등록된 커버가 없습니다</NoCover>;
       }
@@ -181,9 +185,8 @@ const MusicInformation = ({ match }) => {
                 더보기
               </BoardLink>
             </BoardHeader>
-            <GridContainer templateColumn="250px" autoFill>
-              {showCover()}
-            </GridContainer>
+
+            {showCover()}
           </BoardContainer>
         </>
       ) : null}
@@ -503,15 +506,20 @@ const BoardLink = styled(Link)`
 `;
 
 const NoCover = styled.div`
-  font-size: 1.4rem;
+  font-size: 1.2rem;
   color: #9b94b3;
   display: flex;
   justify-content: center;
   align-items: center;
+  width: 100%;
 
   height: 8rem;
   letter-spacing: -0.5px;
   font-weight: 800;
+
+  ${media.small} {
+    font-size: 1rem;
+  }
 `;
 
 export default MusicInformation;
