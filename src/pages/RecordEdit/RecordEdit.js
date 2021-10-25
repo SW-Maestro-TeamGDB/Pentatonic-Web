@@ -113,6 +113,10 @@ const RecordEdit = (props) => {
             },
           });
         } else {
+          console.log({
+            syncDelay: sync / 1000,
+            reverb: (reverb / 100) * 6,
+          });
           uploadCover({
             variables: {
               uploadCoverInput: {
@@ -122,6 +126,10 @@ const RecordEdit = (props) => {
                   songId: songData.songId,
                   position: selectedSession,
                 },
+              },
+              filter: {
+                syncDelay: sync / 1000,
+                reverb: (reverb / 100) * 6,
               },
             },
           });
@@ -138,6 +146,10 @@ const RecordEdit = (props) => {
     },
     onCompleted: (data) => {
       setBandData({ ...bandData, songId: data.uploadFreeSong });
+      console.log({
+        syncDelay: sync / 1000,
+        reverb: (reverb / 100) * 6,
+      });
       uploadCover({
         variables: {
           uploadCoverInput: {
@@ -146,6 +158,10 @@ const RecordEdit = (props) => {
               coverURI: coverURI,
               songId: data.uploadFreeSong,
               position: selectedSession,
+            },
+            filter: {
+              syncDelay: sync / 1000,
+              reverb: (reverb / 100) * 6,
             },
           },
         },
@@ -435,8 +451,8 @@ const RecordEdit = (props) => {
         setValue={setSync}
         title="싱크 조절"
         desc={`${sync}ms`}
-        max={500}
-        min={-500}
+        max={1000}
+        min={1000}
         unit={50}
         onAfterChange={() => changeSync(sync)}
         disable={isFreeCover}
