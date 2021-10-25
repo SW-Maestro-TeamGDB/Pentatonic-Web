@@ -667,6 +667,7 @@ const CustomDragger = styled(Dragger)`
   ${media.small} {
     width: 5rem !important;
     height: 5rem !important;
+    padding: 0 !important;
 
     &:hover {
       border: none;

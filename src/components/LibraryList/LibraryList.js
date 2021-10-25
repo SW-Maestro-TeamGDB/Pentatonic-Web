@@ -423,12 +423,22 @@ const LibararyPagePauseIcon = styled.img`
   width: 1rem;
   height: 1rem;
   filter: invert(100%);
+
+  ${media.small} {
+    width: 0.9rem;
+    height: 0.9rem;
+  }
 `;
 
 const LibararyPagePlayIcon = styled.img`
   width: 1rem;
   height: 1rem;
   filter: invert(100%);
+
+  ${media.small} {
+    width: 0.8rem;
+    height: 0.8rem;
+  }
 `;
 
 const ErrorMessage = styled.div`
@@ -528,7 +538,7 @@ const AudioButtonContainer = styled.div`
   color: white;
   width: 8rem;
   height: 2.5rem;
-  font-size: 0.8vw;
+  font-size: 0.9rem;
   cursor: pointer;
   background-image: linear-gradient(to right, #6236ff, #9b66ff);
   font-weight: 700;
@@ -545,6 +555,7 @@ const AudioButtonContainer = styled.div`
 
   ${media.small} {
     width: 6rem;
+    font-size: 0.75rem;
   }
 `;
 
