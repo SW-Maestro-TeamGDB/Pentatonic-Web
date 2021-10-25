@@ -75,7 +75,7 @@ const RankItem = styled.div`
 
   ${media.small} {
     padding: 0 1rem;
-    margin-top: 2rem;
+    margin-top: 3rem;
   }
 `;
 

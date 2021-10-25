@@ -139,7 +139,7 @@ const RankIcon = styled.div`
   ${media.small} {
     width: 1.2rem;
     height: 1.2rem;
-    font-size: 0.5em;
+    font-size: 0.8em;
   }
 `;
 
