@@ -221,7 +221,7 @@ const CoverForm = (props) => {
         </BackwardButton>
         <SongTitle>
           {isFreeCover
-            ? '자유곡 커버'
+            ? `자유곡 ${isSolo ? '솔로' : '밴드'}커버`
             : songData
             ? `${songData.name} - ${songData.artist}`
             : null}
@@ -288,7 +288,10 @@ const CoverForm = (props) => {
               <>
                 <CustomPictureIcon />
                 <UploadText>
-                  업로드하지 않을 시, 기본 음원커버 이미지가 설정됩니다.
+                  업로드하지 않을 시,{' '}
+                  {isFreeCover
+                    ? '기본 제공 이미지로 설정됩니다.'
+                    : '기본 음원커버 이미지로 설정됩니다.'}
                 </UploadText>
               </>
             )}
