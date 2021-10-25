@@ -9,6 +9,7 @@ import { sessionIconMatch } from '../../lib/sessionIconMatch';
 import { useMediaQuery } from 'react-responsive';
 import { changeDateToString } from '../../lib/changeDateToString';
 import { media, Default, Mobile } from '../../lib/Media';
+import Favicon from '../../images/Logo/Favicon.png';
 import ThumbIcon from '../../images/ThumbIcon.svg';
 import ViewIcon from '../../images/ViewIcon.svg';
 
@@ -238,8 +239,8 @@ const LibraryList = (props) => {
     >
       {data ? (
         <>
-          <ImageContainer>
-            <CoverImage src={data.song.songImg} />
+          <ImageContainer edit={edit}>
+            <CoverImage src={data.song.songImg ? data.song.songImg : Favicon} />
           </ImageContainer>
           <Spacing width={isMobile ? '3px' : '2%'} />
           <CoverInform edit={edit}>
@@ -263,43 +264,49 @@ const LibraryList = (props) => {
                 <SongInform selected={selected}>
                   {data.song.name} - {data.song.artist}
                 </SongInform>
-                <CoverTime>{changeDateToString(data.date)}</CoverTime>
+                <CoverTime selected={selected}>
+                  {changeDateToString(data.date)}
+                </CoverTime>
               </>
             )}
           </CoverInform>
           {edit && data.date ? (
             <>
-              <SessionIconContainer>
-                <SessionIcon src={sessionIconMatch(data.position)} />
-                <SessionText>
-                  {changeSessionNameToKorean(data.position)} 커버
-                </SessionText>
-              </SessionIconContainer>
+              <Default>
+                <SessionIconContainer>
+                  <SessionIcon src={sessionIconMatch(data.position)} />
+                  <SessionText>
+                    {changeSessionNameToKorean(data.position)} 커버
+                  </SessionText>
+                </SessionIconContainer>
+              </Default>
             </>
           ) : null}
           <Spacing width={isMobile ? '3px' : '3%'} />
           {edit ? (
             <>
-              <EditButtonContainer>
-                {editToggle ? (
-                  <>
-                    <EditButton onClick={onClickEditToggle}>
-                      수정 완료
-                    </EditButton>
-                    <DeleteButton onClick={() => setEditToggle(false)}>
-                      수정 취소
-                    </DeleteButton>
-                  </>
-                ) : (
-                  <>
-                    <EditButton onClick={onClickEditToggle}>수정</EditButton>
-                    <DeleteButton onClick={() => setDeleteModal(true)}>
-                      삭제
-                    </DeleteButton>
-                  </>
-                )}
-              </EditButtonContainer>
-              <Spacing width={isMobile ? '3px' : '3%'} />
+              <Default>
+                <EditButtonContainer>
+                  {editToggle ? (
+                    <>
+                      <EditButton onClick={onClickEditToggle}>
+                        수정 완료
+                      </EditButton>
+                      <DeleteButton onClick={() => setEditToggle(false)}>
+                        수정 취소
+                      </DeleteButton>
+                    </>
+                  ) : (
+                    <>
+                      <EditButton onClick={onClickEditToggle}>수정</EditButton>
+                      <DeleteButton onClick={() => setDeleteModal(true)}>
+                        삭제
+                      </DeleteButton>
+                    </>
+                  )}
+                </EditButtonContainer>
+                <Spacing width={isMobile ? '3px' : '3%'} />
+              </Default>
             </>
           ) : null}
           {edit ? (
@@ -385,6 +392,11 @@ const CoverContainer = styled.div`
   cursor: ${(props) => (props.edit ? '' : 'pointer')};
   background-color: ${(props) =>
     props.selected ? 'rgba(98, 54, 255, 0.7)' : 'transparent'};
+
+  ${media.small} {
+    padding: 0;
+    margin-bottom: 1rem;
+  }
 `;
 
 const SessionText = styled.div`
@@ -491,6 +503,8 @@ const CoverTime = styled.div`
   letter-spacing: -1px;
   margin-top: 6px;
   font-weight: 500;
+
+  color: ${(props) => (props.selected ? '#ddd' : 'trasparent')};
 `;
 
 const EditButtonContainer = styled.div`
@@ -528,6 +542,10 @@ const AudioButtonContainer = styled.div`
   -webkit-user-select: none;
   -khtml-user-select: none;
   user-select: none;
+
+  ${media.small} {
+    width: 6rem;
+  }
 `;
 
 const EditButton = styled.div`
@@ -566,18 +584,18 @@ const ImageContainer = styled.div`
   margin: 0.5rem;
   display: flex;
   align-items: center;
-  width: 7.5rem;
-  height: 5.5rem;
+  width: 7rem;
+  height: 6rem;
 
   ${media.small} {
-    width: 5rem;
+    width: ${(props) => (props.edit ? '6rem' : '4rem')};
     height: 4rem;
   }
 `;
 
 const CoverImage = styled.img`
   width: 100%;
-  border-radius: 0.5vw;
+  border-radius: 0.5rem;
   object-fit: cover;
   height: 100%;
 
@@ -590,11 +608,16 @@ const CoverInform = styled.div`
   width: ${(props) => (props.edit ? '25%' : '50%')};
   color: black;
   padding-left: 0.5rem;
+  padding-right: 1rem;
 
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
   box-sizing: border-box;
+
+  ${media.small} {
+    width: ${(props) => (props.edit ? '70%' : '50%')};
+  }
 `;
 
 const CoverMeta = styled.div`
@@ -622,7 +645,7 @@ const CoverTitle = styled.div`
   color: ${(props) => (props.selected ? '#fff' : '000')};
 
   ${media.small} {
-    font-size: 1.2rem;
+    font-size: 1rem;
   }
 `;
 
@@ -635,7 +658,7 @@ const SongInform = styled.div`
   text-overflow: ellipsis;
 
   ${media.small} {
-    font-size: 0.8rem;
+    font-size: 0.7rem;
   }
 `;
 

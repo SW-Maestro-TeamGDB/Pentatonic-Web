@@ -153,7 +153,7 @@ const LibraryContainer = styled.div`
   width: 100%;
 
   ${media.small} {
-    padding: 0 1rem;
+    width: 93%;
   }
 `;
 

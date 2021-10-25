@@ -196,6 +196,10 @@ const LibaryContainer = styled.div`
   height: 77%;
   overflow-y: scroll;
   padding: 0 1vw;
+
+  ${media.small} {
+    padding: 0 1rem;
+  }
 `;
 
 const DrawerContainer = styled.div`
