@@ -117,7 +117,7 @@ const ArtistHome = ({ match }) => {
 };
 
 const Spacing = styled.div`
-  height: 3vh;
+  height: 2rem;
 `;
 
 const BoardContainer = styled.div`

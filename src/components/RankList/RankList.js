@@ -1,7 +1,7 @@
 import react, { useEffect, useState } from 'react';
 import { useQuery, gql, useLazyQuery } from '@apollo/client';
 import styled from 'styled-components';
-import { media } from '../../lib/Media';
+import { media, Default, Mobile } from '../../lib/Media';
 import { Link } from 'react-router-dom';
 
 import ThumbIcon from '../../images/ThumbIcon.svg';
@@ -71,6 +71,10 @@ const RankListContainer = styled.div`
   &:hover {
     color: black;
   }
+
+  ${media.small} {
+    margin-bottom: 1.5rem;
+  }
 `;
 
 const RankListImg = styled.div`
@@ -82,6 +86,11 @@ const RankListImg = styled.div`
   width: 4.5em;
   height: 4.5em;
   box-sizing: border-box;
+
+  ${media.small} {
+    width: 4rem;
+    height: 4rem;
+  }
 `;
 
 const SongText = styled.div`
@@ -93,6 +102,11 @@ const SongText = styled.div`
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+
+  ${media.small} {
+    font-size: 0.75rem;
+    width: 8rem;
+  }
 `;
 
 const RankContainer = styled.div`
@@ -102,6 +116,11 @@ const RankContainer = styled.div`
   align-items: center;
   margin-right: 3%;
   margin-left: 2%;
+
+  ${media.small} {
+    width: 10%;
+    margin-left: 0;
+  }
 `;
 
 const RankIcon = styled.div`
@@ -110,11 +129,18 @@ const RankIcon = styled.div`
   border-radius: 100%;
   color: ${(props) => (props.color === '#fff' ? '000' : '#fff')};
   font-weight: 700;
+  line-height: 1;
 
   background-color: ${(props) => props.color};
   display: flex;
   justify-content: center;
   align-items: center;
+
+  ${media.small} {
+    width: 1.2rem;
+    height: 1.2rem;
+    font-size: 0.5em;
+  }
 `;
 
 const ListTitle = styled.div`
@@ -128,17 +154,37 @@ const ListTitle = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
+
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+
+  ${media.small} {
+    padding-left: 1rem;
+    font-size: 1rem;
+    letter-spacing: -1px;
+    width: 50%;
+  }
 `;
 
 const CountText = styled.div`
   width: 2rem;
   text-align: center;
+
+  ${media.small} {
+    font-size: 0.8rem;
+    padding-left: 5px;
+  }
 `;
 
 const CustomIcon = styled.img`
   width: 14px;
   filter: invert(25%) sepia(39%) saturate(0%) hue-rotate(199deg) brightness(93%)
     contrast(92%);
+
+  ${media.small} {
+    width: 0.7rem;
+  }
 `;
 
 const CountContainer = styled.div`
@@ -150,8 +196,12 @@ const CountContainer = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
-  justify-content: flex-start;
+  justify-content: flex-end;
   padding-right: 1rem;
+
+  ${media.small} {
+    width: 20%;
+  }
 `;
 
 const IdText = styled.span`
