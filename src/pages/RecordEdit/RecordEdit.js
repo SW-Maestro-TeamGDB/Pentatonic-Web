@@ -452,7 +452,7 @@ const RecordEdit = (props) => {
         title="싱크 조절"
         desc={`${sync}ms`}
         max={1000}
-        min={1000}
+        min={-1000}
         unit={50}
         onAfterChange={() => changeSync(sync)}
         disable={isFreeCover}
