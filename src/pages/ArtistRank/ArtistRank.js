@@ -1,6 +1,7 @@
 import react, { useEffect, useState } from 'react';
 import { useQuery, gql, useLazyQuery } from '@apollo/client';
 import { Link } from 'react-router-dom';
+import { media, Default, Mobile } from '../../lib/Media';
 import styled from 'styled-components';
 import PageContainer from '../../components/PageContainer';
 import RankList from '../../components/RankList';
@@ -37,7 +38,7 @@ const ArtistRank = () => {
   return (
     <PageContainer width="40%" minWidth="700px">
       <PageTitle>아티스트 랭킹</PageTitle>
-      <PageDesc>좋아요를 가장 많이 받은 아티스트는 누굴까요?</PageDesc>
+      <PageDesc>좋아요를 가장 많이 받은 아티스트는 누구일까요?</PageDesc>
       <RankItem>{showBandRank()}</RankItem>
     </PageContainer>
   );
@@ -47,11 +48,20 @@ const PageTitle = styled.div`
   font-size: 2rem;
   font-weight: 800;
   margin-top: 1rem;
+
+  ${media.small} {
+    font-size: 1.5rem;
+    margin-top: 2rem;
+  }
 `;
 
 const PageDesc = styled.div`
   font-size: 1rem;
   margin-top: 1rem;
+
+  ${media.small} {
+    font-size: 0.8rem;
+  }
 `;
 
 const RankItem = styled.div`
@@ -62,6 +72,11 @@ const RankItem = styled.div`
   justify-content: center;
 
   width: 100%;
+
+  ${media.small} {
+    padding: 0 1rem;
+    margin-top: 2rem;
+  }
 `;
 
 export default ArtistRank;
