@@ -4,6 +4,7 @@ import { Carousel } from 'antd';
 import { Default } from '../../lib/Media';
 import { Link } from 'react-router-dom';
 import ArtistBannerContents from '../ArtistBannerContents/ArtistBannerContents';
+import { media } from '../../lib/Media';
 
 import ThumbIcon from '../../images/ThumbIcon.svg';
 import ViewIcon from '../../images/ViewIcon.svg';
@@ -77,7 +78,7 @@ const ArtistBanner = (props) => {
 
 const CustomCarousel = styled(Carousel)`
   width: 100%;
-  height: 18rem;
+  height: 20rem;
   position: relative;
 `;
 
@@ -90,6 +91,10 @@ const BannerContainer = styled.div`
 
   border-radius: 15px;
   overflow: hidden;
+
+  ${media.small} {
+    border-radius: 0;
+  }
 `;
 
 export default ArtistBanner;

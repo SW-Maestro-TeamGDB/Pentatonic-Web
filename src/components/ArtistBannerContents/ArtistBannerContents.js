@@ -1,9 +1,11 @@
 import react from 'react';
 import styled from 'styled-components';
 import { Carousel, Card } from 'antd';
-import { Default } from '../../lib/Media';
+import { media, Default } from '../../lib/Media';
 import { Link } from 'react-router-dom';
 import { sessionIconMatch } from '../../lib/sessionIconMatch';
+import { useMediaQuery } from 'react-responsive';
+import { CustomerServiceOutlined } from '@ant-design/icons';
 
 import ArtistRank from '../../images/ArtistRank.jpeg';
 import ThumbIcon from '../../images/ThumbIcon.svg';
@@ -11,6 +13,9 @@ import ViewIcon from '../../images/ViewIcon.svg';
 
 const ArtistBannerContents = (props) => {
   const { data, type } = props;
+  const isMobile = useMediaQuery({
+    query: '(max-width:767px)',
+  });
 
   return (
     <CarouselContents
@@ -18,11 +23,21 @@ const ArtistBannerContents = (props) => {
         type === 'band' ? `/lounge/cover/${data.bandId}` : `/profile/${data.id}`
       }
     >
-      <Background url={type === 'band' ? data.backGroundURI : ArtistRank} />
+      <Background
+        url={
+          type === 'band'
+            ? data.backGroundURI
+            : isMobile
+            ? data.profileURI
+            : ArtistRank
+        }
+      />
       {type === 'band' ? null : (
-        <ProfileContainer>
-          <ProfileImage src={data.profileURI} />
-        </ProfileContainer>
+        <Default>
+          <ProfileContainer>
+            <ProfileImage src={data.profileURI} />
+          </ProfileContainer>
+        </Default>
       )}
       <BannerContents>
         <CoverRecommendTitleContainer>
@@ -36,13 +51,14 @@ const ArtistBannerContents = (props) => {
             <>
               <Title>{data.name}</Title>
               <Desc>
+                <CustomerServiceOutlined style={{ marginRight: '8px' }} />
                 {data.song.name} - {data.song.artist}
               </Desc>
             </>
           ) : (
             <>
               <Title>{data.username}</Title>
-              <Desc>@ {data.id} </Desc>
+              <Desc>@ {data.id}</Desc>
             </>
           )}
         </CoverInfoContainer>
@@ -65,7 +81,7 @@ const Background = styled.div`
 
 const CarouselContents = styled(Link)`
   width: 100%;
-  height: 18rem;
+  height: 20rem;
   font-size: 3rem;
 
   display: flex;
@@ -118,6 +134,11 @@ const BannerContents = styled.div`
   display: flex;
   flex-direction: column;
   left: 3%;
+
+  ${media.small} {
+    bottom: 18%;
+    left: 5%;
+  }
 `;
 
 const CoverRecommendTitleContainer = styled.div`
@@ -127,20 +148,28 @@ const CoverRecommendTitleContainer = styled.div`
 
 const CoverRecommendTitle = styled.div`
   color: white;
-  font-size: 0.9vw;
+  font-size: 1rem;
   font-weight: 700;
   line-height: 1.5;
   letter-spacing: -0.4px;
-  padding-left: 0.2vw;
+  padding-left: 0.2rem;
+  margin-bottom: 0.3rem;
 
   display: flex;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
+
+  ${media.small} {
+    width: 100%;
+    font-size: 0.8rem;
+    padding-left: 3px;
+    margin-bottom: 0.5rem;
+  }
 `;
 
 const Title = styled.span`
   font-weight: 900;
-  font-size: 3.5vw;
+  font-size: 3rem;
   color: white;
 
   display: flex;
@@ -148,19 +177,30 @@ const Title = styled.span`
 
   line-height: 1;
   letter-spacing: 2px;
+
+  ${media.small} {
+    width: 100%;
+    font-size: 2rem;
+  }
 `;
 
 const Desc = styled.span`
   font-weight: 900;
-  font-size: 24px;
+  font-size: 1.5rem;
   color: white;
 
-  margin-top: 1vw;
+  margin-top: 1rem;
 
   display: flex;
   justify-content: flex-start;
   line-height: 1;
   letter-spacing: -1px;
+
+  ${media.small} {
+    width: 100%;
+    font-size: 1rem;
+    margin-top: 10px;
+  }
 `;
 
 const CountContainer = styled.span`

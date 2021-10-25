@@ -290,7 +290,7 @@ const CoverTitle = styled.div`
 
 const SongInform = styled.div`
   font-size: 12px;
-  color: #999;
+  color: #888;
   font-weight: 600;
 
   ${media.small} {

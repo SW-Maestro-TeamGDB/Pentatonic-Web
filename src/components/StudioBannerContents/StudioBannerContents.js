@@ -82,6 +82,11 @@ const BannerContents = styled.div`
   display: flex;
   flex-direction: column;
   left: 3%;
+
+  ${media.small} {
+    bottom: 18%;
+    left: 5%;
+  }
 `;
 
 const CoverRecommendTitleContainer = styled.div`
@@ -157,6 +162,10 @@ const CountContainer = styled.span`
   align-items: center;
   color: #fff;
   margin-top: 0.7rem;
+
+  ${media.small} {
+    transform: translateX(-0.5rem);
+  }
 `;
 
 const LikeCount = styled.span`
