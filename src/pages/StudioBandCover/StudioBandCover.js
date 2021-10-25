@@ -183,6 +183,8 @@ const SongContainer = styled.div`
 
   ${media.small} {
     margin-top: 0;
+    width: 100%;
+    padding: 0 1rem;
   }
 `;
 
@@ -201,7 +203,8 @@ const SubContainer = styled.div`
 
   ${media.small} {
     margin: 1.5rem 0;
-    width: 90%;
+    width: 100%;
+    padding: 0 1rem;
   }
 `;
 

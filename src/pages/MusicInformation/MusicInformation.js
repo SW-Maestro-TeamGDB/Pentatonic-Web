@@ -11,8 +11,6 @@ import { changeGenreToKorean } from '../../lib/changeGenreToKorean';
 import { useMediaQuery } from 'react-responsive';
 import { media, Default, Mobile, mobileCheck } from '../../lib/Media';
 
-import tempData from '../../data/songs/tempData.json';
-
 const GET_SONG = gql`
   query Query($getSongSongId: ObjectID!) {
     getSong(songId: $getSongSongId) {

@@ -1,6 +1,7 @@
 import react, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useQuery, gql, useLazyQuery } from '@apollo/client';
+import { media, Default, Mobile, mobileCheck } from '../../lib/Media';
 import styled from 'styled-components';
 
 import PageContainer from '../../components/PageContainer';
@@ -12,14 +13,6 @@ import RankList from '../../components/RankList';
 
 import GroupIcon from '../../images/GroupIcon.svg';
 import SoloIcon from '../../images/SoloIcon.svg';
-
-// tempData
-import TameImpala from '../../images/TempData/TameImpala.jpeg';
-import Hyukoh from '../../images/TempData/Hyukoh.jpeg';
-import Beatles from '../../images/TempData/Beatles.jpeg';
-import MenITrust from '../../images/TempData/MenITrust.jpeg';
-import NoSurprises from '../../images/TempData/NoSurprises.jpeg';
-import TheVolunteers from '../../images/TempData/TheVolunteers.jpeg';
 
 const GET_RANKED_USER = gql`
   query Query {
@@ -133,6 +126,12 @@ const BoardContainer = styled.div`
   justify-content: space-between;
   width: 100%;
   margin: 4vh 0 2vh;
+
+  ${media.small} {
+    margin: 2rem 0;
+    justify-content: center;
+    flex-direction: column;
+  }
 `;
 
 const BoardWrapper = styled.div`
@@ -141,6 +140,11 @@ const BoardWrapper = styled.div`
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
+
+  ${media.small} {
+    margin-top: 1rem;
+    padding: 0 1rem;
+  }
 `;
 
 const BoardHeader = styled.div`
@@ -162,6 +166,12 @@ const BoardTitle = styled.nav`
   margin-left: 1vw;
 
   line-height: 1;
+
+  ${media.small} {
+    font-size: 16px;
+    letter-spacing: -1px;
+    font-weight: 800;
+  }
 `;
 
 const BoardItems = styled.div`
@@ -182,6 +192,12 @@ const BoardLink = styled(Link)`
 
   &:hover {
     color: rgb(150, 150, 150);
+  }
+
+  ${media.small} {
+    font-size: 12px;
+    letter-spacing: -1px;
+    font-weight: 500;
   }
 `;
 
