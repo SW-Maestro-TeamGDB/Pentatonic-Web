@@ -5,12 +5,15 @@ import { changeGenreToKorean } from '../../lib/changeGenreToKorean';
 import { Default, media } from '../../lib/Media';
 
 const GenreButton = (props) => {
-  const { genre, setGenre } = props;
+  const { genre, setGenre, admin = false } = props;
   const genreMenu = (
     <CustomMenu>
-      <CustomMenuItem key={0} onClick={() => setGenre('전체')}>
-        전체
-      </CustomMenuItem>
+      {admin ? null : (
+        <CustomMenuItem key={0} onClick={() => setGenre('전체')}>
+          전체
+        </CustomMenuItem>
+      )}
+
       <CustomMenuItem key={1} onClick={() => setGenre('POP')}>
         {changeGenreToKorean('POP')}
       </CustomMenuItem>

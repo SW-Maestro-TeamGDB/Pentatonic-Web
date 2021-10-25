@@ -16,6 +16,7 @@ import Login from './pages/Login/Login';
 import FindAccount from './pages/FindAccount';
 import NotFoundPage from './pages/NotFoundPage';
 import CoverHistory from './pages/CoverHistory';
+import AdminPage from './pages/AdminPage';
 import PageTracker from './lib/PageTracker';
 
 function App() {
@@ -37,6 +38,7 @@ function App() {
             <Route path="/register" component={Register} />
             <Route path="/library" component={Library} />
             <Route path="/account" component={FindAccount} />
+            <Route path="/admin" component={AdminPage} />
             <Route path="*" component={NotFoundPage} exact />
           </Switch>
         </Centered>

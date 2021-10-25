@@ -7,12 +7,14 @@ import { Default, media } from '../../lib/Media';
 const { Option } = Select;
 
 const DifficultyButton = (props) => {
-  const { difficulty, setDifficulty } = props;
+  const { difficulty, setDifficulty, admin } = props;
   const DifficultyMenu = (
     <CustomMenu>
-      <CustomMenuItem key={0} onClick={() => setDifficulty('전체')}>
-        전체
-      </CustomMenuItem>
+      {admin ? null : (
+        <CustomMenuItem key={0} onClick={() => setDifficulty('전체')}>
+          전체
+        </CustomMenuItem>
+      )}
       <CustomMenuItem key={1} onClick={() => setDifficulty(1)}>
         <DifficultyIcon value={1} />
       </CustomMenuItem>
