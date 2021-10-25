@@ -4,8 +4,10 @@ import { useQuery, gql, useLazyQuery, useMutation } from '@apollo/client';
 import { DeleteFilled, EditOutlined, LoadingOutlined } from '@ant-design/icons';
 import { Skeleton, notification } from 'antd';
 import QuestionModal from '../QuestionModal';
+import { changeSessionNameToKorean } from '../../lib/changeSessionNameToKorean';
 import { sessionIconMatch } from '../../lib/sessionIconMatch';
 import { useMediaQuery } from 'react-responsive';
+import { changeDateToString } from '../../lib/changeDateToString';
 import { media, Default, Mobile } from '../../lib/Media';
 import ThumbIcon from '../../images/ThumbIcon.svg';
 import ViewIcon from '../../images/ViewIcon.svg';
@@ -127,22 +129,30 @@ const LibraryList = (props) => {
   }, [editToggle]);
 
   const onClickStart = () => {
-    inst.play();
-    setAudioState(1);
+    if (inst) {
+      inst.play();
+      setAudioState(1);
+    }
   };
 
   const onClickPause = () => {
-    inst.pause();
-    setAudioState(2);
+    if (inst) {
+      inst.pause();
+      inst.currentTime = 0;
+      setAudioState(2);
+    }
   };
 
   const onClickIcon = () => {
-    if (audioState === 1) {
-      inst.pause();
-      setAudioState(2);
-    } else {
-      inst.play();
-      setAudioState(1);
+    if (inst) {
+      if (audioState === 1) {
+        inst.pause();
+        inst.currentTime = 0;
+        setAudioState(2);
+      } else {
+        inst.play();
+        setAudioState(1);
+      }
     }
   };
 
@@ -253,6 +263,7 @@ const LibraryList = (props) => {
                 <SongInform selected={selected}>
                   {data.song.name} - {data.song.artist}
                 </SongInform>
+                <CoverTime>{changeDateToString(data.date)}</CoverTime>
               </>
             )}
           </CoverInform>
@@ -260,8 +271,10 @@ const LibraryList = (props) => {
             <>
               <SessionIconContainer>
                 <SessionIcon src={sessionIconMatch(data.position)} />
+                <SessionText>
+                  {changeSessionNameToKorean(data.position)} 커버
+                </SessionText>
               </SessionIconContainer>
-              <CoverTime>{data.date.substr(0, 10)}</CoverTime>
             </>
           ) : null}
           <Spacing width={isMobile ? '3px' : '3%'} />
@@ -374,11 +387,18 @@ const CoverContainer = styled.div`
     props.selected ? 'rgba(98, 54, 255, 0.7)' : 'transparent'};
 `;
 
+const SessionText = styled.div`
+  font-size: 0.8rem;
+  font-weight: 700;
+  margin-top: 10px;
+`;
+
 const SessionIconContainer = styled.div`
-  width: 10%;
+  width: 15%;
   display: flex;
   justify-content: center;
   align-items: center;
+  flex-direction: column;
 `;
 
 const SessionIcon = styled.img`
@@ -467,10 +487,10 @@ const Spacing = styled.div`
 `;
 
 const CoverTime = styled.div`
-  font-size: 0.8rem;
-  letter-spacing: -0.5px;
-  width: 20%;
-  text-align: center;
+  font-size: 0.7rem;
+  letter-spacing: -1px;
+  margin-top: 6px;
+  font-weight: 500;
 `;
 
 const EditButtonContainer = styled.div`
@@ -514,7 +534,7 @@ const EditButton = styled.div`
   border-radius: 8px;
   border: solid 1px #9561ff;
   color: #9561ff;
-  width: 4rem;
+  width: 4.5rem;
   height: 2.5rem;
   font-size: 0.8rem;
   cursor: pointer;
@@ -529,7 +549,7 @@ const DeleteButton = styled.div`
   border-radius: 8px;
   border: solid 1px #222;
   color: #222;
-  width: 4rem;
+  width: 4.5rem;
   height: 2.5rem;
   font-size: 0.8rem;
   cursor: pointer;
@@ -546,8 +566,8 @@ const ImageContainer = styled.div`
   margin: 0.5rem;
   display: flex;
   align-items: center;
-  width: 6.5rem;
-  height: 4.5rem;
+  width: 7.5rem;
+  height: 5.5rem;
 
   ${media.small} {
     width: 5rem;
@@ -567,7 +587,7 @@ const CoverImage = styled.img`
 `;
 
 const CoverInform = styled.div`
-  width: ${(props) => (props.edit ? '35%' : '50%')};
+  width: ${(props) => (props.edit ? '25%' : '50%')};
   color: black;
   padding-left: 0.5rem;
 
@@ -575,8 +595,6 @@ const CoverInform = styled.div`
   overflow: hidden;
   text-overflow: ellipsis;
   box-sizing: border-box;
-
-  padding-right: 1rem;
 `;
 
 const CoverMeta = styled.div`
@@ -599,6 +617,7 @@ const CoverTitle = styled.div`
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  line-height: 1.3;
 
   color: ${(props) => (props.selected ? '#fff' : '000')};
 
@@ -608,7 +627,7 @@ const CoverTitle = styled.div`
 `;
 
 const SongInform = styled.div`
-  font-size: 0.9rem;
+  font-size: 0.8rem;
   color: ${(props) => (props.selected ? '#ddd' : 'rgb(100, 100, 100)')};
 
   white-space: nowrap;
@@ -630,7 +649,7 @@ const CustomInput = styled.input`
   border-radius: 0.8rem;
   margin: 0.2rem 0;
   padding: 0 1rem;
-  font-size: 1.2rem;
+  font-size: 1.1rem;
 
   &:focus {
     border: 2px solid black;
