@@ -10,7 +10,7 @@ import GridContainer from '../../components/GridContainer/GridContainer';
 import ResponsiveCoverGrid from '../../components/ResponsiveCoverGrid/ResponsiveCoverGrid';
 import { SearchOutlined } from '@ant-design/icons';
 import { useMediaQuery } from 'react-responsive';
-import { media } from '../../lib/Media';
+import { media, Default } from '../../lib/Media';
 
 import LoungeBandImage from '../../images/LoungeBandCover.jpg';
 import LoungeSoloImage from '../../images/LoungeSoloCover.jpeg';
@@ -104,7 +104,9 @@ const LoungeHome = () => {
           {loadSoloCover()}
         </BoardWrapper>
       </BoardContainer>
-      <Spacing />
+      <Default>
+        <Spacing />
+      </Default>
       <BoardContainer>
         <CoverLinkContainer to="lounge/band">
           <Background url={LoungeBandImage} position="center" />
@@ -142,7 +144,7 @@ const CoverLinkContainer = styled(Link)`
   width: 100%;
   height: 7.5rem;
   border-radius: 15px;
-  margin: 1rem 1rem;
+  margin: 0.5rem;
   overflow: hidden;
 
   display: flex;
@@ -183,7 +185,7 @@ const LinkText = styled.div`
 `;
 
 const Spacing = styled.div`
-  margin: 1rem 0;
+  margin: 0.8rem 0;
 
   ${media.small} {
     margin: 0.8rem 0;
