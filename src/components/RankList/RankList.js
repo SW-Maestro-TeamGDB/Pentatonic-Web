@@ -49,7 +49,11 @@ const RankList = (props) => {
         </CustomLink>
       </ListTitle>
       <CountContainer>
-        <CustomIcon src={bandType ? ThumbIcon : HeartIcon} />
+        {bandType ? (
+          <CustomIcon src={ThumbIcon} />
+        ) : (
+          <CustomHeartIcon src={HeartIcon} />
+        )}
         <CountText> {bandType ? data.likeCount : data.followerCount}</CountText>
       </CountContainer>
     </RankListContainer>
@@ -181,6 +185,16 @@ const CustomIcon = styled.img`
   width: 14px;
   filter: invert(25%) sepia(39%) saturate(0%) hue-rotate(199deg) brightness(93%)
     contrast(92%);
+
+  ${media.small} {
+    width: 0.7rem;
+  }
+`;
+
+const CustomHeartIcon = styled.img`
+  width: 14px;
+  filter: invert(11%) sepia(85%) saturate(5263%) hue-rotate(357deg)
+    brightness(90%) contrast(115%);
 
   ${media.small} {
     width: 0.7rem;
