@@ -159,6 +159,7 @@ const CoverMaking = ({ match }) => {
           isFreeCover={isFreeCover}
           userId={userId}
           songData={songData}
+          setInst={setInst}
         />
       ),
     },
