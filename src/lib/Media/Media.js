@@ -30,7 +30,8 @@ const mobileCheck = () => {
       'freebsd',
       'openbsd',
       'sunos',
-    ].indexOf(navigator.platform.toLocaleLowerCase()) === -1
+    ].indexOf(navigator.platform.toLocaleLowerCase()) === -1 ||
+    navigator.maxTouchPoints >= 5
   );
 };
 
