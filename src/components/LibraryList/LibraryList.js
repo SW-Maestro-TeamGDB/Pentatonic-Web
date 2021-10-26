@@ -265,7 +265,12 @@ const LibraryList = (props) => {
                   {data.song.name} - {data.song.artist}
                 </SongInform>
                 <CoverTime selected={selected}>
-                  {changeDateToString(data.date)}
+                  {new Date(data.date).toISOString().split('T')[0] +
+                    ' ' +
+                    new Date(data.date)
+                      .toTimeString()
+                      .split(' ')[0]
+                      .slice(0, -3)}
                 </CoverTime>
               </>
             )}
