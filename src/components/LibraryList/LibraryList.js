@@ -159,6 +159,13 @@ const LibraryList = (props) => {
 
         const audio = new Audio();
         audio.src = data.coverURI;
+        audio.addEventListener('ended', function () {
+          audio.src = '';
+          audio.removeAttribute('src');
+          audio.load();
+          setSelectedAudio();
+          setAudioState(0);
+        });
         setSelectedAudio(audio);
         setAudioState(1);
         audio.play();
@@ -166,6 +173,13 @@ const LibraryList = (props) => {
     } else {
       const audio = new Audio();
       audio.src = data.coverURI;
+      audio.addEventListener('ended', function () {
+        audio.src = '';
+        audio.removeAttribute('src');
+        audio.load();
+        setSelectedAudio();
+        setAudioState(0);
+      });
       setSelectedAudio(audio);
       setAudioState(1);
       audio.play();
