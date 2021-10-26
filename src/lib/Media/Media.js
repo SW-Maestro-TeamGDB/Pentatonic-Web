@@ -18,8 +18,19 @@ const Default = ({ children }) => {
 };
 
 const mobileCheck = () => {
-  return !/win16|win32|win64|windows|mac|macintel|linux|freebsd|openbsd|sunos/i.test(
-    navigator.platform.toLocaleLowerCase(),
+  return (
+    [
+      'win16',
+      'win32',
+      'win64',
+      'windows',
+      'mac',
+      'macintel',
+      'linux',
+      'freebsd',
+      'openbsd',
+      'sunos',
+    ].indexOf(navigator.platform.toLocaleLowerCase()) === -1
   );
 };
 
