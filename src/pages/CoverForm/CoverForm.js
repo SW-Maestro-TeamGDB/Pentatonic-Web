@@ -9,8 +9,12 @@ import SessionAddPanel from '../../components/SessionAddPanel';
 import SessionContents from '../../components/SessionContents';
 import InstSelect from '../../components/InstSelect';
 import LoadingModal from '../../components/LoadingModal';
-import { Upload, notification, Collapse, Select } from 'antd';
-import { LeftOutlined, PictureOutlined } from '@ant-design/icons';
+import { Upload, notification, Collapse, Select, Popover } from 'antd';
+import {
+  LeftOutlined,
+  PictureOutlined,
+  QuestionCircleFilled,
+} from '@ant-design/icons';
 import { changeSessionNameToKorean } from '../../lib/changeSessionNameToKorean';
 
 import sessionType from '../../data/sessionType.json';
@@ -197,6 +201,18 @@ const CoverForm = (props) => {
     });
   };
 
+  const HelpContent = (
+    <HelpContainer>
+      <HelpWrapper>
+        <HelpTitle>반주를 선택했는데 들리지 않아요!</HelpTitle>
+        <HelpDesc>
+          반주에 따라 부분적으로 녹음된 반주가 있을 수 있습니다. 들리지 않는
+          부분은 선택한 세션이 연주하지 않는 부분입니다.
+        </HelpDesc>
+      </HelpWrapper>
+    </HelpContainer>
+  );
+
   // 페이지 렌더마다 데이터 초기화
   useEffect(() => {
     initBandData();
@@ -329,9 +345,9 @@ const CoverForm = (props) => {
           </InputContainer>
         ) : (
           <InputContainer>
-            <CustomTitle>세션 프리셋</CustomTitle>
+            <CustomTitle>밴드 구성</CustomTitle>
             <CustomDescription>
-              커버에 필요한 세션을 추가하고 녹음에 참여할 세션을 고릅니다
+              밴드에 필요한 세션을 구성하고, 참여할 세션을 클릭해 고릅니다
             </CustomDescription>
             <SessionContainer>
               {session.length > 0 ? (
@@ -367,7 +383,10 @@ const CoverForm = (props) => {
           <InputContainer>
             <CustomTitle>제공 반주</CustomTitle>
             <CustomDescription>
-              녹음에 사용될 반주를 조합합니다
+              녹음에 사용될 반주를 조합합니다{' '}
+              <CustomPopover placement="rightTop" content={HelpContent}>
+                <QuestionCircleFilled />
+              </CustomPopover>
             </CustomDescription>
             <InstContainer>
               <InstSelect
@@ -407,6 +426,39 @@ const Container = styled.div`
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
   border-radius: 1rem;
   margin-top: 4%;
+`;
+
+const CustomPopover = styled(Popover)`
+  color: #444;
+  font-size: 0.8rem;
+  margin-left: 1rem;
+`;
+
+const HelpContainer = styled.div`
+  width: 20rem;
+  height: auto;
+  padding: 1rem;
+`;
+
+const HelpWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding-bottom: 1.5rem;
+`;
+
+const HelpTitle = styled.div`
+  font-size: 1.1rem;
+  font-weight: 800;
+  background-color: rgba(100, 100, 100, 0.1);
+  border-radius: 10px;
+  padding: 0.3rem 0.7rem;
+  letter-spacing: -1px;
+`;
+
+const HelpDesc = styled.div`
+  font-size: 0.8rem;
+  margin-top: 1rem;
 `;
 
 const SessionSelect = styled(Select)`
@@ -570,6 +622,10 @@ const SongTitle = styled.div`
 const CustomTitle = styled.div`
   font-size: 1.2rem;
   font-weight: 800;
+`;
+
+const ExtraDesc = styled.span`
+  font-size: 0.8rem;
 `;
 
 const CustomDescription = styled.div`
