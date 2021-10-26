@@ -31,7 +31,7 @@ const GET_SONG = gql`
 
 const { Step } = Steps;
 
-const CoverMaking = ({ match }) => {
+const CoverMaking = ({ match, history }) => {
   const [page, setPage] = useState(0);
   const [audioFile, setAudioFile] = useState();
   const [audioDuration, setAudioDuration] = useState();
@@ -139,6 +139,7 @@ const CoverMaking = ({ match }) => {
           bandData={bandData}
           songData={songData}
           isFreeCover={isFreeCover}
+          history={history}
         />
       ),
     },
@@ -160,6 +161,7 @@ const CoverMaking = ({ match }) => {
           userId={userId}
           songData={songData}
           setInst={setInst}
+          history={history}
         />
       ),
     },

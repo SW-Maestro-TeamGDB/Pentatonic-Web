@@ -29,7 +29,7 @@ const GET_SONG = gql`
   }
 `;
 
-const RecordMaking = ({ match }) => {
+const RecordMaking = ({ match, history }) => {
   const [page, setPage] = useState(0);
   const [audioFile, setAudioFile] = useState();
   const [audioDuration, setAudioDuration] = useState();
@@ -109,6 +109,7 @@ const RecordMaking = ({ match }) => {
           bandData={bandData}
           songData={songData}
           setInst={setInst}
+          history={history}
         />
       ),
     },
@@ -125,6 +126,7 @@ const RecordMaking = ({ match }) => {
           selectedSession={selectedSession}
           songData={songData}
           setInst={setInst}
+          history={history}
         />
       ),
     },

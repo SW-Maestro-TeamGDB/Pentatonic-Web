@@ -32,6 +32,7 @@ const RecordPage = (props) => {
     isFreeCover,
     setInst,
     instDuration,
+    history,
   } = props;
   const [countdown, setCountDown] = useState(4);
   const [audioCtx, setAudioCtx] = useState();
@@ -486,6 +487,16 @@ const RecordPage = (props) => {
       setCountDownState(false);
     };
   }, []);
+
+  useEffect(() => {
+    const unBlock = history.block(
+      `페이지를 이동하면 녹음 정보가 삭제됩니다. 이동하시겠습니까?`,
+    );
+
+    return () => {
+      unBlock();
+    };
+  }, [history]);
 
   const showRecordingState = useMemo(() => {
     if (countdown !== 4) {

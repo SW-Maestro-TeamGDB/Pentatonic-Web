@@ -69,7 +69,7 @@ const { Panel } = Collapse;
 const { Option } = Select;
 const { Dragger } = Upload;
 
-const AdminPage = () => {
+const AdminPage = ({ history }) => {
   const [page, setPage] = useState(1);
   const [code, setCode] = useState();
   const [codeCheck, setCodeCheck] = useState(false);
@@ -310,6 +310,16 @@ const AdminPage = () => {
   useEffect(() => {
     if (songId) setInstData({ ...instData, songId: songId });
   }, [songId]);
+
+  useEffect(() => {
+    const unBlock = history.block(
+      `페이지를 이동하면 곡 정보가 삭제됩니다. 이동하시겠습니까?`,
+    );
+
+    return () => {
+      unBlock();
+    };
+  }, [history]);
 
   return (
     <>

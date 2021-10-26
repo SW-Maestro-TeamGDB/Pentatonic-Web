@@ -54,7 +54,7 @@ const GET_BAND = gql`
   }
 `;
 
-const CoverRoomRecord = ({ match }) => {
+const CoverRoomRecord = ({ match, history }) => {
   const location = useLocation();
   const [page, setPage] = useState(0);
   const [audioFile, setAudioFile] = useState();
@@ -137,6 +137,7 @@ const CoverRoomRecord = ({ match }) => {
           songData={songData}
           setInst={setInst}
           instDuration={instDuration}
+          history={history}
         />
       ),
     },
@@ -155,6 +156,7 @@ const CoverRoomRecord = ({ match }) => {
           songData={songData}
           instDuration={instDuration}
           existingInst={existingInst}
+          history={history}
         />
       ),
     },

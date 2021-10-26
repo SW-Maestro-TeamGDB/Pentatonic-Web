@@ -69,6 +69,7 @@ const RecordEdit = (props) => {
     instDuration,
     audioDuration,
     existingInst,
+    history,
   } = props;
   // 업로드 모달
   const [modalToggle, setModalToggle] = useState(false);
@@ -395,6 +396,16 @@ const RecordEdit = (props) => {
       });
     }
   };
+
+  useEffect(() => {
+    const unBlock = history.block(
+      `페이지를 이동하면 녹음 정보가 삭제됩니다. 이동하시겠습니까?`,
+    );
+
+    return () => {
+      unBlock();
+    };
+  }, [history]);
 
   const showAudioPlayer = useMemo(() => {
     return (
