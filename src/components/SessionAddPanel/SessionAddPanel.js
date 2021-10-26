@@ -149,16 +149,17 @@ const Centered = styled.span`
 
 const SessionSubmitButton = styled.button`
   border-radius: 0.5rem;
-  background-color: black;
+  background-color: rgba(98, 54, 255, 0.9);
   width: 15%;
   margin-right: 3%;
-  height: 2rem;
+  height: 2.5rem;
   border: none;
   color: white;
   font-size: 0.8rem;
+  font-weight: 700;
   cursor: pointer;
   &:hover {
-    background-color: rgb(50, 50, 50);
+    background-color: rgba(98, 54, 255, 1);
   }
 `;
 

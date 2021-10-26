@@ -784,7 +784,8 @@ const FollowingButton = styled.div`
   justify-content: center;
   align-items: center;
 
-  background-color: #666;
+  background-color: rgba(98, 54, 255, 0.9);
+
   color: white;
 
   font-size: 1rem;
@@ -793,7 +794,7 @@ const FollowingButton = styled.div`
   transition: all 0.3s ease-in-out;
 
   &:hover {
-    background-color: #555;
+    background-color: rgba(98, 54, 255, 1);
   }
 
   ${media.small} {

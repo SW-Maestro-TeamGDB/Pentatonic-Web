@@ -197,7 +197,7 @@ const ButtonContainer = styled.div`
 `;
 
 const CustomButton = styled.button`
-  background-color: black;
+  background-color: rgba(98, 54, 255, 0.9);
   border: none;
   color: white;
   width: 12rem;
@@ -210,7 +210,7 @@ const CustomButton = styled.button`
   transition: all ease 0.3s;
 
   &:hover {
-    background-color: #3d3d3d;
+    background-color: rgba(98, 54, 255, 1);
   }
 
   ${media.small} {

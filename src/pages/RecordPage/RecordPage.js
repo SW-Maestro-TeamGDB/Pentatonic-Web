@@ -749,14 +749,15 @@ const SubmitContainer = styled.div`
 
 const SubmitButton = styled.div`
   cursor: pointer;
-  background-color: black;
+  background-color: rgba(98, 54, 255, 0.9);
   color: white;
   padding: 0.5rem 1rem;
   border-radius: 1rem;
   transition: all ease-in-out 0.3s;
+  font-weight: 700;
 
   &:hover {
-    background-color: rgb(50, 50, 50);
+    background-color: rgba(98, 54, 255, 1);
   }
 `;
 

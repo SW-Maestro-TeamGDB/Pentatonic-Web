@@ -778,7 +778,7 @@ const CoverImage = styled.img`
 
 const SubmitButton = styled.button`
   border-radius: 0.8rem;
-  background-color: black;
+  background-color: rgba(98, 54, 255, 0.9);
   margin: 1rem 0;
   width: 100%;
   height: 4rem;
@@ -787,8 +787,9 @@ const SubmitButton = styled.button`
   font-size: 1.2rem;
   cursor: pointer;
   transition: all ease-in-out 0.3s;
+  font-weight: 700;
   &:hover {
-    background-color: rgb(50, 50, 50);
+    background-color: rgba(98, 54, 255, 1);
   }
 `;
 

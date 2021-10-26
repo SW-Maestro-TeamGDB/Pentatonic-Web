@@ -209,16 +209,17 @@ const PasswordInput = styled.input.attrs({ type: 'password' })`
 
 const SubmitButton = styled.button`
   border-radius: 0.8rem;
-  background-color: black;
+  background-color: rgba(98, 54, 255, 0.9);
   margin: 0.5rem 0;
   height: 4rem;
   border: none;
   color: white;
   font-size: 1.2rem;
   cursor: pointer;
+  font-weight: 700;
   transition: all ease-in-out 0.3s;
   &:hover {
-    background-color: rgb(50, 50, 50);
+    background-color: rgba(98, 54, 255, 1);
   }
 `;
 

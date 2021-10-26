@@ -231,12 +231,12 @@ const EditSubmitButton = styled.button`
 
   transition: background-color 0.3s ease-in-out;
 
-  background-color: #000;
+  background-color: rgba(98, 54, 255, 0.9);
   color: white;
   border-radius: 8px;
 
   &:hover {
-    background-color: #333;
+    background-color: rgba(98, 54, 255, 1);
   }
 
   &:disabled {

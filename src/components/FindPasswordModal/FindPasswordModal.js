@@ -277,13 +277,13 @@ const CustomDescription = styled.div`
 `;
 
 const AuthButton = styled.button`
-  background-color: black;
+  background-color: rgba(98, 54, 255, 0.9);
   border: none;
   color: white;
   width: 25%;
   height: 4rem;
   font-size: 1rem;
-  font-weight: 500;
+  font-weight: 700;
   padding: 0.5rem 1rem;
   border-radius: 0.8rem;
   cursor: pointer;
@@ -291,7 +291,7 @@ const AuthButton = styled.button`
   margin-left: 5%;
 
   &:hover {
-    background-color: #3d3d3d;
+    background-color: rgba(98, 54, 255, 1);
   }
 `;
 
@@ -356,16 +356,17 @@ const SubmitButton = styled.button`
   position: absolute;
   bottom: 0%;
   left: 0;
-  background-color: black;
+  background-color: rgba(98, 54, 255, 0.9);
   width: 100%;
   height: 4rem;
   border: none;
   color: white;
   font-size: 1.2rem;
+  font-weight: 700;
   cursor: pointer;
   transition: all ease-in-out 0.3s;
   &:hover {
-    background-color: rgb(50, 50, 50);
+    background-color: rgba(98, 54, 255, 1);
   }
 `;
 

@@ -83,7 +83,7 @@ const ModalContainer = styled.div`
 
 const SubmitButton = styled.button`
   border-radius: 0.8rem;
-  background-color: black;
+  background-color: rgba(98, 54, 255, 0.9);
   margin: 1.5rem 0;
   width: 80%;
   padding: 0.7rem 0;
@@ -94,7 +94,7 @@ const SubmitButton = styled.button`
   cursor: pointer;
   transition: all ease-in-out 0.3s;
   &:hover {
-    background-color: rgb(50, 50, 50);
+    background-color: rgba(98, 54, 255, 1);
   }
 `;
 

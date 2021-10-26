@@ -1201,7 +1201,7 @@ const SubmitButton = styled.div`
 
 const CommentButton = styled.button`
   border-radius: 10px;
-  background-color: black;
+  background-color: rgba(98, 54, 255, 0.9);
   width: 6rem;
   height: 100%;
   border: none;
@@ -1212,7 +1212,7 @@ const CommentButton = styled.button`
   transition: all ease-in-out 0.3s;
 
   &:hover {
-    background-color: rgb(50, 50, 50);
+    background-color: rgba(98, 54, 255, 1);
   }
 
   &:disabled {
