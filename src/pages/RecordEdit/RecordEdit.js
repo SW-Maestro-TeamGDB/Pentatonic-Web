@@ -90,6 +90,7 @@ const RecordEdit = (props) => {
   const [recordSound, setRecordSound] = useState();
   // 언마운트를 위한 녹음 사운드 ref
   const recordSoundRef = useRef();
+  const loadingRef = useRef();
 
   const [uploadCoverFile, uploadCoverFileResult] = useMutation(
     UPLOAD_COVER_FILE,
@@ -358,6 +359,10 @@ const RecordEdit = (props) => {
     }
   }, [volume]);
 
+  useEffect(() => {
+    loadingRef.current = modalLoading;
+  }, [modalLoading]);
+
   const changeSync = (sync) => {
     if (recordSound) {
       recordSound.stop();
@@ -398,9 +403,10 @@ const RecordEdit = (props) => {
   };
 
   useEffect(() => {
-    const unBlock = history.block(
-      `페이지를 이동하면 녹음 정보가 삭제됩니다. 이동하시겠습니까?`,
-    );
+    const unBlock = history.block((location, action) => {
+      if (!loadingRef.current) return true;
+      else return `페이지를 이동하면 녹음 정보가 삭제됩니다. 이동하시겠습니까?`;
+    });
 
     return () => {
       unBlock();
