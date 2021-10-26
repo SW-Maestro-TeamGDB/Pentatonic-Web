@@ -10,6 +10,7 @@ import NotFoundPage from '../NotFoundPage';
 import LoungeFreeCovers from '../LoungeFreeCovers';
 import LoungeSongCovers from '../LoungeSongCovers';
 import CoverRoomRecord from '../CoverRoomRecord/CoverRoomRecord';
+import TrendingCover from '../TrendingCover/TrendingCover';
 
 const Lounge = ({ match }) => {
   return (
@@ -41,6 +42,11 @@ const Lounge = ({ match }) => {
       />
       <Route path={`${match.path}/free`} component={LoungeFreeCovers} />
       <Route path={`${match.path}/cover/:id`} component={CoverRoom} exact />
+      <Route
+        path={`${match.path}/trending/:id`}
+        component={TrendingCover}
+        exact
+      />
       <Route
         path={`${match.path}/record/:id`}
         component={CoverRoomRecord}

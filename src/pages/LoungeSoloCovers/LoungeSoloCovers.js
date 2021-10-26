@@ -15,6 +15,8 @@ import GridContainer from '../../components/GridContainer/GridContainer';
 import { useMediaQuery } from 'react-responsive';
 import { media, Default } from '../../lib/Media';
 
+import LoungeSoloCover from '../../images/LoungeSoloCover.jpeg';
+
 const QUERY_BAND = gql`
   query Query($queryBandFilter: QueryBandInput!) {
     queryBand(filter: $queryBandFilter) {
@@ -103,7 +105,7 @@ const LoungeSoloCovers = ({ match }) => {
   return (
     <PageContainer>
       <PageImage
-        imgUrl="https://images.unsplash.com/photo-1510915361894-db8b60106cb1?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1050&q=80"
+        imgUrl={LoungeSoloCover}
         title="솔로 커버"
         desc="유저들의 솔로 커버를 감상하고 참여해보세요"
       />

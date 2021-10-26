@@ -111,7 +111,7 @@ const LoungeBandCovers = ({ match }) => {
         imgUrl="https://images.unsplash.com/photo-1499364615650-ec38552f4f34?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1072&q=80"
         title="자유곡 커버"
         desc="유저들이 자유롭게 녹음한 커버를 감상하고 참여해보세요"
-        position="top"
+        position="center"
       />
       <PageDesc>
         {content ? (

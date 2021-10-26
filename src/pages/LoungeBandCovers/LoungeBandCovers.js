@@ -15,6 +15,8 @@ import GridContainer from '../../components/GridContainer/GridContainer';
 import { useMediaQuery } from 'react-responsive';
 import { media, Default } from '../../lib/Media';
 
+import StudioBandImage from '../../images/StudioBandCover.jpg';
+
 const QUERY_BAND = gql`
   query Query($queryBandFilter: QueryBandInput!) {
     queryBand(filter: $queryBandFilter) {
@@ -103,10 +105,10 @@ const LoungeBandCovers = ({ match }) => {
   return (
     <PageContainer>
       <PageImage
-        imgUrl="https://images.pexels.com/photos/167636/pexels-photo-167636.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260"
+        imgUrl={StudioBandImage}
         title="밴드 커버"
         desc="유저들의 밴드 커버를 감상하고 참여해보세요"
-        position="top"
+        position="center"
       />
       <PageDesc>
         {content ? (

@@ -12,7 +12,7 @@ import SongGrid from '../../components/SongGrid';
 
 import GroupIcon from '../../images/GroupIcon.svg';
 import SoloIcon from '../../images/SoloIcon.svg';
-import StudioBandImage from '../../images/StudioBandCover.jpeg';
+import StudioBandImage from '../../images/StudioBandCover.jpg';
 import StudioSoloImage from '../../images/StudioSoloCover.jpeg';
 
 const QUERY_SONG = gql`

@@ -7,8 +7,12 @@ import PageContainer from '../../components/PageContainer';
 import SearchBar from '../../components/SearchBar';
 import CoverGrid from '../../components/CoverGrid/CoverGrid';
 import GridContainer from '../../components/GridContainer/GridContainer';
+import { SearchOutlined } from '@ant-design/icons';
 import { useMediaQuery } from 'react-responsive';
 import { media } from '../../lib/Media';
+
+import StudioBandImage from '../../images/StudioBandCover.jpg';
+import LoungeSoloCover from '../../images/LoungeSoloCover.jpeg';
 
 const GET_TREND_BANDS = gql`
   query Query($querySongFilter: QuerySongInput!) {
@@ -48,7 +52,9 @@ const LoungeHome = () => {
       },
     },
   });
+
   const COVER_WIDTH = useMediaQuery({ maxWidth: 767 }) ? '160px' : '200px';
+
   const loadBandCover = () => {
     if (data) {
       const filtered = data.getTrendBands.filter((v) => !v.isSoloBand);
@@ -92,29 +98,107 @@ const LoungeHome = () => {
   return (
     <PageContainer>
       <WeeklyBanner data={data?.querySong} />
-      <Spacing />
+      <Spacing /> <Spacing />
       <BoardContainer>
         <BoardWrapper>
           <BoardHeader>
-            <BoardTitle>떠오르는 솔로커버</BoardTitle>
-            <BoardLink to="/lounge/solo">더보기</BoardLink>
-          </BoardHeader>
-          {loadSoloCover()}
-        </BoardWrapper>
-        <BoardWrapper>
-          <BoardHeader>
             <BoardTitle>떠오르는 밴드커버</BoardTitle>
-            <BoardLink to="/lounge/band">더보기</BoardLink>
+            <BoardLink to="lounge/trending/band">더보기</BoardLink>
           </BoardHeader>
           {loadBandCover()}
         </BoardWrapper>
+        <BoardWrapper>
+          <BoardHeader>
+            <BoardTitle>떠오르는 솔로커버</BoardTitle>
+            <BoardLink to="lounge/trending/solo">더보기</BoardLink>
+          </BoardHeader>
+          {loadSoloCover()}
+        </BoardWrapper>
+      </BoardContainer>
+      <Spacing />
+      <BoardContainer>
+        <CoverLinkContainer to="lounge/band">
+          <Background url={StudioBandImage} position="center" />
+          <LinkText>
+            <SearchOutlined style={{ marginRight: '10px' }} /> 밴드 커버
+            전체보기
+          </LinkText>
+        </CoverLinkContainer>
+        <CoverLinkContainer to="lounge/solo">
+          <Background url={LoungeSoloCover} position="center" />
+          <LinkText>
+            <SearchOutlined style={{ marginRight: '10px' }} /> 솔로 커버
+            전체보기
+          </LinkText>
+        </CoverLinkContainer>
       </BoardContainer>
     </PageContainer>
   );
 };
 
+const Background = styled.div`
+  position: absolute;
+  width: 100%;
+  height: 100%;
+
+  background-image: url(${(props) => props.url});
+  background-repeat: no-repeat;
+  background-position: ${(props) => `${props.position} center`};
+  background-size: cover;
+  filter: blur(1px) brightness(50%);
+  transition: all 0.3s ease-in-out;
+`;
+
+const CoverLinkContainer = styled(Link)`
+  width: 100%;
+  height: 9rem;
+  border-radius: 15px;
+  margin: 1rem 1rem;
+  overflow: hidden;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  position: relative;
+
+  ${media.small} {
+    height: 5rem;
+    margin: 0.5rem 0;
+    width: 90%;
+  }
+
+  &:hover {
+    ${Background} {
+      filter: blur(0.5px) brightness(65%);
+    }
+  }
+`;
+
+const LinkText = styled.div`
+  font-size: 1.5rem;
+  font-weight: 900;
+  color: white;
+  letter-spacing: -0.5px;
+  z-index: 2;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  ${media.small} {
+    font-size: 1.1rem;
+    font-weight: 800;
+  }
+`;
+
 const Spacing = styled.div`
   margin: 1rem 0;
+
+  ${media.small} {
+    margin: 0.5rem 0;
+  }
 `;
 
 const BoardContainer = styled.div`
