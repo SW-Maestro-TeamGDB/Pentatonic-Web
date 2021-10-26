@@ -97,6 +97,25 @@ const MusicInformation = ({ match }) => {
     }
   };
 
+  const HelpContent = (
+    <HelpContainer>
+      <HelpWrapper>
+        <HelpTitle>라이브러리 녹음하기?</HelpTitle>
+        <HelpDesc>
+          라운지의 다양한 커버에 참여하기 위해 내{' '}
+          <b>라이브러리에 녹음본을 저장</b>합니다.
+        </HelpDesc>
+      </HelpWrapper>
+      <HelpWrapper>
+        <HelpTitle>커버 만들기?</HelpTitle>
+        <HelpDesc>
+          라운지에 올라가는 <b>사용자들이 참여할 수 있는 커버</b>를 만듭니다.
+          (녹음본은 라이브러리에 저장됩니다)
+        </HelpDesc>
+      </HelpWrapper>
+    </HelpContainer>
+  );
+
   return (
     <PageContainer>
       {musicData ? (
@@ -156,9 +175,9 @@ const MusicInformation = ({ match }) => {
                     <MakingCoverButton to={match.url + '/cover'}>
                       커버 만들기
                     </MakingCoverButton>
-                    {/* <CustomPopover placement="bottom" content={<h2>gd</h2>}>
+                    <CustomPopover placement="rightTop" content={HelpContent}>
                       <QuestionCircleFilled />
-                    </CustomPopover> */}
+                    </CustomPopover>
                   </ButtonContainer>
                 ) : (
                   <RecordNoticeContainer>
@@ -201,6 +220,33 @@ const MusicInformation = ({ match }) => {
     </PageContainer>
   );
 };
+
+const HelpContainer = styled.div`
+  width: 20rem;
+  height: auto;
+  padding: 1rem;
+`;
+
+const HelpWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding-bottom: 1.5rem;
+`;
+
+const HelpTitle = styled.div`
+  font-size: 1.1rem;
+  font-weight: 800;
+  background-color: rgba(100, 100, 100, 0.1);
+  border-radius: 10px;
+  padding: 0.3rem 0.7rem;
+  letter-spacing: -1px;
+`;
+
+const HelpDesc = styled.div`
+  font-size: 0.8rem;
+  margin-top: 1rem;
+`;
 
 const MusicInformContainer = styled.div`
   display: flex;
