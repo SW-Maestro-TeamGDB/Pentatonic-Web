@@ -159,7 +159,7 @@ const CoverContainer = styled.div`
   justify-content: center;
   width: 100%;
   height: auto;
-  margin: 2vh 0;
+  margin: 0.5rem 0;
   color: black;
   overflow: hidden;
 
