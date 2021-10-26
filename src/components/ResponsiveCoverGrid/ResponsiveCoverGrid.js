@@ -21,7 +21,7 @@ const ResponsiveCoverGrid = (props) => {
   }, []);
 
   const showResponsiveCoverGrid = () => {
-    if (windowWidth) {
+    if (windowWidth && coverData) {
       const coverUnit = parseInt(
         (windowWidth * 0.945) / parseInt(coverWidth.split('px')[0]),
       );
