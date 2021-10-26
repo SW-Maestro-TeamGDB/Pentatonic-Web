@@ -479,6 +479,7 @@ const Profile = ({ match }) => {
                 <ResponsiveCoverGrid
                   coverWidth={COVER_WIDTH}
                   coverData={userData?.band}
+                  reversed
                 />
               )}
             </CoverHistoryContainer>
