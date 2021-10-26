@@ -4,8 +4,8 @@ import GridContainer from '../GridContainer';
 import styled from 'styled-components';
 import { debounce } from 'lodash';
 
-const CoverHistory = (props) => {
-  const { coverWidth, coverData } = props;
+const ResponsiveCoverGrid = (props) => {
+  const { coverWidth, coverData, half } = props;
   const [windowWidth, setWindowWidth] = useState(0);
   const resizeWindow = debounce(
     () => setWindowWidth(coverRef.current.clientWidth),
@@ -19,9 +19,11 @@ const CoverHistory = (props) => {
     return () => window.removeEventListener('resize', resizeWindow);
   }, []);
 
-  const showCoverHistory = () => {
+  const showResponsiveCoverGrid = () => {
     if (windowWidth) {
-      const coverUnit = parseInt((windowWidth * 0.95) / coverWidth);
+      const coverUnit = parseInt(
+        (windowWidth * 0.945) / parseInt(coverWidth.split('px')[0]),
+      );
 
       return [...coverData]
         .reverse()
@@ -33,16 +35,16 @@ const CoverHistory = (props) => {
   };
 
   return (
-    <CoverHistoryContainer ref={coverRef}>
-      <GridContainer templateColumn={`${coverWidth}px`} autoFill>
-        {showCoverHistory()}
+    <ResponsiveCoverGridContainer ref={coverRef}>
+      <GridContainer templateColumn={coverWidth} autoFill>
+        {showResponsiveCoverGrid()}
       </GridContainer>
-    </CoverHistoryContainer>
+    </ResponsiveCoverGridContainer>
   );
 };
 
-const CoverHistoryContainer = styled.div`
+const ResponsiveCoverGridContainer = styled.div`
   width: 100%;
 `;
 
-export default CoverHistory;
+export default ResponsiveCoverGrid;
