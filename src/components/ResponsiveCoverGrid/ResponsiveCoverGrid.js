@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import { debounce } from 'lodash';
 
 const ResponsiveCoverGrid = (props) => {
-  const { coverWidth, coverData, half } = props;
+  const { coverWidth, coverData } = props;
   const [windowWidth, setWindowWidth] = useState(0);
   const resizeWindow = debounce(
     () => setWindowWidth(coverRef.current.clientWidth),

@@ -13,8 +13,9 @@ import CoverGrid from '../../components/CoverGrid';
 import QuestionModal from '../../components/QuestionModal/QuestionModal';
 import NotFoundPage from '../NotFoundPage';
 import PositionGrid from '../../components/PositionGrid';
-import CoverHistory from '../../components/CoverHistroy/CoverHistory';
+import ResponsiveCoverGrid from '../../components/ResponsiveCoverGrid/ResponsiveCoverGrid';
 import CropModal from '../../components/CropModal';
+import { useMediaQuery } from 'react-responsive';
 import { Upload, notification } from 'antd';
 import styled from 'styled-components';
 import { file } from '@babel/types';
@@ -88,7 +89,7 @@ const Profile = ({ match }) => {
   });
 
   const coverRef = useRef();
-  const coverWidth = 220;
+  const COVER_WIDTH = useMediaQuery({ maxWidth: 767 }) ? '160px' : '200px';
 
   const [cropModal, setCropModal] = useState(false);
   const [unfollowModal, setUnfollowModal] = useState(false);
@@ -180,18 +181,6 @@ const Profile = ({ match }) => {
       getUserInfo();
     },
   });
-
-  const showCoverHistory = () => {
-    if (coverRef.current) {
-      const coverUnit = parseInt(
-        (coverRef.current.clientWidth * 0.95) / coverWidth,
-      );
-
-      return userData.band.slice(0, coverUnit > 1 ? coverUnit : 2).map((v) => {
-        return <CoverGrid key={v.bandId} data={v} />;
-      });
-    }
-  };
 
   const onClickFollowing = () => {
     if (data.user) follow();
@@ -487,8 +476,8 @@ const Profile = ({ match }) => {
               {userData.band.length === 0 ? (
                 <NoCoverText>참여한 커버가 없습니다</NoCoverText>
               ) : (
-                <CoverHistory
-                  coverWidth={coverWidth}
+                <ResponsiveCoverGrid
+                  coverWidth={COVER_WIDTH}
                   coverData={userData?.band}
                 />
               )}
@@ -902,7 +891,7 @@ const UserSession = styled.div`
 
 const CoverHistoryContainer = styled.div`
   width: 100%;
-  margin-top: 2rem;
+  margin: 2rem 0 1rem;
 
   ${media.small} {
     width: 90%;

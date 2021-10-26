@@ -7,6 +7,7 @@ import PageContainer from '../../components/PageContainer';
 import SearchBar from '../../components/SearchBar';
 import CoverGrid from '../../components/CoverGrid/CoverGrid';
 import GridContainer from '../../components/GridContainer/GridContainer';
+import ResponsiveCoverGrid from '../../components/ResponsiveCoverGrid/ResponsiveCoverGrid';
 import { SearchOutlined } from '@ant-design/icons';
 import { useMediaQuery } from 'react-responsive';
 import { media } from '../../lib/Media';
@@ -61,13 +62,7 @@ const LoungeHome = () => {
 
       if (filtered.length > 0)
         return (
-          <GridContainer templateColumn={COVER_WIDTH} autoFill>
-            {filtered.map((v, i) => {
-              return (
-                <CoverGrid key={`bandData+${v.bandId}`} data={v} autoFill />
-              );
-            })}
-          </GridContainer>
+          <ResponsiveCoverGrid coverWidth={COVER_WIDTH} coverData={filtered} />
         );
       else {
         return <NoCover>최근 떠오르는 밴드커버가 없습니다</NoCover>;
@@ -81,13 +76,7 @@ const LoungeHome = () => {
 
       if (filtered.length > 0)
         return (
-          <GridContainer templateColumn={COVER_WIDTH} autoFill>
-            {filtered.map((v, i) => {
-              return (
-                <CoverGrid key={`bandData+${v.bandId}`} data={v} autoFill />
-              );
-            })}
-          </GridContainer>
+          <ResponsiveCoverGrid coverWidth={COVER_WIDTH} coverData={filtered} />
         );
       else {
         return <NoCover>최근 떠오르는 솔로커버가 없습니다</NoCover>;

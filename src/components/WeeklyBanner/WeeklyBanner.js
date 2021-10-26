@@ -55,7 +55,7 @@ const Background = styled.div`
 const BannerContainer = styled.div`
   display: flex;
   flex-direction: column;
-  height: 25vw;
+  height: 26rem;
   min-height: 20rem;
   width: 100%;
   border-radius: 10px;
