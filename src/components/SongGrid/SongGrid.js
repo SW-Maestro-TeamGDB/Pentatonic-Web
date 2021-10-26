@@ -34,9 +34,7 @@ const SongGrid = (props) => {
             <>
               <CoverImage src={data.songImg} />
               <RecordIcon src={vocal} />
-              <Mobile>
-                <DifficultyContainer>Lv.{data.level}</DifficultyContainer>
-              </Mobile>
+              <DifficultyContainer>Lv.{data.level}</DifficultyContainer>
             </>
           ) : (
             <>
@@ -53,15 +51,8 @@ const SongGrid = (props) => {
               <CoverInform>
                 <CoverTitle>{data.name}</CoverTitle>
                 <CoverArtist>{data.artist}</CoverArtist>
+                <SessionInform>{showSession(data.instrument)}</SessionInform>
               </CoverInform>
-              <Default>
-                <CoverMeta>
-                  <DifficultyContainer>
-                    <DifficultyIcon value={data.level} />
-                  </DifficultyContainer>
-                  <SessionInform>{showSession(data.instrument)}</SessionInform>
-                </CoverMeta>
-              </Default>
             </>
           ) : (
             <Skeleton
@@ -103,11 +94,12 @@ const CoverImage = styled.img`
   transition: all ease-in-out 0.3s;
   object-fit: cover;
   z-index: 2;
+  filter: brightness(80%);
 
   ${media.small} {
-    filter: brightness(50%);
     overflow: hidden;
     border-radius: 1rem;
+    filter: brightness(50%);
   }
 `;
 
@@ -135,7 +127,7 @@ const CoverContainer = styled.div`
 
   &:hover ${CoverImage} {
     transform: scale(1.15);
-    filter: brightness(50%);
+    filter: brightness(60%);
   }
 `;
 
@@ -244,6 +236,7 @@ const SessionInform = styled.div`
   height: auto;
   position: absolute;
   right: 0;
+  bottom: 8%;
   display: flex;
   flex: row;
   align-items: center;
@@ -257,10 +250,19 @@ const SessionInform = styled.div`
 const DifficultyContainer = styled.span`
   display: flex;
   align-items: center;
-  width: 50%;
-  background-color: rgba(230, 230, 230, 0.4);
   padding: 0.2rem 0.7rem;
   border-radius: 10px;
+
+  position: absolute;
+  bottom: 10px;
+  z-index: 2;
+  width: auto;
+  right: 8px;
+  background-color: rgba(220, 220, 220, 0.5);
+
+  color: #fff;
+  font-weight: 900;
+  letter-spacing: -1px;
 
   ${media.small} {
     position: absolute;
@@ -269,6 +271,7 @@ const DifficultyContainer = styled.span`
     width: auto;
     right: 8px;
     background-color: rgba(245, 245, 245, 0.4);
+    letter-spacing: 0px;
 
     color: #fff;
     font-weight: 800;
