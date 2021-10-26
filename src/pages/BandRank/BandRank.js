@@ -40,8 +40,8 @@ const BandRank = () => {
 
   return (
     <PageContainer width="40%" minWidth="700px">
-      <PageTitle>밴드 랭킹</PageTitle>
-      <PageDesc>좋아요를 가장 많이 받은 밴드는 누구일까요?</PageDesc>
+      <PageTitle>밴드 커버 랭킹</PageTitle>
+      <PageDesc>좋아요를 가장 많이 받은 밴드 커버를 둘러보세요</PageDesc>
       <RankItem>{showBandRank()}</RankItem>
     </PageContainer>
   );

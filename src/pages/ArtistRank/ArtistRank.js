@@ -39,7 +39,7 @@ const ArtistRank = () => {
   return (
     <PageContainer width="40%" minWidth="700px">
       <PageTitle>아티스트 랭킹</PageTitle>
-      <PageDesc>좋아요를 가장 많이 받은 아티스트는 누구일까요?</PageDesc>
+      <PageDesc>펜타토닉에서 가장 인기있는 아티스트들을 둘러보세요</PageDesc>
       <RankItem>{showBandRank()}</RankItem>
     </PageContainer>
   );

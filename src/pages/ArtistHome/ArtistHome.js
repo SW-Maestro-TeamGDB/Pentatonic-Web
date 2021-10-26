@@ -99,7 +99,7 @@ const ArtistHome = ({ match }) => {
       <BoardContainer>
         <BoardWrapper>
           <BoardHeader>
-            <BoardTitle>밴드 랭킹</BoardTitle>
+            <BoardTitle>밴드 커버 랭킹</BoardTitle>
             <BoardLink to="/artist/rank/band">더보기</BoardLink>
           </BoardHeader>
           <BoardItems>{showBandRank()}</BoardItems>
