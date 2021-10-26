@@ -29,11 +29,23 @@ const QUERY_SONG = gql`
         position
       }
     }
+    getRecommendBand {
+      bandId
+      name
+      backGroundURI
+      likeCount
+      viewCount
+      song {
+        name
+        artist
+      }
+    }
   }
 `;
 
 const StudioHome = () => {
   const [songData, setSongData] = useState();
+  const [recommendData, setRecommendData] = useState();
   const isMobile = useMediaQuery({
     query: '(max-width:767px)',
   });
@@ -46,6 +58,7 @@ const StudioHome = () => {
     },
     onCompleted: (data) => {
       setSongData(data.querySong);
+      setRecommendData(data.getRecommendBand);
     },
   });
 
@@ -58,7 +71,7 @@ const StudioHome = () => {
 
   return (
     <PageContainer>
-      <StudioBanner />
+      <StudioBanner data={recommendData} />
       <BoardContainer>
         <BoardWrapper>
           <GridContainer>

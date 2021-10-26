@@ -10,28 +10,12 @@ import { media } from '../../lib/Media';
 import ThumbIcon from '../../images/ThumbIcon.svg';
 import ViewIcon from '../../images/ViewIcon.svg';
 
-const GET_RECOMMEND_BAND = gql`
-  query Query {
-    getRecommendBand {
-      bandId
-      name
-      backGroundURI
-      likeCount
-      viewCount
-      song {
-        name
-        artist
-      }
-    }
-  }
-`;
-
-const StudioBanner = () => {
-  const { data } = useQuery(GET_RECOMMEND_BAND);
+const StudioBanner = (props) => {
+  const { data } = props;
 
   const showContents = () => {
-    if (data)
-      return data.getRecommendBand.map((v, i) => {
+    if (data && data.length > 0)
+      return data.map((v, i) => {
         return (
           <StudioBannerContents data={v} key={`StudioBannerConents-${i}`} />
         );
@@ -54,7 +38,7 @@ const StudioBanner = () => {
 
 const CarouselContainer = styled.div`
   width: 100%;
-  height: 20rem;
+  height: 22rem;
   position: relative;
 `;
 

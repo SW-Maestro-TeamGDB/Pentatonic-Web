@@ -13,6 +13,7 @@ const StudioBannerContents = (props) => {
     <CarouselContents to={`/lounge/cover/${data.bandId}`}>
       <Background url={data.backGroundURI} />
       <BannerContents>
+        <BandTitle>{data.name}</BandTitle>
         <CoverInfoContainer>
           <SongTitle>{data.song.name}</SongTitle>
           <Singer>{data.song.artist}</Singer>
@@ -46,7 +47,7 @@ const Background = styled.div`
 
 const CarouselContents = styled(Link)`
   width: 100%;
-  height: 20rem;
+  height: 22rem;
   font-size: 3rem;
 
   display: flex;
@@ -86,9 +87,33 @@ const BannerContents = styled.div`
   }
 `;
 
-const SongTitle = styled.span`
+const BandTitle = styled.span`
   font-weight: 900;
   font-size: 3.5rem;
+  max-width: 40rem;
+  color: white;
+
+  display: flex;
+  justify-content: flex-start;
+
+  line-height: 1.5;
+  letter-spacing: -2px;
+
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+
+  ${media.small} {
+    font-size: 2rem;
+    max-width: 70vw;
+    letter-spacing: -1px;
+    line-height: 1.5;
+  }
+`;
+
+const SongTitle = styled.span`
+  font-weight: 700;
+  font-size: 2rem;
   max-width: 40rem;
   color: white;
 
@@ -103,24 +128,24 @@ const SongTitle = styled.span`
   overflow: hidden;
 
   ${media.small} {
-    font-size: 2rem;
+    font-size: 1.2rem;
     max-width: 70vw;
     letter-spacing: -1px;
   }
 `;
 
 const Singer = styled.span`
-  font-weight: 900;
-  font-size: 1.8rem;
+  font-weight: 700;
+  font-size: 1.3rem;
   color: white;
 
   display: flex;
   justify-content: flex-start;
 
-  margin-left: 2vw;
+  margin-left: 1rem;
 
   ${media.small} {
-    font-size: 1rem;
+    font-size: 0.9rem;
     margin-left: 1.2rem;
 
     max-width: 20vw;
