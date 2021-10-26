@@ -419,9 +419,7 @@ const Profile = ({ match }) => {
                       </FollowButton>
                     )
                   ) : userData.followingStatus ? (
-                    <FollowingButton onClick={onClickUnfollow}>
-                      팔로잉
-                    </FollowingButton>
+                    <FollowingButton onClick={unfollow}>팔로잉</FollowingButton>
                   ) : (
                     <FollowButton onClick={onClickFollowing}>
                       <CustomFollowIcon />
@@ -483,12 +481,12 @@ const Profile = ({ match }) => {
                 />
               )}
             </CoverHistoryContainer>
-            <QuestionModal
+            {/* <QuestionModal
               modalToggle={unfollowModal}
               setModalToggle={setUnfollowModal}
               text={`${userData.username}님의 팔로잉을 취소하시겠습니까?`}
               afterRequest={unfollow}
-            />
+            /> */}
             <QuestionModal
               modalToggle={editUserDataModal}
               setModalToggle={setEditUserDataModal}
