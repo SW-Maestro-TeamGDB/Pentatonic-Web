@@ -60,10 +60,13 @@ const LibraryList = (props) => {
     setSelectedCover,
     getUserInfo,
     userId,
+    selectedAudio,
+    setSelectedAudio,
+    audioState,
+    setAudioState,
+    instRef,
   } = props;
-  // const [songData, setSongData] = useState();
   const [coverTitle, setCoverTitle] = useState();
-  const [audioState, setAudioState] = useState(0); // 0:정지 , 1:재생 , 2:일시정지
   const [inst, setInst] = useState();
   const [editModal, setEditModal] = useState(false);
   const [deleteModal, setDeleteModal] = useState(false);
@@ -73,7 +76,7 @@ const LibraryList = (props) => {
   const isMobile = useMediaQuery({
     query: '(max-width:767px)',
   });
-  const instRef = useRef();
+
   const buttonRef = useRef();
 
   const selected = !edit && data.coverId === selectedCover;
@@ -122,10 +125,6 @@ const LibraryList = (props) => {
   });
 
   useEffect(() => {
-    instRef.current = inst;
-  }, [inst]);
-
-  useEffect(() => {
     if (coverTitle) setEditTitle(coverTitle);
   }, [editToggle]);
 
@@ -139,21 +138,37 @@ const LibraryList = (props) => {
   const onClickPause = () => {
     if (inst) {
       inst.pause();
-      inst.currentTime = 0;
       setAudioState(2);
     }
   };
 
   const onClickIcon = () => {
-    if (inst) {
-      if (audioState === 1) {
-        inst.pause();
-        inst.currentTime = 0;
-        setAudioState(2);
+    if (selectedAudio) {
+      if (selectedAudio.src === data.coverURI) {
+        if (audioState === 1) {
+          selectedAudio.pause();
+          setAudioState(2);
+        } else {
+          selectedAudio.play();
+          setAudioState(1);
+        }
       } else {
-        inst.play();
+        selectedAudio.pause();
+        selectedAudio.removeAttribute('src');
+        selectedAudio.load();
+
+        const audio = new Audio();
+        audio.src = data.coverURI;
+        setSelectedAudio(audio);
         setAudioState(1);
+        audio.play();
       }
+    } else {
+      const audio = new Audio();
+      audio.src = data.coverURI;
+      setSelectedAudio(audio);
+      setAudioState(1);
+      audio.play();
     }
   };
 
@@ -211,25 +226,6 @@ const LibraryList = (props) => {
   useEffect(() => {
     setEditTitleError();
   }, [editTitle]);
-
-  useEffect(() => {
-    const audio = new Audio();
-    audio.src = data.coverURI;
-    setInst(audio);
-
-    return () => {
-      instRef.current.pause();
-      instRef.current.currentTime = 0;
-    };
-  }, [data]);
-
-  useEffect(() => {
-    if (!visible && instRef.current) {
-      setAudioState(0);
-      instRef.current.pause();
-      instRef.current.currentTime = 0;
-    }
-  }, [visible]);
 
   return (
     <CoverContainer
@@ -316,7 +312,9 @@ const LibraryList = (props) => {
           ) : null}
           {edit ? (
             <AudioButtonContainer onClick={onClickIcon}>
-              {audioState === 1 ? (
+              {audioState === 1 &&
+              selectedAudio &&
+              selectedAudio.src === data.coverURI ? (
                 <>
                   <LibararyPagePauseIcon src={PauseIcon} color="white" />
                 </>
@@ -332,10 +330,16 @@ const LibraryList = (props) => {
             <IconContainer
               onClick={onClickIcon}
               ref={buttonRef}
-              audioState={audioState}
+              audioState={
+                audioState === 1 &&
+                selectedAudio &&
+                selectedAudio.src === data.coverURI
+              }
               selected={selected}
             >
-              {audioState === 1 ? (
+              {audioState === 1 &&
+              selectedAudio &&
+              selectedAudio.src === data.coverURI ? (
                 <CustomPauseIcon src={PauseIcon} />
               ) : (
                 <CustomPlayIcon src={PlayIcon} />
@@ -468,8 +472,7 @@ const CustomPauseIcon = styled.img`
 const IconContainer = styled.div`
   width: 5rem;
   height: 3.5rem;
-  background-color: ${(props) =>
-    props.audioState === 1 ? '#6236ff' : 'white'};
+  background-color: ${(props) => (props.audioState ? '#6236ff' : 'white')};
 
   -ms-user-select: none;
   -moz-user-select: -moz-none;
@@ -489,7 +492,7 @@ const IconContainer = styled.div`
   color: #6236ff;
 
   ${CustomPauseIcon} {
-    filter: ${(props) => (props.audioState === 1 ? 'invert(100%)' : null)};
+    filter: ${(props) => (props.audioState ? 'invert(100%)' : null)};
   }
 
   &:hover {

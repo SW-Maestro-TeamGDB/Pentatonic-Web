@@ -1,4 +1,4 @@
-import react, { useEffect, useState } from 'react';
+import react, { useEffect, useState, useRef } from 'react';
 import { useQuery, gql, useLazyQuery, useMutation } from '@apollo/client';
 import { notification } from 'antd';
 import { GET_CURRENT_USER } from '../../apollo/cache';
@@ -37,9 +37,13 @@ const LibraryDrawer = (props) => {
   const { visible, filter, setFilter, onClose, getSession, bandId } = props;
   const [filteredData, setFilteredData] = useState([]);
   const [libraryData, setLibraryData] = useState([]);
+  const [audioState, setAudioState] = useState(0); // 0:정지 , 1:재생 , 2:일시정지
   const [selectedCover, setSelectedCover] = useState();
+  const [selectedAudio, setSelectedAudio] = useState();
+  const instRef = useRef();
   const userData = useQuery(GET_CURRENT_USER);
   const [getUserInfo] = useLazyQuery(GET_USER_INFO, {
+    fetchPolicy: 'network-only',
     filter: 'no-cahce',
     onCompleted: (data) => {
       setLibraryData(data.getUserInfo.library);
@@ -91,7 +95,20 @@ const LibraryDrawer = (props) => {
   }, [userData.data.user]);
 
   useEffect(() => {
-    setSelectedCover();
+    if (selectedAudio) instRef.current = selectedAudio;
+  }, [selectedAudio]);
+
+  useEffect(() => {
+    if (!visible) {
+      setSelectedCover();
+      setSelectedAudio();
+      setAudioState(0);
+
+      if (instRef.current) {
+        instRef.current.pause();
+        instRef.current.currentTime = 0;
+      }
+    }
   }, [visible]);
 
   const loadLibrary = () =>
@@ -103,6 +120,11 @@ const LibraryDrawer = (props) => {
           visible={visible}
           selectedCover={selectedCover}
           setSelectedCover={setSelectedCover}
+          instRef={instRef}
+          selectedAudio={selectedAudio}
+          setSelectedAudio={setSelectedAudio}
+          audioState={audioState}
+          setAudioState={setAudioState}
         />
       );
     });

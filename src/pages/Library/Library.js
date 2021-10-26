@@ -1,4 +1,4 @@
-import react, { useEffect, useState } from 'react';
+import react, { useEffect, useState, useRef } from 'react';
 import { useQuery, gql, useLazyQuery } from '@apollo/client';
 import { GET_CURRENT_USER } from '../../apollo/cache';
 import PageContainer from '../../components/PageContainer';
@@ -34,7 +34,10 @@ const GET_USER_INFO = gql`
 const Library = () => {
   const [loadLibraryState, setLoadLibraryState] = useState(true);
   const [libraryData, setLibraryData] = useState([]);
+  const [selectedAudio, setSelectedAudio] = useState();
+  const [audioState, setAudioState] = useState(0); // 0:정지 , 1:재생 , 2:일시정지
   const userData = useQuery(GET_CURRENT_USER);
+  const instRef = useRef();
   const [getUserInfo, { loading, error, data }] = useLazyQuery(GET_USER_INFO, {
     fetchPolicy: 'no-cache',
     onCompleted: (data) => {
@@ -71,10 +74,19 @@ const Library = () => {
               setLibraryData={setLibraryData}
               getUserInfo={getUserInfo}
               userId={userData.data.user.id}
+              selectedAudio={selectedAudio}
+              setSelectedAudio={setSelectedAudio}
+              audioState={audioState}
+              setAudioState={setAudioState}
+              instRef={instRef}
             />
           );
         });
   };
+
+  useEffect(() => {
+    if (selectedAudio) instRef.current = selectedAudio;
+  }, [selectedAudio]);
 
   useEffect(() => {
     if (libraryData) {
@@ -86,6 +98,10 @@ const Library = () => {
   useEffect(() => {
     return () => {
       setLibraryData([]);
+      if (instRef.current) {
+        instRef.current.src = '';
+        instRef.current.removeAttribute('src');
+      }
     };
   }, []);
 
