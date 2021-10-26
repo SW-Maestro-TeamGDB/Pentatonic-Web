@@ -66,6 +66,14 @@ const LoungeBandCovers = ({ match }) => {
     </SubMenuContainer>
   );
 
+  const { data } = useQuery(QUERY_BANDS, {
+    fetchPolicy: 'network-only',
+    variables: {
+      queryBandFilter: bandFilter,
+      queryBandFirst: 10,
+    },
+  });
+
   const loadFreeCover = () => {
     if (data) {
       const coverData = data.queryBand.bands;
@@ -83,13 +91,6 @@ const LoungeBandCovers = ({ match }) => {
       }
     }
   };
-
-  const { data } = useQuery(QUERY_BANDS, {
-    variables: {
-      queryBandFilter: bandFilter,
-      queryBandFirst: 10,
-    },
-  });
 
   useEffect(() => {
     if (genre !== '전체') {

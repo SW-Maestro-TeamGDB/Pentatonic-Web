@@ -54,6 +54,12 @@ const LoungeBandCovers = ({ match }) => {
     weeklyChallenge: false,
   });
 
+  const { data } = useQuery(QUERY_BAND, {
+    variables: {
+      queryBandFilter: bandFilter,
+    },
+  });
+
   const loadBandCover = () => {
     if (data) {
       const coverData = data.queryBand.bands;
@@ -71,12 +77,6 @@ const LoungeBandCovers = ({ match }) => {
       }
     }
   };
-
-  const { data } = useQuery(QUERY_BAND, {
-    variables: {
-      queryBandFilter: bandFilter,
-    },
-  });
 
   useEffect(() => {
     if (genre !== '전체') {
