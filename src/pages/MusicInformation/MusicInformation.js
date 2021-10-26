@@ -6,7 +6,12 @@ import CoverGrid from '../../components/CoverGrid/CoverGrid';
 import PageContainer from '../../components/PageContainer';
 import GridContainer from '../../components/GridContainer';
 import DifficultyIcon from '../../components/DifficultyIcon';
-import { StopOutlined, CustomerServiceOutlined } from '@ant-design/icons';
+import { Popover } from 'antd';
+import {
+  StopOutlined,
+  CustomerServiceOutlined,
+  QuestionCircleFilled,
+} from '@ant-design/icons';
 import { changeGenreToKorean } from '../../lib/changeGenreToKorean';
 import { useMediaQuery } from 'react-responsive';
 import { media, Default, Mobile, mobileCheck } from '../../lib/Media';
@@ -149,8 +154,11 @@ const MusicInformation = ({ match }) => {
                       라이브러리 녹음하기
                     </RecordButton>
                     <MakingCoverButton to={match.url + '/cover'}>
-                      커버룸 만들기
+                      커버 만들기
                     </MakingCoverButton>
+                    {/* <CustomPopover placement="bottom" content={<h2>gd</h2>}>
+                      <QuestionCircleFilled />
+                    </CustomPopover> */}
                   </ButtonContainer>
                 ) : (
                   <RecordNoticeContainer>
@@ -215,6 +223,16 @@ const MusicInformContainer = styled.div`
     z-index: 2;
     overflow: hidden;
   }
+`;
+
+const CustomPopover = styled(Popover)`
+  margin-left: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 2.5rem;
+  font-size: 1rem;
+  color: #444;
 `;
 
 const Background = styled.img`
@@ -359,7 +377,7 @@ const RecordNoticeText = styled.div`
   color: #fff;
   font-size: 0.8rem;
   font-weight: 700;
-  padding: 0.5rem 1rem;
+  padding: 0.5rem 1.2rem;
   border-radius: 1rem;
 
   ${media.small} {
@@ -384,16 +402,16 @@ const ButtonContainer = styled.div`
 const RecordButton = styled(Link)`
   cursor: pointer;
   min-width: 10em;
-  padding: 1vh 0.5vw;
+  padding: 0.5rem 1.2rem;
   color: white;
   background-image: linear-gradient(to right, #6236ff, #9b66ff);
-  border-radius: 1vh;
+  border-radius: 10px;
 
   display: flex;
   justify-content: center;
   align-items: center;
 
-  font-size: 1.8vh;
+  font-size: 1.1rem;
   font-weight: 700;
 
   &:hover {
@@ -404,10 +422,10 @@ const RecordButton = styled(Link)`
 const MakingCoverButton = styled(Link)`
   cursor: pointer;
   min-width: 10em;
-  padding: 1vh 0.5vw;
+  padding: 0.45rem 1rem;
   color: #925fff;
   border: 1px solid #925fff;
-  border-radius: 1vh;
+  border-radius: 10px;
 
   margin-left: 1rem;
 
@@ -415,7 +433,7 @@ const MakingCoverButton = styled(Link)`
   justify-content: center;
   align-items: center;
 
-  font-size: 1.8vh;
+  font-size: 1.1rem;
   font-weight: 700;
 
   &:hover {
@@ -469,11 +487,13 @@ const BoardHeader = styled.div`
 `;
 
 const BoardTitle = styled.nav`
-  font-size: 2vh;
-  font-weight: 600;
+  font-size: 20px;
+  font-weight: 700;
   width: 100%;
   color: black;
-  padding-left: 1.5vh;
+  padding-left: 0.6rem;
+  letter-spacing: -1px;
+  margin-bottom: 6px;
 
   ${media.small} {
     font-size: 16px;
