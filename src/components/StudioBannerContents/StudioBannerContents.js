@@ -13,9 +13,6 @@ const StudioBannerContents = (props) => {
     <CarouselContents to={`/lounge/cover/${data.bandId}`}>
       <Background url={data.backGroundURI} />
       <BannerContents>
-        <CoverRecommendTitleContainer>
-          <CoverRecommendTitle>이런 커버 어때요?</CoverRecommendTitle>
-        </CoverRecommendTitleContainer>
         <CoverInfoContainer>
           <SongTitle>{data.song.name}</SongTitle>
           <Singer>{data.song.artist}</Singer>
@@ -86,28 +83,6 @@ const BannerContents = styled.div`
   ${media.small} {
     bottom: 18%;
     left: 5%;
-  }
-`;
-
-const CoverRecommendTitleContainer = styled.div`
-  display: flex;
-  justify-content: flex-start;
-`;
-
-const CoverRecommendTitle = styled.div`
-  color: white;
-  font-size: 1.1rem;
-  font-weight: 600;
-  line-height: 2;
-  letter-spacing: -0.4px;
-
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  ${media.small} {
-    font-size: 1.1rem;
-    line-height: 2;
   }
 `;
 

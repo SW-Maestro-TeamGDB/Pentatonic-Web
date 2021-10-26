@@ -40,16 +40,62 @@ const StudioBanner = () => {
 
   return (
     <BannerContainer>
-      <CustomCarousel dotPosition="bottom" autoplay>
-        {showContents()}
-      </CustomCarousel>
+      <CarouselContainer>
+        <CoverRecommendTitleContainer>
+          <CoverRecommendTitle>이런 커버 어때요?</CoverRecommendTitle>
+        </CoverRecommendTitleContainer>
+        <CustomCarousel usel dotPosition="bottom" autoplay>
+          {showContents()}
+        </CustomCarousel>
+      </CarouselContainer>
     </BannerContainer>
   );
 };
 
-const CustomCarousel = styled(Carousel)`
+const CarouselContainer = styled.div`
   width: 100%;
   height: 20rem;
+  position: relative;
+`;
+
+const CoverRecommendTitleContainer = styled.div`
+  display: flex;
+  justify-content: flex-start;
+  position: absolute;
+  top: 8%;
+  left: 3%;
+  z-index: 2;
+  border-radius: 10px;
+
+  padding: 0 1rem;
+  background-color: rgba(150, 150, 150, 0.8);
+
+  ${media.small} {
+    top: 7%;
+    left: 4%;
+  }
+`;
+
+const CoverRecommendTitle = styled.div`
+  color: white;
+  font-size: 1.1rem;
+  font-weight: 800;
+  line-height: 2;
+  letter-spacing: -1px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  ${media.small} {
+    font-size: 0.9rem;
+    line-height: 2;
+  }
+`;
+
+const CustomCarousel = styled(Carousel)`
+  width: 100%;
+  height: 100%;
   position: relative;
 `;
 
