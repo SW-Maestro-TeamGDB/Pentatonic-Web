@@ -19,6 +19,7 @@ import PauseIcon from '../../images/PauseIcon.png';
 import SaveIcon from '../../images/SaveIcon.svg';
 import tempLyric from './lyrics.json';
 import { LeftOutlined, PauseOutlined } from '@ant-design/icons';
+import vocal from '../../images/Session/vocal.svg';
 import hihat from './hihat.mp3';
 
 const RecordPage = (props) => {
@@ -505,20 +506,32 @@ const RecordPage = (props) => {
 
     if (onRec === 0) {
       return (
-        <CustomPlayIcon
-          src={audioCtx ? RetryIcon : PlayIcon}
-          onClick={onClickStart}
-        />
+        <IconDescContainer onClick={onClickStart}>
+          <CustomPlayIcon src={audioCtx ? RetryIcon : vocal} />
+          <IconDescText>
+            {audioCtx ? '다시 녹음하기' : '녹음 시작'}
+          </IconDescText>
+        </IconDescContainer>
       );
     } else if (onRec === 1) {
-      // return <CustomPauseIcon onClick={onClickPause} />;
       return (
         <PauseIconContainer>
           <CustomPauseIcon src={PauseIcon} onClick={onClickPause} />
         </PauseIconContainer>
       );
     } else if (onRec === 2) {
-      return <CustomPlayIcon src={PlayIcon} onClick={onClickResume} />;
+      return (
+        <>
+          <IconDescContainer onClick={onClickResume}>
+            <CustomPlayIcon src={vocal} />
+            <IconDescText>이어서 녹음하기</IconDescText>
+          </IconDescContainer>
+          <IconDescContainer onClick={onClickStart}>
+            <CustomPlayIcon src={RetryIcon} />
+            <IconDescText>처음부터 녹음하기</IconDescText>
+          </IconDescContainer>
+        </>
+      );
     }
   }, [onRec, countdown, media, audioCtx]);
 
@@ -607,10 +620,10 @@ const RecordPage = (props) => {
           >
             {showRecordingState}
             {((onRec === 0 && audioUrl) || onRec === 2) && countdown === 4 ? (
-              <CustomPlayIcon
-                src={SaveIcon}
-                onClick={() => onSubmitAudioFile()}
-              />
+              <IconDescContainer onClick={() => onSubmitAudioFile()}>
+                <CustomSaveIcon src={SaveIcon} />
+                <IconDescText>저장하고 음원 편집하기</IconDescText>
+              </IconDescContainer>
             ) : null}
           </IconContainer>
           {isFreeCover ? null : showLyrics}
@@ -694,6 +707,66 @@ const RecordCountContainer = styled.div`
   z-index: 3;
 `;
 
+const CustomPlayIcon = styled.img`
+  filter: invert(100%);
+  transition: all ease-in-out 0.3s;
+  cursor: pointer;
+  width: 4rem;
+  height: 4rem;
+
+  position: absolute;
+  top: 12%;
+`;
+
+const IconDescText = styled.div`
+  color: white;
+  font-size: 0.9rem;
+  font-weight: 800;
+  margin-top: 1rem;
+  letter-spacing: -1px;
+
+  position: absolute;
+  bottom: 12%;
+`;
+
+const CustomSaveIcon = styled.img`
+  filter: invert(100%);
+  transition: all ease-in-out 0.3s;
+  cursor: pointer;
+  width: 3rem;
+  height: 3rem;
+
+  position: absolute;
+  top: 20%;
+`;
+
+const IconDescContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  padding: 1rem 1.5rem;
+  transition: background-color 0.3s ease-in-out;
+  border-radius: 1rem;
+  margin: 0 1rem;
+  width: 10rem;
+  height: 8rem;
+  position: relative;
+
+  &:hover {
+    ${CustomPlayIcon} {
+      transform: scale(1.05);
+    }
+
+    ${CustomSaveIcon} {
+      transform: scale(1.05);
+    }
+
+    background-color: rgba(220, 220, 220, 0.2);
+  }
+`;
+
 const RemainTimeContainer = styled.div`
   font-weight: 800;
   color: #6236ff;
@@ -708,7 +781,7 @@ const IconContainer = styled.div`
   display: flex;
   justify-content: ${(props) => (props.canSave ? 'space-between' : 'center')};
   align-items: center;
-  width: 20%;
+  min-width: ${(props) => (props.canSave ? '32rem' : 'auto')};
 `;
 
 const VisualizerContainer = styled.div`
@@ -854,32 +927,6 @@ const SaveIconImg = styled.img`
 
 const CustomProgress = styled(Progress)`
   width: 100%;
-`;
-
-const CustomSaveIcon = styled.img`
-  filter: invert(100%);
-  transition: all ease-in-out 0.3s;
-  cursor: pointer;
-  width: 4rem;
-  height: 4rem;
-
-  &:hover {
-    /* color: rgb(100, 100, 100); */
-    transform: scale(1.03);
-  }
-`;
-
-const CustomPlayIcon = styled.img`
-  filter: invert(100%);
-  transition: all ease-in-out 0.3s;
-  cursor: pointer;
-  width: 4rem;
-  height: 4rem;
-
-  &:hover {
-    /* color: rgb(100, 100, 100); */
-    transform: scale(1.03);
-  }
 `;
 
 const CustomPauseIcon = styled.img`
