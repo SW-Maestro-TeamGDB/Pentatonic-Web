@@ -1,31 +1,16 @@
-import react from 'react';
+import react, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { media } from '../../lib/Media';
 import { useQuery, gql } from '@apollo/client';
 import { Default } from '../../lib/Media';
 import { Link } from 'react-router-dom';
 
-const QUERY_SONG = gql`
-  query Query($querySongFilter: QuerySongInput!) {
-    querySong(filter: $querySongFilter) {
-      name
-      artist
-      songImg
-    }
-  }
-`;
+const WeeklyBanner = (data) => {
+  const [songData, setSongData] = useState();
 
-const WeeklyBanner = () => {
-  const { data } = useQuery(QUERY_SONG, {
-    variables: {
-      querySongFilter: {
-        weeklyChallenge: true,
-        type: 'ALL',
-      },
-    },
-  });
-
-  const songData = data?.querySong[0];
+  useEffect(() => {
+    if (data?.data) setSongData(data.data[0]);
+  }, [data]);
 
   return (
     <BannerContainer>

@@ -11,7 +11,12 @@ import { useMediaQuery } from 'react-responsive';
 import { media } from '../../lib/Media';
 
 const GET_TREND_BANDS = gql`
-  query Query {
+  query Query($querySongFilter: QuerySongInput!) {
+    querySong(filter: $querySongFilter) {
+      name
+      artist
+      songImg
+    }
     getTrendBands {
       backGroundURI
       song {
@@ -35,6 +40,10 @@ const LoungeHome = () => {
   const { data } = useQuery(GET_TREND_BANDS, {
     variables: {
       queryBandFilter: {
+        type: 'ALL',
+      },
+      querySongFilter: {
+        weeklyChallenge: true,
         type: 'ALL',
       },
     },
@@ -82,7 +91,7 @@ const LoungeHome = () => {
 
   return (
     <PageContainer>
-      <WeeklyBanner />
+      <WeeklyBanner data={data?.querySong} />
       <Spacing />
       <BoardContainer>
         <BoardWrapper>

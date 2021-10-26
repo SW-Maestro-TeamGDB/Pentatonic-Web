@@ -5,7 +5,6 @@ import { useQuery, gql, useLazyQuery } from '@apollo/client';
 import styled from 'styled-components';
 import MakingCoverButton from '../../components/MakingCoverButton';
 import PageContainer from '../../components/PageContainer';
-import WeeklyBanner from '../../components/WeeklyBanner/WeeklyBanner';
 import SearchBar from '../../components/SearchBar';
 import CoverGrid from '../../components/CoverGrid/CoverGrid';
 import MakingIcon from '../../images/MakingIcon.svg';

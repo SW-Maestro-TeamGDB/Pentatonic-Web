@@ -7,7 +7,6 @@ import SongList from '../../components/SongList';
 import MakingCoverButton from '../../components/MakingCoverButton';
 import PageContainer from '../../components/PageContainer';
 import DifficultyButton from '../../components/DifficultyButton/DifficultyButton';
-import WeeklyBanner from '../../components/WeeklyBanner/WeeklyBanner';
 import SearchBar from '../../components/SearchBar';
 import CoverGrid from '../../components/CoverGrid';
 import MakingIcon from '../../images/MakingIcon.svg';
