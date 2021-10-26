@@ -7,6 +7,7 @@ import FindIdModal from '../FindIdModal.js/FindIdModal';
 import FindPasswordModal from '../FindPasswordModal';
 import MicAuth from './MicAuth.png';
 import SilenceIcon from './SilenceIcon.png';
+import { ExclamationCircleOutlined } from '@ant-design/icons';
 
 const RecordModal = (props) => {
   const { modalToggle, setModalToggle } = props;
@@ -31,6 +32,11 @@ const RecordModal = (props) => {
           <CautionTitle>2. 녹음은 조용한 곳에서 진행해주세요</CautionTitle>
           <CustomImg src={SilenceIcon} width="20%" />
           <Spacing />
+          <Spacing />
+          <ExtraCaution>
+            <ExclamationCircleOutlined style={{ marginRight: '5px' }} /> 원활한
+            녹음을 위해 크롬 브라우저를 권장합니다
+          </ExtraCaution>
           <SubmitButton onClick={() => closeModal()}>확인했습니다</SubmitButton>
         </CautionContent>
       </CautionContainer>
@@ -45,6 +51,11 @@ const CustomModal = styled(Modal)`
 
 const CustomImg = styled.img`
   margin: 1rem 0;
+`;
+
+const ExtraCaution = styled.p`
+  font-size: 1rem;
+  color: #333;
 `;
 
 const CautionContainer = styled.div`
