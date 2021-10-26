@@ -65,12 +65,12 @@ const StudioHome = () => {
             <CoverLinkContainer to="/studio/band">
               <Background url={StudioBandImage} position="top" />
               <BandIconContainer src={GroupIcon} />
-              <LinkText>밴드 커버 녹음하기</LinkText>
+              <LinkText>밴드 커버 만들기</LinkText>
             </CoverLinkContainer>
             <CoverLinkContainer to="/studio/solo">
               <Background url={StudioSoloImage} position="center" />
               <SoloIconContainer src={SoloIcon} />
-              <LinkText>솔로 커버 녹음하기</LinkText>
+              <LinkText>솔로 커버 만들기</LinkText>
             </CoverLinkContainer>
           </GridContainer>
         </BoardWrapper>
