@@ -9,6 +9,7 @@ import PageContainer from '../../components/PageContainer';
 import StudioBanner from '../../components/StudioBanner/StudioBanner';
 import GridContainer from '../../components/GridContainer/GridContainer';
 import SongGrid from '../../components/SongGrid';
+import ResponsiveCoverGrid from '../../components/ResponsiveCoverGrid';
 
 import GroupIcon from '../../images/GroupIcon.svg';
 import SoloIcon from '../../images/SoloIcon.svg';
@@ -49,6 +50,7 @@ const StudioHome = () => {
   const isMobile = useMediaQuery({
     query: '(max-width:767px)',
   });
+  const SONG_WIDTH = isMobile ? '150px' : '250px';
 
   const { data } = useQuery(QUERY_SONG, {
     variables: {
@@ -91,9 +93,13 @@ const StudioHome = () => {
           <BoardHeader>
             <BoardTitle>이런 곡 어때요?</BoardTitle>
           </BoardHeader>
-          <GridContainer templateColumn={isMobile ? '150px' : '250px'} autoFill>
+          <ResponsiveCoverGrid
+            coverData={songData}
+            coverWidth={SONG_WIDTH}
+            songData
+          >
             {showSongGrid()}
-          </GridContainer>
+          </ResponsiveCoverGrid>
         </BoardWrapper>
       </BoardContainer>
     </PageContainer>
@@ -128,7 +134,7 @@ const BoardHeader = styled.div`
   flex-direction: row;
   align-items: center;
   justify-content: center;
-  margin-bottom: 10px;
+  margin-bottom: 3px;
   width: 100%;
 
   ${media.small} {
