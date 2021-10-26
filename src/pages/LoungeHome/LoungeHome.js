@@ -98,7 +98,7 @@ const LoungeHome = () => {
   return (
     <PageContainer>
       <WeeklyBanner data={data?.querySong} />
-      <Spacing /> <Spacing />
+      <Spacing />
       <BoardContainer>
         <BoardWrapper>
           <BoardHeader>
@@ -151,7 +151,7 @@ const Background = styled.div`
 
 const CoverLinkContainer = styled(Link)`
   width: 100%;
-  height: 9rem;
+  height: 7.5rem;
   border-radius: 15px;
   margin: 1rem 1rem;
   overflow: hidden;
@@ -165,8 +165,8 @@ const CoverLinkContainer = styled(Link)`
 
   ${media.small} {
     height: 5rem;
-    margin: 0.5rem 0;
     width: 90%;
+    margin: 0.5rem 0;
   }
 
   &:hover {
@@ -197,7 +197,7 @@ const Spacing = styled.div`
   margin: 1rem 0;
 
   ${media.small} {
-    margin: 0.5rem 0;
+    margin: 0.8rem 0;
   }
 `;
 
@@ -223,8 +223,7 @@ const BoardWrapper = styled.div`
   align-items: center;
 
   ${media.small} {
-    width: 100%;
-    padding: 0 1rem;
+    width: 90%;
     margin: 0 0 1rem;
   }
 `;
