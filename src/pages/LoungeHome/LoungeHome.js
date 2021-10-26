@@ -12,8 +12,8 @@ import { SearchOutlined } from '@ant-design/icons';
 import { useMediaQuery } from 'react-responsive';
 import { media } from '../../lib/Media';
 
-import StudioBandImage from '../../images/StudioBandCover.jpg';
-import LoungeSoloCover from '../../images/LoungeSoloCover.jpeg';
+import LoungeBandImage from '../../images/LoungeBandCover.jpg';
+import LoungeSoloImage from '../../images/LoungeSoloCover.jpeg';
 
 const GET_TREND_BANDS = gql`
   query Query($querySongFilter: QuerySongInput!) {
@@ -107,14 +107,14 @@ const LoungeHome = () => {
       <Spacing />
       <BoardContainer>
         <CoverLinkContainer to="lounge/band">
-          <Background url={StudioBandImage} position="center" />
+          <Background url={LoungeBandImage} position="center" />
           <LinkText>
             <SearchOutlined style={{ marginRight: '10px' }} /> 밴드 커버
             전체보기
           </LinkText>
         </CoverLinkContainer>
         <CoverLinkContainer to="lounge/solo">
-          <Background url={LoungeSoloCover} position="center" />
+          <Background url={LoungeSoloImage} position="center" />
           <LinkText>
             <SearchOutlined style={{ marginRight: '10px' }} /> 솔로 커버
             전체보기
