@@ -122,7 +122,8 @@ const WeeklyChallenge = ({ match }) => {
         <PageContainer>
           <PageImage
             imgUrl={songData ? songData.songImg : null}
-            title={songData ? `${songData.name} - ${songData.artist}` : null}
+            title={songData ? songData.name : null}
+            artist={songData ? songData.artist : null}
             desc="금주의 위클리 챌린지 커버를 감상해보세요"
             position="top"
           />

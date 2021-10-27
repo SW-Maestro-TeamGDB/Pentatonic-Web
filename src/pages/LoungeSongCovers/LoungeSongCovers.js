@@ -95,7 +95,8 @@ const LoungeSongCovers = ({ match }) => {
           <PageContainer>
             <PageImage
               imgUrl={songData ? songData.songImg : null}
-              title={songData ? `${songData.name} - ${songData.artist}` : null}
+              title={songData ? songData.name : null}
+              artist={songData ? songData.artist : null}
               position="top"
               desc="유저들의 커버를 감상하고 참여해보세요"
             />

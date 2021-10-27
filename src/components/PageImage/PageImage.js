@@ -3,13 +3,14 @@ import styled from 'styled-components';
 import { media } from '../../lib/Media';
 
 const PageImage = (props) => {
-  const { title, imgUrl, position, desc } = props;
+  const { title, artist, imgUrl, position, desc } = props;
   const pose = position ? position : 'center';
 
   return (
     <PageImageContainer>
       <CustomImg imgUrl={imgUrl} pose={pose} />
       <PageTitle>{title}</PageTitle>
+      {artist ? <ArtistText>{artist}</ArtistText> : null}
       {desc ? <PageDesc>{desc}</PageDesc> : null}
     </PageImageContainer>
   );
@@ -77,6 +78,10 @@ const PageTitle = styled.div`
   position: absolute;
   top: 30%;
 
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+
   ${media.small} {
     width: 100%;
     top: 40%;
@@ -84,6 +89,30 @@ const PageTitle = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
+    padding: 0 1rem;
+  }
+`;
+
+const ArtistText = styled.div`
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+
+  width: 100%;
+  top: 40%;
+  letter-spacing: -1px;
+  margin-top: 2.2rem;
+  font-size: 1.6rem;
+  font-weight: 700;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  color: white;
+
+  ${media.small} {
+    margin-top: 3rem;
+    padding: 0 1rem;
   }
 `;
 
