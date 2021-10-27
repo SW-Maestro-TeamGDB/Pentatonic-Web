@@ -234,7 +234,7 @@ const CoverArtist = styled.div`
   font-size: 12px;
   color: #999;
   text-align: left;
-  width: 100%;
+  width: 60%;
 
   // 텍스트 생략표현
   white-space: nowrap;
@@ -246,7 +246,7 @@ const CoverArtist = styled.div`
     font-size: 0.8rem;
     font-weight: 700;
     line-height: 1.2;
-    width: 100%;
+    width: 60%;
     text-align: left;
   }
 `;
