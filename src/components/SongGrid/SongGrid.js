@@ -72,6 +72,7 @@ const CustomLink = styled(Link)`
   transition: all ease-in-out 0.3s;
   border-radius: 1rem;
   z-index: 1;
+  overflow: hidden;
 `;
 
 const RecordIcon = styled.img`
@@ -100,6 +101,7 @@ const CoverImage = styled.img`
     overflow: hidden;
     border-radius: 1rem;
     filter: brightness(50%);
+    transition: none;
   }
 `;
 
@@ -112,9 +114,11 @@ const CoverContainer = styled.div`
   height: auto;
   margin: 2vh 0;
   color: black;
+  border-radius: 1rem;
 
   ${media.small} {
     margin: 0;
+    overflow: hidden;
   }
 
   &:hover ${RecordIcon} {
@@ -128,6 +132,22 @@ const CoverContainer = styled.div`
   &:hover ${CoverImage} {
     transform: scale(1.15);
     filter: brightness(60%);
+  }
+
+  ${media.small} {
+    &:hover {
+      ${CoverImage} {
+        transform: none;
+        filter: brightness(60%);
+      }
+
+      ${RecordIcon} {
+        width: 2.5rem;
+        visibility: none;
+        transition: none;
+        opacity: 0;
+      }
+    }
   }
 `;
 

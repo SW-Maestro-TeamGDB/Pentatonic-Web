@@ -34,7 +34,7 @@ const ResponsiveCoverGrid = (props) => {
         });
       } else
         return showData.slice(0, coverUnit > 1 ? coverUnit : 2).map((v) => {
-          return <SongGrid key={v.bandId} data={v} />;
+          return <SongGrid key={v.songId} data={v} />;
         });
     }
   };
