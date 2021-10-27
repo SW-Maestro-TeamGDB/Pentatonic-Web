@@ -32,7 +32,7 @@ const GET_TREND_BANDS = gql`
 `;
 
 const TrendingCover = ({ match }) => {
-  const COVER_WIDTH = useMediaQuery({ maxWidth: 767 }) ? '160px' : '200px';
+  const COVER_WIDTH = useMediaQuery({ maxWidth: 767 }) ? '250px' : '200px';
   const type = match.params.id;
   const { data } = useQuery(GET_TREND_BANDS, {
     fetchPolicy: 'cache-first',
