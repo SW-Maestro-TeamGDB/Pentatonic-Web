@@ -44,7 +44,11 @@ const CoverHistory = ({ match }) => {
   });
 
   const showCover = () => {
-    return userData.band.map((v) => <CoverGrid key={v.bandId} data={v} />);
+    if (userData.band)
+      return userData.band
+        .slice(0)
+        .reverse()
+        .map((v) => <CoverGrid key={v.bandId} data={v} />);
   };
 
   return (
