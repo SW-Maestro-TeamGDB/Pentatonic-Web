@@ -275,16 +275,16 @@ const CustomIcon = styled.img`
 const CoverTitle = styled.div`
   font-size: 16px;
   font-weight: 700;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: 100%;
 
   ${media.small} {
     font-size: 1.4rem;
     font-weight: 900;
     line-height: 1.7;
     max-width: 90%;
-
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
   }
 `;
 
@@ -292,16 +292,16 @@ const SongInform = styled.div`
   font-size: 12px;
   color: #888;
   font-weight: 600;
+  width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 
   ${media.small} {
     color: white;
     font-size: 0.75rem;
     line-height: 1;
     max-width: 90%;
-
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
   }
 `;
 
