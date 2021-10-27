@@ -101,6 +101,8 @@ const PageTitle = styled.div`
 `;
 
 const CoverContainer = styled.div`
+  width: 100%;
+
   ${media.small} {
     width: 90%;
     padding-bottom: 1rem;

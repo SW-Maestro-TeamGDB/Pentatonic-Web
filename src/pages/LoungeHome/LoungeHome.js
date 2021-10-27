@@ -138,6 +138,10 @@ const Background = styled.div`
   background-size: cover;
   filter: blur(1px) brightness(50%);
   transition: all 0.3s ease-in-out;
+
+  ${media.small} {
+    transition: none;
+  }
 `;
 
 const CoverLinkContainer = styled(Link)`
@@ -163,6 +167,12 @@ const CoverLinkContainer = styled(Link)`
   &:hover {
     ${Background} {
       filter: blur(0.5px) brightness(65%);
+    }
+
+    ${media.small} {
+      ${Background} {
+        filter: none;
+      }
     }
   }
 `;
