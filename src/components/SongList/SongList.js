@@ -108,14 +108,14 @@ const SongDataContainer = styled.div`
 `;
 
 const SongMetaContainer = styled.div`
-  width: 20%;
+  width: 30%;
   display: flex;
   justify-content: center;
   align-items: center;
   padding: 0 1.5rem;
 
   ${media.medium} {
-    padding: 0 1rem;
+    padding: 0 1rem 0 2rem;
   }
 
   ${media.small} {
@@ -133,6 +133,12 @@ const SongGenreContainer = styled.div`
   width: auto;
   padding: 0.2rem 1rem;
   border-radius: 10px;
+  width: auto;
+
+  ${media.medium} {
+    padding: 0.5rem 1rem;
+    min-width: 5rem;
+  }
 
   display: flex;
   justify-content: center;
@@ -212,6 +218,14 @@ const SongImg = styled.div`
 const IconContainer = styled.div`
   width: 80%;
   min-width: 7rem;
+
+  ${media.medium} {
+    min-width: 6rem;
+  }
+
+  ${media.small} {
+    min-width: 7rem;
+  }
 
   ${media.five} {
     width: 3rem;
@@ -300,6 +314,11 @@ const DifficultyContainer = styled.div`
   align-items: center;
   justify-content: flex-end;
   padding-right: 1rem;
+
+  ${media.medium} {
+    padding-left: 1rem;
+    width: 20%;
+  }
 
   ${media.small} {
     padding-left: 0;
