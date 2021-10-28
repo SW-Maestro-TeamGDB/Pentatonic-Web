@@ -9,8 +9,8 @@ import { gql, useMutation, useQuery, useLazyQuery } from '@apollo/client';
 import { Link } from 'react-router-dom';
 
 const LOGIN = gql`
-  mutation login($id: Id!, $password: Password!) {
-    login(input: { user: { id: $id, password: $password } })
+  mutation LoginMutation($input: LoginInput!) {
+    login(input: $input)
   }
 `;
 
@@ -87,7 +87,16 @@ const LoginModal = (props) => {
       return setFormError('아이디와 비밀번호를 입력해주세요');
     }
 
-    login({ variables: { id, password } });
+    login({
+      variables: {
+        input: {
+          user: {
+            id: 'jongmin',
+            password: 'sc640813',
+          },
+        },
+      },
+    });
   };
 
   return (
