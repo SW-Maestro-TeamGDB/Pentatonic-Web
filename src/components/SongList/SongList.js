@@ -201,7 +201,7 @@ const WeeklyBanner = styled.div`
 const SongImg = styled.div`
   background-image: ${(props) => `url(${props.img})`};
   background-repeat: no-repeat;
-  background-position: top center;
+  background-position: center center;
   background-size: cover;
   border-radius: 15px;
   min-width: 9rem;
