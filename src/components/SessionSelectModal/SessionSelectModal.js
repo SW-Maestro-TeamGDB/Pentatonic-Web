@@ -1,14 +1,19 @@
 import react, { useEffect, useState } from 'react';
 import styled from 'styled-components';
+import { media } from '../../lib/Media';
+import { useMediaQuery } from 'react-responsive';
 import { Link } from 'react-router-dom';
 import { Modal } from 'antd';
 import { ExclamationCircleOutlined } from '@ant-design/icons';
 
+import SessionSelectMobile from '../../images/SessionSelectMobile.gif';
 import SessionSelect from '../../images/SessionSelect.gif';
 
 const SessionSelectModal = (props) => {
   const { modalToggle, setModalToggle } = props;
-
+  const isMobile = useMediaQuery({
+    query: '(max-width:767px)',
+  });
   const closeModal = () => {
     setModalToggle(false);
   };
@@ -24,10 +29,11 @@ const SessionSelectModal = (props) => {
     >
       <ModalContainer>
         <CustomExclamationIcon />
-        <TextWrapper>세션을 선택해주세요</TextWrapper>
-        <HelpImage src={SessionSelect} />
+        <TextWrapper>하나 이상의 세션을 선택해주세요</TextWrapper>
+        <HelpImage src={isMobile ? SessionSelectMobile : SessionSelect} />
         <DescWrapper>
-          하나 이상의 세션을 선택해야 커버를 감상 할 수 있습니다
+          듣고싶은 세션을 클릭해서 선택하면, 클릭된 세션을 합친 밴드커버가
+          완성됩니다.
         </DescWrapper>
         <ButtonContainer>
           <AcceptButton onClick={closeModal}>확인</AcceptButton>
@@ -50,11 +56,19 @@ const ModalContainer = styled.div`
   width: 100%;
   height: 30rem;
   padding: 6vh 0;
+
+  ${media.small} {
+    height: 40rem;
+  }
 `;
 
 const HelpImage = styled.img`
   width: 90%;
   margin-top: 3rem;
+
+  ${media.small} {
+    margin-top: 2rem;
+  }
 `;
 
 const CustomExclamationIcon = styled(ExclamationCircleOutlined)`
@@ -63,7 +77,7 @@ const CustomExclamationIcon = styled(ExclamationCircleOutlined)`
 `;
 
 const TextWrapper = styled.div`
-  font-size: 1.5rem;
+  font-size: 1.3rem;
   font-weight: 700;
   margin-top: 2rem;
 `;
@@ -71,7 +85,14 @@ const TextWrapper = styled.div`
 const DescWrapper = styled.div`
   font-size: 1rem;
   margin-top: 2.5rem;
-  font-weight: 500;
+  font-weight: 700;
+  padding: 0 1.5rem;
+  letter-spacing: -1px;
+
+  ${media.small} {
+    font-size: 0.9rem;
+    padding: 0 1rem;
+  }
 `;
 
 const ButtonContainer = styled.div`
