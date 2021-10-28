@@ -388,6 +388,7 @@ const CoverRoom = ({ match }) => {
 
   const onClickCommentButton = () => {
     if (comment.length > 0) {
+      setComment('');
       createComment({
         variables: {
           createCommentInput: {
