@@ -33,7 +33,7 @@ const UPDATE_COMMENT = gql`
 const CommentList = (props) => {
   const { data, edit, queryComments } = props;
   const [deleteModal, setDeleteModal] = useState(false);
-  const [editModal, setEditModal] = useState(false);
+  // const [editModal, setEditModal] = useState(false);
   const [editToggle, setEditToggle] = useState(false);
   const [comment, setComment] = useState('');
 
@@ -42,13 +42,13 @@ const CommentList = (props) => {
     onCompleted: (data) => {
       setComment('');
       setEditToggle(false);
-      setEditModal(false);
+      // setEditModal(false);
       queryComments();
     },
     onError: (error) => {
       console.log(error);
       alert('댓글을 삭제하지 못했습니다');
-      setEditModal(false);
+      // setEditModal(false);
     },
   });
 
@@ -127,7 +127,7 @@ const CommentList = (props) => {
               취소
             </EditCancleButton>
             <EditSubmitButton
-              onClick={() => setEditModal(true)}
+              onClick={() => onClickEditSubmit()}
               disabled={comment.length === 0}
             >
               수정
@@ -156,12 +156,12 @@ const CommentList = (props) => {
           </EditDropdown>
         </CommentEditContainer>
       ) : null}
-      <QuestionModal
+      {/* <QuestionModal
         modalToggle={editModal}
         setModalToggle={setEditModal}
         text="댓글을 수정하시겠습니까?"
         afterRequest={onClickEditSubmit}
-      />
+      /> */}
       <QuestionModal
         modalToggle={deleteModal}
         setModalToggle={setDeleteModal}
