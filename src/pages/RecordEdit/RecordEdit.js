@@ -305,6 +305,9 @@ const RecordEdit = (props) => {
 
   useEffect(() => {
     const temp = new Pizzicato.Sound(audioFile?.url);
+
+    // effect test
+    // const temp = new Pizzicato.Sound(inst.src);
     setRecordSound(temp);
 
     const tempReverb = new Pizzicato.Effects.Reverb({
@@ -535,7 +538,7 @@ const RecordEdit = (props) => {
       <ButtonConatiner>
         <BackwardButton
           onClick={() => {
-            setInst(existingInst);
+            if (existingInst) setInst(existingInst);
             setPage(1);
           }}
         >
