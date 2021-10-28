@@ -21,7 +21,7 @@ import Logo from '../../images/Logo/Logo.png';
 const Header = () => {
   const [menuToggle, setMenuToggle] = useState(false);
   const [modalToggle, setModalToggle] = useState(false);
-  const { data } = useQuery(GET_CURRENT_USER);
+  const { data } = useQuery(GET_CURRENT_USER, { fetchPolicy: 'network-only' });
 
   const [getUserInform, getUserInformResult] = useLazyQuery(GET_USER_INFORM, {
     fetchPolicy: 'network-only',
@@ -42,6 +42,7 @@ const Header = () => {
     sessionStorage.clear();
     isLoggedInVar(false);
     currentUserVar(null);
+    if (menuToggle) setMenuToggle(false);
   };
 
   const showDrawer = () => {
