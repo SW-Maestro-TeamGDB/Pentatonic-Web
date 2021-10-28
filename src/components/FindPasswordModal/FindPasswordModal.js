@@ -16,18 +16,8 @@ const CHECK_AUTH_CODE = gql`
 `;
 
 const RESET_PASSWORD = gql`
-  mutation resetPassword(
-    $phoneNumber: PhoneNumber!
-    $authCode: Int!
-    $password: Password!
-  ) {
-    resetPassword(
-      input: {
-        phoneNumber: $phoneNumber
-        authCode: $authCode
-        user: { password: $password }
-      }
-    )
+  mutation ResetPasswordMutation($input: ResetPasswordInput!) {
+    resetPassword(input: $input)
   }
 `;
 
@@ -87,9 +77,11 @@ const FindPasswordModal = (props) => {
     if (passwordCheck()) {
       resetPassword({
         variables: {
-          password: password,
-          phoneNumber: changeNumber(tempNumber),
-          authCode: Number(authCode),
+          input: {
+            user: { password: password },
+            phoneNumber: changeNumber(tempNumber),
+            authCode: Number(authCode),
+          },
         },
       });
     }
