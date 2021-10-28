@@ -1,5 +1,6 @@
 import react, { useEffect, useState } from 'react';
 import styled from 'styled-components';
+import { Default, media } from '../../lib/Media';
 import { gql, useLazyQuery, useMutation } from '@apollo/client';
 import { LeftOutlined, CheckCircleOutlined } from '@ant-design/icons';
 
@@ -298,6 +299,10 @@ const ResultContainer = styled.div`
 const TextWrapper = styled.div`
   font-size: 1.8rem;
   font-weight: 800;
+
+  ${media.small} {
+    font-size: 1.2rem;
+  }
 `;
 
 const IconWrapper = styled.div`
@@ -389,6 +394,10 @@ const HeaderTitle = styled.div`
   text-align: center;
   position: absolute;
   width: 100%;
+
+  ${media.small} {
+    font-size: 1.3rem;
+  }
 `;
 
 const PhoneNumberInput = styled.input`

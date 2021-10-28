@@ -1,5 +1,6 @@
 import react, { useEffect, useState, useCallback } from 'react';
 import styled from 'styled-components';
+import { Default, media } from '../../lib/Media';
 import { LeftOutlined, SearchOutlined } from '@ant-design/icons';
 
 const FindAccountModal = (props) => {
@@ -94,12 +95,20 @@ const IconContainer = styled.div`
   font-size: 3rem;
   width: 30%;
   text-align: center;
+
+  ${media.small} {
+    font-size: 2rem;
+  }
 `;
 
 const TextContainer = styled.div`
   font-size: 2rem;
   width: 70%;
   text-align: center;
+
+  ${media.small} {
+    font-size: 1.5rem;
+  }
 `;
 
 const SelectDesc = styled.div`
@@ -116,6 +125,10 @@ const HeaderTitle = styled.div`
   text-align: center;
   position: absolute;
   width: 100%;
+
+  ${media.small} {
+    font-size: 1.3rem;
+  }
 `;
 
 export default FindAccountModal;

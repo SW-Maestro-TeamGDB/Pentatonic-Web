@@ -1,5 +1,6 @@
 import react, { useEffect, useState } from 'react';
 import styled from 'styled-components';
+import { Default, media } from '../../lib/Media';
 import { gql, useLazyQuery, useMutation } from '@apollo/client';
 import { LeftOutlined } from '@ant-design/icons';
 
@@ -210,6 +211,11 @@ const AuthButton = styled.button`
   &:hover {
     background-color: rgba(98, 54, 255, 1);
   }
+
+  ${media.small} {
+    font-size: 0.8rem;
+    padding: 0.5rem 0.5rem;
+  }
 `;
 
 const ResultContainer = styled.div`
@@ -313,6 +319,10 @@ const HeaderTitle = styled.div`
   text-align: center;
   position: absolute;
   width: 100%;
+
+  ${media.small} {
+    font-size: 1.3rem;
+  }
 `;
 
 const PhoneNumberInput = styled.input`
