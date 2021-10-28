@@ -133,7 +133,7 @@ const Header = () => {
                 </CustomDropdown>
               ) : (
                 <LoginButton onClick={() => onClickLoginButton()}>
-                  로그인 / 회원가입
+                  로그인
                 </LoginButton>
               )}
             </UserContainer>
@@ -176,7 +176,7 @@ const UserContainer = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-right: 3%;
+  margin-right: 0%;
 `;
 
 const CustomDropdown = styled(Dropdown)`
@@ -241,20 +241,24 @@ const LoginButton = styled.div`
   background-color: transparent;
   color: black;
   width: auto;
+  padding: 0.4rem 1rem;
   border-radius: 6px;
-  font-size: 16px;
-  font-weight: bold;
+  font-size: 14px;
+  font-weight: 700;
+  color: rgba(110, 101, 170, 0.8);
   cursor: pointer;
   display: flex;
   justify-content: center;
   align-items: center;
   transition: all 0.3s ease-in-out;
+  border: 2px solid rgba(110, 101, 170, 0.6);
 
   line-height: 1.13;
   letter-spacing: -0.4px;
 
   &:hover {
-    color: rgb(60, 60, 60);
+    color: rgba(110, 101, 170, 1);
+    border: 2px solid rgba(110, 101, 170, 0.8);
   }
 `;
 

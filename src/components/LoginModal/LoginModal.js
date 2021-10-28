@@ -156,6 +156,10 @@ const CustomLink = styled(Link)`
   color: black;
   font-size: 1rem;
   margin: 0 1rem;
+
+  &:hover {
+    color: black;
+  }
 `;
 
 const CustomButton = styled.div`
