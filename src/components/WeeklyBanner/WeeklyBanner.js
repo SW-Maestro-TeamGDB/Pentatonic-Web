@@ -2,31 +2,51 @@ import react, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { media } from '../../lib/Media';
 import { useQuery, gql } from '@apollo/client';
+import { Skeleton } from 'antd';
 import { Default } from '../../lib/Media';
 import { Link } from 'react-router-dom';
 
-const WeeklyBanner = (data) => {
+const WeeklyBanner = (props) => {
+  const { data, loading } = props;
   const [songData, setSongData] = useState();
 
   useEffect(() => {
-    if (data?.data) setSongData(data.data[0]);
+    if (data) setSongData(data[0]);
   }, [data]);
 
   return (
     <BannerContainer>
       <Link to="/lounge/weekly">
-        <Background url={songData ? songData.songImg : null} />
-        <BannerContents>
-          <WeeklyChallengeTitleContainer>
-            <WeeklyChallengeTitle>Weekly Challenge</WeeklyChallengeTitle>
-          </WeeklyChallengeTitleContainer>
-          <SongTitle>{songData ? songData.name : null}</SongTitle>
-          <Singer>{songData ? songData.artist : null}</Singer>
-        </BannerContents>
+        {loading ? (
+          <SkeletonBackground />
+        ) : (
+          <>
+            <Background url={songData ? songData.songImg : null} />
+            <BannerContents>
+              <WeeklyChallengeTitleContainer>
+                <WeeklyChallengeTitle>Weekly Challenge</WeeklyChallengeTitle>
+              </WeeklyChallengeTitleContainer>
+              <SongTitle>{songData ? songData.name : null}</SongTitle>
+              <Singer>{songData ? songData.artist : null}</Singer>
+            </BannerContents>
+          </>
+        )}
       </Link>
     </BannerContainer>
   );
 };
+
+const SkeletonBackground = styled.div`
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  background-color: #ddd;
+  border-radius: 15px;
+
+  ${media.small} {
+    border-radius: 0px;
+  }
+`;
 
 const Background = styled.div`
   width: 100%;
@@ -91,6 +111,9 @@ const BannerContents = styled.div`
   display: flex;
   flex-direction: column;
   right: 3%;
+  z-index: 2;
+  width: 100%;
+  align-items: flex-end;
 `;
 
 const WeeklyChallengeTitleContainer = styled.div`
@@ -122,6 +145,7 @@ const WeeklyChallengeTitle = styled.div`
 const SongTitle = styled.span`
   font-weight: 900;
   font-size: 60px;
+  width: 100%;
   color: white;
 
   display: flex;

@@ -98,7 +98,7 @@ const LoungeHome = () => {
 
   return (
     <PageContainer>
-      <WeeklyBanner data={data?.querySong} />
+      <WeeklyBanner data={data?.querySong} loading={loading} />
       <Spacing />
       <BoardContainer>
         <BoardWrapper>
