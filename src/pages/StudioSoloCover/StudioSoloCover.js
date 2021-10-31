@@ -15,6 +15,7 @@ import GenreButton from '../../components/GenreButton/GenreButton';
 import GridContainer from '../../components/GridContainer/GridContainer';
 import { useMediaQuery } from 'react-responsive';
 import { media, mobileCheck } from '../../lib/Media';
+import { LoadingOutlined } from '@ant-design/icons';
 
 const QUERY_SONG = gql`
   query Query($querySongFilter: QuerySongInput!) {
@@ -40,7 +41,7 @@ const StudioSoloCover = ({ match }) => {
   const isDesktop = useMediaQuery({ minWidth: 992 });
   const content = match.params?.content;
 
-  const { data } = useQuery(QUERY_SONG, {
+  const { loading, error, data } = useQuery(QUERY_SONG, {
     variables: {
       querySongFilter: {
         type: 'NAME',
@@ -110,7 +111,13 @@ const StudioSoloCover = ({ match }) => {
           />
         ) : null}
       </SubContainer>
-      <SongContainer>{showCover()}</SongContainer>
+      {loading ? (
+        <LoadingContainer>
+          <LoadingOutlined />
+        </LoadingContainer>
+      ) : (
+        <SongContainer>{showCover()}</SongContainer>
+      )}
     </PageContainer>
   );
 };
@@ -242,6 +249,17 @@ const NoSong = styled.div`
   ${media.small} {
     font-size: 0.9rem;
   }
+`;
+
+const LoadingContainer = styled.div`
+  width: 100%;
+  height: 20rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  font-size: 6rem;
+  color: #6236ff;
 `;
 
 export default StudioSoloCover;
