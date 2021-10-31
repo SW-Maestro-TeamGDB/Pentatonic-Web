@@ -10,6 +10,7 @@ import CoverGrid from '../../components/CoverGrid/CoverGrid';
 import MakingIcon from '../../images/MakingIcon.svg';
 import PageImage from '../../components/PageImage';
 import GridContainer from '../../components/GridContainer/GridContainer';
+import { LoadingOutlined } from '@ant-design/icons';
 import { useMediaQuery } from 'react-responsive';
 import { media, Default, mobileCheck } from '../../lib/Media';
 
@@ -63,7 +64,7 @@ const WeeklyChallenge = ({ match }) => {
 
         if (filteredData.length > 0) {
           return (
-            <GridContainer width="95%" templateColumn={COVER_WIDTH} autoFill>
+            <GridContainer width="100%" templateColumn={COVER_WIDTH} autoFill>
               {filteredData.map((v, i) => {
                 return (
                   <CoverGrid
@@ -81,7 +82,7 @@ const WeeklyChallenge = ({ match }) => {
         }
       }
       return (
-        <GridContainer width="95%" templateColumn={COVER_WIDTH} autoFill>
+        <GridContainer width="100%" templateColumn={COVER_WIDTH} autoFill>
           {songData.band.map((v, i) => {
             return (
               <CoverGrid
@@ -157,7 +158,13 @@ const WeeklyChallenge = ({ match }) => {
               ) : null}
             </Default>
           </SubContainer>
-          {loadCover()}
+          {loading ? (
+            <LoadingContainer>
+              <LoadingOutlined />
+            </LoadingContainer>
+          ) : (
+            loadCover()
+          )}
           <PageSpacing />
         </PageContainer>
       ) : null}
@@ -167,6 +174,17 @@ const WeeklyChallenge = ({ match }) => {
 
 const PageSpacing = styled.div`
   height: 1.5rem;
+`;
+
+const LoadingContainer = styled.div`
+  width: 100%;
+  height: 15rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  font-size: 6rem;
+  color: #6236ff;
 `;
 
 const BandIconContainer = styled.img`
@@ -274,7 +292,7 @@ const SearchResult = styled.div`
 `;
 
 const SubContainer = styled.div`
-  margin: 4rem 0 1rem;
+  margin: 4rem 0 2rem;
   position: relative;
   width: 93%;
   display: flex;
