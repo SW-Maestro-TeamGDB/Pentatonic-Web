@@ -11,6 +11,7 @@ import MakingIcon from '../../images/MakingIcon.svg';
 import PageImage from '../../components/PageImage';
 import GridContainer from '../../components/GridContainer/GridContainer';
 import NotFoundPage from '../NotFoundPage';
+import { LoadingOutlined } from '@ant-design/icons';
 import { useMediaQuery } from 'react-responsive';
 import { media, Default } from '../../lib/Media';
 
@@ -117,13 +118,28 @@ const LoungeSongCovers = ({ match }) => {
             </SubContainer>
             {loadCover()}
           </PageContainer>
-        ) : null
+        ) : (
+          <LoadingContainer>
+            <LoadingOutlined />
+          </LoadingContainer>
+        )
       ) : !loading ? (
         <NotFoundPage />
       ) : null}
     </>
   );
 };
+
+const LoadingContainer = styled.div`
+  width: 100%;
+  height: 30rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  font-size: 12rem;
+  color: #6236ff;
+`;
 
 const BandIconContainer = styled.img`
   width: 48px;
