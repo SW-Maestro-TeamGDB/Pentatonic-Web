@@ -12,14 +12,16 @@ import PageImage from '../../components/PageImage/PageImage';
 import GenreButton from '../../components/GenreButton/GenreButton';
 import DifficultyButton from '../../components/DifficultyButton/DifficultyButton';
 import GridContainer from '../../components/GridContainer/GridContainer';
+import InfiniteScrollGrid from '../../components/InfiniteScrollGrid/InfiniteScrollGrid';
 import { useMediaQuery } from 'react-responsive';
 import { media, Default } from '../../lib/Media';
+import { throttle } from 'lodash';
 
 import LoungeBandImage from '../../images/LoungeBandCover.jpg';
 
 const QUERY_BAND = gql`
-  query Query($queryBandFilter: QueryBandInput!) {
-    queryBand(filter: $queryBandFilter) {
+  query Query($filter: QueryBandInput!, $first: Int!, $after: String) {
+    queryBand(filter: $filter, first: $first, after: $after) {
       bands {
         backGroundURI
         song {
@@ -37,6 +39,10 @@ const QUERY_BAND = gql`
           position
         }
       }
+      pageInfo {
+        endCursor
+        hasNextPage
+      }
     }
   }
 `;
@@ -53,30 +59,6 @@ const LoungeBandCovers = ({ match }) => {
     isFreeSong: false,
     weeklyChallenge: false,
   });
-
-  const { data } = useQuery(QUERY_BAND, {
-    variables: {
-      queryBandFilter: bandFilter,
-    },
-  });
-
-  const loadBandCover = () => {
-    if (data) {
-      const coverData = data.queryBand.bands;
-
-      if (coverData.length > 0)
-        return (
-          <GridContainer width="95%" templateColumn={COVER_WIDTH} autoFill>
-            {coverData.map((v, i) => {
-              return <CoverGrid key={`bandData+${i}`} data={v} />;
-            })}
-          </GridContainer>
-        );
-      else {
-        return <NoCover>등록된 커버가 없습니다</NoCover>;
-      }
-    }
-  };
 
   useEffect(() => {
     if (genre !== '전체') {
@@ -136,7 +118,8 @@ const LoungeBandCovers = ({ match }) => {
           <MakingCoverButton link={`/studio/band`} title="새로운 커버 만들기" />
         </Default>
       </SubContainer>
-      {loadBandCover()}
+      {/* {loadBandCover()} */}
+      <InfiniteScrollGrid coverWidth={COVER_WIDTH} bandFilter={bandFilter} />
       <PageSpacing />
     </PageContainer>
   );
@@ -192,7 +175,7 @@ const SearchResult = styled.div`
 `;
 
 const SubContainer = styled.div`
-  margin: 4rem 0 1rem;
+  margin: 4rem 0 2rem;
   position: relative;
   width: 93%;
   display: flex;

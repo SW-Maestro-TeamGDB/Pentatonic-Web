@@ -10,6 +10,7 @@ import CoverGrid from '../../components/CoverGrid';
 import MakingIcon from '../../images/MakingIcon.svg';
 import PageImage from '../../components/PageImage/PageImage';
 import GridContainer from '../../components/GridContainer/GridContainer';
+import InfiniteScrollGrid from '../../components/InfiniteScrollGrid/InfiniteScrollGrid';
 
 import { useMediaQuery } from 'react-responsive';
 import { media, Default, mobileCheck } from '../../lib/Media';
@@ -66,32 +67,6 @@ const LoungeBandCovers = ({ match }) => {
     </SubMenuContainer>
   );
 
-  const { data } = useQuery(QUERY_BANDS, {
-    fetchPolicy: 'network-only',
-    variables: {
-      queryBandFilter: bandFilter,
-      queryBandFirst: 10,
-    },
-  });
-
-  const loadFreeCover = () => {
-    if (data) {
-      const coverData = data.queryBand.bands;
-
-      if (coverData.length > 0)
-        return (
-          <GridContainer width="95%" templateColumn={COVER_WIDTH} autoFill>
-            {coverData.map((v, i) => {
-              return <CoverGrid key={`bandData+${i}`} data={v} />;
-            })}
-          </GridContainer>
-        );
-      else {
-        return <NoCover>등록된 커버가 없습니다</NoCover>;
-      }
-    }
-  };
-
   useEffect(() => {
     if (genre !== '전체') {
       setBandFilter({ ...bandFilter, genre: genre });
@@ -144,7 +119,9 @@ const LoungeBandCovers = ({ match }) => {
           ) : null}
         </Default>
       </SubContainer>
-      {loadFreeCover()}
+      {/* {loadFreeCover()}
+       */}
+      <InfiniteScrollGrid coverWidth={COVER_WIDTH} bandFilter={bandFilter} />
       <PageSpacing />
     </PageContainer>
   );
@@ -255,7 +232,7 @@ const SearchResult = styled.div`
 `;
 
 const SubContainer = styled.div`
-  margin: 4rem 0 1rem;
+  margin: 4rem 0 2rem;
   position: relative;
   width: 93%;
   display: flex;

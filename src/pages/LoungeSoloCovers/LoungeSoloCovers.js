@@ -12,6 +12,7 @@ import PageImage from '../../components/PageImage';
 import GenreButton from '../../components/GenreButton/GenreButton';
 import DifficultyButton from '../../components/DifficultyButton/DifficultyButton';
 import GridContainer from '../../components/GridContainer/GridContainer';
+import InfiniteScrollGrid from '../../components/InfiniteScrollGrid/InfiniteScrollGrid';
 import { useMediaQuery } from 'react-responsive';
 import { media, Default } from '../../lib/Media';
 
@@ -53,30 +54,6 @@ const LoungeSoloCovers = ({ match }) => {
     isFreeSong: false,
     weeklyChallenge: false,
   });
-
-  const { data } = useQuery(QUERY_BAND, {
-    variables: {
-      queryBandFilter: bandFilter,
-    },
-  });
-
-  const loadSoloCover = () => {
-    if (data) {
-      const coverData = data.queryBand.bands;
-
-      if (coverData.length > 0)
-        return (
-          <GridContainer width="95%" templateColumn={COVER_WIDTH} autoFill>
-            {coverData.map((v, i) => {
-              return <CoverGrid key={`bandData+${i}`} data={v} />;
-            })}
-          </GridContainer>
-        );
-      else {
-        return <NoCover>등록된 커버가 없습니다</NoCover>;
-      }
-    }
-  };
 
   useEffect(() => {
     if (genre !== '전체') {
@@ -135,7 +112,7 @@ const LoungeSoloCovers = ({ match }) => {
           <MakingCoverButton link={`/studio/solo`} title="새로운 커버 만들기" />
         </Default>
       </SubContainer>
-      {loadSoloCover()}
+      <InfiniteScrollGrid coverWidth={COVER_WIDTH} bandFilter={bandFilter} />
       <PageSpacing />
     </PageContainer>
   );
@@ -166,7 +143,7 @@ const PageDesc = styled.div`
 `;
 
 const SubContainer = styled.div`
-  margin: 4rem 0 1rem;
+  margin: 4rem 0 2rem;
   position: relative;
   width: 93%;
   display: flex;
