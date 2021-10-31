@@ -2,6 +2,7 @@ import react, { useState } from 'react';
 import { useQuery, gql, useLazyQuery } from '@apollo/client';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
+import { Skeleton } from 'antd';
 import WeeklyBanner from '../../components/WeeklyBanner/WeeklyBanner';
 import PageContainer from '../../components/PageContainer';
 import SearchBar from '../../components/SearchBar';
@@ -42,7 +43,7 @@ const GET_TREND_BANDS = gql`
 `;
 
 const LoungeHome = () => {
-  const { data } = useQuery(GET_TREND_BANDS, {
+  const { loading, error, data } = useQuery(GET_TREND_BANDS, {
     variables: {
       queryBandFilter: {
         type: 'ALL',
@@ -84,6 +85,17 @@ const LoungeHome = () => {
     }
   };
 
+  const CoverSkeleton = (
+    <SkeletonContainer>
+      <Skeleton.Button style={{ width: '100%', height: '8rem' }} active />
+      <Skeleton
+        title={{ width: '100%' }}
+        paragraph={{ width: '100%', rows: 1 }}
+        active
+      />
+    </SkeletonContainer>
+  );
+
   return (
     <PageContainer>
       <WeeklyBanner data={data?.querySong} />
@@ -94,14 +106,28 @@ const LoungeHome = () => {
             <BoardTitle>떠오르는 밴드커버</BoardTitle>
             <BoardLink to="lounge/trending/band">더보기</BoardLink>
           </BoardHeader>
-          {loadBandCover()}
+          {loading ? (
+            <GridContainer coverWidth={COVER_WIDTH}>
+              {CoverSkeleton}
+              {CoverSkeleton}
+            </GridContainer>
+          ) : (
+            loadBandCover()
+          )}
         </BoardWrapper>
         <BoardWrapper>
           <BoardHeader>
             <BoardTitle>떠오르는 솔로커버</BoardTitle>
             <BoardLink to="lounge/trending/solo">더보기</BoardLink>
           </BoardHeader>
-          {loadSoloCover()}
+          {loading ? (
+            <GridContainer coverWidth={COVER_WIDTH}>
+              {CoverSkeleton}
+              {CoverSkeleton}
+            </GridContainer>
+          ) : (
+            loadSoloCover()
+          )}
         </BoardWrapper>
       </BoardContainer>
       <Default>
@@ -126,6 +152,12 @@ const LoungeHome = () => {
     </PageContainer>
   );
 };
+
+const SkeletonContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  padding-top: 1rem;
+`;
 
 const Background = styled.div`
   position: absolute;
@@ -291,6 +323,17 @@ const NoCover = styled.div`
     padding-bottom: 0.5rem;
     font-weight: 700;
   }
+`;
+
+const LoadingContainer = styled.div`
+  width: 100%;
+  height: 15rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  font-size: 6rem;
+  color: #6236ff;
 `;
 
 export default LoungeHome;
