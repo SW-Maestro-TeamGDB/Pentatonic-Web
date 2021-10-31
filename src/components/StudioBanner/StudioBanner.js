@@ -11,7 +11,7 @@ import ThumbIcon from '../../images/ThumbIcon.svg';
 import ViewIcon from '../../images/ViewIcon.svg';
 
 const StudioBanner = (props) => {
-  const { data } = props;
+  const { data, loading } = props;
 
   const showContents = () => {
     if (data && data.length > 0)
@@ -25,16 +25,34 @@ const StudioBanner = (props) => {
   return (
     <BannerContainer>
       <CarouselContainer>
-        <CoverRecommendTitleContainer>
-          <CoverRecommendTitle>이런 커버 어때요?</CoverRecommendTitle>
-        </CoverRecommendTitleContainer>
-        <CustomCarousel usel dotPosition="bottom" autoplay>
-          {showContents()}
-        </CustomCarousel>
+        {loading ? (
+          <SkeletonBackground />
+        ) : (
+          <>
+            <CoverRecommendTitleContainer>
+              <CoverRecommendTitle>이런 커버 어때요?</CoverRecommendTitle>
+            </CoverRecommendTitleContainer>
+            <CustomCarousel usel dotPosition="bottom" autoplay>
+              {showContents()}
+            </CustomCarousel>
+          </>
+        )}
       </CarouselContainer>
     </BannerContainer>
   );
 };
+
+const SkeletonBackground = styled.div`
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  background-color: #ddd;
+  border-radius: 15px;
+
+  ${media.small} {
+    border-radius: 0px;
+  }
+`;
 
 const CarouselContainer = styled.div`
   width: 100%;
