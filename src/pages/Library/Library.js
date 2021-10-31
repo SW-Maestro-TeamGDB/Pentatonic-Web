@@ -5,7 +5,7 @@ import PageContainer from '../../components/PageContainer';
 import LibraryList from '../../components/LibraryList';
 import SearchBar from '../../components/SearchBar';
 import styled from 'styled-components';
-import { StopOutlined } from '@ant-design/icons';
+import { StopOutlined, LoadingOutlined } from '@ant-design/icons';
 import { media } from '../../lib/Media';
 
 import LoginAuth from '../../lib/LoginAuth';
@@ -122,7 +122,11 @@ const Library = () => {
             loadLibrary()
           ) : (
             <>
-              {loadLibraryState ? null : loading ? null : (
+              {loading ? (
+                <LoadingContainer>
+                  <LoadingOutlined />
+                </LoadingContainer>
+              ) : (
                 <NoDataContainer>
                   <CustomStopOutlined />
                   <NoLibrary>저장된 라이브러리가 없습니다</NoLibrary>
@@ -135,6 +139,17 @@ const Library = () => {
     </LoginAuth>
   );
 };
+
+const LoadingContainer = styled.div`
+  width: 100%;
+  height: 15rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  font-size: 6rem;
+  color: #6236ff;
+`;
 
 const PageTitle = styled.div`
   font-size: 1.5rem;
