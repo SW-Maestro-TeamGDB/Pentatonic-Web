@@ -151,7 +151,7 @@ const Profile = ({ match }) => {
       if (data.getUserInfo) {
         // const sessionData = JSON.parse(sessionStorage.getItem('userInfo'));
 
-        if (data?.user.id === ID) {
+        if (data.getUserInfo.id === ID) {
           currentUserVar(data.getUserInfo);
           // sessionStorage.setItem('userInfo', JSON.stringify(data.getUserInfo));
         }
@@ -365,7 +365,6 @@ const Profile = ({ match }) => {
                         });
                       }}
                       value={editUserName}
-                      defaultValue={editUserName}
                       maxLength="14"
                     />
                     {nameError ? (
@@ -380,7 +379,6 @@ const Profile = ({ match }) => {
                         })
                       }
                       value={editUserData.introduce}
-                      defaultValue={editUserData.introduce}
                       maxLength="100"
                     />
                   </>
