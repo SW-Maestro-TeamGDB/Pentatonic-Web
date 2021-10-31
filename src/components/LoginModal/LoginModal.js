@@ -46,7 +46,7 @@ const LoginModal = (props) => {
     // 여기에 variables 넣으면 id값 바뀔때마다 query 실행됨
     onCompleted: (data) => {
       if (data.getUserInfo) {
-        sessionStorage.setItem('userInfo', JSON.stringify(data.getUserInfo));
+        // sessionStorage.setItem('userInfo', JSON.stringify(data.getUserInfo));
         currentUserVar(data.getUserInfo);
         setID('');
         setPassword('');

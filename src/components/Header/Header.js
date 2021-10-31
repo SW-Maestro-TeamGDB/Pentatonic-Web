@@ -26,7 +26,7 @@ const Header = () => {
   const [getUserInform, getUserInformResult] = useLazyQuery(GET_USER_INFORM, {
     fetchPolicy: 'network-only',
     onCompleted: (data) => {
-      sessionStorage.setItem('userInfo', JSON.stringify(data.getUserInfo));
+      // sessionStorage.setItem('userInfo', JSON.stringify(data.getUserInfo));
       currentUserVar(data.getUserInfo);
     },
     onError: (error) => {
@@ -62,17 +62,17 @@ const Header = () => {
     query: '(max-width:767px)',
   });
 
-  useEffect(() => {
-    if (sessionStorage.getItem('token') && sessionStorage.getItem('userInfo')) {
-      const userInfo = JSON.parse(sessionStorage.getItem('userInfo'));
-      if (userInfo)
-        getUserInform({
-          variables: {
-            getUserInfoUserId: userInfo.id,
-          },
-        });
-    }
-  }, [sessionStorage.getItem('token')]);
+  // useEffect(() => {
+  //   if (sessionStorage.getItem('token') && sessionStorage.getItem('userInfo')) {
+  //     // const userInfo = JSON.parse(sessionStorage.getItem('userInfo'));
+  //     // if (userInfo)
+  //     //   getUserInform({
+  //     //     variables: {
+  //     //       getUserInfoUserId: userInfo.id,
+  //     //     },
+  //     //   });
+  //   }
+  // }, [sessionStorage.getItem('token')]);
 
   return (
     <Fixed>

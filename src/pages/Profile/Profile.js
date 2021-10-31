@@ -149,11 +149,11 @@ const Profile = ({ match }) => {
     },
     onCompleted: (data) => {
       if (data.getUserInfo) {
-        const sessionData = JSON.parse(sessionStorage.getItem('userInfo'));
+        // const sessionData = JSON.parse(sessionStorage.getItem('userInfo'));
 
-        if (sessionData.id === ID) {
+        if (data?.user.id === ID) {
           currentUserVar(data.getUserInfo);
-          sessionStorage.setItem('userInfo', JSON.stringify(data.getUserInfo));
+          // sessionStorage.setItem('userInfo', JSON.stringify(data.getUserInfo));
         }
 
         setUserData(data.getUserInfo);
