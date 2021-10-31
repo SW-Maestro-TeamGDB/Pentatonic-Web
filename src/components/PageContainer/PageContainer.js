@@ -2,7 +2,9 @@ import react from 'react';
 import styled from 'styled-components';
 import { media } from '../../lib/Media';
 
-const PageContainer = ({ children, width, minWidth }) => {
+const PageContainer = (props) => {
+  const { children, width, minWidth } = props;
+
   return (
     <Container width={width} minWidth={minWidth}>
       {children}
@@ -18,6 +20,8 @@ const Container = styled.div`
   align-items: center;
   /* box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3); */
   padding: 1rem;
+  padding-bottom: 5rem;
+  min-height: 100vh;
   height: auto;
   width: ${(props) => (props.width ? `${props.width}` : '60%')};
   min-width: ${(props) =>
@@ -38,7 +42,7 @@ const Container = styled.div`
     min-width: 0px;
     margin-top: 1rem;
     padding: 0;
-    padding-bottom: 2rem;
+    padding-bottom: 5rem;
     overflow-x: hidden;
   }
 `;
