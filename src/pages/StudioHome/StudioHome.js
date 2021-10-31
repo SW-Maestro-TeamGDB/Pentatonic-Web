@@ -1,9 +1,10 @@
-import react, { useState } from 'react';
+import react, { useState, Suspense } from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import { useQuery, gql, useLazyQuery } from '@apollo/client';
 import { useMediaQuery } from 'react-responsive';
 import { media, Default } from '../../lib/Media';
+import { Skeleton } from 'antd';
 
 import PageContainer from '../../components/PageContainer';
 import StudioBanner from '../../components/StudioBanner/StudioBanner';
@@ -52,7 +53,7 @@ const StudioHome = () => {
   });
   const SONG_WIDTH = isMobile ? '150px' : '250px';
 
-  const { data } = useQuery(QUERY_SONG, {
+  const { loading, error, data } = useQuery(QUERY_SONG, {
     variables: {
       querySongFilter: {
         type: 'ALL',
@@ -71,9 +72,20 @@ const StudioHome = () => {
       });
   };
 
+  const SongSkeleton = (
+    <SkeletonContainer>
+      <Skeleton.Button style={{ width: '100%', height: '8rem' }} active />
+      <Skeleton
+        title={{ width: '100%' }}
+        paragraph={{ width: '100%', rows: 1 }}
+        active
+      />
+    </SkeletonContainer>
+  );
+
   return (
     <PageContainer>
-      <StudioBanner data={recommendData} />
+      <StudioBanner data={recommendData} loading={loading} />
       <BoardContainer>
         <BoardWrapper>
           <GridContainer>
@@ -93,18 +105,31 @@ const StudioHome = () => {
           <BoardHeader>
             <BoardTitle>이런 곡 어때요?</BoardTitle>
           </BoardHeader>
-          <ResponsiveCoverGrid
-            coverData={songData}
-            coverWidth={SONG_WIDTH}
-            songData
-          >
-            {showSongGrid()}
-          </ResponsiveCoverGrid>
+          {loading ? (
+            <GridContainer coverWidth={SONG_WIDTH}>
+              {SongSkeleton}
+              {SongSkeleton}
+            </GridContainer>
+          ) : (
+            <ResponsiveCoverGrid
+              coverData={songData}
+              coverWidth={SONG_WIDTH}
+              songData
+            >
+              {showSongGrid()}
+            </ResponsiveCoverGrid>
+          )}
         </BoardWrapper>
       </BoardContainer>
     </PageContainer>
   );
 };
+
+const SkeletonContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  padding-top: 1rem;
+`;
 
 const BoardContainer = styled.div`
   display: flex;
