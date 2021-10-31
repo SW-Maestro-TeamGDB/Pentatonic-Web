@@ -6,7 +6,7 @@ import SearchBar from '../../components/SearchBar';
 import styled from 'styled-components';
 import GridContainer from '../../components/GridContainer';
 import CoverGrid from '../../components/CoverGrid';
-import { StopOutlined } from '@ant-design/icons';
+import { StopOutlined, LoadingOutlined } from '@ant-design/icons';
 import { media } from '../../lib/Media';
 
 const GET_USER_INFO = gql`
@@ -60,24 +60,37 @@ const CoverHistory = ({ match }) => {
       ) : null}
       <Spacing />
       <CoverContainer>
-        {userData && userData.band.length > 0 ? (
+        {loading ? (
+          <LoadingContainer>
+            <LoadingOutlined />
+          </LoadingContainer>
+        ) : userData && userData.band.length > 0 ? (
           <GridContainer templateColumn={`${coverWidth}px`} autoFill>
             {showCover()}
           </GridContainer>
         ) : (
           <>
-            {loading ? null : (
-              <NoDataContainer>
-                <CustomStopOutlined />
-                <NoCoverData>참여한 커버가 없습니다</NoCoverData>
-              </NoDataContainer>
-            )}
+            <NoDataContainer>
+              <CustomStopOutlined />
+              <NoCoverData>참여한 커버가 없습니다</NoCoverData>
+            </NoDataContainer>
           </>
         )}
       </CoverContainer>
     </PageContainer>
   );
 };
+
+const LoadingContainer = styled.div`
+  width: 100%;
+  height: 30rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  font-size: 12rem;
+  color: #6236ff;
+`;
 
 const PageTitle = styled.div`
   font-size: 1.5rem;
