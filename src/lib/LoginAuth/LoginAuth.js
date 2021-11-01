@@ -1,15 +1,15 @@
 import react, { useEffect, useState } from 'react';
 import AuthModal from '../../components/AuthModal';
 import { gql, useQuery } from '@apollo/client';
-import { IS_LOGGED_IN } from '../../apollo/cache';
+import { GET_CURRENT_USER } from '../../apollo/cache';
 import { useHistory } from 'react-router-dom';
 
 const LoginAuth = ({ children }) => {
-  const { data } = useQuery(IS_LOGGED_IN, {});
+  const { data } = useQuery(GET_CURRENT_USER, {});
 
   const [modalToggle, setModalToggle] = useState(true);
 
-  if (data?.isLoggedIn) {
+  if (data?.user) {
     return <>{children}</>;
   } else
     return (
