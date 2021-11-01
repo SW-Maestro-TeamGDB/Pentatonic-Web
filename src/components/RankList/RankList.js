@@ -31,9 +31,7 @@ const RankList = (props) => {
         <RankContainer>
           <RankIcon color={rankColor(rank)}>{rank}</RankIcon>
         </RankContainer>
-      ) : (
-        <RankContainer> </RankContainer>
-      )}
+      ) : null}
       <CustomLink to={link}>
         <RankListImg img={bandType ? data.backGroundURI : data.profileURI} />
       </CustomLink>
@@ -48,6 +46,7 @@ const RankList = (props) => {
           </SongText>
         </CustomLink>
       </ListTitle>
+      <Default>{rank ? null : <RankContainer> </RankContainer>}</Default>
       <CountContainer>
         {bandType ? (
           <CustomIcon src={ThumbIcon} />
