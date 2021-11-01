@@ -9,6 +9,10 @@ import { media } from '../../lib/Media';
 import ThumbIcon from '../../images/ThumbIcon.svg';
 import ViewIcon from '../../images/ViewIcon.svg';
 
+import FocusriteAd from '../../images/Ads/focusrite_ad.png';
+import JflaAd from '../../images/Ads/jfla_ad.png';
+import SonyAd from '../../images/Ads/sony_ad.png';
+
 const ArtistBanner = (props) => {
   const { artistData, bandData } = props;
   const [randomArtist, setRandomArtist] = useState();
@@ -70,6 +74,9 @@ const ArtistBanner = (props) => {
   return (
     <BannerContainer>
       <CustomCarousel dotPosition="bottom" autoplay>
+        {/* <BannerImage src={FocusriteAd} />
+        <BannerImage src={JflaAd} />
+        <BannerImage src={SonyAd} /> */}
         {showContents()}
       </CustomCarousel>
     </BannerContainer>
@@ -78,8 +85,13 @@ const ArtistBanner = (props) => {
 
 const CustomCarousel = styled(Carousel)`
   width: 100%;
+  /* height: 28rem; */
   height: 20rem;
   position: relative;
+
+  /* ${media.small} {
+    height: 70vw;
+  } */
 `;
 
 const BannerContainer = styled.div`
@@ -95,6 +107,17 @@ const BannerContainer = styled.div`
   ${media.small} {
     border-radius: 0;
   }
+`;
+
+const BannerImage = styled.img`
+  width: 100%;
+  /* height: 28rem; */
+  height: 20rem;
+  object-fit: cover;
+  /* 
+  ${media.small} {
+    height: 70vw;
+  } */
 `;
 
 export default ArtistBanner;
