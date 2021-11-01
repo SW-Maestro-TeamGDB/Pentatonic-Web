@@ -68,7 +68,7 @@ const WeeklyChallenge = ({ match }) => {
               {filteredData.map((v, i) => {
                 return (
                   <CoverGrid
-                    key={`bandData+${i}`}
+                    key={`bandData+${v.bandId}`}
                     data={v}
                     title={title}
                     artist={artist}
