@@ -1,4 +1,4 @@
-import react from 'react';
+import react, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import { Skeleton } from 'antd';
@@ -10,6 +10,8 @@ import { media, Default, Mobile } from '../../lib/Media';
 
 const CoverGrid = (props) => {
   const { idx, title, artist, img, data } = props;
+  const [image, setImage] = useState(new Image());
+  const [imageState, setImageState] = useState(false);
 
   const showSession = (session) => {
     return session.map((v, idx) => {
@@ -22,19 +24,26 @@ const CoverGrid = (props) => {
     });
   };
 
+  useEffect(() => {
+    image.src = data.backGroundURI;
+    image.onload = () => {
+      setImageState(true);
+    };
+  }, []);
+
   return (
     <CustomLink to={data ? `/lounge/cover/${data.bandId}` : `/`}>
       <CoverContainer>
         <Default>
           <ImageContainer>
-            {data?.backGroundURI ? (
+            {imageState ? (
               <>
-                <CoverImage src={data.backGroundURI} />
+                <CoverImage src={image.src} />
                 <HeadPhoneImage src={HeadPhoneIcon} />
               </>
             ) : (
               <Skeleton.Button
-                style={{ width: '50rem', height: '50rem' }}
+                style={{ width: '500rem', height: '50rem' }}
                 active
               />
             )}
@@ -79,9 +88,9 @@ const CoverGrid = (props) => {
         </Default>
         <Mobile>
           <ImageContainer>
-            {data?.backGroundURI ? (
+            {imageState ? (
               <>
-                <CoverImage src={data.backGroundURI} />
+                <CoverImage src={image.src} />
                 <CoverInform>
                   <CoverTitle>{data.name}</CoverTitle>
                   <SongInform>
