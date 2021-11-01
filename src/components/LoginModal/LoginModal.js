@@ -28,8 +28,10 @@ const LoginModal = (props) => {
   const [FormError, setFormError] = useState(null);
   const [login, loginResult] = useMutation(LOGIN, {
     errorPolicy: 'all',
+    fetchPolicy: 'no-cache',
     onError: (errors) => {
       setFormError('로그인에 실패했습니다');
+      sessionStorage.clear();
     },
     onCompleted: (data) => {
       getUserInform({
@@ -91,8 +93,8 @@ const LoginModal = (props) => {
       variables: {
         input: {
           user: {
-            id: 'jongmin',
-            password: 'sc640813',
+            id: id,
+            password: password,
           },
         },
       },
