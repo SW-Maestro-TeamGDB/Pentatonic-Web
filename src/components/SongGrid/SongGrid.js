@@ -1,4 +1,4 @@
-import react from 'react';
+import react, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { media, Default, Mobile } from '../../lib/Media';
 import { Link } from 'react-router-dom';
@@ -14,6 +14,8 @@ import tempData from '../../data/songs/tempData.json';
 
 const SongGrid = (props) => {
   const { idx, data } = props;
+  const [image, setImage] = useState(new Image());
+  const [imageState, setImageState] = useState(false);
 
   const showSession = (session) => {
     return session.map((v) => {
@@ -26,13 +28,20 @@ const SongGrid = (props) => {
     });
   };
 
+  useEffect(() => {
+    image.src = data.songImg;
+    image.onload = () => {
+      setImageState(true);
+    };
+  }, []);
+
   return (
     <CustomLink to={`/studio/band/${data.songId}`}>
       <CoverContainer>
         <ImageContainer>
-          {data ? (
+          {imageState ? (
             <>
-              <CoverImage src={data.songImg} />
+              <CoverImage src={image.src} />
               <RecordIcon src={vocal} />
               <DifficultyContainer>Lv.{data.level}</DifficultyContainer>
             </>
