@@ -83,12 +83,15 @@ const CoverHistory = ({ match }) => {
 
 const LoadingContainer = styled.div`
   width: 100%;
-  height: 30rem;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  font-size: 12rem;
+  font-size: 18rem;
   color: #6236ff;
 `;
 
