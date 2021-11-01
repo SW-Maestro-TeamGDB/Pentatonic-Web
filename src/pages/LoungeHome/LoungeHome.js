@@ -133,22 +133,24 @@ const LoungeHome = () => {
       <Default>
         <Spacing />
       </Default>
-      <BoardContainer>
-        <CoverLinkContainer to="lounge/band">
-          <Background url={LoungeBandImage} position="center" />
-          <LinkText>
-            <SearchOutlined style={{ marginRight: '10px' }} /> 밴드 커버
-            전체보기
-          </LinkText>
-        </CoverLinkContainer>
-        <CoverLinkContainer to="lounge/solo">
-          <Background url={LoungeSoloImage} position="center" />
-          <LinkText>
-            <SearchOutlined style={{ marginRight: '10px' }} /> 솔로 커버
-            전체보기
-          </LinkText>
-        </CoverLinkContainer>
-      </BoardContainer>
+      {loading ? null : (
+        <BoardContainer>
+          <CoverLinkContainer to="lounge/band">
+            <Background url={LoungeBandImage} position="center" />
+            <LinkText>
+              <SearchOutlined style={{ marginRight: '10px' }} /> 밴드 커버
+              전체보기
+            </LinkText>
+          </CoverLinkContainer>
+          <CoverLinkContainer to="lounge/solo">
+            <Background url={LoungeSoloImage} position="center" />
+            <LinkText>
+              <SearchOutlined style={{ marginRight: '10px' }} /> 솔로 커버
+              전체보기
+            </LinkText>
+          </CoverLinkContainer>
+        </BoardContainer>
+      )}
     </PageContainer>
   );
 };
