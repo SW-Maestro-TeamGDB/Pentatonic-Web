@@ -86,31 +86,39 @@ const StudioHome = () => {
   return (
     <PageContainer>
       <StudioBanner data={recommendData} loading={loading} />
-      <BoardContainer>
-        <BoardWrapper>
-          <GridContainer>
-            <CoverLinkContainer to="/studio/band">
-              <Background url={StudioBandImage} position="top" />
-              <BandIconContainer src={GroupIcon} />
-              <LinkText>밴드 커버 만들기</LinkText>
-            </CoverLinkContainer>
-            <CoverLinkContainer to="/studio/solo">
-              <Background url={StudioSoloImage} position="center" />
-              <SoloIconContainer src={SoloIcon} />
-              <LinkText>솔로 커버 만들기</LinkText>
-            </CoverLinkContainer>
-          </GridContainer>
-        </BoardWrapper>
-        <BoardWrapper>
-          <BoardHeader>
-            <BoardTitle>이런 곡 어때요?</BoardTitle>
-          </BoardHeader>
-          {loading ? (
+      {loading ? (
+        <BoardContainer>
+          <BoardWrapper>
             <GridContainer coverWidth={SONG_WIDTH}>
               {SongSkeleton}
               {SongSkeleton}
             </GridContainer>
-          ) : (
+            <GridContainer coverWidth={SONG_WIDTH}>
+              {SongSkeleton}
+              {SongSkeleton}
+            </GridContainer>
+          </BoardWrapper>
+        </BoardContainer>
+      ) : (
+        <BoardContainer>
+          <BoardWrapper>
+            <GridContainer>
+              <CoverLinkContainer to="/studio/band">
+                <Background url={StudioBandImage} position="top" />
+                <BandIconContainer src={GroupIcon} />
+                <LinkText>밴드 커버 만들기</LinkText>
+              </CoverLinkContainer>
+              <CoverLinkContainer to="/studio/solo">
+                <Background url={StudioSoloImage} position="center" />
+                <SoloIconContainer src={SoloIcon} />
+                <LinkText>솔로 커버 만들기</LinkText>
+              </CoverLinkContainer>
+            </GridContainer>
+          </BoardWrapper>
+          <BoardWrapper>
+            <BoardHeader>
+              <BoardTitle>이런 곡 어때요?</BoardTitle>
+            </BoardHeader>
             <ResponsiveCoverGrid
               coverData={songData}
               coverWidth={SONG_WIDTH}
@@ -118,9 +126,9 @@ const StudioHome = () => {
             >
               {showSongGrid()}
             </ResponsiveCoverGrid>
-          )}
-        </BoardWrapper>
-      </BoardContainer>
+          </BoardWrapper>
+        </BoardContainer>
+      )}
     </PageContainer>
   );
 };
