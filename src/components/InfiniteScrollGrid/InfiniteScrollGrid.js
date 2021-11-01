@@ -141,7 +141,7 @@ const InfiniteScrollGrid = (props) => {
   return (
     <InfiniteScrollGridContainer ref={coverRef}>
       {showResponsiveCoverGrid()}
-      {loading ? (
+      {loading && !isEnd ? (
         <LoadingContainer>
           <LoadingOutlined />
         </LoadingContainer>

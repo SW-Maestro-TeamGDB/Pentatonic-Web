@@ -25,15 +25,23 @@ const DELETE_COMMENT = gql`
 const UPDATE_COMMENT = gql`
   mutation UpdateCommentMutation($updateCommentInput: UpdateCommentInput!) {
     updateComment(input: $updateCommentInput) {
-      commentId
+      content
     }
   }
 `;
 
 const CommentList = (props) => {
-  const { data, edit, queryComments } = props;
+  const {
+    bandId,
+    data,
+    edit,
+    commentData,
+    setCommentData,
+    commentLength,
+    setCommentLength,
+  } = props;
+  const [commentNow, setCommentNow] = useState(data);
   const [deleteModal, setDeleteModal] = useState(false);
-  // const [editModal, setEditModal] = useState(false);
   const [editToggle, setEditToggle] = useState(false);
   const [comment, setComment] = useState('');
 
@@ -42,13 +50,11 @@ const CommentList = (props) => {
     onCompleted: (data) => {
       setComment('');
       setEditToggle(false);
-      // setEditModal(false);
-      queryComments();
+      setCommentNow({ ...commentNow, content: data.updateComment.content });
     },
     onError: (error) => {
       console.log(error);
       alert('댓글을 삭제하지 못했습니다');
-      // setEditModal(false);
     },
   });
 
@@ -57,13 +63,17 @@ const CommentList = (props) => {
     variables: {
       deleteCommentInput: {
         comment: {
-          commentId: data.commentId,
+          commentId: commentNow.commentId,
         },
       },
     },
     onCompleted: (data) => {
+      const filtered = commentData.filter(
+        (v) => v.commentId !== commentNow.commentId,
+      );
       setDeleteModal(false);
-      queryComments();
+      setCommentData(filtered);
+      setCommentLength(commentLength > 0 ? commentData.length - 1 : 0);
     },
     onError: (error) => {
       console.log(error);
@@ -77,7 +87,7 @@ const CommentList = (props) => {
       variables: {
         updateCommentInput: {
           comment: {
-            commentId: data.commentId,
+            commentId: commentNow.commentId,
             content: comment,
           },
         },
@@ -91,8 +101,8 @@ const CommentList = (props) => {
   };
 
   useEffect(() => {
-    if (editToggle && data.content) {
-      setComment(data.content);
+    if (editToggle && commentNow.content) {
+      setComment(commentNow.content);
     }
   }, [editToggle]);
 
@@ -111,9 +121,9 @@ const CommentList = (props) => {
 
   return (
     <CommentListContainer>
-      <CustomLink to={`/profile/${data.user.id}`}>
+      <CustomLink to={`/profile/${commentNow.user.id}`}>
         <CommentUserWrapper>
-          <UserProfile src={data.user.profileURI} />
+          <UserProfile src={commentNow.user.profileURI} />
         </CommentUserWrapper>
       </CustomLink>
       {editToggle ? (
@@ -137,12 +147,14 @@ const CommentList = (props) => {
       ) : (
         <CommentContentsContainer>
           <ContentsMetaWrapper>
-            <CustomLink to={`/profile/${data.user.id}`}>
-              <UserName>{data.user.username}</UserName>
+            <CustomLink to={`/profile/${commentNow.user.id}`}>
+              <UserName>{commentNow.user.username}</UserName>
             </CustomLink>
-            <CommentTime>{changeDateToString(data.createdAt)}</CommentTime>
+            <CommentTime>
+              {changeDateToString(commentNow.createdAt)}
+            </CommentTime>
           </ContentsMetaWrapper>
-          <CommentContent>{data.content}</CommentContent>
+          <CommentContent>{commentNow.content}</CommentContent>
         </CommentContentsContainer>
       )}
       {edit && !editToggle ? (

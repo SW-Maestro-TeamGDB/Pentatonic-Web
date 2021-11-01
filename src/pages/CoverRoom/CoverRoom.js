@@ -20,6 +20,7 @@ import {
   LeftOutlined,
 } from '@ant-design/icons';
 import QuestionModal from '../../components/QuestionModal';
+import InfiniteScrollComment from '../../components/InfiniteScrollComment/InfiniteScrollComment';
 import { LikeFilled, ShareAltOutlined, LikeOutlined } from '@ant-design/icons';
 import { changeSessionNameToKorean } from '../../lib/changeSessionNameToKorean';
 import { gql, useQuery, useMutation, useLazyQuery } from '@apollo/client';
@@ -79,13 +80,6 @@ const GET_BAND = gql`
       }
       comment(first: $commentFirst) {
         comments {
-          user {
-            username
-            profileURI
-            id
-          }
-          content
-          createdAt
           commentId
         }
       }
@@ -94,16 +88,9 @@ const GET_BAND = gql`
 `;
 
 const QUERY_COMMENTS = gql`
-  query Query($queryCommentsBandId: ObjectID!, $queryCommentsFirst: Int!) {
-    queryComments(bandId: $queryCommentsBandId, first: $queryCommentsFirst) {
+  query Query($bandId: ObjectID!, $first: Int!, $after: ObjectID) {
+    queryComments(bandId: $bandId, first: $first, after: $after) {
       comments {
-        user {
-          username
-          profileURI
-          id
-        }
-        content
-        createdAt
         commentId
       }
     }
@@ -174,10 +161,13 @@ const CoverRoom = ({ match }) => {
   const [selectInst, setSelectInst] = useState([]);
   const [audio, setAudio] = useState(null);
   const [coverData, setCoverData] = useState();
+  const [commentLength, setCommentLength] = useState(0);
+
   const [mode, setMode] = useState(0); // 0: select , 1: audio
-  const [comment, setComment] = useState('');
+
   const [deleteModal, setDeleteModal] = useState(false);
   const [libraryFilter, setLibraryFilter] = useState();
+
   const isMobile = useMediaQuery({
     query: '(max-width:767px)',
   });
@@ -206,10 +196,11 @@ const CoverRoom = ({ match }) => {
   const { loading, error, getBand } = useQuery(GET_BAND, {
     variables: {
       getBandBandId: bandId,
-      commentFirst: 10,
+      commentFirst: 1000,
     },
     onCompleted: (data) => {
       setCoverData(data.getBand);
+      setCommentLength(data.getBand.comment.comments.length);
     },
   });
 
@@ -223,21 +214,19 @@ const CoverRoom = ({ match }) => {
     },
   });
 
-  const [queryComments, queryCommentsResult] = useLazyQuery(QUERY_COMMENTS, {
-    fetchPolicy: 'network-only',
-    variables: {
-      queryCommentsBandId: bandId,
-      queryCommentsFirst: 10,
+  const [getCommentLength, getCommentLengthResult] = useLazyQuery(
+    QUERY_COMMENTS,
+    {
+      fetchPolicy: 'network-only',
+      variables: {
+        bandId: bandId,
+        first: 1000,
+      },
+      onCompleted: (data) => {
+        setCommentLength(data.queryComments.comments.length);
+      },
     },
-    onCompleted: (data) => {
-      setCoverData({
-        ...coverData,
-        comment: {
-          comments: data.queryComments.comments,
-        },
-      });
-    },
-  });
+  );
 
   const [getLike, getLikeResult] = useLazyQuery(GET_LIKE, {
     fetchPolicy: 'network-only',
@@ -261,17 +250,6 @@ const CoverRoom = ({ match }) => {
     onError: (error) => {
       alert('음원 병합에 실패하였습니다.');
       setMode(0);
-    },
-  });
-
-  const [createComment, createCommentResult] = useMutation(CREATE_COMMENT, {
-    fetchPolicy: 'no-cache',
-    onCompleted: (data) => {
-      setComment('');
-      queryComments();
-    },
-    onError: (error) => {
-      alert(error);
     },
   });
 
@@ -352,23 +330,6 @@ const CoverRoom = ({ match }) => {
     });
   };
 
-  const showComment = () => {
-    if (coverData.comment.comments.length === 0) {
-      return;
-    } else {
-      return coverData.comment.comments.map((v, i) => {
-        return (
-          <CommentList
-            data={v}
-            key={`${bandId}+comment+${i}`}
-            edit={data?.user?.id && v.user.id === data.user.id}
-            queryComments={queryComments}
-          />
-        );
-      });
-    }
-  };
-
   const onClickSubmit = () => {
     if (session.length === 0 && !coverData.isSoloBand) {
       setSessionModal(true);
@@ -380,22 +341,6 @@ const CoverRoom = ({ match }) => {
             audios: coverData.isSoloBand
               ? [...session, coverData.session[0].cover[0].coverURI]
               : session,
-          },
-        },
-      });
-    }
-  };
-
-  const onClickCommentButton = () => {
-    if (comment.length > 0) {
-      setComment('');
-      createComment({
-        variables: {
-          createCommentInput: {
-            comment: {
-              content: comment,
-              bandId: bandId,
-            },
           },
         },
       });
@@ -428,6 +373,10 @@ const CoverRoom = ({ match }) => {
       duration: 3,
     });
   };
+
+  useEffect(() => {
+    console.log(coverData);
+  }, [coverData]);
 
   return (
     <PageContainer>
@@ -578,12 +527,10 @@ const CoverRoom = ({ match }) => {
               <Mobile>{showCoverRoomSession()}</Mobile>
             </SessionContainer>
           )}
-          <CommentContainer>
+          {/* <CommentContainer>
             <CommentHeader>
               댓글
-              <CurrentComment>
-                {coverData.comment.comments.length}
-              </CurrentComment>
+              <CurrentComment>{commentData.length}</CurrentComment>
             </CommentHeader>
             <CommentForm>
               {data?.user ? (
@@ -620,8 +567,18 @@ const CoverRoom = ({ match }) => {
                 </>
               )}
             </CommentForm>
-            <CommentWrapper>{showComment()}</CommentWrapper>
-          </CommentContainer>
+            <CommentWrapper>
+              <InfiniteScrollComment
+                bandId={bandId}
+                currentUser={data?.user?.id}
+              />
+            </CommentWrapper>
+          </CommentContainer> */}
+          <InfiniteScrollComment
+            bandId={bandId}
+            currentUser={data?.user}
+            length={commentLength}
+          />
           <Drawer
             placement="right"
             closable={true}
@@ -860,12 +817,6 @@ const ButtonContainer = styled.div`
   }
 `;
 
-const MyProfileImg = styled.img`
-  width: 40px;
-  height: 40px;
-  border-radius: 10rem;
-`;
-
 const DeleteButton = styled.div`
   cursor: pointer;
   position: absolute;
@@ -914,69 +865,6 @@ const BackwardButton = styled.div`
   }
 `;
 
-const CustomInput = styled.input`
-  width: 80%;
-  color: black;
-  border: 2px solid #ddd;
-  transition: all ease 0.3s;
-  outline: none;
-  height: 100%;
-  border-radius: 0.8rem;
-  margin: 0.5rem 2rem;
-  padding: 0 1rem;
-  font-size: 1rem;
-
-  ::placeholder {
-    color: #bbbbbb;
-    font-size: 16px;
-  }
-
-  &:focus {
-    border: 2px solid black;
-  }
-
-  ${media.small} {
-    margin: 0 0.7rem;
-    width: 90%;
-    font-size: 0.8rem;
-
-    ::placeholder {
-      color: #bbbbbb;
-      font-size: 0.8rem;
-    }
-  }
-`;
-
-const CommentWrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  margin-top: 2rem;
-`;
-
-const CommentForm = styled.div`
-  width: 100%;
-  height: 3rem;
-  position: relative;
-  margin-top: 1rem;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-`;
-
-const CommentContainer = styled.div`
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  margin-top: 2rem;
-  padding: 1rem 0;
-
-  ${media.small} {
-    padding: 1rem 1rem;
-  }
-`;
-
 const CustomDeleteIcon = styled(DeleteOutlined)`
   padding-right: 8px;
   line-height: 1;
@@ -1014,29 +902,6 @@ const AudioPlayerWrapper = styled.div`
 
   ${media.small} {
     width: 95%;
-  }
-`;
-
-const CommentHeader = styled.div`
-  display: flex;
-  flex-direction: row;
-  font-size: 18px;
-  font-weight: 700;
-  align-items: center;
-  width: 100%;
-
-  ${media.small} {
-    font-size: 1rem;
-  }
-`;
-
-const CurrentComment = styled.div`
-  margin-left: 0.5rem;
-  color: #bbbbbb;
-  font-size: 16px;
-
-  ${media.small} {
-    font-size: 0.9rem;
   }
 `;
 
@@ -1197,34 +1062,6 @@ const SubmitButton = styled.div`
     transform: translateX(50%);
     width: 90%;
     bottom: 10%;
-  }
-`;
-
-const CommentButton = styled.button`
-  border-radius: 10px;
-  background-color: rgba(98, 54, 255, 0.9);
-  width: 6rem;
-  height: 100%;
-  border: none;
-  color: white;
-  font-weight: 700;
-  font-size: 1rem;
-  cursor: pointer;
-  transition: all ease-in-out 0.3s;
-
-  &:hover {
-    background-color: rgba(98, 54, 255, 1);
-  }
-
-  &:disabled {
-    background-color: #666;
-    color: #eee;
-    cursor: not-allowed;
-  }
-
-  ${media.small} {
-    width: 5rem;
-    font-size: 0.9rem;
   }
 `;
 
