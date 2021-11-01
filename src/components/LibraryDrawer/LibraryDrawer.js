@@ -5,6 +5,7 @@ import { GET_CURRENT_USER } from '../../apollo/cache';
 import styled from 'styled-components';
 import LibraryList from '../LibraryList/LibraryList';
 import { useMediaQuery } from 'react-responsive';
+import { StopOutlined, LoadingOutlined } from '@ant-design/icons';
 import { media, Default, Mobile } from '../../lib/Media';
 
 const GET_USER_INFO = gql`
@@ -42,7 +43,7 @@ const LibraryDrawer = (props) => {
   const [selectedAudio, setSelectedAudio] = useState();
   const instRef = useRef();
   const userData = useQuery(GET_CURRENT_USER);
-  const [getUserInfo] = useLazyQuery(GET_USER_INFO, {
+  const [getUserInfo, { loading, error, data }] = useLazyQuery(GET_USER_INFO, {
     fetchPolicy: 'network-only',
     filter: 'no-cahce',
     onCompleted: (data) => {
@@ -154,7 +155,23 @@ const LibraryDrawer = (props) => {
         {filteredData.length > 0 ? (
           loadLibrary()
         ) : (
-          <NoLibraryText>참여 할 수 있는 라이브러리가 없습니다</NoLibraryText>
+          <>
+            {loading ? (
+              <LoadingContainer>
+                <LoadingOutlined />
+              </LoadingContainer>
+            ) : (
+              <NoDataContainer>
+                <CustomStopOutlined />
+                <NoLibraryText>
+                  참여 할 수 있는 라이브러리가 없습니다
+                  <Mobile>
+                    <br /> 데스크탑에서 커버를 녹음해서 참여해주세요
+                  </Mobile>
+                </NoLibraryText>
+              </NoDataContainer>
+            )}
+          </>
         )}
       </LibaryContainer>
       <SubmitButtonConatiner>
@@ -268,6 +285,36 @@ const SubmitButton = styled.button`
   ${media.small} {
     font-size: 1rem;
     height: 50%;
+  }
+`;
+
+const LoadingContainer = styled.div`
+  width: 100%;
+  height: 15rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  font-size: 6rem;
+  color: #6236ff;
+`;
+
+const NoDataContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 25rem;
+`;
+
+const CustomStopOutlined = styled(StopOutlined)`
+  font-size: 12rem;
+  color: #bbb;
+  margin-bottom: 2rem;
+
+  ${media.small} {
+    font-size: 8rem;
   }
 `;
 
