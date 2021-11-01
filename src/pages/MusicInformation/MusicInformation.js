@@ -332,6 +332,10 @@ const MusicTitle = styled.div`
   color: #222222;
   margin-bottom: 0.5rem;
 
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+
   ${media.small} {
     color: #eee;
     margin-top: 1.2rem;
@@ -341,6 +345,7 @@ const MusicTitle = styled.div`
     height: auto;
     margin-bottom: 0;
     line-height: 1.2;
+    text-align: center;
   }
 `;
 
@@ -381,6 +386,7 @@ const ArtistText = styled.div`
   font-weight: 600;
   width: auto;
   letter-spacing: -1px;
+  text-align: center;
 
   margin-bottom: 1.5rem;
 `;
