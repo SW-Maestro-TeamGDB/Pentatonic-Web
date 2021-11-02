@@ -45,6 +45,7 @@ const GET_BAND = gql`
         songId
         artist
         duration
+        lyrics
         instrument {
           instURI
           position
@@ -63,6 +64,7 @@ const CoverRoomRecord = ({ match, history }) => {
   const [instDuration, setInstDuration] = useState();
   const [sessionData, setSessionData] = useState();
   const [existingInst, setExistingInst] = useState();
+  const [lyrics, setLyrics] = useState();
   const pageUrl = match.url;
   const bandId = match.params.id;
   const isDesktop = useMediaQuery({ minWidth: 992 });
@@ -84,7 +86,7 @@ const CoverRoomRecord = ({ match, history }) => {
     },
     onCompleted: (data) => {
       const band = data.getBand;
-
+      if (band.song.lyrics) setLyrics(JSON.parese(band.song.lyrics));
       setBandData(band);
       setSongData({
         name: band.name,
@@ -138,6 +140,7 @@ const CoverRoomRecord = ({ match, history }) => {
           setInst={setInst}
           instDuration={instDuration}
           history={history}
+          lyrics={lyrics}
         />
       ),
     },

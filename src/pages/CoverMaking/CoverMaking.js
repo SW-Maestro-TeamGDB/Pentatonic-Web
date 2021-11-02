@@ -21,6 +21,7 @@ const GET_SONG = gql`
       songImg
       duration
       artist
+      lyrics
       instrument {
         position
         instURI
@@ -38,6 +39,7 @@ const CoverMaking = ({ match, history }) => {
   const [inst, setInst] = useState();
   const [sessionData, setSessionData] = useState();
   const [userId, setUserId] = useState();
+  const [lyrics, setLyrics] = useState();
   const pageUrl = match.url;
   const songId = match.params.id;
   const isFreeCover = match.params.id === 'free';
@@ -73,6 +75,7 @@ const CoverMaking = ({ match, history }) => {
       getSongSongId: songId,
     },
     onCompleted: (data) => {
+      if (data.getSong.lyrics) setLyrics(JSON.parese(data.getSong.lyrics));
       setSongData({
         ...songData,
         name: data.getSong.name,
@@ -140,6 +143,7 @@ const CoverMaking = ({ match, history }) => {
           songData={songData}
           isFreeCover={isFreeCover}
           history={history}
+          lyrics={lyrics}
         />
       ),
     },

@@ -17,7 +17,6 @@ import StopIcon from '../../images/StopIcon.svg';
 import RetryIcon from '../../images/RetryIcon.svg';
 import PauseIcon from '../../images/PauseIcon.png';
 import SaveIcon from '../../images/SaveIcon.svg';
-import tempLyric from './lyrics.json';
 import { LeftOutlined, PauseOutlined } from '@ant-design/icons';
 import vocal from '../../images/Session/vocal.svg';
 import hihat from './hihat.mp3';
@@ -34,6 +33,7 @@ const RecordPage = (props) => {
     setInst,
     instDuration,
     history,
+    lyrics,
   } = props;
   const [countdown, setCountDown] = useState(4);
   const [audioCtx, setAudioCtx] = useState();
@@ -168,13 +168,12 @@ const RecordPage = (props) => {
   }, []);
 
   // 가사
-  const lyrics = tempLyric.lyrics;
-  const lyricsLength = lyrics.length;
+  const [lyricsLength, setLyricsLength] = useState(0);
   const [lyricsIndex, setLyricsIndex] = useState(0);
-  const [endTime, setEndTime] = useState(lyrics[0].end);
+  const [endTime, setEndTime] = useState(0);
 
   useEffect(() => {
-    if (count > endTime && lyricsIndex < lyricsLength - 1) {
+    if (count > endTime && lyricsIndex < lyricsLength - 1 && lyrics) {
       setEndTime(lyrics[lyricsIndex + 1].end);
       setLyricsIndex(lyricsIndex + 1);
     }
@@ -188,6 +187,13 @@ const RecordPage = (props) => {
     setAudioSecond(remain % 60);
     setAudioMinute(parseInt(remain / 60));
   }, [count]);
+
+  useEffect(() => {
+    if (lyrics) {
+      setLyricsLength(lyrics.length);
+      setEndTime(lyrics[0].end);
+    }
+  }, [lyrics]);
 
   const init = () => {
     if (onRec === 1) {
@@ -204,8 +210,10 @@ const RecordPage = (props) => {
     setRecordingLength(0);
     setAudioUrl();
 
-    setEndTime(lyrics[0].end);
-    setLyricsIndex(0);
+    if (lyrics) {
+      setEndTime(lyrics[0].end);
+      setLyricsIndex(0);
+    }
   };
 
   const changeAudioFile = (left, right, length) => {
@@ -589,9 +597,17 @@ const RecordPage = (props) => {
   const showLyrics = useMemo(() => {
     return (
       <LyricsContainer>
-        <CurrentLyrics>{lyrics[lyricsIndex].text}</CurrentLyrics>
+        {lyrics ? (
+          <CurrentLyrics>{lyrics[lyricsIndex].text} </CurrentLyrics>
+        ) : (
+          <NextLyrics>가사를 제공하지 않는 음원입니다</NextLyrics>
+        )}
         <NextLyrics>
-          {lyricsIndex < lyricsLength - 1 ? lyrics[lyricsIndex + 1].text : 'ㅤ'}
+          {lyrics
+            ? lyricsIndex < lyricsLength - 1
+              ? lyrics[lyricsIndex + 1].text
+              : 'ㅤ'
+            : 'ㅤ'}
         </NextLyrics>
       </LyricsContainer>
     );

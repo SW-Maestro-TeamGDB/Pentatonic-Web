@@ -21,6 +21,7 @@ const GET_SONG = gql`
       songImg
       duration
       artist
+      lyrics
       instrument {
         position
         instURI
@@ -35,6 +36,7 @@ const RecordMaking = ({ match, history }) => {
   const [audioDuration, setAudioDuration] = useState();
   const [inst, setInst] = useState();
   const [sessionData, setSessionData] = useState();
+  const [lyrics, setLyrics] = useState();
   const pageUrl = match.url;
   const songId = match.params.id;
   const isDesktop = useMediaQuery({ minWidth: 992 });
@@ -54,6 +56,7 @@ const RecordMaking = ({ match, history }) => {
       getSongSongId: songId,
     },
     onCompleted: (data) => {
+      if (data.getSong.lyrics) setLyrics(JSON.parese(data.getSong.lyrics));
       setSongData({
         ...songData,
         name: data.getSong.name,
@@ -110,6 +113,7 @@ const RecordMaking = ({ match, history }) => {
           songData={songData}
           setInst={setInst}
           history={history}
+          lyrics={lyrics}
         />
       ),
     },

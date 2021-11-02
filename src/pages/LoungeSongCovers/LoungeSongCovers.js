@@ -25,6 +25,7 @@ const GET_SONG = gql`
       songImg
       artist
       name
+      lyrics
       band {
         bandId
         name
