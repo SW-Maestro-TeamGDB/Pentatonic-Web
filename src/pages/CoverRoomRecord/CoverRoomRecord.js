@@ -86,7 +86,7 @@ const CoverRoomRecord = ({ match, history }) => {
     },
     onCompleted: (data) => {
       const band = data.getBand;
-      if (band.song.lyrics) setLyrics(JSON.parese(band.song.lyrics));
+      if (band.song.lyrics) setLyrics(JSON.parse(data.getSong.lyrics).lyrics);
       setBandData(band);
       setSongData({
         name: band.name,

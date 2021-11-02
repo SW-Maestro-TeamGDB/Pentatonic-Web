@@ -75,7 +75,8 @@ const CoverMaking = ({ match, history }) => {
       getSongSongId: songId,
     },
     onCompleted: (data) => {
-      if (data.getSong.lyrics) setLyrics(JSON.parese(data.getSong.lyrics));
+      if (data.getSong.lyrics)
+        setLyrics(JSON.parse(data.getSong.lyrics).lyrics);
       setSongData({
         ...songData,
         name: data.getSong.name,
