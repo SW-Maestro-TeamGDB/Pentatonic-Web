@@ -91,8 +91,9 @@ const InfiniteScrollComment = (props) => {
     { loading: initLoading, error: initError, data: initData },
   ] = useLazyQuery(QUERY_COMMENTS, {
     fetchPolicy: 'network-only',
-    variables: { bandId: bandId, first: 3 },
+    variables: { bandId: bandId, first: 5 },
     onCompleted: (data) => {
+      setCommentData([]);
       setCommentData(data.queryComments.comments);
       setLastComment(data.queryComments.pageInfo.endCursor);
 
@@ -152,11 +153,11 @@ const InfiniteScrollComment = (props) => {
   }, []);
 
   useEffect(() => {
-    if (isScrollBottom && length > commentData.length) {
+    if (isScrollBottom && !isEnd) {
       loadComment({
         variables: {
           bandId: bandId,
-          first: 3,
+          first: 5,
           after: lastComment,
         },
       });
@@ -232,7 +233,7 @@ const InfiniteScrollComment = (props) => {
       </CommentForm>
       <CommentWrapper>
         {showCommentList()}
-        {loading && length > commentData.length && !initLoading ? (
+        {loading && !isEnd && !initLoading ? (
           <LoadingContainer>
             <LoadingOutlined />
           </LoadingContainer>
@@ -248,12 +249,12 @@ const InfiniteScrollGridContainer = styled.div`
 
 const LoadingContainer = styled.div`
   width: 100%;
-  height: 15rem;
+  height: 10rem;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  font-size: 6rem;
+  font-size: 5rem;
   color: #6236ff;
 `;
 
