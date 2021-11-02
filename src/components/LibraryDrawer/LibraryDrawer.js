@@ -77,10 +77,14 @@ const LibraryDrawer = (props) => {
 
   useEffect(() => {
     if (libraryData.length > 0 && filter) {
-      const temp = libraryData.filter(
-        (v) =>
-          v.song.songId === filter.songId && v.position === filter.position,
-      );
+      const temp =
+        filter.position !== 'FREE'
+          ? libraryData.filter(
+              (v) =>
+                v.song.songId === filter.songId &&
+                v.position === filter.position,
+            )
+          : libraryData.filter((v) => v.song.songId === filter.songId);
       setFilteredData(temp);
     }
   }, [filter, libraryData]);
