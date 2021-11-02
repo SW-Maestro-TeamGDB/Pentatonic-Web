@@ -55,7 +55,7 @@ const CoverBy = (props) => {
       </Header>
       <SessionContainer>
         <SessionWrapper>
-          <ImgContainer>
+          <ImgContainer to={`/profile/${coverData.coverBy.id}`}>
             <SessionImg src={coverData.coverBy.profileURI} />
           </ImgContainer>
           <SessionIdContainer>
@@ -185,12 +185,13 @@ const SessionContentsContainer = styled.div`
   position: relative;
 `;
 
-const ImgContainer = styled.div`
+const ImgContainer = styled(Link)`
   overflow: hidden;
   width: 8rem;
   height: 8rem;
   border-radius: 15px;
   margin-left: 5px;
+  cursor: pointer;
 `;
 
 const SessionImg = styled.img`
