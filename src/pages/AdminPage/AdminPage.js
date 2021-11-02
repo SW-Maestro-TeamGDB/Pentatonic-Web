@@ -23,8 +23,10 @@ import {
   CustomerServiceOutlined,
   UploadOutlined,
   PlusCircleFilled,
+  OrderedListOutlined,
 } from '@ant-design/icons';
 
+import tempLyric from './lyrics.json';
 import styled from 'styled-components';
 import PageContainer from '../../components/PageContainer';
 import GenreButton from '../../components/GenreButton/GenreButton';
@@ -101,6 +103,7 @@ const AdminPage = ({ history }) => {
   const [day, setDay] = useState();
   const [instError, setInstError] = useState();
   const [addedInst, setAddedInst] = useState([]);
+  const [lyrics, setLyrics] = useState();
   const admin = process.env.REACT_APP_ADMIN_ID.split(',');
 
   const { data } = useQuery(GET_CURRENT_USER, { fetchPolicy: 'network-only' });
@@ -169,6 +172,18 @@ const AdminPage = ({ history }) => {
     },
   );
 
+  const onClickDownloadSampleLyrics = () => {
+    const lyricFile = new Blob([JSON.stringify(tempLyric)], {
+      type: 'application/json',
+    });
+    const lyricPath = window.URL.createObjectURL(lyricFile);
+    const link = document.createElement('a');
+    link.href = lyricPath;
+    link.download = 'sampleLyric.json';
+    link.click();
+    link.remove();
+  };
+
   const imageFileCheck = (file) => {
     const acceptType = ['image/png', 'image/jpeg', 'image/bmp'];
 
@@ -177,6 +192,25 @@ const AdminPage = ({ history }) => {
         key: 'imagFilyTypeNotification',
         message: '이미지 파일 형식 오류',
         description: `png , jpeg , bmp 형식의 파일만 업로드 할 수 있습니다`,
+        placement: 'bottomRight',
+        duration: 5,
+        style: {
+          width: '30rem',
+        },
+      });
+      return false;
+    }
+    return true;
+  };
+
+  const jsonFileCheck = (file) => {
+    const acceptType = ['application/json'];
+
+    if (acceptType.indexOf(file.type) == -1) {
+      notification['warning']({
+        key: 'imagFilyTypeNotification',
+        message: '가사 파일 형식 오류',
+        description: `application/json 형식의 파일만 업로드 할 수 있습니다`,
         placement: 'bottomRight',
         duration: 5,
         style: {
@@ -297,6 +331,16 @@ const AdminPage = ({ history }) => {
         },
       },
     });
+  };
+
+  const handleLyrics = (e) => {
+    if (jsonFileCheck(e)) {
+      const fileReader = new FileReader();
+      fileReader.readAsText(e, 'UTF-8');
+      fileReader.onload = (e) => {
+        setSongData({ ...songData, lyrics: e.target.result });
+      };
+    }
   };
 
   useEffect(() => {
@@ -429,6 +473,29 @@ const AdminPage = ({ history }) => {
                     </>
                   </CustomDragger>
                   {songData.songURI ? (
+                    <UploadText>
+                      업로드 되었습니다. 변경을 원하시면 클릭해주세요.
+                    </UploadText>
+                  ) : null}
+                </InputContainer>
+                <InputContainer>
+                  <CustomTitle>가사 파일</CustomTitle>
+                  <CustomDescription>
+                    가사 파일 (JSON형식)을 올려주세요
+                    <DownloadButton onClick={onClickDownloadSampleLyrics}>
+                      샘플파일 다운로드
+                    </DownloadButton>
+                  </CustomDescription>
+                  <CustomDragger
+                    customRequest={(data) => handleLyrics(data.file)}
+                    maxCount={1}
+                    showUploadList={false}
+                  >
+                    <>
+                      {songData?.lyrics ? songData.lyrics : <CustomLyricIcon />}
+                    </>
+                  </CustomDragger>
+                  {songData?.lyrics ? (
                     <UploadText>
                       업로드 되었습니다. 변경을 원하시면 클릭해주세요.
                     </UploadText>
@@ -573,6 +640,17 @@ const SessionSelect = styled(Select)`
   width: 100%;
 `;
 
+const DownloadButton = styled.div`
+  position: absolute;
+  right: 0;
+  cursor: pointer;
+  font-size: 0.9rem;
+
+  &:hover {
+    color: #1890ff;
+  }
+`;
+
 const DateContainer = styled.div`
   width: 100%;
   display: flex;
@@ -694,6 +772,7 @@ const CustomDescription = styled.div`
   font-weight: 500;
   margin: 0.2rem 0 1rem;
   color: #3d3d3d;
+  position: relative;
 
   display: flex;
   justify-content: flex-start;
@@ -747,6 +826,13 @@ const CustomPictureIcon = styled(PictureOutlined)`
 `;
 
 const CustomMusicIcon = styled(CustomerServiceOutlined)`
+  font-size: 4rem;
+  margin-top: 0.5rem;
+  color: gray;
+  transition: all 0.3s ease-in-out !important;
+`;
+
+const CustomLyricIcon = styled(OrderedListOutlined)`
   font-size: 4rem;
   margin-top: 0.5rem;
   color: gray;
