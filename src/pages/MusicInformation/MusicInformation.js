@@ -1,4 +1,4 @@
-import react, { useState } from 'react';
+import react, { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { useQuery, gql, useLazyQuery } from '@apollo/client';
 import styled from 'styled-components';
@@ -16,6 +16,9 @@ import { changeGenreToKorean } from '../../lib/changeGenreToKorean';
 import { useMediaQuery } from 'react-responsive';
 import { media, Default, Mobile, mobileCheck } from '../../lib/Media';
 
+import PlayIcon from '../../images/PlayIcon.svg';
+import PauseIcon from '../../images/PauseIcon.png';
+
 const GET_SONG = gql`
   query Query($getSongSongId: ObjectID!) {
     getSong(songId: $getSongSongId) {
@@ -27,6 +30,7 @@ const GET_SONG = gql`
       weeklyChallenge
       duration
       level
+      songURI
       instrument {
         position
       }
@@ -54,6 +58,9 @@ const MusicInformation = ({ match }) => {
     query: '(max-width:767px)',
   });
   const [musicData, setMusicData] = useState();
+  const [audioState, setAudioState] = useState(0); // 0:정지 , 1:재생 , 2:일시정지
+  const [inst, setInst] = useState();
+  const instRef = useRef();
 
   const { data } = useQuery(GET_SONG, {
     variables: {
@@ -97,6 +104,50 @@ const MusicInformation = ({ match }) => {
     }
   };
 
+  const onClickIcon = () => {
+    if (inst) {
+      if (audioState === 1) {
+        inst.pause();
+        setAudioState(2);
+      } else {
+        if (inst.paused) {
+          inst.play();
+          setAudioState(1);
+        }
+      }
+    }
+  };
+
+  useEffect(() => {
+    if (musicData) {
+      const audio = new Audio();
+      audio.src = musicData.songURI;
+      audio.addEventListener('ended', function () {
+        audio.src = '';
+        audio.removeAttribute('src');
+        audio.load();
+        setAudioState(0);
+      });
+      setInst(audio);
+    }
+  }, [musicData]);
+
+  useEffect(() => {
+    if (inst) {
+      instRef.current = inst;
+    }
+  }, [inst]);
+
+  // 언마운트시 음악 정지
+  useEffect(() => {
+    return () => {
+      if (instRef.current) {
+        instRef.current.src = '';
+        instRef.current.removeAttribute('src');
+      }
+    };
+  }, []);
+
   const HelpContent = (
     <HelpContainer>
       <HelpWrapper>
@@ -121,7 +172,20 @@ const MusicInformation = ({ match }) => {
       {musicData ? (
         <>
           <MusicInformContainer>
-            <MusicInformImg img={musicData.songImg} />
+            <MusicInformImgContainer onClick={onClickIcon}>
+              <MusicInformImg img={musicData.songImg} />
+              <AudioButtonContainer>
+                {audioState === 1 && inst ? (
+                  <>
+                    <MusicPauseIcon src={PauseIcon} color="white" />
+                  </>
+                ) : (
+                  <>
+                    <MusicPlayIcon src={PlayIcon} color="white" />
+                  </>
+                )}
+              </AudioButtonContainer>
+            </MusicInformImgContainer>
             <Background src={musicData.songImg} />
             {isMobile ? (
               <>
@@ -221,6 +285,64 @@ const MusicInformation = ({ match }) => {
   );
 };
 
+const Spacing = styled.div`
+  width: ${(props) => props.width};
+`;
+
+const AudioButtonContainer = styled.div`
+  cursor: pointer;
+  color: white;
+  width: auto;
+  z-index: 2;
+
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  font-size: 1.1rem;
+  font-weight: 700;
+
+  -ms-user-select: none;
+  -moz-user-select: -moz-none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  user-select: none;
+
+  ${media.small} {
+    width: 6rem;
+    font-size: 0.75rem;
+  }
+`;
+
+const MusicPauseIcon = styled.img`
+  width: 4rem;
+  height: 4rem;
+  filter: invert(100%);
+  transition: all ease-in-out 0.3s;
+
+  ${media.small} {
+    width: 3rem;
+    height: 3rem;
+  }
+`;
+
+const MusicPlayIcon = styled.img`
+  width: 3rem;
+  height: 3rem;
+  filter: invert(100%);
+  transition: all ease-in-out 0.3s;
+
+  ${media.small} {
+    width: 2.5rem;
+    height: 2.5rem;
+  }
+`;
+
 const HelpContainer = styled.div`
   width: 20rem;
   height: auto;
@@ -251,7 +373,6 @@ const HelpDesc = styled.div`
 const MusicInformContainer = styled.div`
   display: flex;
   flex-direction: row;
-
   height: 18rem;
 
   margin-top: 2rem;
@@ -303,8 +424,36 @@ const MusicInformImg = styled.div`
   background-size: cover;
 
   min-width: 18rem;
-  height: 100%;
+  height: 18rem;
   border-radius: 10px;
+
+  filter: brightness(70%);
+  transition: filter ease-in-out 0.3s;
+
+  ${media.small} {
+    height: 15rem;
+    min-width: 15rem;
+    z-index: 2;
+  }
+`;
+
+const MusicInformImgContainer = styled.div`
+  cursor: pointer;
+  position: relative;
+
+  &:hover {
+    ${MusicPlayIcon} {
+      transform: scale(1.05);
+    }
+
+    ${MusicPauseIcon} {
+      transform: scale(1.05);
+    }
+
+    ${MusicInformImg} {
+      filter: brightness(85%);
+    }
+  }
 
   ${media.small} {
     height: 15rem;
@@ -458,6 +607,7 @@ const RecordButton = styled(Link)`
   color: white;
   background-image: linear-gradient(to right, #6236ff, #9b66ff);
   border-radius: 10px;
+  height: 2.8rem;
 
   display: flex;
   justify-content: center;
