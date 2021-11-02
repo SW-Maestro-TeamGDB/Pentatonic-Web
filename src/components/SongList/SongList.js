@@ -93,8 +93,12 @@ const SongDataContainer = styled.div`
   width: 35rem;
   padding-left: 2rem;
 
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+
   ${media.medium} {
-    min-width: 45%;
+    min-width: 40%;
   }
 
   ${media.small} {
@@ -103,7 +107,7 @@ const SongDataContainer = styled.div`
   }
 
   ${media.xsmall} {
-    min-width: 80%;
+    width: 80%;
   }
 `;
 
@@ -126,17 +130,16 @@ const SongMetaContainer = styled.div`
 `;
 
 const SongGenreContainer = styled.div`
-  font-size: 1rem;
+  font-size: 0.8rem;
   font-weight: 700;
   background-color: rgba(100, 100, 100, 0.4);
   color: #fff;
   width: auto;
-  padding: 0.2rem 1rem;
+  padding: 0.4rem 0.8rem;
   border-radius: 10px;
-  width: auto;
 
   ${media.medium} {
-    padding: 0.5rem 1rem;
+    padding: 0.5rem 0.5rem;
     min-width: 5rem;
   }
 
@@ -236,12 +239,12 @@ const IconContainer = styled.div`
 
 const SongTitleContainer = styled.div`
   width: 100%;
-  text-align: left;
-  font-size: 1.7rem;
+  font-size: 1.5rem;
   font-weight: 800;
   display: flex;
   flex-direction: row;
   align-items: center;
+
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
