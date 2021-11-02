@@ -101,10 +101,18 @@ const SongText = styled.div`
   margin-top: 3px;
   color: #aaa;
 
-  width: 11rem;
+  width: 13em;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+
+  ${media.medium} {
+    width: 10vw;
+  }
+
+  ${media.five} {
+    width: 7rem;
+  }
 
   ${media.small} {
     font-size: 0.75rem;
@@ -226,6 +234,9 @@ const IdText = styled.span`
 const CustomLink = styled(Link)`
   color: black;
   transition: all 0.3s ease-in-out;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 
   &:hover {
     color: #888;
