@@ -399,7 +399,7 @@ const Profile = ({ match }) => {
                       </FollowWrapper>
                       <FollowWrapper>
                         <FollowCounter>{userData.followingCount}</FollowCounter>
-                        <FollowContainerTitle>팔로우</FollowContainerTitle>
+                        <FollowContainerTitle>팔로잉</FollowContainerTitle>
                       </FollowWrapper>
                     </>
                   )}
