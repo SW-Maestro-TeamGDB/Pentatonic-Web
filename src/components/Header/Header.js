@@ -260,6 +260,10 @@ const LoginButton = styled.div`
     color: rgba(110, 101, 170, 1);
     border: 2px solid rgba(110, 101, 170, 0.8);
   }
+
+  ${media.medium} {
+    padding: 0.4rem 0.7rem;
+  }
 `;
 
 const MobileMenuButton = styled.div`
