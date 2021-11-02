@@ -204,6 +204,13 @@ const CoverForm = (props) => {
   const HelpContent = (
     <HelpContainer>
       <HelpWrapper>
+        <HelpTitle>제공 반주가 무엇인가요?</HelpTitle>
+        <HelpDesc>
+          펜타토닉에서 제공하는 반주로, 음원 녹음을 하면서 들을 악기를
+          조합합니다.
+        </HelpDesc>
+      </HelpWrapper>
+      <HelpWrapper>
         <HelpTitle>반주를 선택했는데 들리지 않아요!</HelpTitle>
         <HelpDesc>
           반주에 따라 부분적으로 녹음된 반주가 있을 수 있습니다. 들리지 않는
@@ -430,7 +437,7 @@ const Container = styled.div`
 
 const CustomPopover = styled(Popover)`
   color: #444;
-  font-size: 0.8rem;
+  font-size: 0.9rem;
   margin-left: 1rem;
 `;
 
