@@ -649,6 +649,10 @@ const SongArtist = styled.div`
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+
+  ${media.small} {
+    width: 6rem;
+  }
 `;
 
 const SongName = styled.div`
@@ -667,6 +671,10 @@ const SongName = styled.div`
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+
+  ${media.small} {
+    width: 6rem;
+  }
 `;
 
 const SongData = styled.div`
