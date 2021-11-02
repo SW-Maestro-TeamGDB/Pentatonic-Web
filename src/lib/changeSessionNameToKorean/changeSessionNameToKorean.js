@@ -21,6 +21,8 @@ const changeSessionNameToKorean = (name) => {
     return '해금';
   } else if (name === 'GEOMUNGO') {
     return '거문고';
+  } else if (name === 'FREE') {
+    return '그 외 악기';
   } else {
     return '알 수 없는 악기';
   }
