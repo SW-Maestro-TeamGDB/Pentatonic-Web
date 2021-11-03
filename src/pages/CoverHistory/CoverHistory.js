@@ -91,7 +91,7 @@ const LoadingContainer = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  font-size: 18rem;
+  font-size: 10rem;
   color: #6236ff;
 `;
 
