@@ -115,7 +115,7 @@ const CoverRoomButton = styled(Link)`
   display: flex;
   justify-content: center;
   align-items: center;
-  font-size: 1.2rem;
+  font-size: 1rem;
   font-weight: 700;
 
   &:hover {
@@ -140,7 +140,7 @@ const LibraryButton = styled(Link)`
   justify-content: center;
   align-items: center;
 
-  font-size: 1.2rem;
+  font-size: 1rem;
   font-weight: 700;
 
   &:hover {

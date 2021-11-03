@@ -112,7 +112,7 @@ const AcceptButton = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  font-size: 1.2rem;
+  font-size: 1rem;
   font-weight: 700;
 
   &:hover {
@@ -137,7 +137,7 @@ const RefuseButton = styled.div`
   justify-content: center;
   align-items: center;
 
-  font-size: 1.2rem;
+  font-size: 1rem;
   font-weight: 700;
 
   &:hover {
