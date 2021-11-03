@@ -8,10 +8,9 @@ import { debounce } from 'lodash';
 const ResponsiveCoverGrid = (props) => {
   const { coverWidth, coverData, songData = false, reversed = false } = props;
   const [windowWidth, setWindowWidth] = useState(0);
-  const resizeWindow = debounce(
-    () => setWindowWidth(coverRef.current.clientWidth),
-    10,
-  );
+  const resizeWindow = debounce(() => {
+    if (coverRef.current) setWindowWidth(coverRef.current.clientWidth);
+  }, 10);
   const coverRef = useRef();
 
   useEffect(() => {

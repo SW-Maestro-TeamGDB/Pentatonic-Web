@@ -56,10 +56,9 @@ const InfiniteScrollGrid = (props) => {
 
   const coverRef = useRef();
 
-  const resizeWindow = debounce(
-    () => setWindowWidth(coverRef.current.clientWidth),
-    10,
-  );
+  const resizeWindow = debounce(() => {
+    if (coverRef.current) setWindowWidth(coverRef.current.clientWidth);
+  }, 10);
 
   const handleScroll = throttle(() => {
     const scrollHeight = document.documentElement.scrollHeight;
