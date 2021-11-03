@@ -25,8 +25,8 @@ const QuestionModal = (props) => {
       onCancel={closeModal}
       footer={null}
       centered
-      closable={false}
-      maskClosable={false}
+      closable={true}
+      maskClosable={true}
     >
       <ModalContainer>
         <CustomCheckIcon />
@@ -63,8 +63,11 @@ const ModalContainer = styled.div`
   align-items: center;
   flex-direction: column;
   width: 100%;
-  height: 25rem;
-  padding: 6vh 0;
+  height: 22rem;
+
+  ${media.small} {
+    height: 20rem;
+  }
 `;
 
 const CustomCheckIcon = styled(QuestionCircleOutlined)`
