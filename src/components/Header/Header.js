@@ -214,13 +214,21 @@ const UserImg = styled.img`
   border-radius: 30px;
   margin-right: 10px;
   object-fit: cover;
+
+  ${media.medium} {
+    height: 40px;
+  }
 `;
 
 const UserName = styled.div`
-  font-size: 16px;
+  font-size: 14px;
   font-weight: 600;
   line-height: 1.13;
   letter-spacing: -1px;
+
+  ${media.medium} {
+    display: none;
+  }
 `;
 
 const HeaderContainer = styled.div`

@@ -5,6 +5,7 @@ import {
   GET_CURRENT_USER,
 } from '../../apollo/cache';
 import { gql, useQuery, useMutation, useLazyQuery } from '@apollo/client';
+import { media } from '../../lib/Media';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
@@ -43,6 +44,10 @@ const MenuContainer = styled.div`
   transform: translate(-20%);
   border-radius: 1rem;
   padding: 1rem 0;
+
+  ${media.medium} {
+    transform: translate(-38%);
+  }
 `;
 
 const MenuLink = styled(Link)`
