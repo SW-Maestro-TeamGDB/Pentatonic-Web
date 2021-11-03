@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import { Modal } from 'antd';
 import { CheckCircleOutlined, LoadingOutlined } from '@ant-design/icons';
+import { media } from '../../lib/Media';
 
 const UploadCompleteModal = (props) => {
   const { modalToggle, setModalToggle, modalLoading, bandId, cover } = props;
@@ -105,43 +106,50 @@ const ButtonContainer = styled.div`
 
 const CoverRoomButton = styled(Link)`
   cursor: pointer;
-  min-width: 10rem;
-  padding: 1vh 0.5vw;
+  width: 10rem;
+  padding: 0.5rem 0.5rem;
   color: white;
   background-image: linear-gradient(to right, #6236ff, #9b66ff);
-  border-radius: 1vh;
+  border-radius: 0.5rem;
 
   display: flex;
   justify-content: center;
   align-items: center;
-
-  font-size: 1.8vh;
+  font-size: 1.2rem;
   font-weight: 700;
 
   &:hover {
     color: white;
   }
+
+  ${media.small} {
+    width: 8em;
+    font-size: 1rem;
+  }
 `;
 
 const LibraryButton = styled(Link)`
   cursor: pointer;
-  min-width: 10em;
-  padding: 1vh 0.5vw;
+  width: 10em;
+  padding: 0.5rem 0.5rem;
   color: #925fff;
   border: 1px solid #925fff;
-  border-radius: 1vh;
-
-  margin-left: 1rem;
+  border-radius: 0.5rem;
 
   display: flex;
   justify-content: center;
   align-items: center;
 
-  font-size: 1.8vh;
+  font-size: 1.2rem;
   font-weight: 700;
 
   &:hover {
     color: #925fff;
+  }
+
+  ${media.small} {
+    width: 8em;
+    font-size: 1rem;
   }
 `;
 
