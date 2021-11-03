@@ -116,11 +116,13 @@ const FindPasswordModal = (props) => {
             />
             <AuthButton onClick={() => numberCheck()}>인증하기</AuthButton>
           </PhoneNumberWrapper>
-          <ErrorContainer>
-            {numberStatus === -1 ? (
+
+          {numberStatus === -1 ? (
+            <ErrorContainer>
               <ErrorMessage>{numberError}</ErrorMessage>
-            ) : null}
-          </ErrorContainer>
+            </ErrorContainer>
+          ) : null}
+
           {numberStatus === 1 ? (
             <CustomInput
               value={authCode}
@@ -129,9 +131,13 @@ const FindPasswordModal = (props) => {
               maxLength="6"
             ></CustomInput>
           ) : null}
-          <ErrorContainer>
-            {authError ? <ErrorMessage>{authError}</ErrorMessage> : null}
-          </ErrorContainer>
+
+          {authError ? (
+            <ErrorContainer>
+              <ErrorMessage>{authError}</ErrorMessage>
+            </ErrorContainer>
+          ) : null}
+
           <SubmitButton onClick={() => authCodeCheck()}>다음으로</SubmitButton>
         </>
       );
@@ -255,11 +261,19 @@ const FindAccountContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+
+  ${media.small} {
+    height: 24rem;
+  }
 `;
 
 const CustomTitle = styled.div`
   font-size: 1.2rem;
   font-weight: 800;
+
+  ${media.small} {
+    font-size: 1.1rem;
+  }
 `;
 
 const CustomDescription = styled.div`
@@ -267,6 +281,10 @@ const CustomDescription = styled.div`
   font-weight: 500;
   margin: 0.2rem 0 1rem;
   color: #3d3d3d;
+
+  ${media.small} {
+    font-size: 0.9rem;
+  }
 `;
 
 const AuthButton = styled.button`
@@ -286,6 +304,12 @@ const AuthButton = styled.button`
   &:hover {
     background-color: rgba(98, 54, 255, 1);
   }
+
+  ${media.small} {
+    font-size: 0.8rem;
+    padding: 0.5rem 0.5rem;
+    height: 3rem;
+  }
 `;
 
 const ResultContainer = styled.div`
@@ -302,6 +326,7 @@ const TextWrapper = styled.div`
 
   ${media.small} {
     font-size: 1.2rem;
+    line-height: 3px;
   }
 `;
 
@@ -313,6 +338,10 @@ const IconWrapper = styled.div`
   text-align: center;
   padding: 0.5rem 0;
   border-radius: 1rem;
+
+  ${media.small} {
+    font-size: 1.5rem;
+  }
 `;
 
 const PhoneNumberWrapper = styled.span`
@@ -365,6 +394,11 @@ const SubmitButton = styled.button`
   &:hover {
     background-color: rgba(98, 54, 255, 1);
   }
+
+  ${media.small} {
+    font-size: 1rem;
+    height: 3.5rem;
+  }
 `;
 
 const Divider = styled.div`
@@ -415,6 +449,11 @@ const PhoneNumberInput = styled.input`
   &:focus {
     border: 2px solid black;
   }
+
+  ${media.small} {
+    font-size: 1rem;
+    height: 3rem;
+  }
 `;
 
 const CustomInput = styled.input`
@@ -431,6 +470,11 @@ const CustomInput = styled.input`
 
   &:focus {
     border: 2px solid black;
+  }
+
+  ${media.small} {
+    font-size: 1rem;
+    height: 3rem;
   }
 `;
 
@@ -453,6 +497,11 @@ const PasswordInput = styled.input.attrs({ type: 'password' })`
 
   ::placeholder {
     font-family: 'NanumSquare';
+  }
+
+  ${media.small} {
+    font-size: 1rem;
+    height: 3rem;
   }
 `;
 

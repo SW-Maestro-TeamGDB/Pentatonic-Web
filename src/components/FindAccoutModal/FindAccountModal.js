@@ -40,6 +40,10 @@ const FindAccountContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+
+  ${media.small} {
+    height: 24rem;
+  }
 `;
 
 const ModalHeader = styled.div`
@@ -58,6 +62,11 @@ const SelectContainer = styled.div`
   bottom: 10%;
   display: flex;
   flex-direction: column;
+
+  ${media.small} {
+    height: 60%;
+    bottom: 20%;
+  }
 `;
 
 const Divider = styled.div`

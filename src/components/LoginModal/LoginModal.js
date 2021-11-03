@@ -7,6 +7,7 @@ import {
 } from '../../apollo/cache';
 import { gql, useMutation, useQuery, useLazyQuery } from '@apollo/client';
 import { Link } from 'react-router-dom';
+import { media, Default, Mobile } from '../../lib/Media';
 
 const LOGIN = gql`
   mutation LoginMutation($input: LoginInput!) {
@@ -111,7 +112,7 @@ const LoginModal = (props) => {
       <CustomForm onSubmit={handleSubmit}>
         <CustomInput
           placeholder="아이디"
-          value={id}
+          value={id || ''}
           onChange={(e) => setID(e.target.value)}
           type="text"
           maxLength="14"
@@ -119,7 +120,7 @@ const LoginModal = (props) => {
         <PasswordInput
           placeholder="비밀번호"
           type="password"
-          value={password}
+          value={password || ''}
           onChange={(e) => setPassword(e.target.value)}
         />
         {FormError ? <ErrorMessage>{FormError}</ErrorMessage> : null}
@@ -140,12 +141,20 @@ const LoginContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+
+  ${media.small} {
+    height: 24rem;
+  }
 `;
 
 const LoginTitle = styled.div`
   font-size: 2rem;
   font-weight: bold;
   margin-top: 5%;
+
+  ${media.small} {
+    font-size: 1.3rem;
+  }
 `;
 
 const SubContainer = styled.div`
@@ -166,6 +175,10 @@ const CustomLink = styled(Link)`
   &:hover {
     color: black;
   }
+
+  ${media.small} {
+    font-size: 0.9rem;
+  }
 `;
 
 const CustomButton = styled.div`
@@ -173,6 +186,10 @@ const CustomButton = styled.div`
   font-size: 1rem;
   margin: 0 1rem;
   cursor: pointer;
+
+  ${media.small} {
+    font-size: 0.9rem;
+  }
 `;
 
 const CustomForm = styled.form`
@@ -196,6 +213,11 @@ const CustomInput = styled.input`
 
   &:focus {
     border: 2px solid black;
+  }
+
+  ${media.small} {
+    font-size: 1rem;
+    height: 3rem;
   }
 `;
 
@@ -224,6 +246,11 @@ const PasswordInput = styled.input.attrs({ type: 'password' })`
   ::placeholder {
     font-family: 'NanumSquare';
   }
+
+  ${media.small} {
+    font-size: 1rem;
+    height: 3rem;
+  }
 `;
 
 const SubmitButton = styled.button`
@@ -239,6 +266,11 @@ const SubmitButton = styled.button`
   transition: all ease-in-out 0.3s;
   &:hover {
     background-color: rgba(98, 54, 255, 1);
+  }
+
+  ${media.small} {
+    font-size: 1rem;
+    height: 3rem;
   }
 `;
 
