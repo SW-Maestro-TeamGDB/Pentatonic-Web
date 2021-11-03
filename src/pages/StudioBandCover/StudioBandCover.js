@@ -40,7 +40,9 @@ const StudioBandCover = ({ match }) => {
   const [genre, setGenre] = useState('전체');
   const [difficulty, setDifficulty] = useState('전체');
   const [songData, setSongData] = useState();
-  const isDesktop = useMediaQuery({ minWidth: 992 });
+  const isMobile = useMediaQuery({
+    query: '(max-width:767px)',
+  });
   const content = match.params?.content;
 
   const { loading, error, data } = useQuery(QUERY_SONG, {
@@ -106,7 +108,7 @@ const StudioBandCover = ({ match }) => {
             setDifficulty={setDifficulty}
           />
         </ButtonContainer>
-        {isDesktop && !mobileCheck() ? (
+        {!isMobile && !mobileCheck() ? (
           <MakingCoverButton
             link={`/studio/band/free/cover`}
             title="자유곡 커버 만들기"

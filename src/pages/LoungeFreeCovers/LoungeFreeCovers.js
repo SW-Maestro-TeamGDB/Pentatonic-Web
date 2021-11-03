@@ -50,7 +50,9 @@ const LoungeBandCovers = ({ match }) => {
   const content = match.params?.content;
   const coverRef = useRef();
   const COVER_WIDTH = useMediaQuery({ maxWidth: 767 }) ? '250px' : '220px';
-  const isDesktop = useMediaQuery({ minWidth: 992 });
+  const isMobile = useMediaQuery({
+    query: '(max-width:767px)',
+  });
 
   const CoverMenu = (
     <SubMenuContainer>
@@ -104,7 +106,7 @@ const LoungeBandCovers = ({ match }) => {
       />
       <SubContainer>
         <Default>
-          {isDesktop && !mobileCheck() ? (
+          {!isMobile && !mobileCheck() ? (
             <Dropdown
               overlay={CoverMenu}
               placement="bottomCenter"

@@ -67,7 +67,9 @@ const CoverRoomRecord = ({ match, history }) => {
   const [lyrics, setLyrics] = useState();
   const pageUrl = match.url;
   const bandId = match.params.id;
-  const isDesktop = useMediaQuery({ minWidth: 992 });
+  const isMobile = useMediaQuery({
+    query: '(max-width:767px)',
+  });
 
   const selectedSession = location?.state?.selectedSession;
 
@@ -167,7 +169,7 @@ const CoverRoomRecord = ({ match, history }) => {
 
   return (
     <>
-      {isDesktop && !mobileCheck() ? (
+      {!isMobile && !mobileCheck() ? (
         selectedSession ? (
           <LoginAuth>
             <PageContainer>

@@ -231,7 +231,7 @@ const MusicInformation = ({ match }) => {
                     </MusicMeta>
                   </GridContainer>
                 </MusicMetaWrapper>
-                {isDesktop && !mobileCheck() ? (
+                {!mobileCheck() ? (
                   <ButtonContainer>
                     <RecordButton to={match.url + '/record'}>
                       라이브러리 녹음하기

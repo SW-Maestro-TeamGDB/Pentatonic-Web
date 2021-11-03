@@ -41,7 +41,9 @@ const QUERY_SONG = gql`
 const WeeklyChallenge = ({ match }) => {
   const content = match.params?.content;
   const COVER_WIDTH = useMediaQuery({ maxWidth: 767 }) ? '250px' : '220px';
-  const isDesktop = useMediaQuery({ minWidth: 992 });
+  const isMobile = useMediaQuery({
+    query: '(max-width:767px)',
+  });
 
   const { loading, error, data } = useQuery(QUERY_SONG, {
     variables: {
@@ -143,7 +145,7 @@ const WeeklyChallenge = ({ match }) => {
           />
           <SubContainer>
             <Default>
-              {isDesktop && !mobileCheck() ? (
+              {!isMobile && !mobileCheck() ? (
                 <Dropdown
                   overlay={CoverMenu}
                   placement="bottomCenter"

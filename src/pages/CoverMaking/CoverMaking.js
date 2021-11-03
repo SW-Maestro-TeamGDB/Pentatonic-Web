@@ -44,7 +44,9 @@ const CoverMaking = ({ match, history }) => {
   const songId = match.params.id;
   const isFreeCover = match.params.id === 'free';
   const isSolo = match.path.indexOf('band') === -1;
-  const isDesktop = useMediaQuery({ minWidth: 992 });
+  const isMobile = useMediaQuery({
+    query: '(max-width:767px)',
+  });
 
   const [bandId, setBandId] = useState();
   const [bandData, setBandData] = useState({
@@ -174,7 +176,7 @@ const CoverMaking = ({ match, history }) => {
 
   return (
     <>
-      {isDesktop && !mobileCheck() ? (
+      {!isMobile && !mobileCheck() ? (
         <LoginAuth>
           <PageContainer>
             <CustomSteps progressDot current={page}>

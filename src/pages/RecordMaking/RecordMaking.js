@@ -40,6 +40,9 @@ const RecordMaking = ({ match, history }) => {
   const pageUrl = match.url;
   const songId = match.params.id;
   const isDesktop = useMediaQuery({ minWidth: 992 });
+  const isMobile = useMediaQuery({
+    query: '(max-width:767px)',
+  });
 
   const [bandId, setBandId] = useState();
   const [bandData, setBandData] = useState({
@@ -139,7 +142,7 @@ const RecordMaking = ({ match, history }) => {
 
   return (
     <>
-      {isDesktop && !mobileCheck() ? (
+      {!isMobile && !mobileCheck() ? (
         <LoginAuth>
           <PageContainer>
             <CustomSteps progressDot current={page}>

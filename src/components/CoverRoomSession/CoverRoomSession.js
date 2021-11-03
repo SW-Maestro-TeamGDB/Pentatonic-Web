@@ -47,7 +47,7 @@ const CoverRoomSession = (props) => {
 
   const onClickParticipate = () => {
     if (data.isLoggedIn) {
-      if (isDesktop && !mobileCheck()) setParticipationModal(true);
+      if (!mobileCheck()) setParticipationModal(true);
       else {
         onClickLibrary();
       }
