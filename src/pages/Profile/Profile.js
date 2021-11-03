@@ -59,6 +59,10 @@ const CHANGE_PROFILE = gql`
   mutation ChangeProfileMutation($changeProfileInput: ChangeProfileInput!) {
     changeProfile(input: $changeProfileInput) {
       id
+      username
+      profileURI
+      prime
+      type
     }
   }
 `;
@@ -119,7 +123,7 @@ const Profile = ({ match }) => {
       setEditUserDataModal(false);
     },
     onCompleted: (data) => {
-      updateUserData();
+      currentUserVar(data.changeProfile);
       setEditUserDataModal(false);
       setEdit(false);
     },
@@ -132,35 +136,6 @@ const Profile = ({ match }) => {
     },
     onCompleted: (data) => {
       if (data.getUserInfo) {
-        setUserData(data.getUserInfo);
-        setLoading(false);
-        setError(false);
-      } else {
-        setError(true);
-        setLoading(false);
-      }
-    },
-    onError: (error) => {
-      console.log(error);
-      setError(true);
-      setLoading(false);
-    },
-  });
-
-  const [updateUserData] = useLazyQuery(GET_USER_INFO, {
-    fetchPolicy: 'network-only',
-    variables: {
-      getUserInfoUserId: ID,
-    },
-    onCompleted: (data) => {
-      if (data.getUserInfo) {
-        // const sessionData = JSON.parse(sessionStorage.getItem('userInfo'));
-
-        if (data.getUserInfo.id === ID) {
-          currentUserVar(data.getUserInfo);
-          // sessionStorage.setItem('userInfo', JSON.stringify(data.getUserInfo));
-        }
-
         setUserData(data.getUserInfo);
         setLoading(false);
         setError(false);
