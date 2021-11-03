@@ -242,7 +242,7 @@ const Profile = ({ match }) => {
       return (
         <PositionGrid
           position={v.position}
-          like={v.likeCount}
+          like={v.likeCount ? v.likeCount : 0}
           key={`${ID}+${i}`}
         />
       );
@@ -518,7 +518,7 @@ const PurchasedButton = styled.div`
   font-size: 1rem;
   font-weight: 800;
   letter-spacing: -1px;
-  margin: 1rem 0;
+  margin: 1.5rem 0 2.5rem;
   height: 3rem;
 
   color: white;
@@ -546,6 +546,7 @@ const PurchasedButton = styled.div`
 
   ${media.small} {
     width: 100%;
+    margin: 1rem 0 3rem;
   }
 `;
 
@@ -556,7 +557,7 @@ const PrimeButton = styled.div`
   font-size: 1rem;
   font-weight: 800;
   letter-spacing: -1px;
-  margin: 1rem 0;
+  margin: 1.5rem 0 2.5rem;
   height: 3rem;
 
   cursor: pointer;
@@ -578,6 +579,7 @@ const PrimeButton = styled.div`
 
   ${media.small} {
     width: 100%;
+    margin: 1rem 0 3rem;
   }
 `;
 
@@ -616,15 +618,20 @@ const CreditContainer = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  height: 5rem;
+  margin-bottom: 1rem;
+  height: 6rem;
   width: 100%;
+
+  ${media.small} {
+    height: 4rem;
+  }
 `;
 
 const CreditWrapper = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  width: 65%;
+  width: 100%;
   font-size: 1.1rem;
 `;
 
@@ -632,8 +639,9 @@ const CreditButton = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 6.5rem;
+  min-width: 6.5rem;
   padding: 0.5rem 0.8rem;
+  margin-left: 2rem;
 
   cursor: pointer;
   color: #999;
@@ -970,14 +978,14 @@ const FollowingButton = styled.div`
 
 const FollowButton = styled.div`
   cursor: pointer;
-  min-width: 100px;
+  min-width: 8rem;
   height: 2.5rem;
 
-  padding: 0 1rem;
+  padding: 0 0.8rem;
 
   color: #999;
   border: 1px solid #999;
-  border-radius: 1vh;
+  border-radius: 10px;
 
   display: flex;
   justify-content: center;
