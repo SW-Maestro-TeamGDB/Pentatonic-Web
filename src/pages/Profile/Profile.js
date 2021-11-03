@@ -19,6 +19,13 @@ import NotFoundPage from '../NotFoundPage';
 import PositionGrid from '../../components/PositionGrid';
 import ResponsiveCoverGrid from '../../components/ResponsiveCoverGrid/ResponsiveCoverGrid';
 import CropModal from '../../components/CropModal';
+import SNSModal from '../../components/SNSModal';
+
+import ic_facebook from '../../images/SNS/ic_facebook.png';
+import ic_instagram from '../../images/SNS/ic_instagram.png';
+import ic_kakao from '../../images/SNS/ic_kakao.png';
+import ic_twitter from '../../images/SNS/ic_twitter.png';
+
 import { useMediaQuery } from 'react-responsive';
 import { Upload, notification } from 'antd';
 import styled from 'styled-components';
@@ -36,6 +43,12 @@ const GET_USER_INFO = gql`
       followerCount
       followingCount
       followingStatus
+      social {
+        facebook
+        twitter
+        instagram
+        kakao
+      }
       band {
         song {
           name
@@ -87,7 +100,7 @@ const Profile = ({ match }) => {
   const [beforeCropImage, setBeforeCropImage] = useState();
   const [userData, setUserData] = useState();
   const [error, setError] = useState(false);
-  const [nameError, setNameError] = useState();
+  const [nameError, setNameError] = useState(false);
   const [loading, setLoading] = useState(true);
   const [edit, setEdit] = useState(false);
   const [editUserName, setEditUserName] = useState();
@@ -99,10 +112,14 @@ const Profile = ({ match }) => {
 
   const coverRef = useRef();
   const COVER_WIDTH = useMediaQuery({ maxWidth: 767 }) ? '160px' : '200px';
+  const isMobile = useMediaQuery({
+    query: '(max-width:767px)',
+  });
 
   const [cropModal, setCropModal] = useState(false);
   const [unfollowModal, setUnfollowModal] = useState(false);
   const [editUserDataModal, setEditUserDataModal] = useState(false);
+  const [SNSModifyModal, setSNSModifyModal] = useState(false);
 
   const [uploadImage, uploadImageResult] = useMutation(UPLOAD_IMAGE_FILE, {
     fetchPolicy: 'no-cache',
@@ -233,6 +250,8 @@ const Profile = ({ match }) => {
           },
         },
       });
+    } else {
+      setEditUserDataModal(false);
     }
   };
 
@@ -364,17 +383,60 @@ const Profile = ({ match }) => {
                   </>
                 ) : (
                   <>
-                    <UserName>
-                      {userData.username}
-                      {userData.prime ? <PrimeText>PRIME</PrimeText> : null}
-                    </UserName>
+                    <UserNameContainer>
+                      <UserNameWrapper>
+                        <UserName> {userData.username}</UserName>
+                        {userData.prime ? <PrimeText>PRIME</PrimeText> : null}
+                      </UserNameWrapper>
+                      <Default>
+                        <SNSAccountContainer>
+                          {userData?.social?.facebook ? (
+                            <SNSIcon
+                              src={ic_facebook}
+                              onClick={() =>
+                                window.open(userData.social.facebook, '_blank')
+                              }
+                            />
+                          ) : null}
+                          {userData?.social?.twitter ? (
+                            <SNSIcon
+                              src={ic_twitter}
+                              onClick={() =>
+                                window.open(userData.social.twitter, '_blank')
+                              }
+                            />
+                          ) : null}
+                          {userData?.social?.instagram ? (
+                            <SNSIcon
+                              src={ic_instagram}
+                              onClick={() =>
+                                window.open(userData.social.instagram, '_blank')
+                              }
+                            />
+                          ) : null}
+                          {userData?.social?.kakao ? (
+                            <SNSIcon
+                              src={ic_kakao}
+                              onClick={() =>
+                                window.open(userData.social.kakao, '_blank')
+                              }
+                            />
+                          ) : null}
+                        </SNSAccountContainer>
+                      </Default>
+                    </UserNameContainer>
                     <UserIntroduce>{userData.introduce}</UserIntroduce>
                   </>
                 )}
               </UserInfo>
               <MetaContainer>
                 <FollowContainer>
-                  {edit ? null : (
+                  {edit ? (
+                    <SNSModifyButton onClick={() => setSNSModifyModal(true)}>
+                      <PlusCircleFilled style={{ marginRight: '6px' }} /> SNS
+                      계정 추가
+                    </SNSModifyButton>
+                  ) : (
                     <>
                       <FollowWrapper>
                         <FollowCounter>{userData.followerCount}</FollowCounter>
@@ -384,6 +446,42 @@ const Profile = ({ match }) => {
                         <FollowCounter>{userData.followingCount}</FollowCounter>
                         <FollowContainerTitle>팔로잉</FollowContainerTitle>
                       </FollowWrapper>
+                      {isMobile ? (
+                        <SNSAccountContainer>
+                          {userData?.social?.facebook ? (
+                            <SNSIcon
+                              src={ic_facebook}
+                              onClick={() =>
+                                window.open(userData.social.facebook, '_blank')
+                              }
+                            />
+                          ) : null}
+                          {userData?.social?.twitter ? (
+                            <SNSIcon
+                              src={ic_twitter}
+                              onClick={() =>
+                                window.open(userData.social.twitter, '_blank')
+                              }
+                            />
+                          ) : null}
+                          {userData?.social?.instagram ? (
+                            <SNSIcon
+                              src={ic_instagram}
+                              onClick={() =>
+                                window.open(userData.social.instagram, '_blank')
+                              }
+                            />
+                          ) : null}
+                          {userData?.social?.kakao ? (
+                            <SNSIcon
+                              src={ic_kakao}
+                              onClick={() =>
+                                window.open(userData.social.kakao, '_blank')
+                              }
+                            />
+                          ) : null}
+                        </SNSAccountContainer>
+                      ) : null}
                     </>
                   )}
                 </FollowContainer>
@@ -490,12 +588,13 @@ const Profile = ({ match }) => {
                 />
               )}
             </CoverHistoryContainer>
-            {/* <QuestionModal
-              modalToggle={unfollowModal}
-              setModalToggle={setUnfollowModal}
-              text={`${userData.username}님의 팔로잉을 취소하시겠습니까?`}
-              afterRequest={unfollow}
-            /> */}
+            <SNSModal
+              modalToggle={SNSModifyModal}
+              setModalToggle={setSNSModifyModal}
+              data={userData.social}
+              setData={setEditUserData}
+              getUserInfo={getUserInfo}
+            />
             <QuestionModal
               modalToggle={editUserDataModal}
               setModalToggle={setEditUserDataModal}
@@ -510,6 +609,56 @@ const Profile = ({ match }) => {
     </PageContainer>
   );
 };
+
+const UserNameContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  width: 100%;
+`;
+
+const SNSIcon = styled.img`
+  width: 1.2rem;
+  cursor: pointer;
+  margin-left: 12px;
+  filter: invert(28%) sepia(21%) saturate(0%) hue-rotate(240deg)
+    brightness(101%) contrast(80%);
+  transition: filter 0.3s ease-in-out;
+
+  ${media.medium} {
+    width: 1rem;
+  }
+
+  ${media.small} {
+    width: 0.9rem;
+    margin-left: 10px;
+    transition: none;
+  }
+
+  &:hover {
+    filter: none;
+  }
+`;
+
+const SNSModifyButton = styled.div`
+  color: #999;
+  cursor: pointer;
+  font-weight: 700;
+  transition: color 0.3s ease-in-out;
+
+  &:hover {
+    color: #666;
+  }
+
+  ${media.small} {
+    transition: none;
+    margin-top: 1rem;
+
+    &:hover {
+      color: #999;
+    }
+  }
+`;
 
 const PurchasedButton = styled.div`
   width: 100%;
@@ -925,9 +1074,9 @@ const CustomFollowIcon = styled(PlusCircleFilled)`
 `;
 
 const FollowButtonContainer = styled.div`
-  width: 80%;
+  width: 100%;
   display: flex;
-  justify-content: flex-end;
+  justify-content: center;
   align-items: center;
 
   ${media.small} {
@@ -1026,13 +1175,16 @@ const FollowContainer = styled.div`
   height: 100%;
   display: flex;
   flex-direction: row;
-  justify-content: space-evenly;
+  justify-content: center;
   align-items: flex-start;
   padding-top: 0.5rem;
+  position: relative;
 
   ${media.small} {
     justify-content: flex-start;
+    align-items: center;
     padding-top: 0;
+    width: 100%;
   }
 `;
 
@@ -1160,7 +1312,7 @@ const UserImage = styled.div`
   background-size: cover;
 
   border-radius: 10px;
-  border: ${(props) => (props.prime ? '5px solid #6236ff' : 'none')};
+  border: ${(props) => (props.prime ? '4px solid #6236ff' : 'none')};
 
   ${media.small} {
     border: ${(props) => (props.prime ? '5px solid #6236ff' : 'none')};
@@ -1181,13 +1333,54 @@ const UserInfo = styled.div`
 `;
 
 const UserName = styled.div`
+  max-width: 20rem;
+
+  position: relative;
+
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+
+  ${media.small} {
+    max-width: 100%;
+  }
+`;
+
+const UserNameWrapper = styled.div`
   font-size: 2.2rem;
   font-weight: 800;
   letter-spacing: -0.6px;
+  margin-top: 0.5rem;
+
+  max-width: 75%;
+  position: relative;
+
+  display: flex;
+  flex-direction: row;
+  align-items: flex-end;
+  line-height: 0.9;
 
   ${media.small} {
     font-size: 1.3rem;
-    margin-top: 0.5rem;
+    margin-top: 1rem;
+    max-width: 100%;
+  }
+`;
+
+const SNSAccountContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  align-items: flex-end;
+
+  height: 100%;
+  min-width: 20%;
+  margin-left: 1.5rem;
+
+  ${media.small} {
+    align-items: center;
+    position: absolute;
+    right: -95%;
   }
 `;
 
@@ -1197,7 +1390,7 @@ const UserIntroduce = styled.pre`
   font-family: 'NanumSquare';
 
   ${media.small} {
-    margin-top: 0.1rem;
+    margin-top: 0.5rem;
     font-size: 0.8rem;
   }
 
@@ -1229,16 +1422,23 @@ const FollowWrapper = styled.div`
   font-size: 1.4rem;
   color: #999999;
   font-weight: 800;
+  margin: 0 1rem;
 
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
 
+  ${media.medium} {
+    margin: 0 0.5rem;
+  }
+
   ${media.small} {
     font-size: 0.8rem;
     flex-direction: row;
     padding-right: 8px;
+    min-width: 4rem;
+    margin: 0;
   }
 `;
 
