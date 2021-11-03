@@ -23,6 +23,14 @@ const changeSessionNameToKorean = (name) => {
     return '거문고';
   } else if (name === 'FREE') {
     return '그 외 악기';
+  } else if (name === 'PIANO') {
+    return '피아노';
+  } else if (name === 'TRUMPET') {
+    return '트럼펫';
+  } else if (name === 'CLARINET') {
+    return '클라리넷';
+  } else if (name === 'FLUTE') {
+    return '플룻';
   } else {
     return '알 수 없는 악기';
   }

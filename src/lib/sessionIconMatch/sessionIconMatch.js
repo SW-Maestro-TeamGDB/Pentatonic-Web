@@ -8,9 +8,14 @@ import electric_guitar from '../../images/Session/electric_guitar.png';
 import gayaguem from '../../images/Session/gayaguem.png';
 import haeguem from '../../images/Session/haeguem.png';
 import violin from '../../images/Session/violin.png';
+import clarinet from '../../images/Session/clarinet.png';
+import etc from '../../images/Session/etc.png';
+import flute from '../../images/Session/flute.png';
+import trumpet from '../../images/Session/trumpet.png';
 
 const sessionIconMatch = (position) => {
   if (position === 'ACOUSTIC_GUITAR') return guitar;
+  else if (position === 'PIANO') return piano;
   else if (position === 'DRUM') return drum;
   else if (position === 'KEYBOARD') return piano;
   else if (position === 'VOCAL') return vocal;
@@ -20,7 +25,10 @@ const sessionIconMatch = (position) => {
   else if (position === 'GAYAGEUM') return gayaguem;
   else if (position === 'HAEGEUM') return haeguem;
   else if (position === 'VIOLIN') return violin;
-  else return null;
+  else if (position === 'CLARINET') return clarinet;
+  else if (position === 'FLUTE') return flute;
+  else if (position === 'TRUMPET') return trumpet;
+  else return etc;
 };
 
 export { sessionIconMatch };
