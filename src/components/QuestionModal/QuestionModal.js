@@ -103,17 +103,16 @@ const ButtonContainer = styled.div`
 
 const AcceptButton = styled.div`
   cursor: pointer;
-  min-width: 10rem;
-  padding: 1vh 0.5vw;
+  width: 10rem;
+  padding: 0.5rem 0.5rem;
   color: white;
   background-image: linear-gradient(to right, #6236ff, #9b66ff);
-  border-radius: 1vh;
+  border-radius: 0.5rem;
 
   display: flex;
   justify-content: center;
   align-items: center;
-
-  font-size: 1.8vh;
+  font-size: 1.2rem;
   font-weight: 700;
 
   &:hover {
@@ -121,23 +120,24 @@ const AcceptButton = styled.div`
   }
 
   ${media.small} {
-    min-width: 8em;
+    width: 8em;
+    font-size: 1rem;
   }
 `;
 
 const RefuseButton = styled.div`
   cursor: pointer;
-  min-width: 10em;
-  padding: 1vh 0.5vw;
+  width: 10em;
+  padding: 0.5rem 0.5rem;
   color: #925fff;
   border: 1px solid #925fff;
-  border-radius: 1vh;
+  border-radius: 0.5rem;
 
   display: flex;
   justify-content: center;
   align-items: center;
 
-  font-size: 1.8vh;
+  font-size: 1.2rem;
   font-weight: 700;
 
   &:hover {
@@ -145,7 +145,8 @@ const RefuseButton = styled.div`
   }
 
   ${media.small} {
-    min-width: 8em;
+    width: 8em;
+    font-size: 1rem;
   }
 `;
 
