@@ -7,7 +7,11 @@ import {
   SettingFilled,
   PlusCircleFilled,
   PictureOutlined,
+  CopyrightOutlined,
+  CreditCardFilled,
+  CheckCircleFilled,
 } from '@ant-design/icons';
+
 import GridContainer from '../../components/GridContainer';
 import CoverGrid from '../../components/CoverGrid';
 import QuestionModal from '../../components/QuestionModal/QuestionModal';
@@ -25,6 +29,7 @@ const GET_USER_INFO = gql`
   query Query($getUserInfoUserId: Id!) {
     getUserInfo(userId: $getUserInfoUserId) {
       id
+      prime
       username
       profileURI
       introduce
@@ -349,7 +354,7 @@ const Profile = ({ match }) => {
                     />
                   </>
                 ) : (
-                  <UserImage src={userData.profileURI} />
+                  <UserImage src={userData.profileURI} prime={userData.prime} />
                 )}
               </UserImageContainer>
               <UserInfo>
@@ -384,7 +389,10 @@ const Profile = ({ match }) => {
                   </>
                 ) : (
                   <>
-                    <UserName>{userData.username}</UserName>
+                    <UserName>
+                      {userData.username}
+                      {userData.prime ? <PrimeText>PRIME</PrimeText> : null}
+                    </UserName>
                     <UserIntroduce>{userData.introduce}</UserIntroduce>
                   </>
                 )}
@@ -427,8 +435,36 @@ const Profile = ({ match }) => {
                 </FollowButtonContainer>
               </MetaContainer>
             </UserInfoContainer>
+            {data.user && data.user.id === userData.id ? (
+              <PaymentContainer>
+                <PaymentWrapper>
+                  <BoardTitle>보유 크레딧</BoardTitle>
+                  <CreditContainer>
+                    <CreditWrapper>
+                      <CopyrightOutlined />
+                      <CreditText> 0</CreditText>
+                    </CreditWrapper>
+                    <CreditButton>
+                      <CreditCardFilled />
+                      <ButtonText>충전하기</ButtonText>
+                    </CreditButton>
+                  </CreditContainer>
+                </PaymentWrapper>
+                <PrimeWrapper>
+                  <BoardTitle>프리미엄</BoardTitle>
+                  {userData.prime ? (
+                    <PurchasedButton>
+                      <CheckCircleFilled style={{ marginRight: '0.5rem' }} />
+                      프리미엄 회원입니다
+                    </PurchasedButton>
+                  ) : (
+                    <PrimeButton>프리미엄 결제하기</PrimeButton>
+                  )}
+                </PrimeWrapper>
+              </PaymentContainer>
+            ) : null}
             <UserSessionContainer>
-              <BoardTitle>포지션</BoardTitle>
+              <BoardTitle>포지션 뱃지</BoardTitle>
               <UserSession>
                 {userData.band.length > 0 ? (
                   <>
@@ -499,6 +535,156 @@ const Profile = ({ match }) => {
     </PageContainer>
   );
 };
+
+const PurchasedButton = styled.div`
+  width: 100%;
+  padding: 0.5rem 1rem;
+
+  font-size: 1rem;
+  font-weight: 800;
+  letter-spacing: -1px;
+  margin: 1rem 0;
+  height: 3rem;
+
+  color: white;
+  background-color: #ccc;
+  border: 2px solid #aaa;
+  border-radius: 10px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  -ms-user-select: none;
+  -moz-user-select: -moz-none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  user-select: none;
+
+  &:hover {
+    color: white;
+  }
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  ${media.small} {
+    width: 100%;
+  }
+`;
+
+const PrimeButton = styled.div`
+  width: 100%;
+  padding: 0.5rem 1rem;
+
+  font-size: 1rem;
+  font-weight: 800;
+  letter-spacing: -1px;
+  margin: 1rem 0;
+  height: 3rem;
+
+  cursor: pointer;
+  color: white;
+  background-image: linear-gradient(to right, #6236ff, #9b66ff);
+  border-radius: 10px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  &:hover {
+    color: white;
+  }
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  ${media.small} {
+    width: 100%;
+  }
+`;
+
+const CreditText = styled.div`
+  font-size: 0.9rem;
+  margin-left: 1.5rem;
+
+  width: 100%;
+  text-align: right;
+
+  color: #555;
+  font-weight: 700;
+  background-color: #eee;
+  padding: 0.3rem 1rem 0.3rem 0;
+  border-radius: 10px;
+`;
+
+const ButtonText = styled.div`
+  font-size: 0.9rem;
+  margin-left: 0.5rem;
+  width: 100%;
+  text-align: right;
+`;
+
+const PrimeText = styled.span`
+  font-size: 0.8rem;
+  padding-left: 0.5rem;
+  color: #6236ff;
+
+  ${media.small} {
+    font-size: 0.5rem;
+  }
+`;
+
+const CreditContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 5rem;
+  width: 100%;
+`;
+
+const CreditWrapper = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 65%;
+  font-size: 1.1rem;
+`;
+
+const CreditButton = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 6.5rem;
+  padding: 0.5rem 0.8rem;
+
+  cursor: pointer;
+  color: #999;
+  border: 1px solid #999;
+  border-radius: 1vh;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  font-size: 14px;
+  font-weight: 700;
+
+  transition: all 0.3s ease-in-out;
+
+  -ms-user-select: none;
+  -moz-user-select: -moz-none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  user-select: none;
+
+  &:hover {
+    border-color: #666;
+    color: #666;
+  }
+`;
 
 const FollowCounter = styled.div`
   color: #666;
@@ -867,9 +1053,54 @@ const FollowContainer = styled.div`
   }
 `;
 
+const PaymentContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+
+  width: 100%;
+
+  ${media.small} {
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+`;
+
+const PrimeWrapper = styled.div`
+  width: 40%;
+  margin-top: 2rem;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  ${media.small} {
+    width: 90%;
+    margin-top: 0;
+  }
+`;
+
+const PaymentWrapper = styled.div`
+  width: 55%;
+  margin-top: 2rem;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  ${media.small} {
+    width: 90%;
+    margin-top: 2rem;
+  }
+`;
+
 const UserSessionContainer = styled.div`
   width: 100%;
-  margin-top: 2rem;
+  margin-top: 1.5rem;
 
   ${media.small} {
     width: 90%;
@@ -946,6 +1177,11 @@ const UserImage = styled.div`
   background-size: cover;
 
   border-radius: 10px;
+  border: ${(props) => (props.prime ? '5px solid #6236ff' : 'none')};
+
+  ${media.small} {
+    border: ${(props) => (props.prime ? '5px solid #6236ff' : 'none')};
+  }
 `;
 
 const UserInfo = styled.div`
