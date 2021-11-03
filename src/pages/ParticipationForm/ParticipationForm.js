@@ -84,6 +84,11 @@ const ParticipationForm = (props) => {
       check = false;
     }
 
+    if (selectInstURI.length === 0) {
+      setInstError('반주를 선택해주세요');
+      check = false;
+    }
+
     return check;
   };
 
