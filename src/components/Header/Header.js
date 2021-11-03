@@ -18,10 +18,29 @@ import AuthModal from '../AuthModal';
 import Menu from '../Menu';
 import Logo from '../../images/Logo/Logo.png';
 
+const GET_MY_INFO = gql`
+  query Query {
+    getMyInfo {
+      id
+      username
+      profileURI
+      prime
+      type
+    }
+  }
+`;
+
 const Header = () => {
   const [menuToggle, setMenuToggle] = useState(false);
   const [modalToggle, setModalToggle] = useState(false);
   const { data } = useQuery(GET_CURRENT_USER, { fetchPolicy: 'network-only' });
+
+  const [getMyInfo, getMyInfoResult] = useLazyQuery(GET_MY_INFO, {
+    fetchPolicy: 'network-only',
+    onCompleted: (data) => {
+      currentUserVar(data.getMyInfo);
+    },
+  });
 
   const [getUserInform, getUserInformResult] = useLazyQuery(GET_USER_INFORM, {
     fetchPolicy: 'network-only',
@@ -65,12 +84,7 @@ const Header = () => {
 
   useEffect(() => {
     if (sessionStorage.getItem('token')) {
-      // if (userInfo)
-      //   getUserInform({
-      //     variables: {
-      //       getUserInfoUserId: userInfo.id,
-      //     },
-      //   });
+      getMyInfo();
     }
   }, [sessionStorage.getItem('token')]);
 
