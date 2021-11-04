@@ -20,6 +20,7 @@ import PositionGrid from '../../components/PositionGrid';
 import ResponsiveCoverGrid from '../../components/ResponsiveCoverGrid/ResponsiveCoverGrid';
 import CropModal from '../../components/CropModal';
 import SNSModal from '../../components/SNSModal';
+import dotenv from 'dotenv';
 
 import ic_facebook from '../../images/SNS/ic_facebook.png';
 import ic_instagram from '../../images/SNS/ic_instagram.png';
@@ -39,6 +40,7 @@ const GET_USER_INFO = gql`
       prime
       username
       profileURI
+      phoneNumber
       introduce
       followerCount
       followingCount
@@ -92,6 +94,13 @@ const FOLLOW = gql`
   }
 `;
 
+const PAYMENT = gql`
+  mutation PaymentMutation($input: PaymentInput!) {
+    payment(input: $input)
+  }
+`;
+
+dotenv.config();
 const { Dragger } = Upload;
 
 const Profile = ({ match }) => {
@@ -120,6 +129,23 @@ const Profile = ({ match }) => {
   const [unfollowModal, setUnfollowModal] = useState(false);
   const [editUserDataModal, setEditUserDataModal] = useState(false);
   const [SNSModifyModal, setSNSModifyModal] = useState(false);
+
+  const [payment, paymentMutation] = useMutation(PAYMENT, {
+    fetchPolicy: 'no-cache',
+    onCompleted: () => {
+      notification['success']({
+        key: 'chargeSuccess',
+        message: '결제 완료',
+        description: '펜타토닉 프리미엄 회원이 되신걸 환영합니다',
+        placement: 'bottomRight',
+        duration: 5,
+        style: {
+          width: '30rem',
+        },
+      });
+      getUserInfo();
+    },
+  });
 
   const [uploadImage, uploadImageResult] = useMutation(UPLOAD_IMAGE_FILE, {
     fetchPolicy: 'no-cache',
@@ -280,6 +306,16 @@ const Profile = ({ match }) => {
     }
   };
 
+  const onClickCreditChargeButton = () => {
+    notification['error']({
+      key: 'errorEditTitle',
+      message: '',
+      description: '현재는 크레딧 충전이 불가능 합니다',
+      placement: 'bottomRight',
+      duration: 3,
+    });
+  };
+
   useEffect(() => {
     if (editUserDataModal && editUserName) {
       setEditUserData({ ...editUserData, username: editUserName });
@@ -307,6 +343,48 @@ const Profile = ({ match }) => {
   useEffect(() => {
     getUserInfo();
   }, [data]);
+
+  const onClickPayment = () => {
+    /* 1. 가맹점 식별하기 */
+    const { IMP } = window;
+    IMP.init(process.env.REACT_APP_IMPORT_KEY);
+
+    /* 2. 결제 데이터 정의하기 */
+    const data = {
+      pg: 'html5_inicis', // PG사
+      pay_method: 'card', // 결제수단
+      merchant_uid: `mid_${new Date().getTime()}`, // 주문번호
+      amount: 3900, // 결제금액
+      name: '펜타토닉 프리미엄 회원 결제', // 주문명
+      buyer_name: userData.username, // 구매자 이름
+      buyer_tel: userData.phoneNumber, // 구매자 전화번호
+      m_redirect_url: `https://penta-tonic.com${match.url}`,
+    };
+
+    const callback = (response) => {
+      const { success, merchant_uid, error_msg } = response;
+
+      if (success) {
+        payment({
+          variables: {
+            input: {
+              cardNumber: '1',
+              expiry: '1',
+              birth: '1',
+              buyerName: '1',
+              buyerEmail: '1',
+              password2Digit: '1',
+            },
+          },
+        });
+      } else {
+        alert(`결제 실패: ${error_msg}`);
+      }
+    };
+
+    /* 4. 결제 창 호출하기 */
+    IMP.request_pay(data, callback);
+  };
 
   return (
     <PageContainer width="55%" minWidth="800px">
@@ -519,7 +597,9 @@ const Profile = ({ match }) => {
                     </CreditWrapper>
                     <CreditButton>
                       <CreditCardFilled />
-                      <ButtonText>충전하기</ButtonText>
+                      <ButtonText onClick={onClickCreditChargeButton}>
+                        충전하기
+                      </ButtonText>
                     </CreditButton>
                   </CreditContainer>
                 </PaymentWrapper>
@@ -531,7 +611,9 @@ const Profile = ({ match }) => {
                       프리미엄 회원입니다
                     </PurchasedButton>
                   ) : (
-                    <PrimeButton>프리미엄 결제하기</PrimeButton>
+                    <PrimeButton onClick={onClickPayment}>
+                      프리미엄 결제하기
+                    </PrimeButton>
                   )}
                 </PrimeWrapper>
               </PaymentContainer>
@@ -791,6 +873,7 @@ const CreditButton = styled.div`
   min-width: 6.5rem;
   padding: 0.5rem 0.8rem;
   margin-left: 2rem;
+  background-color: transparent;
 
   cursor: pointer;
   color: #999;
@@ -1235,11 +1318,11 @@ const PaymentWrapper = styled.div`
 
 const UserSessionContainer = styled.div`
   width: 100%;
-  margin-top: 1.5rem;
+  margin-top: 1rem;
 
   ${media.small} {
     width: 90%;
-    margin-top: 2rem;
+    margin-top: 0rem;
   }
 `;
 
