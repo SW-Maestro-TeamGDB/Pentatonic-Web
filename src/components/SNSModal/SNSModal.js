@@ -172,18 +172,6 @@ const SNSModal = (props) => {
               placeholder="https://facebook.com/example"
             />
           </SNSFormWrapper>
-          {facebookError ? <ErrorMessage>{facebookError}</ErrorMessage> : null}
-          <SNSFormWrapper>
-            <SNSICon src={ic_twitter} />
-            <CustomInput
-              value={tempSNSData.twitter || ''}
-              onChange={(e) => {
-                setTempSNSData({ ...tempSNSData, twitter: e.target.value });
-              }}
-              placeholder="https://twitter.com/example"
-            />
-          </SNSFormWrapper>
-          {twitterError ? <ErrorMessage>{twitterError}</ErrorMessage> : null}
           <SNSFormWrapper>
             <SNSICon src={ic_instagram} />
             <CustomInput
@@ -197,6 +185,18 @@ const SNSModal = (props) => {
           {instagramError ? (
             <ErrorMessage>{instagramError}</ErrorMessage>
           ) : null}
+          {facebookError ? <ErrorMessage>{facebookError}</ErrorMessage> : null}
+          <SNSFormWrapper>
+            <SNSICon src={ic_twitter} />
+            <CustomInput
+              value={tempSNSData.twitter || ''}
+              onChange={(e) => {
+                setTempSNSData({ ...tempSNSData, twitter: e.target.value });
+              }}
+              placeholder="https://twitter.com/example"
+            />
+          </SNSFormWrapper>
+          {twitterError ? <ErrorMessage>{twitterError}</ErrorMessage> : null}
           <SNSFormWrapper>
             <SNSICon src={ic_kakao} />
             <CustomInput

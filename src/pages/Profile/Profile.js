@@ -398,19 +398,19 @@ const Profile = ({ match }) => {
                               }
                             />
                           ) : null}
-                          {userData?.social?.twitter ? (
-                            <SNSIcon
-                              src={ic_twitter}
-                              onClick={() =>
-                                window.open(userData.social.twitter, '_blank')
-                              }
-                            />
-                          ) : null}
                           {userData?.social?.instagram ? (
                             <SNSIcon
                               src={ic_instagram}
                               onClick={() =>
                                 window.open(userData.social.instagram, '_blank')
+                              }
+                            />
+                          ) : null}
+                          {userData?.social?.twitter ? (
+                            <SNSIcon
+                              src={ic_twitter}
+                              onClick={() =>
+                                window.open(userData.social.twitter, '_blank')
                               }
                             />
                           ) : null}
@@ -456,19 +456,19 @@ const Profile = ({ match }) => {
                               }
                             />
                           ) : null}
-                          {userData?.social?.twitter ? (
-                            <SNSIcon
-                              src={ic_twitter}
-                              onClick={() =>
-                                window.open(userData.social.twitter, '_blank')
-                              }
-                            />
-                          ) : null}
                           {userData?.social?.instagram ? (
                             <SNSIcon
                               src={ic_instagram}
                               onClick={() =>
                                 window.open(userData.social.instagram, '_blank')
+                              }
+                            />
+                          ) : null}
+                          {userData?.social?.twitter ? (
+                            <SNSIcon
+                              src={ic_twitter}
+                              onClick={() =>
+                                window.open(userData.social.twitter, '_blank')
                               }
                             />
                           ) : null}
@@ -630,7 +630,7 @@ const SNSIcon = styled.img`
   }
 
   ${media.small} {
-    width: 0.9rem;
+    width: 1rem;
     margin-left: 10px;
     transition: none;
   }
@@ -1352,7 +1352,7 @@ const UserNameWrapper = styled.div`
   letter-spacing: -0.6px;
   margin-top: 0.5rem;
 
-  max-width: 75%;
+  max-width: 68%;
   position: relative;
 
   display: flex;
