@@ -387,7 +387,7 @@ const Profile = ({ match }) => {
   };
 
   return (
-    <PageContainer width="55%" minWidth="800px">
+    <PageContainer width="55%" minWidth="1000px">
       {!error ? (
         !loading && userData ? (
           <>
@@ -463,7 +463,7 @@ const Profile = ({ match }) => {
                   <>
                     <UserNameContainer>
                       <UserNameWrapper>
-                        <UserName> {userData.username}</UserName>
+                        <UserName> {userData.username.repeat(10)}</UserName>
                         {userData.prime ? <PrimeText>PRIME</PrimeText> : null}
                       </UserNameWrapper>
                       <Default>
@@ -700,7 +700,7 @@ const UserNameContainer = styled.div`
 `;
 
 const SNSIcon = styled.img`
-  width: 1.2rem;
+  width: 1.5rem;
   cursor: pointer;
   margin-left: 12px;
   filter: invert(28%) sepia(21%) saturate(0%) hue-rotate(240deg)
@@ -708,11 +708,11 @@ const SNSIcon = styled.img`
   transition: filter 0.3s ease-in-out;
 
   ${media.medium} {
-    width: 1rem;
+    width: 1.2rem;
   }
 
   ${media.small} {
-    width: 1rem;
+    width: 1.4rem;
     margin-left: 10px;
     transition: none;
   }
@@ -1435,13 +1435,17 @@ const UserNameWrapper = styled.div`
   letter-spacing: -0.6px;
   margin-top: 0.5rem;
 
-  max-width: 68%;
+  max-width: 65%;
   position: relative;
 
   display: flex;
   flex-direction: row;
   align-items: flex-end;
   line-height: 0.9;
+
+  ${media.medium} {
+    max-width: 60%;
+  }
 
   ${media.small} {
     font-size: 1.3rem;
