@@ -463,7 +463,7 @@ const Profile = ({ match }) => {
                   <>
                     <UserNameContainer>
                       <UserNameWrapper>
-                        <UserName> {userData.username.repeat(10)}</UserName>
+                        <UserName> {userData.username}</UserName>
                         {userData.prime ? <PrimeText>PRIME</PrimeText> : null}
                       </UserNameWrapper>
                       <Default>
