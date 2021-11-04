@@ -307,8 +307,8 @@ const Profile = ({ match }) => {
   };
 
   const onClickCreditChargeButton = () => {
-    notification['error']({
-      key: 'errorEditTitle',
+    notification['warning']({
+      key: 'errorCreditCharge',
       message: '',
       description: '현재는 크레딧 충전이 불가능 합니다',
       placement: 'bottomRight',
