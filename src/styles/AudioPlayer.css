@@ -10,6 +10,7 @@
   border-radius: 10px;
   transition: background-color 0.3s ease-in-out;
   cursor: pointer;
+  outline: 0;
 }
 
 .rhap_container:hover {
@@ -187,8 +188,7 @@
   font-size: 60px;
   width: 60px;
   height: 60px;
-  filter: invert(33%) sepia(84%) saturate(7021%) hue-rotate(250deg)
-    brightness(100%) contrast(104%);
+  color: #6236ff;
 }
 
 .rhap_volume-controls {
