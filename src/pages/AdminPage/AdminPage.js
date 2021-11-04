@@ -67,6 +67,14 @@ const UPLOAD_IMAGE_FILE = gql`
   }
 `;
 
+const UPDATE_SONG = gql`
+  mutation UpdateSongMutation($input: UpdateSongInput!) {
+    updateSong(input: $input) {
+      songId
+    }
+  }
+`;
+
 const { Panel } = Collapse;
 const { Option } = Select;
 const { Dragger } = Upload;
@@ -102,11 +110,23 @@ const AdminPage = ({ history }) => {
   const [month, setMonth] = useState();
   const [day, setDay] = useState();
   const [instError, setInstError] = useState();
+  const [changeError, setChangeError] = useState();
   const [addedInst, setAddedInst] = useState([]);
   const [lyrics, setLyrics] = useState();
   const admin = process.env.REACT_APP_ADMIN_ID.split(',');
 
   const { data } = useQuery(GET_CURRENT_USER, { fetchPolicy: 'network-only' });
+
+  const [updateSong] = useMutation(UPDATE_SONG, {
+    fetchPolicy: 'no-cache',
+    onCompleted: (data) => {
+      alert('수정되었습니다');
+    },
+    onError: (error) => {
+      setChangeError(error.message);
+    },
+  });
+
   const [uploadSong] = useMutation(UPLOAD_SONG, {
     fetchPolicy: 'no-cache',
     onCompleted: (data) => {
@@ -343,6 +363,354 @@ const AdminPage = ({ history }) => {
     }
   };
 
+  const changeSongData = () => {
+    updateSong({
+      variables: {
+        input: {
+          code: code,
+          song: {
+            songId: songId,
+            lyrics: songData.lyrics,
+          },
+        },
+      },
+    });
+  };
+
+  const showPage = () => {
+    if (page === 1) {
+      return (
+        <>
+          <EditTitle>업로드 된 곡 수정하기</EditTitle>
+          <InputContainer>
+            <CustomDescription>
+              이미 업로드 된 곡을 수정하려면 버튼을 눌러주세요
+            </CustomDescription>
+            <SubmitButton onClick={() => setPage(3)}>
+              업로드 된 곡 수정하기
+            </SubmitButton>
+          </InputContainer>
+          <EditTitle>새로운 곡 등록하기</EditTitle>
+          <InputContainer>
+            <CustomTitle>업로드 코드</CustomTitle>
+            <CustomDescription>업로드 코드를 입력해주세요</CustomDescription>
+            <CustomInput
+              placeholder="코드를 입력하세요"
+              value={code || ''}
+              onChange={(e) => setCode(e.target.value)}
+            />
+          </InputContainer>
+          <InputContainer>
+            <CustomTitle>곡 정보 입력</CustomTitle>
+            <CustomDescription>곡 정보를 입력해주세요</CustomDescription>
+            <CustomInput
+              placeholder="곡 제목"
+              value={songData.name || ''}
+              onChange={(e) =>
+                setSongData({ ...songData, name: e.target.value })
+              }
+            />
+            <CustomInput
+              placeholder="가수 이름"
+              value={songData.artist || ''}
+              onChange={(e) =>
+                setSongData({ ...songData, artist: e.target.value })
+              }
+            />
+            <CustomInput
+              placeholder="앨범 이름"
+              value={songData.album || ''}
+              onChange={(e) =>
+                setSongData({ ...songData, album: e.target.value })
+              }
+            />
+            <DateContainer>
+              <CustomDateInput
+                placeholder="발매년도"
+                value={year || ''}
+                maxLength={4}
+                onChange={(e) => setYear(e.target.value)}
+              />
+              <DateText>-</DateText>
+              <CustomDateInput
+                placeholder="발매월"
+                value={month || ''}
+                maxLength={2}
+                onChange={(e) => setMonth(e.target.value)}
+              />
+              <DateText>-</DateText>
+              <CustomDateInput
+                placeholder="발매일"
+                value={day || ''}
+                maxLength={2}
+                onChange={(e) => setDay(e.target.value)}
+              />
+            </DateContainer>
+          </InputContainer>
+          <InputContainer>
+            <CustomTitle>노래 이미지</CustomTitle>
+            <CustomDescription>
+              노래를 나타낼 대표 커버 이미지를 올려주세요
+            </CustomDescription>
+            <CustomDragger
+              customRequest={(data) => submitImageFile(data)}
+              maxCount={1}
+              showUploadList={false}
+            >
+              {songData.songImg ? (
+                <CoverImage src={songData.songImg} />
+              ) : (
+                <>
+                  <CustomPictureIcon />
+                </>
+              )}
+            </CustomDragger>
+            {songData.songImg ? (
+              <UploadText>
+                사진 변경을 원한다면 클릭하거나 파일을 드래그 해주세요.
+              </UploadText>
+            ) : null}
+          </InputContainer>
+          <InputContainer>
+            <CustomTitle>노래 파일</CustomTitle>
+            <CustomDescription>
+              모든 파트가 합쳐진 노래 파일을 올려주세요
+            </CustomDescription>
+            <CustomDragger
+              customRequest={(data) => submitSongFile(data)}
+              maxCount={1}
+              showUploadList={false}
+            >
+              <>{songData.songURI ? songData.songURI : <CustomMusicIcon />}</>
+            </CustomDragger>
+            {songData.songURI ? (
+              <UploadText>
+                업로드 되었습니다. 변경을 원하시면 클릭해주세요.
+              </UploadText>
+            ) : null}
+          </InputContainer>
+          <InputContainer>
+            <CustomTitle>가사 파일</CustomTitle>
+            <CustomDescription>
+              가사 파일 (JSON형식)을 올려주세요
+              <DownloadButton onClick={onClickDownloadSampleLyrics}>
+                샘플파일 다운로드
+              </DownloadButton>
+            </CustomDescription>
+            <CustomDragger
+              customRequest={(data) => handleLyrics(data.file)}
+              maxCount={1}
+              showUploadList={false}
+            >
+              <>{songData?.lyrics ? songData.lyrics : <CustomLyricIcon />}</>
+            </CustomDragger>
+            {songData?.lyrics ? (
+              <UploadText>
+                업로드 되었습니다. 변경을 원하시면 클릭해주세요.
+              </UploadText>
+            ) : null}
+          </InputContainer>
+          <InputContainer>
+            <CustomTitle>장르와 난이도</CustomTitle>
+            <CustomDescription>
+              노래의 장르와 난이도를 선택해주세요
+            </CustomDescription>
+            <ButtonContainer>
+              <GenreButton genre={genre} setGenre={setGenre} admin />
+              <Spacing />
+              <DifficultyButton
+                difficulty={level}
+                setDifficulty={setLevel}
+                admin
+              />
+            </ButtonContainer>
+          </InputContainer>
+          <InputContainer>
+            <CustomTitle>WeeklyChallenge</CustomTitle>
+            <CustomDescription>WeeklyChallenge 노래인가요?</CustomDescription>
+            <CustomRadioGroup
+              size="large"
+              buttonStyle="solid"
+              value={songData.weeklyChallenge}
+              onChange={(e) =>
+                setSongData({
+                  ...songData,
+                  weeklyChallenge: e.target.value,
+                })
+              }
+            >
+              <RadioButtonContainer>
+                <CustomRadio value={true}>네</CustomRadio>
+                <CustomRadio value={false}>아니요</CustomRadio>
+              </RadioButtonContainer>
+            </CustomRadioGroup>
+          </InputContainer>
+          <ErrorContainer>
+            {error ? <ErrorMessage>{error}</ErrorMessage> : null}
+          </ErrorContainer>
+          <SubmitButton onClick={() => sumbitButtonToSecond()}>
+            다음으로
+          </SubmitButton>
+        </>
+      );
+    } else if (page === 2) {
+      return (
+        <>
+          <EditTitle>{songData?.name} 반주 추가</EditTitle>
+          <InputContainer>
+            <CustomTitle>반주 추가</CustomTitle>
+            <CustomDescription>
+              노래를 구성할 반주를 추가해주세요
+            </CustomDescription>
+            <AddedInstContainer>{showAddedInst()}</AddedInstContainer>
+            <CustomCollapse
+              expandIcon={({ isActive }) => <PlusCircleFilled />}
+              ghost={true}
+              accordion={true}
+            >
+              <Panel header={'추가하기'} key="1">
+                <InstContainer>
+                  <InputContainer>
+                    <CustomTitle>반주 이름</CustomTitle>
+                    <CustomDescription>
+                      반주 이름을 입력해주세요
+                    </CustomDescription>
+                    <CustomInput
+                      placeholder="반주 이름"
+                      value={instData.name || ''}
+                      onChange={(e) =>
+                        setInstData({ ...instData, name: e.target.value })
+                      }
+                    />
+                  </InputContainer>
+                  <InputContainer>
+                    <CustomTitle>반주 파일</CustomTitle>
+                    <CustomDescription>
+                      반주 파일을 올려주세요
+                    </CustomDescription>
+                    <CustomDragger
+                      customRequest={(data) => submitInstFile(data)}
+                      maxCount={1}
+                      showUploadList={false}
+                    >
+                      <>
+                        {instData.instURI ? (
+                          instData.instURI
+                        ) : (
+                          <CustomMusicIcon />
+                        )}
+                      </>
+                    </CustomDragger>
+                    {instData.instURI ? (
+                      <UploadText>
+                        업로드 되었습니다. 변경을 원하시면 클릭해주세요.
+                      </UploadText>
+                    ) : null}
+                  </InputContainer>
+                  <InputContainer>
+                    <CustomTitle>포지션</CustomTitle>
+                    <CustomDescription>
+                      반주의 포지션을 선택해주세요
+                    </CustomDescription>
+                    <SessionSelect
+                      defaultValue="세션 선택"
+                      value={instData.position}
+                      dropdownMatchSelectWidth="100%"
+                      onChange={(value) => {
+                        setInstData({ ...instData, position: value });
+                      }}
+                    >
+                      {showSessionType()}
+                    </SessionSelect>
+                  </InputContainer>
+                  <ErrorContainer>
+                    {instError ? (
+                      <ErrorMessage>{instError}</ErrorMessage>
+                    ) : null}
+                  </ErrorContainer>
+                  <SubmitButton onClick={() => addInstButton()}>
+                    추가하기
+                  </SubmitButton>
+                </InstContainer>
+              </Panel>
+            </CustomCollapse>
+          </InputContainer>
+          <EditTitle>새로운 곡 등록하기</EditTitle>
+          <InputContainer>
+            <CustomDescription>
+              새로운 곡을 등록하려면 버튼을 눌러주세요
+            </CustomDescription>
+            <SubmitButton onClick={() => setPage(1)}>
+              새로운 곡 등록
+            </SubmitButton>
+          </InputContainer>
+        </>
+      );
+    } else if (page === 3) {
+      return (
+        <>
+          <EditTitle>업로드 된 곡 수정하기</EditTitle>
+          <InputContainer>
+            <CustomTitle>업로드 코드</CustomTitle>
+            <CustomDescription>업로드 코드를 입력해주세요</CustomDescription>
+            <CustomInput
+              placeholder="코드를 입력하세요"
+              value={code || ''}
+              onChange={(e) => setCode(e.target.value)}
+            />
+          </InputContainer>
+          <InputContainer>
+            <CustomTitle>Song ID</CustomTitle>
+            <CustomDescription>Song objectID를 입력해주세요</CustomDescription>
+            <CustomInput
+              placeholder="id를 입력하세요"
+              value={songId || ''}
+              onChange={(e) => setSongId(e.target.value)}
+            />
+          </InputContainer>
+          <InputContainer>
+            <CustomTitle>가사 파일</CustomTitle>
+            <CustomDescription>
+              가사 파일 (JSON형식)을 올려주세요
+              <DownloadButton onClick={onClickDownloadSampleLyrics}>
+                샘플파일 다운로드
+              </DownloadButton>
+            </CustomDescription>
+            <CustomDragger
+              customRequest={(data) => handleLyrics(data.file)}
+              maxCount={1}
+              showUploadList={false}
+            >
+              <>{songData?.lyrics ? songData.lyrics : <CustomLyricIcon />}</>
+            </CustomDragger>
+            {songData?.lyrics ? (
+              <UploadText>
+                업로드 되었습니다. 변경을 원하시면 클릭해주세요.
+              </UploadText>
+            ) : null}
+          </InputContainer>
+          <InputContainer>
+            <CustomTitle>Instrument 포지션 변경</CustomTitle>
+            <CustomDescription>
+              반주 포지션 변경은 MongoDB에서 해주세요
+            </CustomDescription>
+          </InputContainer>
+          {changeError ? <ErrorMessage>{changeError}</ErrorMessage> : null}
+          <SubmitButton onClick={changeSongData}>수정하기</SubmitButton>
+          <EditTitle>새로운 곡 등록하기</EditTitle>
+          <InputContainer>
+            <CustomDescription>
+              새로운 곡을 등록하려면 버튼을 눌러주세요
+            </CustomDescription>
+            <SubmitButton onClick={() => setPage(1)}>
+              새로운 곡 등록
+            </SubmitButton>
+          </InputContainer>
+        </>
+      );
+    }
+  };
+
   useEffect(() => {
     setSongData({ ...songData, genre: genre });
   }, [genre]);
@@ -369,265 +737,7 @@ const AdminPage = ({ history }) => {
     <>
       {data?.user && admin.includes(data.user.id) ? (
         <PageContainer>
-          <FormContainer>
-            {page === 1 ? (
-              <>
-                <InputContainer>
-                  <CustomTitle>업로드 코드</CustomTitle>
-                  <CustomDescription>
-                    업로드 코드를 입력해주세요
-                  </CustomDescription>
-                  <CustomInput
-                    placeholder="코드를 입력하세요"
-                    value={code || ''}
-                    onChange={(e) => setCode(e.target.value)}
-                  />
-                </InputContainer>
-                <InputContainer>
-                  <CustomTitle>곡 정보 입력</CustomTitle>
-                  <CustomDescription>곡 정보를 입력해주세요</CustomDescription>
-                  <CustomInput
-                    placeholder="곡 제목"
-                    value={songData.name || ''}
-                    onChange={(e) =>
-                      setSongData({ ...songData, name: e.target.value })
-                    }
-                  />
-                  <CustomInput
-                    placeholder="가수 이름"
-                    value={songData.artist || ''}
-                    onChange={(e) =>
-                      setSongData({ ...songData, artist: e.target.value })
-                    }
-                  />
-                  <CustomInput
-                    placeholder="앨범 이름"
-                    value={songData.album || ''}
-                    onChange={(e) =>
-                      setSongData({ ...songData, album: e.target.value })
-                    }
-                  />
-                  <DateContainer>
-                    <CustomDateInput
-                      placeholder="발매년도"
-                      value={year || ''}
-                      maxLength={4}
-                      onChange={(e) => setYear(e.target.value)}
-                    />
-                    <DateText>-</DateText>
-                    <CustomDateInput
-                      placeholder="발매월"
-                      value={month || ''}
-                      maxLength={2}
-                      onChange={(e) => setMonth(e.target.value)}
-                    />
-                    <DateText>-</DateText>
-                    <CustomDateInput
-                      placeholder="발매일"
-                      value={day || ''}
-                      maxLength={2}
-                      onChange={(e) => setDay(e.target.value)}
-                    />
-                  </DateContainer>
-                </InputContainer>
-                <InputContainer>
-                  <CustomTitle>노래 이미지</CustomTitle>
-                  <CustomDescription>
-                    노래를 나타낼 대표 커버 이미지를 올려주세요
-                  </CustomDescription>
-                  <CustomDragger
-                    customRequest={(data) => submitImageFile(data)}
-                    maxCount={1}
-                    showUploadList={false}
-                  >
-                    {songData.songImg ? (
-                      <CoverImage src={songData.songImg} />
-                    ) : (
-                      <>
-                        <CustomPictureIcon />
-                      </>
-                    )}
-                  </CustomDragger>
-                  {songData.songImg ? (
-                    <UploadText>
-                      사진 변경을 원한다면 클릭하거나 파일을 드래그 해주세요.
-                    </UploadText>
-                  ) : null}
-                </InputContainer>
-                <InputContainer>
-                  <CustomTitle>노래 파일</CustomTitle>
-                  <CustomDescription>
-                    모든 파트가 합쳐진 노래 파일을 올려주세요
-                  </CustomDescription>
-                  <CustomDragger
-                    customRequest={(data) => submitSongFile(data)}
-                    maxCount={1}
-                    showUploadList={false}
-                  >
-                    <>
-                      {songData.songURI ? (
-                        songData.songURI
-                      ) : (
-                        <CustomMusicIcon />
-                      )}
-                    </>
-                  </CustomDragger>
-                  {songData.songURI ? (
-                    <UploadText>
-                      업로드 되었습니다. 변경을 원하시면 클릭해주세요.
-                    </UploadText>
-                  ) : null}
-                </InputContainer>
-                <InputContainer>
-                  <CustomTitle>가사 파일</CustomTitle>
-                  <CustomDescription>
-                    가사 파일 (JSON형식)을 올려주세요
-                    <DownloadButton onClick={onClickDownloadSampleLyrics}>
-                      샘플파일 다운로드
-                    </DownloadButton>
-                  </CustomDescription>
-                  <CustomDragger
-                    customRequest={(data) => handleLyrics(data.file)}
-                    maxCount={1}
-                    showUploadList={false}
-                  >
-                    <>
-                      {songData?.lyrics ? songData.lyrics : <CustomLyricIcon />}
-                    </>
-                  </CustomDragger>
-                  {songData?.lyrics ? (
-                    <UploadText>
-                      업로드 되었습니다. 변경을 원하시면 클릭해주세요.
-                    </UploadText>
-                  ) : null}
-                </InputContainer>
-                <InputContainer>
-                  <CustomTitle>장르와 난이도</CustomTitle>
-                  <CustomDescription>
-                    노래의 장르와 난이도를 선택해주세요
-                  </CustomDescription>
-                  <ButtonContainer>
-                    <GenreButton genre={genre} setGenre={setGenre} admin />
-                    <Spacing />
-                    <DifficultyButton
-                      difficulty={level}
-                      setDifficulty={setLevel}
-                      admin
-                    />
-                  </ButtonContainer>
-                </InputContainer>
-                <InputContainer>
-                  <CustomTitle>WeeklyChallenge</CustomTitle>
-                  <CustomDescription>
-                    WeeklyChallenge 노래인가요?
-                  </CustomDescription>
-                  <CustomRadioGroup
-                    size="large"
-                    buttonStyle="solid"
-                    value={songData.weeklyChallenge}
-                    onChange={(e) =>
-                      setSongData({
-                        ...songData,
-                        weeklyChallenge: e.target.value,
-                      })
-                    }
-                  >
-                    <RadioButtonContainer>
-                      <CustomRadio value={true}>네</CustomRadio>
-                      <CustomRadio value={false}>아니요</CustomRadio>
-                    </RadioButtonContainer>
-                  </CustomRadioGroup>
-                </InputContainer>
-                <ErrorContainer>
-                  {error ? <ErrorMessage>{error}</ErrorMessage> : null}
-                </ErrorContainer>
-                <SubmitButton onClick={() => sumbitButtonToSecond()}>
-                  다음으로
-                </SubmitButton>
-              </>
-            ) : (
-              <>
-                <InputContainer>
-                  <CustomTitle>반주 추가</CustomTitle>
-                  <CustomDescription>
-                    노래를 구성할 반주를 추가해주세요
-                  </CustomDescription>
-                  <AddedInstContainer>{showAddedInst()}</AddedInstContainer>
-                  <CustomCollapse
-                    expandIcon={({ isActive }) => <PlusCircleFilled />}
-                    ghost={true}
-                    accordion={true}
-                  >
-                    <Panel header={'추가하기'} key="1">
-                      <InstContainer>
-                        <InputContainer>
-                          <CustomTitle>반주 이름</CustomTitle>
-                          <CustomDescription>
-                            반주 이름을 입력해주세요
-                          </CustomDescription>
-                          <CustomInput
-                            placeholder="반주 이름"
-                            value={instData.name || ''}
-                            onChange={(e) =>
-                              setInstData({ ...instData, name: e.target.value })
-                            }
-                          />
-                        </InputContainer>
-                        <InputContainer>
-                          <CustomTitle>반주 파일</CustomTitle>
-                          <CustomDescription>
-                            반주 파일을 올려주세요
-                          </CustomDescription>
-                          <CustomDragger
-                            customRequest={(data) => submitInstFile(data)}
-                            maxCount={1}
-                            showUploadList={false}
-                          >
-                            <>
-                              {instData.instURI ? (
-                                instData.instURI
-                              ) : (
-                                <CustomMusicIcon />
-                              )}
-                            </>
-                          </CustomDragger>
-                          {instData.instURI ? (
-                            <UploadText>
-                              업로드 되었습니다. 변경을 원하시면 클릭해주세요.
-                            </UploadText>
-                          ) : null}
-                        </InputContainer>
-                        <InputContainer>
-                          <CustomTitle>포지션</CustomTitle>
-                          <CustomDescription>
-                            반주의 포지션을 선택해주세요
-                          </CustomDescription>
-                          <SessionSelect
-                            defaultValue="세션 선택"
-                            value={instData.position}
-                            dropdownMatchSelectWidth="100%"
-                            onChange={(value) => {
-                              setInstData({ ...instData, position: value });
-                            }}
-                          >
-                            {showSessionType()}
-                          </SessionSelect>
-                        </InputContainer>
-                        <ErrorContainer>
-                          {instError ? (
-                            <ErrorMessage>{instError}</ErrorMessage>
-                          ) : null}
-                        </ErrorContainer>
-                        <SubmitButton onClick={() => addInstButton()}>
-                          추가하기
-                        </SubmitButton>
-                      </InstContainer>
-                    </Panel>
-                  </CustomCollapse>
-                </InputContainer>
-              </>
-            )}
-          </FormContainer>
+          <FormContainer>{showPage()}</FormContainer>
         </PageContainer>
       ) : (
         <NotFoundPage />
@@ -638,6 +748,17 @@ const AdminPage = ({ history }) => {
 
 const SessionSelect = styled(Select)`
   width: 100%;
+`;
+
+const EditTitle = styled.div`
+  font-size: 2rem;
+  font-weight: 800;
+  margin: 2rem 0;
+  padding: 0 1rem;
+
+  border-top: 1px solid rgba(200, 200, 200, 0.5);
+  border-bottom: 1px solid rgba(200, 200, 200, 0.5);
+  background-color: #eee;
 `;
 
 const DownloadButton = styled.div`
@@ -875,7 +996,7 @@ const CoverImage = styled.img`
 const SubmitButton = styled.button`
   border-radius: 0.8rem;
   background-color: rgba(98, 54, 255, 0.9);
-  margin: 1rem 0;
+  margin: 1rem 0 3rem;
   width: 100%;
   height: 4rem;
   border: none;
@@ -884,6 +1005,7 @@ const SubmitButton = styled.button`
   cursor: pointer;
   transition: all ease-in-out 0.3s;
   font-weight: 700;
+
   &:hover {
     background-color: rgba(98, 54, 255, 1);
   }
