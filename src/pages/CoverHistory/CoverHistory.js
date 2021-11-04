@@ -84,15 +84,20 @@ const CoverHistory = ({ match }) => {
 const LoadingContainer = styled.div`
   width: 100%;
   position: absolute;
-  top: 50%;
+  top: 40%;
   left: 50%;
   transform: translate(-50%, -50%);
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  font-size: 10rem;
+  font-size: 15rem;
   color: #6236ff;
+
+  ${media.small} {
+    top: 30%;
+    font-size: 10rem;
+  }
 `;
 
 const PageTitle = styled.div`
