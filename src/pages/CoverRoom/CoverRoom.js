@@ -18,6 +18,7 @@ import {
   ReloadOutlined,
   DeleteOutlined,
   LeftOutlined,
+  DollarCircleOutlined,
 } from '@ant-design/icons';
 import QuestionModal from '../../components/QuestionModal';
 import InfiniteScrollComment from '../../components/InfiniteScrollComment/InfiniteScrollComment';
@@ -304,6 +305,16 @@ const CoverRoom = ({ match }) => {
     },
   });
 
+  const onClickDonate = () => {
+    notification['warning']({
+      key: 'errorDonateTitle',
+      message: '',
+      description: '현재는 커버 후원이 불가능 합니다',
+      placement: 'bottomRight',
+      duration: 3,
+    });
+  };
+
   const showCoverRoomSession = () => {
     return coverData.session.map((v, i) => {
       return (
@@ -429,6 +440,9 @@ const CoverRoom = ({ match }) => {
               audio ? (
                 <AudioPlayerContainer>
                   <ButtonContainer>
+                    <LikeButton>
+                      <DollarCircleOutlined onClick={onClickDonate} />
+                    </LikeButton>
                     <LikeButton onClick={onClickLike}>
                       {data?.user && coverData.likeStatus ? (
                         <CustomLikeFilledIcon />
@@ -780,6 +794,9 @@ const LikeButton = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+
+  color: #ffffff;
+  font-size: 24px;
 
   &:hover {
     background-color: rgba(255, 255, 255, 0.3);
