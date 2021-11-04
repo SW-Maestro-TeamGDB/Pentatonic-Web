@@ -749,7 +749,7 @@ const PurchasedButton = styled.div`
   font-size: 1rem;
   font-weight: 800;
   letter-spacing: -1px;
-  margin: 1.5rem 0 2.5rem;
+  margin: 1.5rem 0 1rem;
   height: 3rem;
 
   color: white;
@@ -777,7 +777,7 @@ const PurchasedButton = styled.div`
 
   ${media.small} {
     width: 100%;
-    margin: 1rem 0 3rem;
+    margin: 1rem 0 1rem;
   }
 `;
 
@@ -810,7 +810,7 @@ const PrimeButton = styled.div`
 
   ${media.small} {
     width: 100%;
-    margin: 1rem 0 3rem;
+    margin: 1rem 0 1rem;
   }
 `;
 
@@ -1318,11 +1318,11 @@ const PaymentWrapper = styled.div`
 
 const UserSessionContainer = styled.div`
   width: 100%;
-  margin-top: 1rem;
+  margin-top: 1.5rem;
 
   ${media.small} {
     width: 90%;
-    margin-top: 0rem;
+    margin-top: 2rem;
   }
 `;
 
