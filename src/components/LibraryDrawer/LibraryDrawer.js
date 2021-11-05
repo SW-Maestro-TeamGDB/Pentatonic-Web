@@ -79,12 +79,16 @@ const LibraryDrawer = (props) => {
     if (libraryData.length > 0 && filter) {
       const temp =
         filter.position !== 'FREE'
-          ? libraryData.filter(
-              (v) =>
-                v.song.songId === filter.songId &&
-                v.position === filter.position,
-            )
-          : libraryData.filter((v) => v.song.songId === filter.songId);
+          ? libraryData
+              .filter(
+                (v) =>
+                  v.song.songId === filter.songId &&
+                  v.position === filter.position,
+              )
+              .reverse()
+          : libraryData
+              .filter((v) => v.song.songId === filter.songId)
+              .reverse();
       setFilteredData(temp);
     }
   }, [filter, libraryData]);
@@ -121,7 +125,7 @@ const LibraryDrawer = (props) => {
       return (
         <LibraryList
           data={v}
-          key={v.coverId}
+          key={`${v.coverId + i}`}
           visible={visible}
           selectedCover={selectedCover}
           setSelectedCover={setSelectedCover}
