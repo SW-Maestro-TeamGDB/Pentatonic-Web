@@ -85,7 +85,7 @@ const ArtistBanner = (props) => {
 
 const CustomCarousel = styled(Carousel)`
   width: 100%;
-  /* height: 28rem; */
+  /* height: 29rem; */
   height: 20rem;
   position: relative;
 
@@ -111,7 +111,7 @@ const BannerContainer = styled.div`
 
 const BannerImage = styled.img`
   width: 100%;
-  /* height: 28rem; */
+  /* height: 29rem; */
   height: 20rem;
   object-fit: cover;
   /* 
