@@ -261,7 +261,7 @@ const CoverForm = (props) => {
               onChange={(e) =>
                 setSongData({ ...songData, name: e.target.value })
               }
-              maxLength="14"
+              maxLength="40"
               placeholder="제목을 입력해주세요"
             />
             <CustomInput
@@ -282,7 +282,7 @@ const CoverForm = (props) => {
           </CustomDescription>
           <CustomInput
             onChange={(e) => setBandData({ ...bandData, name: e.target.value })}
-            maxLength="14"
+            maxLength="40"
             placeholder="커버 제목을 입력해주세요"
           />
           <CustomTextArea
@@ -290,6 +290,7 @@ const CoverForm = (props) => {
               setBandData({ ...bandData, introduce: e.target.value })
             }
             placeholder="커버 소개를 입력해주세요"
+            maxLength="40"
           />
           <ErrorContainer>
             {informError ? <ErrorMessage>{informError}</ErrorMessage> : null}

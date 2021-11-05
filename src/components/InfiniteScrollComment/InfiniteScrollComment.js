@@ -212,6 +212,7 @@ const InfiniteScrollComment = (props) => {
               }
               onChange={(e) => setComment(e.target.value)}
               value={comment}
+              maxLength={200}
             />
             <CommentButton
               onClick={() => onClickCommentButton()}

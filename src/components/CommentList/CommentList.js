@@ -131,6 +131,7 @@ const CommentList = (props) => {
           <CustomInput
             value={comment}
             onChange={(e) => setComment(e.target.value)}
+            maxLength="200"
           />
           <EditButtonWrapper>
             <EditCancleButton onClick={() => onClickCancleEdit()}>

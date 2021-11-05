@@ -260,7 +260,7 @@ const LibraryList = (props) => {
                   placeholder="변경 할 제목을 입력해주세요"
                   value={editTitle}
                   onChange={(e) => setEditTitle(e.target.value)}
-                  maxLength="14"
+                  maxLength="40"
                 />
                 {editTitleError ? (
                   <ErrorMessage>{editTitleError}</ErrorMessage>

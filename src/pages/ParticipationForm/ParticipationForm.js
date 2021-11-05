@@ -152,7 +152,7 @@ const ParticipationForm = (props) => {
           </CustomDescription>
           <CustomInput
             onChange={(e) => setBandData({ ...bandData, name: e.target.value })}
-            maxLength="14"
+            maxLength="40"
             placeholder="라이브러리 제목을 입력해주세요"
           />
           <ErrorContainer>

@@ -619,7 +619,6 @@ const Profile = ({ match }) => {
                 {userData.band.length > 0 ? (
                   userData.position.length > 0 ? (
                     <>
-                      {' '}
                       <Default>
                         <Padding>
                           <GridContainer
