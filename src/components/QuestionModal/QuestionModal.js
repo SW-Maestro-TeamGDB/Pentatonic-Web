@@ -32,7 +32,7 @@ const QuestionModal = (props) => {
         <CustomCheckIcon />
         <TextWrapper>{text ? text : null}</TextWrapper>
         {desc ? <DescWrapper>{desc}</DescWrapper> : null}
-        <ButtonContainer>
+        <ButtonContainer desc={desc}>
           <RefuseButton onClick={closeModal}>아니요</RefuseButton>
           <AcceptButton onClick={afterRequest}>네</AcceptButton>
         </ButtonContainer>
@@ -46,24 +46,13 @@ const CustomModal = styled(Modal)`
   overflow: hidden;
 `;
 
-const UploadText = styled.div`
-  font-size: 1.5rem;
-  font-weight: 700;
-  margin-top: 7vh;
-`;
-
-const CustomLoadingIcon = styled(LoadingOutlined)`
-  font-size: 8rem;
-  color: #6236ff;
-`;
-
 const ModalContainer = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
   width: 100%;
-  height: 22rem;
+  height: 24rem;
 
   ${media.small} {
     height: 20rem;
@@ -87,7 +76,7 @@ const TextWrapper = styled.div`
 
 const DescWrapper = styled.div`
   font-size: 1rem;
-  margin-top: 3rem;
+  margin-top: 2rem;
   font-weight: 500;
 
   ${media.small} {
@@ -101,7 +90,7 @@ const ButtonContainer = styled.div`
   align-items: center;
   justify-content: space-around;
   width: 90%;
-  padding-top: 5rem;
+  padding-top: ${(props) => (props.desc ? '3rem' : '6rem')};
 `;
 
 const AcceptButton = styled.div`
