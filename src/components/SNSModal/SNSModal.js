@@ -160,7 +160,7 @@ const SNSModal = (props) => {
       maskClosable={true}
     >
       <ModalContainer>
-        <TextWrapper>SNS 계정등록</TextWrapper>
+        <TextWrapper>소셜 링크 추가하기</TextWrapper>
         <SNSFormContainer>
           <SNSFormWrapper>
             <SNSICon src={ic_facebook} />
@@ -172,6 +172,7 @@ const SNSModal = (props) => {
               placeholder="https://facebook.com/example"
             />
           </SNSFormWrapper>
+          {facebookError ? <ErrorMessage>{facebookError}</ErrorMessage> : null}
           <SNSFormWrapper>
             <SNSICon src={ic_instagram} />
             <CustomInput
@@ -185,7 +186,6 @@ const SNSModal = (props) => {
           {instagramError ? (
             <ErrorMessage>{instagramError}</ErrorMessage>
           ) : null}
-          {facebookError ? <ErrorMessage>{facebookError}</ErrorMessage> : null}
           <SNSFormWrapper>
             <SNSICon src={ic_twitter} />
             <CustomInput
