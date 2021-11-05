@@ -195,13 +195,14 @@ const CoverRoom = ({ match }) => {
   const { data } = useQuery(GET_CURRENT_USER, { fetchPolicy: 'network-only' });
 
   const { loading, error, getBand } = useQuery(GET_BAND, {
+    fetchPolicy: 'network-only',
     variables: {
       getBandBandId: bandId,
       commentFirst: 1000,
     },
     onCompleted: (data) => {
       setCoverData(data.getBand);
-      setCommentLength(data.getBand.comment.comments.length);
+      setCommentLength(data.getBand?.comment.comments.length);
     },
   });
 
