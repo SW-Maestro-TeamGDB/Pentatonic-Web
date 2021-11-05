@@ -81,7 +81,7 @@ const RecordEdit = (props) => {
   const [reverbEffect, setReverbEffect] = useState();
 
   // slider value
-  const [volume, setVolume] = useState(50);
+  const [volume, setVolume] = useState(80);
   const [sync, setSync] = useState(0);
   const [reverb, setReverb] = useState(0);
   const [gain, setGain] = useState(0);

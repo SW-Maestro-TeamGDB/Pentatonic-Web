@@ -354,7 +354,7 @@ const Profile = ({ match }) => {
       pg: 'html5_inicis', // PG사
       pay_method: 'card', // 결제수단
       merchant_uid: `mid_${new Date().getTime()}`, // 주문번호
-      amount: 100, // 결제금액
+      amount: 3900, // 결제금액
       name: '펜타토닉 프리미엄 회원 결제', // 주문명
       buyer_name: userData.username, // 구매자 이름
       buyer_tel: userData.phoneNumber, // 구매자 전화번호
@@ -362,23 +362,16 @@ const Profile = ({ match }) => {
     };
 
     const callback = (response) => {
-      const { success, merchant_uid, error_msg } = response;
-
-      console.log(response);
+      const { success, imp_uid, error_msg } = response;
 
       if (success) {
-        // payment({
-        //   variables: {
-        //     input: {
-        //       cardNumber: '1',
-        //       expiry: '1',
-        //       birth: '1',
-        //       buyerName: '1',
-        //       buyerEmail: '1',
-        //       password2Digit: '1',
-        //     },
-        //   },
-        // });
+        payment({
+          variables: {
+            input: {
+              impUid: imp_uid,
+            },
+          },
+        });
       } else {
         alert(`결제 실패: ${error_msg}`);
       }
