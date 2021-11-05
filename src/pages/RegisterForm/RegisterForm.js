@@ -148,6 +148,10 @@ const RegisterForm = (props) => {
     }
   }, [userInform.type]);
 
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   return (
     <Container>
       <InputContainer>

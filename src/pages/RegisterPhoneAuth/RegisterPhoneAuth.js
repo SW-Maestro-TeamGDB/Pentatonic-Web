@@ -148,6 +148,10 @@ const RegisterPhoneAuth = (props) => {
     setAuthError(null);
   }, [authCode]);
 
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   return (
     <Container>
       <PhoneNumberContainer>

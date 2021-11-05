@@ -297,6 +297,7 @@ const RecordEdit = (props) => {
 
   useEffect(() => {
     const temp = new Pizzicato.Sound(audioFile?.url);
+    window.scrollTo(0, 0);
 
     // effect test
     // const temp = new Pizzicato.Sound(inst.src);

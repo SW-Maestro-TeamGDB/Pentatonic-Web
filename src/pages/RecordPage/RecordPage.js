@@ -165,6 +165,7 @@ const RecordPage = (props) => {
 
   useEffect(() => {
     setModalToggle(true);
+    window.scrollTo(0, 0);
   }, []);
 
   // 가사

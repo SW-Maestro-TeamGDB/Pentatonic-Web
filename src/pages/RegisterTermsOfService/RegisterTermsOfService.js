@@ -20,6 +20,10 @@ const RegisterTermsOfService = (props) => {
     setError(false);
   }, [check]);
 
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   const Terms = () => {
     return (
       <>
