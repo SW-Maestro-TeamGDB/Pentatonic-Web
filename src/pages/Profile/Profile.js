@@ -617,32 +617,37 @@ const Profile = ({ match }) => {
               <BoardTitle>포지션 뱃지</BoardTitle>
               <UserSession>
                 {userData.band.length > 0 ? (
-                  <>
-                    <Default>
-                      <Padding>
-                        <GridContainer
-                          templateColumn="180px"
-                          rowGap="1.5rem"
-                          columnGap="1.5rem"
-                          autoFill
-                        >
-                          {showPosition()}
-                        </GridContainer>
-                      </Padding>
-                    </Default>
-                    <Mobile>
-                      <Padding>
-                        <GridContainer
-                          templateColumn="120px"
-                          rowGap="15px"
-                          columnGap="15px"
-                          autoFill
-                        >
-                          {showPosition()}
-                        </GridContainer>
-                      </Padding>
-                    </Mobile>
-                  </>
+                  userData.position.length > 0 ? (
+                    <>
+                      {' '}
+                      <Default>
+                        <Padding>
+                          <GridContainer
+                            templateColumn="180px"
+                            rowGap="1.5rem"
+                            columnGap="1.5rem"
+                            autoFill
+                          >
+                            {showPosition()}
+                          </GridContainer>
+                        </Padding>
+                      </Default>
+                      <Mobile>
+                        <Padding>
+                          <GridContainer
+                            templateColumn="120px"
+                            rowGap="15px"
+                            columnGap="15px"
+                            autoFill
+                          >
+                            {showPosition()}
+                          </GridContainer>
+                        </Padding>
+                      </Mobile>
+                    </>
+                  ) : (
+                    <NoPosition>좋아요를 받은 포지션이 없습니다</NoPosition>
+                  )
                 ) : (
                   <NoPosition>참여한 포지션이 없습니다</NoPosition>
                 )}
