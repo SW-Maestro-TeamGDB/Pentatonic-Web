@@ -346,6 +346,7 @@ const CoverRoom = ({ match }) => {
     if (session.length === 0 && !coverData.isSoloBand) {
       setSessionModal(true);
     } else {
+      window.scrollTo(0, 0);
       setMode(1);
       mergeAudios({
         variables: {
