@@ -118,7 +118,6 @@ const LoungeBandCovers = ({ match }) => {
           <MakingCoverButton link={`/studio/band`} title="새로운 커버 만들기" />
         </Default>
       </SubContainer>
-      {/* {loadBandCover()} */}
       <InfiniteScrollGrid coverWidth={COVER_WIDTH} bandFilter={bandFilter} />
       <PageSpacing />
     </PageContainer>

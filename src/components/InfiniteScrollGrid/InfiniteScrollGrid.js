@@ -44,6 +44,7 @@ const InfiniteScrollGrid = (props) => {
   const [isEnd, setIsEnd] = useState(false);
 
   const [loadCover, { loading, error, data }] = useLazyQuery(QUERY_BAND, {
+    fetchPolicy: 'network-only',
     onCompleted: (data) => {
       setCoverData([...coverData, ...data.queryBand.bands]);
       setLastCover(data.queryBand.pageInfo.endCursor);
