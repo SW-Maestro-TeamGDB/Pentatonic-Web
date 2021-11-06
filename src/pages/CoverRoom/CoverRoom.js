@@ -386,10 +386,6 @@ const CoverRoom = ({ match }) => {
     });
   };
 
-  useEffect(() => {
-    console.log(coverData);
-  }, [coverData]);
-
   return (
     <PageContainer>
       {!loading && coverData ? (
@@ -716,7 +712,7 @@ const SongData = styled.div`
   transition: filter 0.5s ease-in-out;
 
   ${media.small} {
-    top: 20px;
+    top: 3rem;
     width: 15rem;
   }
 `;
@@ -962,7 +958,7 @@ const CoverBannerContainer = styled.div`
   }
 
   ${media.small} {
-    height: ${(props) => (props.mode === 1 ? '30rem' : '24rem')};
+    height: ${(props) => (props.mode === 1 ? '27rem' : '24rem')};
   }
 `;
 
@@ -992,9 +988,14 @@ const CoverTitle = styled.span`
   line-height: 1.5;
   letter-spacing: 2px;
 
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+
   ${media.small} {
     font-size: 2.5rem;
     letter-spacing: 0px;
+    padding: 0 0.5rem;
   }
 `;
 
@@ -1007,10 +1008,15 @@ const CoverDesc = styled.span`
   justify-content: flex-end;
   align-items: center;
 
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+
   line-height: 1;
 
   ${media.small} {
     font-size: 1rem;
+    padding: 0 0.5rem;
   }
 `;
 
