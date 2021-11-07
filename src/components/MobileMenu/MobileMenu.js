@@ -61,7 +61,7 @@ const MobileMenu = (props) => {
           아티스트
         </MenuLink>
         <SubMenuLink to="/artist/rank/band" onClick={() => onClose()}>
-          밴드 랭킹
+          커버 랭킹
         </SubMenuLink>
         <SubMenuLink to="/artist/rank/artist" onClick={() => onClose()}>
           아티스트 랭킹
