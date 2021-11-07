@@ -822,6 +822,7 @@ const VisualizerContainer = styled.div`
 const Background = styled.div`
   background: url(${(props) => (props.url ? props.url : null)});
   background-size: cover;
+  background-position: center center;
   margin-top: 5vh;
   height: 60vh;
   z-index: 1;

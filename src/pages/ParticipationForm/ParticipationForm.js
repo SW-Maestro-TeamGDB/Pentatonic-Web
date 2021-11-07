@@ -321,7 +321,7 @@ const BannerBackground = styled.div`
     ),
     url(${(props) => (props.url ? props.url : null)});
   background-repeat: no-repeat;
-  background-position: top center;
+  background-position: center center;
   background-size: 100%;
 
   filter: brightness(50%);
