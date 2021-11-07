@@ -8,9 +8,9 @@
 
 <div align="center">
 
-[<h3>🎸 홈페이지 바로가기</h3>](https://penta-tonic.com)
+[<h4>🎸 홈페이지 바로가기</h3>](https://penta-tonic.com)
     
-[<h3>🎥 소개 영상 보러가기</h3>](https://youtu.be/jUsbNGC68y4)
+[<h4>🎥 소개 영상 보러가기</h3>](https://youtu.be/jUsbNGC68y4)
     
 </div>
 
