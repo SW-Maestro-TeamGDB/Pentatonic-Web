@@ -54,7 +54,7 @@ const Background = styled.div`
   position: absolute;
   background-image: ${(props) => (props.url ? `url(${props.url})` : null)};
   background-repeat: no-repeat;
-  background-position: top center;
+  background-position: center 35%;
   background-size: cover;
   border-radius: 15px;
   transition: all 0.3s ease-in-out;
