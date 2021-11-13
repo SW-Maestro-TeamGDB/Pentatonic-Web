@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { ApolloProvider } from '@apollo/client';
 import { Route, Switch, BrowserRouter as Router } from 'react-router-dom';
 import { client } from './apollo/client';
 import ScrollToTop from './lib/ScrollToTop';
 import styled from 'styled-components';
 import Header from './components/Header';
+import SurveyModal from './components/SurveyModal';
 import LoungeHome from './pages/LoungeHome';
 import Register from './pages/Register';
 import Artist from './pages/Artist';
@@ -20,12 +21,18 @@ import AdminPage from './pages/AdminPage';
 import PageTracker from './lib/PageTracker';
 
 function App() {
+  const [surveyModalToggle, setSurveyModalToggle] = useState(true);
+
   return (
     <ApolloProvider client={client}>
       <Router>
         <ScrollToTop />
         <PageTracker />
         <Header />
+        <SurveyModal
+          modalToggle={surveyModalToggle}
+          setModalToggle={setSurveyModalToggle}
+        />
         <Centered>
           <Switch>
             <Route path="/" component={LoungeHome} exact />
