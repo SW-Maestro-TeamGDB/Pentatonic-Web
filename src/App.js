@@ -29,10 +29,10 @@ function App() {
         <ScrollToTop />
         <PageTracker />
         <Header />
-        <SurveyModal
+        {/* <SurveyModal
           modalToggle={surveyModalToggle}
           setModalToggle={setSurveyModalToggle}
-        />
+        /> */}
         <Centered>
           <Switch>
             <Route path="/" component={LoungeHome} exact />
