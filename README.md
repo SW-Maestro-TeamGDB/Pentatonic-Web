@@ -2,15 +2,9 @@
 
 <br/>
 
-<img src="https://penta-tonic.com/static/media/Logo.c2134bc5.png" width="100%" style="border:2px solid #9F81F7; border-radius:25px;">
-
-<br/>
-
 <div align="center">
-
-[<h4>🎸 홈페이지 바로가기</h3>](https://penta-tonic.com)
     
-[<h4>🎥 소개 영상 보러가기</h3>](https://youtu.be/jUsbNGC68y4)
+[🎥 소개 영상 보러가기](https://youtu.be/jUsbNGC68y4)
     
 </div>
 
@@ -31,8 +25,6 @@
 </h2>
 
 <br/>
-
-<img src="https://cdn.discordapp.com/attachments/843498829781008387/906020785318137926/unknown.png">
 
 <b>고등학생 대학생 백수가 모여서 만든 팀 고대백 입니다</b>
 
